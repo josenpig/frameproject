@@ -5,7 +5,6 @@ import com.xingji.frameproject.service.OperationlogService;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 
-
 import com.xingji.frameproject.util.IpAdrressUtil;
 
 import org.aspectj.lang.JoinPoint;
