@@ -1,5 +1,7 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-06-07 16:26:49
  */
+@Data
 public class BaseExpenditureType implements Serializable {
     private static final long serialVersionUID = -89311962241720020L;
     /**

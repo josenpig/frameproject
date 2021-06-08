@@ -3,7 +3,7 @@
 <mapper namespace="com.xingji.frameproject.mybatis.dao.SysUserDao">
 
     <resultMap type="com.xingji.frameproject.mybatis.entity.SysUser" id="SysUserMap">
-        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="userPass" column="user_pass" jdbcType="VARCHAR"/>
         <result property="userIcon" column="user_icon" jdbcType="VARCHAR"/>
@@ -14,14 +14,13 @@
         <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
         <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="SysUserMap">
         select
-          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, login_time, remark
+          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, remark
         from frameproject.sys_user
         where user_id = #{userId}
     </select>
@@ -29,7 +28,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SysUserMap">
         select
-          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, login_time, remark
+          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, remark
         from frameproject.sys_user
         limit #{offset}, #{limit}
     </select>
@@ -38,7 +37,7 @@
     <select id="queryAll" resultMap="SysUserMap">
         select
         user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by,
-        update_time, login_time, remark
+        update_time, remark
         from frameproject.sys_user
         <where>
             <if test="userId != null">
@@ -74,58 +73,43 @@
             <if test="updateTime != null">
                 and update_time = #{updateTime}
             </if>
-            <if test="loginTime != null">
-                and login_time = #{loginTime}
-            </if>
             <if test="remark != null and remark != ''">
                 and remark = #{remark}
             </if>
         </where>
     </select>
-    <select id="login" resultMap="SysUserMap">
-        select * from sys_user where user_name=#{userName}
-    </select>
-    <select id="gologin" resultMap="SysUserMap">
-        select * from sys_user where user_phone=#{userPhone}
-    </select>
-    <select id="roleusers" resultMap="SysUserMap">
-        select a.* from sys_user a
-        inner join sys_user_role b on a.user_id=b.user_id
-				WHERE b.role_id=1 or
-				b.role_id=#{id}
-</select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, login_time, remark)
-        values (#{userName}, #{userPass}, #{userIcon}, #{userPhone}, #{userSex}, #{userState}, #{founder}, #{foundTime}, #{updatedBy}, #{updateTime}, #{loginTime}, #{remark})
+        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, remark)
+        values (#{userName}, #{userPass}, #{userIcon}, #{userPhone}, #{userSex}, #{userState}, #{founder}, #{foundTime}, #{updatedBy}, #{updateTime}, #{remark})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
         insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder,
-        found_time, updated_by, update_time, login_time, remark)
+        found_time, updated_by, update_time, remark)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.userPass}, #{entity.userIcon}, #{entity.userPhone}, #{entity.userSex},
             #{entity.userState}, #{entity.founder}, #{entity.foundTime}, #{entity.updatedBy}, #{entity.updateTime},
-            #{entity.loginTime}, #{entity.remark})
+            #{entity.remark})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
         insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder,
-        found_time, updated_by, update_time, login_time, remark)
+        found_time, updated_by, update_time, remark)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.userPass}, #{entity.userIcon}, #{entity.userPhone}, #{entity.userSex},
             #{entity.userState}, #{entity.founder}, #{entity.foundTime}, #{entity.updatedBy}, #{entity.updateTime},
-            #{entity.loginTime}, #{entity.remark})
+            #{entity.remark})
         </foreach>
         on duplicate key update
         user_name = values(user_name) , user_pass = values(user_pass) , user_icon = values(user_icon) , user_phone =
         values(user_phone) , user_sex = values(user_sex) , user_state = values(user_state) , founder = values(founder) ,
-        found_time = values(found_time) , updated_by = values(updated_by) , update_time = values(update_time) ,
-        login_time = values(login_time) , remark = values(remark)
+        found_time = values(found_time) , updated_by = values(updated_by) , update_time = values(update_time) , remark =
+        values(remark)
     </insert>
 
     <!--通过主键修改数据-->
@@ -162,9 +146,6 @@
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
-            <if test="loginTime != null">
-                login_time = #{loginTime},
-            </if>
             <if test="remark != null and remark != ''">
                 remark = #{remark},
             </if>
@@ -176,6 +157,22 @@
     <delete id="deleteById">
         delete from frameproject.sys_user where user_id = #{userId}
     </delete>
-
+    <select id="login" resultMap="SysUserMap">
+        select * from sys_user where user_name=#{userName}
+    </select>
+    <select id="gologin" resultMap="SysUserMap">
+        select * from sys_user where user_phone=#{userPhone}
+    </select>
+    <select id="roleusers" resultMap="SysUserMap">
+        select a.* from sys_user a
+        inner join sys_user_role b on a.user_id=b.user_id
+				WHERE b.role_id=1 or
+				b.role_id=#{id}
+	</select>
+    <select id="queryUserIdByUserName" resultType="java.lang.Integer">
+        select  user_id
+        from sys_user
+        where user_name=#{userName}
+    </select>
 </mapper>
 

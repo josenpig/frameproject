@@ -72,4 +72,5 @@ public interface SysUserService {
     List<SysUser> roleusers(Integer id);
 
     List<SysUser> queryAll(SysUser sysUser);
+    Integer queryUserIdByUserName(String userName);
 }

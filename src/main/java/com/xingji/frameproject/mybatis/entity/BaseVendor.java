@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-06-04 15:28:58
  */
+@Data
 public class BaseVendor implements Serializable {
     private static final long serialVersionUID = -76697735950454456L;
     /**

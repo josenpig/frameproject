@@ -15,4 +15,4 @@ import static java.lang.annotation.ElementType.TYPE;
 @Documented
 public @interface Log {
     String value() default "";
-}
+        }

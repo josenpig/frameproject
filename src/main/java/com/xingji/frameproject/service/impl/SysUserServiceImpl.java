@@ -103,4 +103,8 @@ public class SysUserServiceImpl implements SysUserService {
     public List<SysUser> queryAll(SysUser sysUser){
         return this.sysUserDao.queryAll(sysUser);
     }
+    @Override
+    public Integer queryUserIdByUserName(String userName) {
+        return this.sysUserDao.queryUserIdByUserName(userName);
+    }
 }

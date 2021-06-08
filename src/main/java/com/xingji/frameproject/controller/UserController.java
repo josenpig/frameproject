@@ -1,7 +1,12 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
+import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.service.LogininService;
+import com.xingji.frameproject.service.SysRoleService;
+import com.xingji.frameproject.service.SysUserRoleService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.util.SendSms;
@@ -14,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,11 +35,17 @@ import java.util.stream.Collectors;
 @Api(description = "用户Api")
 public class UserController {
     @Autowired
-    SysUserService us;
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     SendSms sendSms;
+    @Autowired
+    SysUserService us;
+    @Autowired
+    LogininService logininService;
+    @Autowired
+    SysUserRoleService sysUserRoleService;
+    @Autowired
+    SysRoleService sysRoleService;
 
     @PostMapping("/login")
     @ApiOperation(value = "用户账户登录",produces = "application/json")
@@ -47,6 +59,17 @@ public class UserController {
             }else if (!user.getUserPass().equals(loginuser.getUserPass())) {
                 return AjaxResponse.success("密码错误");
             } else {
+                Integer userid=us.queryUserIdByUserName(loginuser.getUserName());
+                Loginin loginin=new Loginin();
+                //通过用户id获取角色id
+                Integer roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
+                //通过角色id获取角色名
+                String roleName = sysRoleService.queryRoleNameByroleId(roleId);
+                loginin.setLogintime(new Date());
+                loginin.setOperator(loginuser.getUserName());
+                loginin.setTypeofoperator(roleName+"");
+                //插入一条登录日志
+                logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
                 //获取父菜单
                 List<SysMenu> treemenu = usermenu.stream().filter(m -> m.getParentId() == 0).map(
@@ -86,6 +109,17 @@ public class UserController {
             }else if (sendSms.isphonecode(phone)==null || !sendSms.isphonecode(phone).equals(code)) {
                 return  AjaxResponse.success("手机号与验证码不匹配或已失效！");
             } else {
+                Integer userid=us.queryUserIdByUserName(loginuser.getUserName());
+                Loginin loginin=new Loginin();
+                //通过用户id获取角色id
+                Integer roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
+                //通过角色id获取角色名
+                String roleName = sysRoleService.queryRoleNameByroleId(roleId);
+                loginin.setLogintime(new Date());
+                loginin.setOperator(loginuser.getUserName());
+                loginin.setTypeofoperator(roleName+"");
+                //插入一条登录日志
+                logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
                 //获取父菜单
                 List<SysMenu> treemenu = usermenu.stream().filter(m -> m.getParentId() == 0).map(

@@ -10,6 +10,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-06-02 08:54:58
  */
+@Data
 public class BaseCapitalAccount implements Serializable {
     private static final long serialVersionUID = 560019887627276586L;
     /**

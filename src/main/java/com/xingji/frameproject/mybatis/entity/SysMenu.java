@@ -1,5 +1,7 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-05-22 19:02:25
  */
+@Data
 public class SysMenu implements Serializable {
     private static final long serialVersionUID = -44758494030917654L;
     /**

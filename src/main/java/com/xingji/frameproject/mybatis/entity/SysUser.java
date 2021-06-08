@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -10,10 +11,11 @@ import java.io.Serializable;
  * (SysUser)实体类
  *
  * @author makejava
- * @since 2021-05-15 13:48:07
+ * @since 2021-06-08 11:14:37
  */
+@Data
 public class SysUser implements Serializable {
-    private static final long serialVersionUID = -31393385936400150L;
+    private static final long serialVersionUID = 595281704478655409L;
     /**
      * 用户id
      */
@@ -49,12 +51,12 @@ public class SysUser implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date foundTime;
     /**
      * 更新人
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String updatedBy;
     /**
      * 更新时间
@@ -62,12 +64,6 @@ public class SysUser implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-    /**
-     * 最后登录时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date loginTime;
     /**
      * 备注
      */
@@ -160,14 +156,6 @@ public class SysUser implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public Date getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(Date loginTime) {
-        this.loginTime = loginTime;
     }
 
     public String getRemark() {

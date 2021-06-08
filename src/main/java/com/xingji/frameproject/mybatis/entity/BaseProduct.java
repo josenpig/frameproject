@@ -13,7 +13,6 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-05-26 14:50:59
  */
-
 @Data
 public class BaseProduct implements Serializable {
     private static final long serialVersionUID = -97017808994842311L;
