@@ -3,7 +3,9 @@ package com.xingji.frameproject.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
+import com.xingji.frameproject.mybatis.entity.BaseOpening;
 import com.xingji.frameproject.service.BaseDepotService;
+import com.xingji.frameproject.service.BaseOpeningService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class BaseDepotController {
     private JwtTokenUtil jwtTokenUtil;
     @Resource
     private BaseDepotService baseDepotService;
+    @Resource
+    private BaseOpeningService baseOpeningService;
 
     /**
      * 通过主键查询单条数据
@@ -55,5 +59,24 @@ public class BaseDepotController {
         map.put("total",page.getTotal());
         map.put("rows",baseDepotVoList);
         return AjaxResponse.success(map);
+    };
+
+    /**
+     * 删除仓库
+     * @param id 仓库编号
+     * @return
+     */
+    @GetMapping("/delDepot")
+    public AjaxResponse delDepot(String depotId){
+        System.out.println("del:"+depotId);
+        BaseDepot baseDepot=baseDepotService.queryById(depotId);
+        BaseOpening baseOpening=new BaseOpening();
+        baseOpening.setDepotName(baseDepot.getDepotName());
+        List<BaseOpening> list=baseOpeningService.queryAll(baseOpening);
+        boolean recript=false;
+        if(list.size()==0){
+            recript=baseDepotService.deleteById(depotId);
+        }
+        return AjaxResponse.success(recript);
     };
 }
