@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalCavCiaDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCia" id="CapitalCavCiaMap">
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="cavBy" column="cav_by" jdbcType="VARCHAR"/>
+        <result property="cavType" column="cav_type" jdbcType="VARCHAR"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalCavCiaMap">
+        select
+          cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
+        from frameproject.capital_cav_cia
+        where cav_id = #{cavId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalCavCiaMap">
+        select
+          cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
+        from frameproject.capital_cav_cia
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalCavCiaMap">
+        select
+        cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver,
+        approval_state, approval_remarks, last_approval_time, update_time
+        from frameproject.capital_cav_cia
+        <where>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="orderTime != null">
+                and order_time = #{orderTime}
+            </if>
+            <if test="customer != null and customer != ''">
+                and customer = #{customer}
+            </if>
+            <if test="cavBy != null and cavBy != ''">
+                and cav_by = #{cavBy}
+            </if>
+            <if test="cavType != null and cavType != ''">
+                and cav_type = #{cavType}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="foundTime != null">
+                and found_time = #{foundTime}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="approver != null and approver != ''">
+                and approver = #{approver}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                and approval_remarks = #{approvalRemarks}
+            </if>
+            <if test="lastApprovalTime != null">
+                and last_approval_time = #{lastApprovalTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="cavId" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
+        values (#{orderTime}, #{customer}, #{cavBy}, #{cavType}, #{thisMoney}, #{founder}, #{foundTime}, #{remarks}, #{approver}, #{approvalState}, #{approvalRemarks}, #{lastApprovalTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="cavId" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder,
+        found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderTime}, #{entity.customer}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
+            #{entity.founder}, #{entity.foundTime}, #{entity.remarks}, #{entity.approver}, #{entity.approvalState},
+            #{entity.approvalRemarks}, #{entity.lastApprovalTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="cavId" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder,
+        found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orderTime}, #{entity.customer}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
+            #{entity.founder}, #{entity.foundTime}, #{entity.remarks}, #{entity.approver}, #{entity.approvalState},
+            #{entity.approvalRemarks}, #{entity.lastApprovalTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        order_time = values(order_time) , customer = values(customer) , cav_by = values(cav_by) , cav_type =
+        values(cav_type) , this_money = values(this_money) , founder = values(founder) , found_time = values(found_time)
+        , remarks = values(remarks) , approver = values(approver) , approval_state = values(approval_state) ,
+        approval_remarks = values(approval_remarks) , last_approval_time = values(last_approval_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_cav_cia
+        <set>
+            <if test="orderTime != null">
+                order_time = #{orderTime},
+            </if>
+            <if test="customer != null and customer != ''">
+                customer = #{customer},
+            </if>
+            <if test="cavBy != null and cavBy != ''">
+                cav_by = #{cavBy},
+            </if>
+            <if test="cavType != null and cavType != ''">
+                cav_type = #{cavType},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+            <if test="founder != null and founder != ''">
+                founder = #{founder},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{foundTime},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="approver != null and approver != ''">
+                approver = #{approver},
+            </if>
+            <if test="approvalState != null">
+                approval_state = #{approvalState},
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                approval_remarks = #{approvalRemarks},
+            </if>
+            <if test="lastApprovalTime != null">
+                last_approval_time = #{lastApprovalTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where cav_id = #{cavId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_cav_cia where cav_id = #{cavId}
+    </delete>
+
+</mapper>
+

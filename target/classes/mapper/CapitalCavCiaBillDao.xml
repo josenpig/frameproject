@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalCavCiaBillDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill" id="CapitalCavCiaBillMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="saleId" column="sale_id" jdbcType="VARCHAR"/>
+        <result property="saleType" column="sale_type" jdbcType="VARCHAR"/>
+        <result property="saleTime" column="sale_time" jdbcType="TIMESTAMP"/>
+        <result property="shouldMoney" column="should_money" jdbcType="NUMERIC"/>
+        <result property="alreadyMoney" column="already_money" jdbcType="NUMERIC"/>
+        <result property="notMoney" column="not_money" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalCavCiaBillMap">
+        select
+          id, cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money
+        from frameproject.capital_cav_cia_bill
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalCavCiaBillMap">
+        select
+          id, cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money
+        from frameproject.capital_cav_cia_bill
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalCavCiaBillMap">
+        select
+        id, cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money
+        from frameproject.capital_cav_cia_bill
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="saleId != null and saleId != ''">
+                and sale_id = #{saleId}
+            </if>
+            <if test="saleType != null and saleType != ''">
+                and sale_type = #{saleType}
+            </if>
+            <if test="saleTime != null">
+                and sale_time = #{saleTime}
+            </if>
+            <if test="shouldMoney != null">
+                and should_money = #{shouldMoney}
+            </if>
+            <if test="alreadyMoney != null">
+                and already_money = #{alreadyMoney}
+            </if>
+            <if test="notMoney != null">
+                and not_money = #{notMoney}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_bill(cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money)
+        values (#{cavId}, #{saleId}, #{saleType}, #{saleTime}, #{shouldMoney}, #{alreadyMoney}, #{notMoney}, #{thisMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_bill(cav_id, sale_id, sale_type, sale_time, should_money,
+        already_money, not_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cavId}, #{entity.saleId}, #{entity.saleType}, #{entity.saleTime}, #{entity.shouldMoney},
+            #{entity.alreadyMoney}, #{entity.notMoney}, #{entity.thisMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_bill(cav_id, sale_id, sale_type, sale_time, should_money,
+        already_money, not_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cavId}, #{entity.saleId}, #{entity.saleType}, #{entity.saleTime}, #{entity.shouldMoney},
+            #{entity.alreadyMoney}, #{entity.notMoney}, #{entity.thisMoney})
+        </foreach>
+        on duplicate key update
+        cav_id = values(cav_id) , sale_id = values(sale_id) , sale_type = values(sale_type) , sale_time =
+        values(sale_time) , should_money = values(should_money) , already_money = values(already_money) , not_money =
+        values(not_money) , this_money = values(this_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_cav_cia_bill
+        <set>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="saleId != null and saleId != ''">
+                sale_id = #{saleId},
+            </if>
+            <if test="saleType != null and saleType != ''">
+                sale_type = #{saleType},
+            </if>
+            <if test="saleTime != null">
+                sale_time = #{saleTime},
+            </if>
+            <if test="shouldMoney != null">
+                should_money = #{shouldMoney},
+            </if>
+            <if test="alreadyMoney != null">
+                already_money = #{alreadyMoney},
+            </if>
+            <if test="notMoney != null">
+                not_money = #{notMoney},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_cav_cia_bill where id = #{id}
+    </delete>
+
+</mapper>
+
