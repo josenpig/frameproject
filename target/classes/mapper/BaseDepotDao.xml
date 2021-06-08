@@ -15,15 +15,15 @@
     <!--查询单个-->
     <select id="queryById" resultMap="BaseDepotMap">
         select
-          depot_number, depot_name, depot_address, charge_id, contact_number, remarks, state
+          depot_id, depot_name, depot_address, charge_name, contact_number, remarks, state
         from frameproject.base_depot
-        where depot_number = #{depotNumber}
+        where depot_id = #{depotId}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseDepotMap">
         select
-          depot_number, depot_name, depot_address, charge_id, contact_number, remarks, state
+          depot_id, depot_name, depot_address, charge_name, contact_number, remarks, state
         from frameproject.base_depot
         limit #{offset}, #{limit}
     </select>
@@ -33,11 +33,11 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseDepotMap">
         select
-        depot_number, depot_name, depot_address, charge_id, contact_number, remarks, state
+        depot_id, depot_name, depot_address, charge_name, contact_number, remarks, state
         from frameproject.base_depot
         <where>
-            <if test="depotNumber != null and depotNumber != ''">
-                and depot_number = #{depotNumber}
+            <if test="depotId != null and depotId != ''">
+                and depot_id = #{depotId}
             </if>
             <if test="depotName != null and depotName != ''">
                 and depot_name = #{depotName}
@@ -46,7 +46,7 @@
                 and depot_address = #{depotAddress}
             </if>
             <if test="chargeId != null || chargeId != 0">
-                and charge_id = #{chargeId}
+                and charge_name = #{chargeId}
             </if>
             <if test="contactNumber != null and contactNumber != ''">
                 and contact_number = #{contactNumber}
@@ -67,13 +67,13 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="depotNumber" useGeneratedKeys="true">
-        insert into frameproject.base_depot(depot_name, depot_address, charge_id, contact_number, remarks, state)
+    <insert id="insert" keyProperty="depotId" useGeneratedKeys="true">
+        insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
         values (#{depotName}, #{depotAddress}, #{chargeId}, #{contactNumber}, #{remarks}, #{state})
     </insert>
 
-    <insert id="insertBatch" keyProperty="depotNumber" useGeneratedKeys="true">
-        insert into frameproject.base_depot(depot_name, depot_address, charge_id, contact_number, remarks, state)
+    <insert id="insertBatch" keyProperty="depotId" useGeneratedKeys="true">
+        insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeId}, #{entity.contactNumber},
@@ -81,15 +81,15 @@
         </foreach>
     </insert>
 
-    <insert id="insertOrUpdateBatch" keyProperty="depotNumber" useGeneratedKeys="true">
-        insert into frameproject.base_depot(depot_name, depot_address, charge_id, contact_number, remarks, state)
+    <insert id="insertOrUpdateBatch" keyProperty="depotId" useGeneratedKeys="true">
+        insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeId}, #{entity.contactNumber},
             #{entity.remarks}, #{entity.state})
         </foreach>
         on duplicate key update
-        depot_name = values(depot_name) , depot_address = values(depot_address) , charge_id = values(charge_id) ,
+        depot_name = values(depot_name) , depot_address = values(depot_address) , charge_name = values(charge_name) ,
         contact_number = values(contact_number) , remarks = values(remarks) , state = values(state)
     </insert>
 
@@ -104,7 +104,7 @@
                 depot_address = #{depotAddress},
             </if>
             <if test="chargeId != null">
-                charge_id = #{chargeId},
+                charge_name = #{chargeId},
             </if>
             <if test="contactNumber != null and contactNumber != ''">
                 contact_number = #{contactNumber},
@@ -116,12 +116,12 @@
                 state = #{state},
             </if>
         </set>
-        where depot_number = #{depotNumber}
+        where depot_id = #{depotId}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.base_depot where depot_number = #{depotNumber}
+        delete from frameproject.base_depot where depot_id = #{depotId}
     </delete>
 
 </mapper>

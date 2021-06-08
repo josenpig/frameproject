@@ -20,8 +20,6 @@ public class SendSms {
     public String SendCode(String phone,int i){
         String accessKeyId=null;
         String accessSecret=null;
-//        String accessKeyId="LTAI4GKRXZ9U7FNAapQv4KAw";
-//        String accessSecret="ymoThdBhv5yvX11WNzJSiNm9iz0n77";
         String SignName="星际进销存";
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou",accessKeyId,accessSecret);
         IAcsClient client = new DefaultAcsClient(profile);

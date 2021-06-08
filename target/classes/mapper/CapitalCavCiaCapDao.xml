@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalCavCiaCapDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCiaCap" id="CapitalCavCiaCapMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="capitalId" column="capital_id" jdbcType="VARCHAR"/>
+        <result property="capitalType" column="capital_type" jdbcType="VARCHAR"/>
+        <result property="capitalTime" column="capital_time" jdbcType="TIMESTAMP"/>
+        <result property="beforeMoney" column="before_money" jdbcType="NUMERIC"/>
+        <result property="writtenMoney" column="written_money" jdbcType="NUMERIC"/>
+        <result property="unwrittenMoney" column="unwritten_money" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalCavCiaCapMap">
+        select
+          id, cav_id, capital_id, capital_type, capital_time, before_money, written_money, unwritten_money, this_money
+        from frameproject.capital_cav_cia_cap
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalCavCiaCapMap">
+        select
+          id, cav_id, capital_id, capital_type, capital_time, before_money, written_money, unwritten_money, this_money
+        from frameproject.capital_cav_cia_cap
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalCavCiaCapMap">
+        select
+        id, cav_id, capital_id, capital_type, capital_time, before_money, written_money, unwritten_money, this_money
+        from frameproject.capital_cav_cia_cap
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="capitalId != null and capitalId != ''">
+                and capital_id = #{capitalId}
+            </if>
+            <if test="capitalType != null and capitalType != ''">
+                and capital_type = #{capitalType}
+            </if>
+            <if test="capitalTime != null">
+                and capital_time = #{capitalTime}
+            </if>
+            <if test="beforeMoney != null">
+                and before_money = #{beforeMoney}
+            </if>
+            <if test="writtenMoney != null">
+                and written_money = #{writtenMoney}
+            </if>
+            <if test="unwrittenMoney != null">
+                and unwritten_money = #{unwrittenMoney}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_cap(cav_id, capital_id, capital_type, capital_time, before_money, written_money, unwritten_money, this_money)
+        values (#{cavId}, #{capitalId}, #{capitalType}, #{capitalTime}, #{beforeMoney}, #{writtenMoney}, #{unwrittenMoney}, #{thisMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_cap(cav_id, capital_id, capital_type, capital_time, before_money,
+        written_money, unwritten_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cavId}, #{entity.capitalId}, #{entity.capitalType}, #{entity.capitalTime}, #{entity.beforeMoney},
+            #{entity.writtenMoney}, #{entity.unwrittenMoney}, #{entity.thisMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_cav_cia_cap(cav_id, capital_id, capital_type, capital_time, before_money,
+        written_money, unwritten_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cavId}, #{entity.capitalId}, #{entity.capitalType}, #{entity.capitalTime}, #{entity.beforeMoney},
+            #{entity.writtenMoney}, #{entity.unwrittenMoney}, #{entity.thisMoney})
+        </foreach>
+        on duplicate key update
+        cav_id = values(cav_id) , capital_id = values(capital_id) , capital_type = values(capital_type) , capital_time =
+        values(capital_time) , before_money = values(before_money) , written_money = values(written_money) ,
+        unwritten_money = values(unwritten_money) , this_money = values(this_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_cav_cia_cap
+        <set>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="capitalId != null and capitalId != ''">
+                capital_id = #{capitalId},
+            </if>
+            <if test="capitalType != null and capitalType != ''">
+                capital_type = #{capitalType},
+            </if>
+            <if test="capitalTime != null">
+                capital_time = #{capitalTime},
+            </if>
+            <if test="beforeMoney != null">
+                before_money = #{beforeMoney},
+            </if>
+            <if test="writtenMoney != null">
+                written_money = #{writtenMoney},
+            </if>
+            <if test="unwrittenMoney != null">
+                unwritten_money = #{unwrittenMoney},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_cav_cia_cap where id = #{id}
+    </delete>
+
+</mapper>
+

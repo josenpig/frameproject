@@ -16,7 +16,24 @@
     from loginin
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="findloginlogbylogtime" resultType="com.xingji.frameproject.vo.LoginLogVo">
+      select * from loginin where logintime=#{LoginTime}
+    </select>
+    <select id="findAll" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+      SELECT l.* FROM `loginin` l
+      <where>
+        <if test="logintime != null and logintime != ''">
+          and c.logintime  LIKE CONCAT('%',#{logintime,jdbcType=TIMESTAMP},'%')
+        </if>
+        <if test="operator != null and operator != ''">
+          and c.operator LIKE CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="typeofoperator != null and typeofoperator != ''">
+          and c.typeofoperator LIKE CONCAT('%',#{typeofoperator,jdbcType=VARCHAR},'%')
+        </if>
+      </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loginin
     where id = #{id,jdbcType=INTEGER}
   </delete>
