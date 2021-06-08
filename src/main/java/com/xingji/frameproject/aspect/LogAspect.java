@@ -37,7 +37,7 @@ public class LogAspect {
 
     //定义切点 @Pointcut
     //在注解的位置切入代码
-    @Pointcut("@annotation( com.xingji.frameproject.util.annotation.Log)")
+    @Pointcut("@annotation( com.xingji.frameproject.annotation.Log)")
     public void logPoinCut() {
     }
 
