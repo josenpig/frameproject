@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalReceivableDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceivable" id="CapitalReceivableMap">
+        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
+        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
+        <result property="received" column="received" jdbcType="NUMERIC"/>
+        <result property="uncollected" column="uncollected" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="caseState" column="case_state" jdbcType="INTEGER"/>
+        <result property="receiptRemark" column="receipt_remark" jdbcType="VARCHAR"/>
+        <result property="lastCollectionTime" column="last_collection_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="SaleReceipt" type="com.xingji.frameproject.vo.SaleReceiptVo">
+        <result property="saleId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="saleTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="uncollectedMoney" column="uncollected" jdbcType="NUMERIC"/>
+        <result property="receivedMoney" column="received" jdbcType="NUMERIC"/>
+        <result property="receiptMoney" column="receivables" jdbcType="NUMERIC"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="queryReceipt" resultMap="SaleReceipt">
+        select * from capital_receivable
+        <where>
+            case_state=0
+            <if test="saleId != null and saleId != ''">
+                and delivery_id = #{saleId}
+            </if>
+            <if test="customer != null and customer != ''">
+                and customer = #{customer}
+            </if>
+        </where>
+    </select>
+    <select id="querythisReceipt" resultMap="SaleReceipt">
+        select * from capital_receivable where delivery_id=#{saleId}
+    </select>
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalReceivableMap">
+        select
+          delivery_id, delivery_time, customer, salesmen, receivables, received, uncollected, remarks, founder, case_state, receipt_remark, last_collection_time
+        from frameproject.capital_receivable
+        where delivery_id = #{deliveryId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalReceivableMap">
+        select
+          delivery_id, delivery_time, customer, salesmen, receivables, received, uncollected, remarks, founder, case_state, receipt_remark, last_collection_time
+        from frameproject.capital_receivable
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalReceivableMap">
+        select
+        delivery_id, delivery_time, customer, salesmen, receivables, received, uncollected, remarks, founder,
+        case_state, receipt_remark, last_collection_time
+        from frameproject.capital_receivable
+        <where>
+            <if test="deliveryId != null and deliveryId != ''">
+                and delivery_id = #{deliveryId}
+            </if>
+            <if test="deliveryTime != null">
+                and delivery_time = #{deliveryTime}
+            </if>
+            <if test="customer != null and customer != ''">
+                and customer = #{customer}
+            </if>
+            <if test="salesmen != null and salesmen != ''">
+                and salesmen = #{salesmen}
+            </if>
+            <if test="receivables != null">
+                and receivables = #{receivables}
+            </if>
+            <if test="received != null">
+                and received = #{received}
+            </if>
+            <if test="uncollected != null">
+                and uncollected = #{uncollected}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="caseState != null">
+                and case_state = #{caseState}
+            </if>
+            <if test="receiptRemark != null and receiptRemark != ''">
+                and receipt_remark = #{receiptRemark}
+            </if>
+            <if test="lastCollectionTime != null">
+                and last_collection_time = #{lastCollectionTime}
+            </if>
+        </where>
+    </select>
+    <select id="queryAllByPage" resultMap="CapitalReceivableMap">
+        select * from capital_receivable
+    </select>
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.capital_receivable(delivery_id,delivery_time, customer, salesmen, receivables, received, uncollected, remarks, founder, case_state, receipt_remark, last_collection_time)
+        values (#{deliveryId},#{deliveryTime}, #{customer}, #{salesmen}, #{receivables}, #{received}, #{uncollected}, #{remarks}, #{founder}, #{caseState}, #{receiptRemark}, #{lastCollectionTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.capital_receivable(delivery_time, customer, salesmen, receivables, received,
+        uncollected, remarks, founder, case_state, receipt_remark, last_collection_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.receivables}, #{entity.received},
+            #{entity.uncollected}, #{entity.remarks}, #{entity.founder}, #{entity.caseState}, #{entity.receiptRemark},
+            #{entity.lastCollectionTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.capital_receivable(delivery_time, customer, salesmen, receivables, received,
+        uncollected, remarks, founder, case_state, receipt_remark, last_collection_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.receivables}, #{entity.received},
+            #{entity.uncollected}, #{entity.remarks}, #{entity.founder}, #{entity.caseState}, #{entity.receiptRemark},
+            #{entity.lastCollectionTime})
+        </foreach>
+        on duplicate key update
+        delivery_time = values(delivery_time) , customer = values(customer) , salesmen = values(salesmen) , receivables
+        = values(receivables) , received = values(received) , uncollected = values(uncollected) , remarks =
+        values(remarks) , founder = values(founder) , case_state = values(case_state) , receipt_remark =
+        values(receipt_remark) , last_collection_time = values(last_collection_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_receivable
+        <set>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime},
+            </if>
+            <if test="customer != null and customer != ''">
+                customer = #{customer},
+            </if>
+            <if test="salesmen != null and salesmen != ''">
+                salesmen = #{salesmen},
+            </if>
+            <if test="receivables != null">
+                receivables = #{receivables},
+            </if>
+            <if test="received != null">
+                received = #{received},
+            </if>
+            <if test="uncollected != null">
+                uncollected = #{uncollected},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="founder != null and founder != ''">
+                founder = #{founder},
+            </if>
+            <if test="caseState != null">
+                case_state = #{caseState},
+            </if>
+            <if test="receiptRemark != null and receiptRemark != ''">
+                receipt_remark = #{receiptRemark},
+            </if>
+            <if test="lastCollectionTime != null">
+                last_collection_time = #{lastCollectionTime},
+            </if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+    <update id="receivedadd">
+        update frameproject.capital_receivable
+        <set>
+            <if test="receiptRemark != null and receiptRemark != ''">
+                receipt_remark = #{receiptRemark},
+            </if>
+            <if test="lastCollectionTime != null">
+                last_collection_time = #{lastCollectionTime},
+            </if>
+            <if test="received != null">
+                received = received + #{received},
+                uncollected = receivables - received
+            </if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_receivable where delivery_id = #{deliveryId}
+    </delete>
+
+</mapper>
+

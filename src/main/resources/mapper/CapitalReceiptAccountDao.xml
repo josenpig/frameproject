@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalReceiptAccountDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceiptAccount" id="CapitalReceiptAccountMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="fundAccount" column="fund_account" jdbcType="VARCHAR"/>
+        <result property="settlementType" column="settlement_type" jdbcType="VARCHAR"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalReceiptAccountMap">
+        select
+          id, receipt_id, fund_account, settlement_type, this_money
+        from frameproject.capital_receipt_account
+        where receipt_id = #{receiptId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalReceiptAccountMap">
+        select
+          id, receipt_id, fund_account, settlement_type, this_money
+        from frameproject.capital_receipt_account
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalReceiptAccountMap">
+        select
+        id, receipt_id, fund_account, settlement_type, this_money
+        from frameproject.capital_receipt_account
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="receiptId != null and receiptId != ''">
+                and receipt_id = #{receiptId}
+            </if>
+            <if test="fundAccount != null and fundAccount != ''">
+                and fund_account = #{fundAccount}
+            </if>
+            <if test="settlementType != null and settlementType != ''">
+                and settlement_type = #{settlementType}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_account(receipt_id, fund_account, settlement_type, this_money)
+        values (#{receiptId}, #{fundAccount}, #{settlementType}, #{thisMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_account(receipt_id, fund_account, settlement_type, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptId}, #{entity.fundAccount}, #{entity.settlementType}, #{entity.thisMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_account(receipt_id, fund_account, settlement_type, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptId}, #{entity.fundAccount}, #{entity.settlementType}, #{entity.thisMoney})
+        </foreach>
+        on duplicate key update
+        receipt_id = values(receipt_id) , fund_account = values(fund_account) , settlement_type =
+        values(settlement_type) , this_money = values(this_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_receipt_account
+        <set>
+            <if test="receiptId != null and receiptId != ''">
+                receipt_id = #{receiptId},
+            </if>
+            <if test="fundAccount != null and fundAccount != ''">
+                fund_account = #{fundAccount},
+            </if>
+            <if test="settlementType != null and settlementType != ''">
+                settlement_type = #{settlementType},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_receipt_account where id = #{id}
+    </delete>
+
+</mapper>
+

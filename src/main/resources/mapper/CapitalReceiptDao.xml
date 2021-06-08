@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalReceiptDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceipt" id="CapitalReceiptMap">
+        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="receiptTime" column="receipt_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="payee" column="payee" jdbcType="VARCHAR"/>
+        <result property="incomeType" column="income_type" jdbcType="VARCHAR"/>
+        <result property="receiptMoney" column="receipt_money" jdbcType="NUMERIC"/>
+        <result property="ciaMoney" column="cia_money" jdbcType="NUMERIC"/>
+        <result property="ciaBalance" column="cia_balance" jdbcType="NUMERIC"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalReceiptMap">
+        select
+          receipt_id, receipt_time, customer, payee, income_type, receipt_money, cia_money, cia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_receipt
+        where receipt_id = #{receiptId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalReceiptMap">
+        select
+          receipt_id, receipt_time, customer, payee, income_type, receipt_money, cia_money, cia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_receipt
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalReceiptMap">
+        select
+        receipt_id, receipt_time, customer, payee, income_type, receipt_money, cia_money, cia_balance, cav_id, founder,
+        remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_receipt
+        <where>
+            <if test="receiptId != null and receiptId != ''">
+                and receipt_id = #{receiptId}
+            </if>
+            <if test="receiptTime != null">
+                and receipt_time = #{receiptTime}
+            </if>
+            <if test="customer != null and customer != ''">
+                and customer = #{customer}
+            </if>
+            <if test="payee != null and payee != ''">
+                and payee = #{payee}
+            </if>
+            <if test="incomeType != null and incomeType != ''">
+                and income_type = #{incomeType}
+            </if>
+            <if test="receiptMoney != null">
+                and receipt_money = #{receiptMoney}
+            </if>
+            <if test="ciaMoney != null">
+                and cia_money = #{ciaMoney}
+            </if>
+            <if test="ciaBalance != null">
+                and cia_balance = #{ciaBalance}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+            <if test="approver != null and approver != ''">
+                and approver = #{approver}
+            </if>
+            <if test="lastApprovalTime != null">
+                and last_approval_time = #{lastApprovalTime}
+            </if>
+            <if test="foundTime != null">
+                and found_time = #{foundTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                and approval_remarks = #{approvalRemarks}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="receiptId" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt(receipt_time, customer, payee, income_type, receipt_money, cia_money, cia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks)
+        values (#{receiptTime}, #{customer}, #{payee}, #{incomeType}, #{receiptMoney}, #{ciaMoney}, #{ciaBalance}, #{cavId}, #{founder}, #{remarks}, #{approvalState}, #{approver}, #{lastApprovalTime}, #{foundTime}, #{updateTime}, #{approvalRemarks})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="receiptId" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt(receipt_time, customer, payee, income_type, receipt_money, cia_money,
+        cia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time,
+        approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptTime}, #{entity.customer}, #{entity.payee}, #{entity.incomeType}, #{entity.receiptMoney},
+            #{entity.ciaMoney}, #{entity.ciaBalance}, #{entity.cavId}, #{entity.founder}, #{entity.remarks},
+            #{entity.approvalState}, #{entity.approver}, #{entity.lastApprovalTime}, #{entity.foundTime},
+            #{entity.updateTime}, #{entity.approvalRemarks})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="receiptId" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt(receipt_time, customer, payee, income_type, receipt_money, cia_money,
+        cia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time,
+        approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptTime}, #{entity.customer}, #{entity.payee}, #{entity.incomeType}, #{entity.receiptMoney},
+            #{entity.ciaMoney}, #{entity.ciaBalance}, #{entity.cavId}, #{entity.founder}, #{entity.remarks},
+            #{entity.approvalState}, #{entity.approver}, #{entity.lastApprovalTime}, #{entity.foundTime},
+            #{entity.updateTime}, #{entity.approvalRemarks})
+        </foreach>
+        on duplicate key update
+        receipt_time = values(receipt_time) , customer = values(customer) , payee = values(payee) , income_type =
+        values(income_type) , receipt_money = values(receipt_money) , cia_money = values(cia_money) , cia_balance =
+        values(cia_balance) , cav_id = values(cav_id) , founder = values(founder) , remarks = values(remarks) ,
+        approval_state = values(approval_state) , approver = values(approver) , last_approval_time =
+        values(last_approval_time) , found_time = values(found_time) , update_time = values(update_time) ,
+        approval_remarks = values(approval_remarks)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_receipt
+        <set>
+            <if test="receiptTime != null">
+                receipt_time = #{receiptTime},
+            </if>
+            <if test="customer != null and customer != ''">
+                customer = #{customer},
+            </if>
+            <if test="payee != null and payee != ''">
+                payee = #{payee},
+            </if>
+            <if test="incomeType != null and incomeType != ''">
+                income_type = #{incomeType},
+            </if>
+            <if test="receiptMoney != null">
+                receipt_money = #{receiptMoney},
+            </if>
+            <if test="ciaMoney != null">
+                cia_money = #{ciaMoney},
+            </if>
+            <if test="ciaBalance != null">
+                cia_balance = #{ciaBalance},
+            </if>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="founder != null and founder != ''">
+                founder = #{founder},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="approvalState != null">
+                approval_state = #{approvalState},
+            </if>
+            <if test="approver != null and approver != ''">
+                approver = #{approver},
+            </if>
+            <if test="lastApprovalTime != null">
+                last_approval_time = #{lastApprovalTime},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{foundTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                approval_remarks = #{approvalRemarks},
+            </if>
+        </set>
+        where receipt_id = #{receiptId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_receipt where receipt_id = #{receiptId}
+    </delete>
+
+</mapper>
+

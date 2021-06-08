@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseChargeDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseCharge" id="BaseChargeMap">
+        <result property="chargeId" column="charge_id" jdbcType="INTEGER"/>
+        <result property="chargeName" column="charge_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseChargeMap">
+        select
+          charge_id, charge_name
+        from frameproject.base_charge
+        where charge_id = #{chargeId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseChargeMap">
+        select
+          charge_id, charge_name
+        from frameproject.base_charge
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseChargeMap">
+        select
+        charge_id, charge_name
+        from frameproject.base_charge
+        <where>
+            <if test="chargeId != null">
+                and charge_id = #{chargeId}
+            </if>
+            <if test="chargeName != null and chargeName != ''">
+                and charge_name = #{chargeName}
+            </if>
+        </where>
+
+    </select>
+
+    <!--搜索所有负责人-->
+    <select id="findAllCharge" resultMap="BaseChargeMap">
+        select
+        charge_id, charge_name
+        from frameproject.base_charge
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="chargeId" useGeneratedKeys="true">
+        insert into frameproject.base_charge(charge_name)
+        values (#{chargeName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="chargeId" useGeneratedKeys="true">
+        insert into frameproject.base_charge(charge_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.chargeName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="chargeId" useGeneratedKeys="true">
+        insert into frameproject.base_charge(charge_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.chargeName})
+        </foreach>
+        on duplicate key update
+        charge_name = values(charge_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_charge
+        <set>
+            <if test="chargeName != null and chargeName != ''">
+                charge_name = #{chargeName},
+            </if>
+        </set>
+        where charge_id = #{chargeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_charge where charge_id = #{chargeId}
+    </delete>
+
+</mapper>
+

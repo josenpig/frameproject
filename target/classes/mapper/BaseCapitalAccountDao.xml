@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseCapitalAccountDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseCapitalAccount" id="BaseCapitalAccountMap">
+        <result property="capitalId" column="capital_id" jdbcType="VARCHAR"/>
+        <result property="fundAccount" column="fund_account" jdbcType="VARCHAR"/>
+        <result property="settlementType" column="settlement_type" jdbcType="VARCHAR"/>
+        <result property="initialAmount" column="initial_amount" jdbcType="NUMERIC"/>
+        <result property="currentAmount" column="current_amount" jdbcType="NUMERIC"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseCapitalAccountMap">
+        select
+          capital_id, fund_account, settlement_type, initial_amount, current_amount, state
+        from frameproject.base_capital_account
+        where capital_id = #{capitalId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseCapitalAccountMap">
+        select
+          capital_id, fund_account, settlement_type, initial_amount, current_amount, state
+        from frameproject.base_capital_account
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseCapitalAccountMap">
+        select
+        capital_id, fund_account, settlement_type, initial_amount, current_amount, state
+        from frameproject.base_capital_account
+        <where>
+            <if test="capitalId != null and capitalId != ''">
+                and capital_id = #{capitalId}
+            </if>
+            <if test="fundAccount != null and fundAccount != ''">
+                and fund_account = #{fundAccount}
+            </if>
+            <if test="settlementType != null and settlementType != ''">
+                and settlement_type = #{settlementType}
+            </if>
+            <if test="initialAmount != null">
+                and initial_amount = #{initialAmount}
+            </if>
+            <if test="currentAmount != null">
+                and current_amount = #{currentAmount}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="capitalId" useGeneratedKeys="true">
+        insert into frameproject.base_capital_account(fund_account, settlement_type, initial_amount, current_amount, state)
+        values (#{fundAccount}, #{settlementType}, #{initialAmount}, #{currentAmount}, #{state})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="capitalId" useGeneratedKeys="true">
+        insert into frameproject.base_capital_account(fund_account, settlement_type, initial_amount, current_amount,
+        state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.fundAccount}, #{entity.settlementType}, #{entity.initialAmount}, #{entity.currentAmount},
+            #{entity.state})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="capitalId" useGeneratedKeys="true">
+        insert into frameproject.base_capital_account(fund_account, settlement_type, initial_amount, current_amount,
+        state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.fundAccount}, #{entity.settlementType}, #{entity.initialAmount}, #{entity.currentAmount},
+            #{entity.state})
+        </foreach>
+        on duplicate key update
+        fund_account = values(fund_account) , settlement_type = values(settlement_type) , initial_amount =
+        values(initial_amount) , current_amount = values(current_amount) , state = values(state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_capital_account
+        <set>
+            <if test="fundAccount != null and fundAccount != ''">
+                fund_account = #{fundAccount},
+            </if>
+            <if test="settlementType != null and settlementType != ''">
+                settlement_type = #{settlementType},
+            </if>
+            <if test="initialAmount != null">
+                initial_amount = #{initialAmount},
+            </if>
+            <if test="currentAmount != null">
+                current_amount = #{currentAmount},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        where capital_id = #{capitalId}
+    </update>
+    <update id="currentAmountadd">
+        update frameproject.base_capital_account
+        <set>
+            <if test="currentAmount != null">
+                current_amount =current_amount + #{currentAmount}
+            </if>
+        </set>
+        where fund_account = #{fundAccount}
+    </update>
+    <select id="findAllCapitalAccount" resultMap="BaseCapitalAccountMap">
+        select a.* from `base_capital_account` a
+    </select>
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_capital_account where capital_id = #{capitalId}
+    </delete>
+
+</mapper>
+

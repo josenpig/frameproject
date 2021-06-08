@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.SaleDeliveryDetailsDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.SaleDeliveryDetails" id="SaleDeliveryDetailsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="depot" column="depot" jdbcType="VARCHAR"/>
+        <result property="saleUnitPrice" column="sale_unit_price" jdbcType="NUMERIC"/>
+        <result property="saleMoney" column="sale_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询-->
+    <select id="queryById" resultMap="SaleDeliveryDetailsMap">
+        select
+          id, delivery_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money
+        from frameproject.sale_delivery_details
+        where delivery_id = #{deliveryId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SaleDeliveryDetailsMap">
+        select
+          id, delivery_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money
+        from frameproject.sale_delivery_details
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SaleDeliveryDetailsMap">
+        select
+        id, delivery_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec,
+        product_describe, remark, depot, sale_unit_price, sale_money
+        from frameproject.sale_delivery_details
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="deliveryId != null and deliveryId != ''">
+                and delivery_id = #{deliveryId}
+            </if>
+            <if test="productId != null and productId != ''">
+                and product_id = #{productId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name = #{productName}
+            </if>
+            <if test="productNum != null">
+                and product_num = #{productNum}
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                and product_unit = #{productUnit}
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                and gram_heavy = #{gramHeavy}
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                and ingredient = #{ingredient}
+            </if>
+            <if test="productSpec != null and productSpec != ''">
+                and product_spec = #{productSpec}
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                and product_describe = #{productDescribe}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="depot != null and depot != ''">
+                and depot = #{depot}
+            </if>
+            <if test="saleUnitPrice != null">
+                and sale_unit_price = #{saleUnitPrice}
+            </if>
+            <if test="saleMoney != null">
+                and sale_money = #{saleMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery_details(delivery_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
+        values (#{deliveryId}, #{productId}, #{productName}, #{productNum}, #{productUnit}, #{gramHeavy}, #{ingredient}, #{productSpec}, #{productDescribe}, #{remark}, #{depot}, #{saleUnitPrice}, #{saleMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery_details(delivery_id, product_id, product_name, product_num, product_unit,
+        gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryId}, #{entity.productId}, #{entity.productName}, #{entity.productNum},
+            #{entity.productUnit}, #{entity.gramHeavy}, #{entity.ingredient}, #{entity.productSpec},
+            #{entity.productDescribe}, #{entity.remark}, #{entity.depot}, #{entity.saleUnitPrice}, #{entity.saleMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery_details(delivery_id, product_id, product_name, product_num, product_unit,
+        gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryId}, #{entity.productId}, #{entity.productName}, #{entity.productNum},
+            #{entity.productUnit}, #{entity.gramHeavy}, #{entity.ingredient}, #{entity.productSpec},
+            #{entity.productDescribe}, #{entity.remark}, #{entity.depot}, #{entity.saleUnitPrice}, #{entity.saleMoney})
+        </foreach>
+        on duplicate key update
+        delivery_id = values(delivery_id) , product_id = values(product_id) , product_name = values(product_name) ,
+        product_num = values(product_num) , product_unit = values(product_unit) , gram_heavy = values(gram_heavy) ,
+        ingredient = values(ingredient) , product_spec = values(product_spec) , product_describe =
+        values(product_describe) , remark = values(remark) , depot = values(depot) , sale_unit_price =
+        values(sale_unit_price) , sale_money = values(sale_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.sale_delivery_details
+        <set>
+            <if test="deliveryId != null and deliveryId != ''">
+                delivery_id = #{deliveryId},
+            </if>
+            <if test="productId != null and productId != ''">
+                product_id = #{productId},
+            </if>
+            <if test="productName != null and productName != ''">
+                product_name = #{productName},
+            </if>
+            <if test="productNum != null">
+                product_num = #{productNum},
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                product_unit = #{productUnit},
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                gram_heavy = #{gramHeavy},
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                ingredient = #{ingredient},
+            </if>
+            <if test="productSpec != null and productSpec != ''">
+                product_spec = #{productSpec},
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                product_describe = #{productDescribe},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="depot != null and depot != ''">
+                depot = #{depot},
+            </if>
+            <if test="saleUnitPrice != null">
+                sale_unit_price = #{saleUnitPrice},
+            </if>
+            <if test="saleMoney != null">
+                sale_money = #{saleMoney},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.sale_delivery_details where id = #{id}
+    </delete>
+
+</mapper>
+

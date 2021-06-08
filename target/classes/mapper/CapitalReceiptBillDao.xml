@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalReceiptBillDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceiptBill" id="CapitalReceiptBillMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="saleId" column="sale_id" jdbcType="VARCHAR"/>
+        <result property="saleType" column="sale_type" jdbcType="VARCHAR"/>
+        <result property="saleTime" column="sale_time" jdbcType="TIMESTAMP"/>
+        <result property="receiptMoney" column="receipt_money" jdbcType="NUMERIC"/>
+        <result property="receivedMoney" column="received_money" jdbcType="NUMERIC"/>
+        <result property="uncollectedMoney" column="uncollected_money" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalReceiptBillMap">
+        select
+          id, receipt_id, sale_id, sale_type, sale_time, receipt_money, received_money, uncollected_money, this_money
+        from frameproject.capital_receipt_bill
+        where receipt_id = #{receiptId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalReceiptBillMap">
+        select
+          id, receipt_id, sale_id, sale_type, sale_time, receipt_money, received_money, uncollected_money, this_money
+        from frameproject.capital_receipt_bill
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalReceiptBillMap">
+        select
+        id, receipt_id, sale_id,  sale_type, sale_time, receipt_money, received_money, uncollected_money,
+        this_money
+        from frameproject.capital_receipt_bill
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="receiptId != null and receiptId != ''">
+                and receipt_id = #{receiptId}
+            </if>
+            <if test="saleId != null and saleId != ''">
+                and sale_id = #{saleId}
+            </if>
+            <if test="saleType != null and saleType != ''">
+                and sale_type = #{saleType}
+            </if>
+            <if test="saleTime != null">
+                and sale_time = #{saleTime}
+            </if>
+            <if test="receiptMoney != null">
+                and receipt_money = #{receiptMoney}
+            </if>
+            <if test="receivedMoney != null">
+                and received_money = #{receivedMoney}
+            </if>
+            <if test="uncollectedMoney != null">
+                and uncollected_money = #{uncollectedMoney}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_bill(receipt_id, sale_id, sale_type, sale_time, receipt_money, received_money, uncollected_money, this_money)
+        values (#{receiptId}, #{saleId}, #{saleType}, #{saleTime}, #{receiptMoney}, #{receivedMoney}, #{uncollectedMoney}, #{thisMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_bill(receipt_id, sale_id, sale_type, sale_time, receipt_money,
+        received_money, uncollected_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptId}, #{entity.saleId}, #{entity.saleType}, #{entity.saleTime},
+            #{entity.receiptMoney}, #{entity.receivedMoney}, #{entity.uncollectedMoney}, #{entity.thisMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_receipt_bill(receipt_id, sale_id, sale_type, sale_time, receipt_money,
+        received_money, uncollected_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.receiptId}, #{entity.saleId}, #{entity.saleType}, #{entity.saleTime},
+            #{entity.receiptMoney}, #{entity.receivedMoney}, #{entity.uncollectedMoney}, #{entity.thisMoney})
+        </foreach>
+        on duplicate key update
+        receipt_id = values(receipt_id) , sale_id = values(sale_id), sale_type =
+        values(sale_type) , sale_time = values(sale_time) , receipt_money = values(receipt_money) , received_money =
+        values(received_money) , uncollected_money = values(uncollected_money) , this_money = values(this_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_receipt_bill
+        <set>
+            <if test="receiptId != null and receiptId != ''">
+                receipt_id = #{receiptId},
+            </if>
+            <if test="saleId != null and saleId != ''">
+                sale_id = #{saleId},
+            </if>
+            <if test="saleType != null and saleType != ''">
+                sale_type = #{saleType},
+            </if>
+            <if test="saleTime != null">
+                sale_time = #{saleTime},
+            </if>
+            <if test="receiptMoney != null">
+                receipt_money = #{receiptMoney},
+            </if>
+            <if test="receivedMoney != null">
+                received_money = #{receivedMoney},
+            </if>
+            <if test="uncollectedMoney != null">
+                uncollected_money = #{uncollectedMoney},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+        </set>
+        where sale_id = #{saleId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_receipt_bill where id = #{id}
+    </delete>
+
+</mapper>
+

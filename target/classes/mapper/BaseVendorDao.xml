@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseVendorDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseVendor" id="BaseVendorMap">
+        <result property="vendorId" column="vendor_id" jdbcType="VARCHAR"/>
+        <result property="vendorName" column="vendor_name" jdbcType="VARCHAR"/>
+        <result property="vendorType" column="vendor_type" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="charge" column="charge" jdbcType="VARCHAR"/>
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
+        <result property="contactAddress" column="contact_address" jdbcType="VARCHAR"/>
+        <result property="contactNumber" column="contact_number" jdbcType="VARCHAR"/>
+        <result property="user" column="user" jdbcType="VARCHAR"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="accountsPayable" column="accounts_payable" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseVendorMap">
+        select
+          vendor_id, vendor_name, vendor_type, address, charge, contact_name, contact_address, contact_number, user, creation_time, update_time, accounts_payable
+        from frameproject.base_vendor
+        where vendor_id = #{vendorId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseVendorMap">
+        select
+          vendor_id, vendor_name, vendor_type, address, charge, contact_name, contact_address, contact_number, user, creation_time, update_time, accounts_payable
+        from frameproject.base_vendor
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseVendorMap">
+        select
+        vendor_id, vendor_name, vendor_type, address, charge, contact_name, contact_address, contact_number, user,
+        creation_time, update_time, accounts_payable
+        from frameproject.base_vendor
+        <where>
+            <if test="vendorId != null and vendorId != ''">
+                and vendor_id = #{vendorId}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="vendorType != null and vendorType != ''">
+                and vendor_type = #{vendorType}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="charge != null and charge != ''">
+                and charge = #{charge}
+            </if>
+            <if test="contactName != null and contactName != ''">
+                and contact_name = #{contactName}
+            </if>
+            <if test="contactAddress != null and contactAddress != ''">
+                and contact_address = #{contactAddress}
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                and contact_number = #{contactNumber}
+            </if>
+            <if test="user != null and user != ''">
+                and user = #{user}
+            </if>
+            <if test="creationTime != null">
+                and creation_time = #{creationTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="accountsPayable != null">
+                and accounts_payable = #{accountsPayable}
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有供应商信息-->
+    <select id="findAllVendor"  resultMap="BaseVendorMap">
+        SELECT v.* FROM `base_vendor` v
+        <where>
+            <if test="vendorId != null and vendorId != ''">
+                and vendor_id LIKE CONCAT('%',#{vendorId,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name  LIKE CONCAT('%',#{vendorName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="vendorType != null and vendorType != ''">
+                and vendor_type LIKE CONCAT('%',#{vendorType,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="charge != null and charge != ''">
+                and charge LIKE CONCAT('%',#{charge,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="vendorId" useGeneratedKeys="true">
+        insert into frameproject.base_vendor(vendor_id,vendor_name, vendor_type, address, charge, contact_name, contact_address, contact_number, user, creation_time, update_time, accounts_payable)
+        values (#{vendorId},#{vendorName}, #{vendorType}, #{address}, #{charge}, #{contactName}, #{contactAddress}, #{contactNumber}, #{user}, NOW(), NULL, '0')
+    </insert>
+
+    <insert id="insertBatch" keyProperty="vendorId" useGeneratedKeys="true">
+        insert into frameproject.base_vendor(vendor_name, vendor_type, address, charge, contact_name, contact_address,
+        contact_number, user, creation_time, update_time, accounts_payable)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.vendorName}, #{entity.vendorType}, #{entity.address}, #{entity.charge}, #{entity.contactName},
+            #{entity.contactAddress}, #{entity.contactNumber}, #{entity.user}, #{entity.creationTime},
+            #{entity.updateTime}, #{entity.accountsPayable})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="vendorId" useGeneratedKeys="true">
+        insert into frameproject.base_vendor(vendor_name, vendor_type, address, charge, contact_name, contact_address,
+        contact_number, user, creation_time, update_time, accounts_payable)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.vendorName}, #{entity.vendorType}, #{entity.address}, #{entity.charge}, #{entity.contactName},
+            #{entity.contactAddress}, #{entity.contactNumber}, #{entity.user}, #{entity.creationTime},
+            #{entity.updateTime}, #{entity.accountsPayable})
+        </foreach>
+        on duplicate key update
+        vendor_name = values(vendor_name) , vendor_type = values(vendor_type) , address = values(address) , charge =
+        values(charge) , contact_name = values(contact_name) , contact_address = values(contact_address) ,
+        contact_number = values(contact_number) , user = values(user) , creation_time = values(creation_time) ,
+        update_time = values(update_time) , accounts_payable = values(accounts_payable)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_vendor
+        <set>
+            <if test="vendorName != null and vendorName != ''">
+                vendor_name = #{vendorName},
+            </if>
+            <if test="vendorType != null and vendorType != ''">
+                vendor_type = #{vendorType},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="charge != null and charge != ''">
+                charge = #{charge},
+            </if>
+            <if test="contactName != null and contactName != ''">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactAddress != null and contactAddress != ''">
+                contact_address = #{contactAddress},
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                contact_number = #{contactNumber},
+            </if>
+            <if test="updateTime != null">
+                update_time = NOW(),
+            </if>
+            <if test="accountsPayable != null">
+                accounts_payable = #{accountsPayable},
+            </if>
+        </set>
+        where vendor_id = #{vendorId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_vendor where vendor_id = #{vendorId}
+    </delete>
+
+</mapper>
+

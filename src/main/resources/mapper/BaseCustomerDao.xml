@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseCustomerDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseCustomer" id="BaseCustomerMap">
+        <result property="customerNumber" column="customer_number" jdbcType="VARCHAR"/>
+        <result property="customerName" column="customer_name" jdbcType="VARCHAR"/>
+        <result property="customerType" column="customer_type" jdbcType="VARCHAR"/>
+        <result property="chargeName" column="charge_name" jdbcType="VARCHAR"/>
+        <result property="ratio" column="ratio" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="contact" column="contact" jdbcType="VARCHAR"/>
+        <result property="contactAddress" column="contact_address" jdbcType="VARCHAR"/>
+        <result property="contactNumber" column="contact_number" jdbcType="VARCHAR"/>
+        <result property="user" column="user" jdbcType="VARCHAR"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseCustomerMap">
+        select
+          customer_number, customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address, contact_number, user, creation_time, update_time
+        from frameproject.base_customer
+        where customer_number = #{customerNumber}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseCustomerMap">
+        select
+          customer_number, customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address, contact_number, user, creation_time, update_time
+        from frameproject.base_customer
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseCustomerMap">
+        select
+        customer_number, customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address,
+        contact_number, user, creation_time, update_time
+        from frameproject.base_customer
+        <where>
+            <if test="customerNumber != null and customerNumber != ''">
+                and customer_number = #{customerNumber}
+            </if>
+            <if test="customerName != null and customerName != ''">
+                and customer_name = #{customerName}
+            </if>
+            <if test="customerType != null and customerType != ''">
+                and customer_type = #{customerType}
+            </if>
+            <if test="chargeName != null and chargeName != ''">
+                and charge_name = #{chargeName}
+            </if>
+            <if test="ratio != null">
+                and ratio = #{ratio}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="contact != null and contact != ''">
+                and contact = #{contact}
+            </if>
+            <if test="contactAddress != null and contactAddress != ''">
+                and contact_address = #{contactAddress}
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                and contact_number = #{contactNumber}
+            </if>
+            <if test="user != null and user != ''">
+                and user = #{user}
+            </if>
+            <if test="creationTime != null">
+                and creation_time = #{creationTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="customerNumber" useGeneratedKeys="true">
+        insert into frameproject.base_customer(customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address, contact_number, user, creation_time, update_time)
+        values (#{customerName}, #{customerType}, #{chargeName}, #{ratio}, #{remarks}, #{contact}, #{contactAddress}, #{contactNumber}, #{user}, #{creationTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="customerNumber" useGeneratedKeys="true">
+        insert into frameproject.base_customer(customer_name, customer_type, charge_name, ratio, remarks, contact,
+        contact_address, contact_number, user, creation_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.customerName}, #{entity.customerType}, #{entity.chargeName}, #{entity.ratio}, #{entity.remarks},
+            #{entity.contact}, #{entity.contactAddress}, #{entity.contactNumber}, #{entity.user},
+            #{entity.creationTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="customerNumber" useGeneratedKeys="true">
+        insert into frameproject.base_customer(customer_name, customer_type, charge_name, ratio, remarks, contact,
+        contact_address, contact_number, user, creation_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.customerName}, #{entity.customerType}, #{entity.chargeName}, #{entity.ratio}, #{entity.remarks},
+            #{entity.contact}, #{entity.contactAddress}, #{entity.contactNumber}, #{entity.user},
+            #{entity.creationTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        customer_name = values(customer_name) , customer_type = values(customer_type) , charge_name =
+        values(charge_name) , ratio = values(ratio) , remarks = values(remarks) , contact = values(contact) ,
+        contact_address = values(contact_address) , contact_number = values(contact_number) , user = values(user) ,
+        creation_time = values(creation_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_customer
+        <set>
+            <if test="customerName != null and customerName != ''">
+                customer_name = #{customerName},
+            </if>
+            <if test="customerType != null and customerType != ''">
+                customer_type = #{customerType},
+            </if>
+            <if test="chargeName != null and chargeName != ''">
+                charge_name = #{chargeName},
+            </if>
+            <if test="ratio != null">
+                ratio = #{ratio},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="contact != null and contact != ''">
+                contact = #{contact},
+            </if>
+            <if test="contactAddress != null and contactAddress != ''">
+                contact_address = #{contactAddress},
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                contact_number = #{contactNumber},
+            </if>
+            <if test="user != null and user != ''">
+                user = #{user},
+            </if>
+            <if test="creationTime != null">
+                creation_time = #{creationTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where customer_number = #{customerNumber}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_customer where customer_number = #{customerNumber}
+    </delete>
+    <!--查询所有客户信息-->
+    <select id="findAllCutomer" resultMap="BaseCustomerMap">
+        SELECT c.* FROM `base_customer` c
+        <where>
+            <if test="customerName != null and customerName != ''">
+                and c.customer  LIKE CONCAT('%',#{customer,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="customerNumber != null and customerNumber != ''">
+                and c.customer_number LIKE CONCAT('%',#{customerNumber,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="customerType != null and customerType != ''">
+                and c.customer_type LIKE CONCAT('%',#{customerType,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="chargeName != null and chargeName != ''">
+                and c.charge_name LIKE CONCAT('%',#{chargeName,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
+

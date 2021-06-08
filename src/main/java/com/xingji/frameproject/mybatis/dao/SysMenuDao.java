@@ -1,0 +1,26 @@
+package com.xingji.frameproject.mybatis.dao;
+
+import com.xingji.frameproject.mybatis.entity.SysMenu;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+/**
+ * (SysMenu)表数据库访问层
+ *
+ * @author makejava
+ * @since 2021-05-15 15:36:27
+ */
+@Mapper
+public interface SysMenuDao {
+    /**
+     * 通过用户id查询对应菜单
+     *
+     * @param userId 用户id
+     * @return 对象列表
+     */
+    List<SysMenu> usermenu(Integer userId);
+
+}
+

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseProductDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseProduct" id="BaseProductMap">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="unitId" column="unit_id" jdbcType="INTEGER"/>
+        <result property="productTypeId" column="product_type_id" jdbcType="INTEGER"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="pictureId" column="picture_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="com.xingji.frameproject.vo.BaseProductVo" id="BaseProductShowMap">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="unitId" column="unit_id" jdbcType="INTEGER"/>
+        <result property="productTypeId" column="product_type_id" jdbcType="INTEGER"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="pictureId" column="picture_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productTypeName" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="unitName" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="opingNumber" column="SUM(o.opening_number)" jdbcType="INTEGER"/>
+        <result property="productNumber" column="SUM(o.product_number)" jdbcType="INTEGER"/>
+        <result property="expectNumber" column="SUM(o.expect_number)" jdbcType="INTEGER"/>
+        <result property="pictureAddress" column="picture_address" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="com.xingji.frameproject.vo.SaleProductVo" id="SaleProduct">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="saleUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="remark" column="remarks" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
+        <result property="expectNum" column="SUM(o.expect_number)" jdbcType="INTEGER"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap type="com.xingji.frameproject.vo.PurchaseProductVo" id="PurchaseProductVo">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="remark" column="remarks" jdbcType="VARCHAR"/>
+        <result property="product_type_name" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
+        <result property="expectNum" column="SUM(o.current_number)" jdbcType="INTEGER"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseProductMap">
+        select
+          product_id, product_name, ingredient, product_spec, unit_id, product_type_id, purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy
+        from frameproject.base_product
+        where product_id = #{productId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseProductMap">
+        select
+          product_id, product_name, ingredient, product_spec, unit_id, product_type_id, purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy
+        from frameproject.base_product
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseProductMap">
+        select
+        product_id, product_name, ingredient, product_spec, unit_id, product_type_id, purchase_unit_price,
+        purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy
+        from frameproject.base_product
+        <where>
+            <if test="productId != null and productId != ''">
+                and product_id = #{productId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name = #{productName}
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                and ingredient = #{ingredient}
+            </if>
+            <if test="productSpec != null and productSpec != ''">
+                and product_spec = #{productSpec}
+            </if>
+            <if test="unitId != null">
+                and unit_id = #{unitId}
+            </if>
+            <if test="productTypeId != null">
+                and product_type_id = #{productTypeId}
+            </if>
+            <if test="purchaseUnitPrice != null">
+                and purchase_unit_price = #{purchaseUnitPrice}
+            </if>
+            <if test="purchaseMoney != null">
+                and purchase_money = #{purchaseMoney}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                and product_describe = #{productDescribe}
+            </if>
+            <if test="pictureId != null">
+                and picture_id = #{pictureId}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="creationTime != null">
+                and creation_time = #{creationTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                and gram_heavy = #{gramHeavy}
+            </if>
+        </where>
+    </select>
+
+    <!--查询所有类别的产品-->
+    <select id="findAllProduct" resultMap="BaseProductShowMap">
+        SELECT p.*,t.product_type_name,u.unit_name,SUM(o.opening_number),SUM(o.product_number),SUM(o.expect_number),pic.picture_address,uu.user_name
+        FROM `base_product` p
+        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
+        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
+        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
+        LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
+        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        GROUP BY p.product_id
+    </select>
+    <select id="allsaleproduct" resultMap="SaleProduct">
+        SELECT p.*,t.product_type_name,u.unit_name,SUM(o.opening_number),SUM(o.product_number),SUM(o.expect_number),pic.picture_address,uu.user_name
+        FROM `base_product` p
+        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
+        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
+        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
+        LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
+        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        GROUP BY p.product_id
+    </select>
+    <select id="allPurchaseProduct" resultMap="PurchaseProductVo">
+        SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe
+        FROM `base_product` p
+        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
+        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
+        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
+        LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
+        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        GROUP BY p.product_id
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="productSpec" useGeneratedKeys="true">
+        insert into frameproject.base_product(product_id, product_name, ingredient, unit_id, product_type_id, purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy)
+        values (#{productId}, #{productName}, #{ingredient}, #{unitId}, #{productTypeId}, #{purchaseUnitPrice}, #{purchaseMoney}, #{remarks}, #{productDescribe}, #{pictureId}, #{state}, #{userId}, #{creationTime}, #{updateTime}, #{gramHeavy})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="productSpec" useGeneratedKeys="true">
+        insert into frameproject.base_product(product_id, product_name, ingredient, unit_id, product_type_id,
+        purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time,
+        update_time, gram_heavy)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productId}, #{entity.productName}, #{entity.ingredient}, #{entity.unitId},
+            #{entity.productTypeId}, #{entity.purchaseUnitPrice}, #{entity.purchaseMoney}, #{entity.remarks},
+            #{entity.productDescribe}, #{entity.pictureId}, #{entity.state}, #{entity.userId}, #{entity.creationTime},
+            #{entity.updateTime}, #{entity.gramHeavy})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="productSpec" useGeneratedKeys="true">
+        insert into frameproject.base_product(product_id, product_name, ingredient, unit_id, product_type_id,
+        purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time,
+        update_time, gram_heavy)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productId}, #{entity.productName}, #{entity.ingredient}, #{entity.unitId},
+            #{entity.productTypeId}, #{entity.purchaseUnitPrice}, #{entity.purchaseMoney}, #{entity.remarks},
+            #{entity.productDescribe}, #{entity.pictureId}, #{entity.state}, #{entity.userId}, #{entity.creationTime},
+            #{entity.updateTime}, #{entity.gramHeavy})
+        </foreach>
+        on duplicate key update
+        product_id = values(product_id) , product_name = values(product_name) , ingredient = values(ingredient) ,
+        unit_id = values(unit_id) , product_type_id = values(product_type_id) , purchase_unit_price =
+        values(purchase_unit_price) , purchase_money = values(purchase_money) , remarks = values(remarks) ,
+        product_describe = values(product_describe) , picture_id = values(picture_id) , state = values(state) , user_id
+        = values(user_id) , creation_time = values(creation_time) , update_time = values(update_time) , gram_heavy =
+        values(gram_heavy)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_product
+        <set>
+            <if test="productId != null and productId != ''">
+                product_id = #{productId},
+            </if>
+            <if test="productName != null and productName != ''">
+                product_name = #{productName},
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                ingredient = #{ingredient},
+            </if>
+            <if test="unitId != null">
+                unit_id = #{unitId},
+            </if>
+            <if test="productTypeId != null">
+                product_type_id = #{productTypeId},
+            </if>
+            <if test="purchaseUnitPrice != null">
+                purchase_unit_price = #{purchaseUnitPrice},
+            </if>
+            <if test="purchaseMoney != null">
+                purchase_money = #{purchaseMoney},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                product_describe = #{productDescribe},
+            </if>
+            <if test="pictureId != null">
+                picture_id = #{pictureId},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="creationTime != null">
+                creation_time = #{creationTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                gram_heavy = #{gramHeavy},
+            </if>
+        </set>
+        where product_spec = #{productSpec}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_product where product_spec = #{productSpec}
+    </delete>
+    <!--通过主键删除该产品库存数据-->
+    <delete id="deleteOpingById">
+        delete from frameproject.base_opening where product_id = #{productID}
+    </delete>
+</mapper>
+

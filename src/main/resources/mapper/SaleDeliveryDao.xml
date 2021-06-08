@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.SaleDeliveryDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.SaleDelivery" id="SaleDeliveryMap">
+        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
+        <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
+        <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
+        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
+        <result property="contacts" column="contacts" jdbcType="VARCHAR"/>
+        <result property="contactsPhone" column="contacts_phone" jdbcType="VARCHAR"/>
+        <result property="contactsAddress" column="contacts_address" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
+        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="billingId" column="billing_id" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="deliveryState" column="delivery_state" jdbcType="INTEGER"/>
+        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SaleDeliveryMap">
+        select
+          delivery_id, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, order_id, return_id, receipt_id, cav_id, billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks
+        from frameproject.sale_delivery
+        where delivery_id = #{deliveryId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SaleDeliveryMap">
+        select
+          delivery_id, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, order_id, return_id, receipt_id, cav_id, billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks
+        from frameproject.sale_delivery
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SaleDeliveryMap">
+        select
+        delivery_id, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone,
+        contacts_address, remarks, approver, founder, found_time, update_time, order_id, return_id, receipt_id, cav_id,
+        billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks
+        from frameproject.sale_delivery
+        <where>
+            <if test="deliveryId != null and deliveryId != ''">
+                and delivery_id = #{deliveryId}
+            </if>
+            <if test="deliveryTime != null">
+                and delivery_time = #{deliveryTime}
+            </if>
+            <if test="customer != null and customer != ''">
+                and customer = #{customer}
+            </if>
+            <if test="salesmen != null and salesmen != ''">
+                and salesmen = #{salesmen}
+            </if>
+            <if test="disrate != null">
+                and disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                and dismoney = #{dismoney}
+            </if>
+            <if test="receivables != null">
+                and receivables = #{receivables}
+            </if>
+            <if test="contacts != null and contacts != ''">
+                and contacts = #{contacts}
+            </if>
+            <if test="contactsPhone != null and contactsPhone != ''">
+                and contacts_phone = #{contactsPhone}
+            </if>
+            <if test="contactsAddress != null and contactsAddress != ''">
+                and contacts_address = #{contactsAddress}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="approver != null and approver != ''">
+                and approver = #{approver}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="foundTime != null">
+                and found_time = #{foundTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                and order_id = #{orderId}
+            </if>
+            <if test="returnId != null and returnId != ''">
+                and return_id = #{returnId}
+            </if>
+            <if test="receiptId != null and receiptId != ''">
+                and receipt_id = #{receiptId}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="billingId != null and billingId != ''">
+                and billing_id = #{billingId}
+            </if>
+            <if test="lastApprovalTime != null">
+                and last_approval_time = #{lastApprovalTime}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+            <if test="deliveryState != null">
+                and delivery_state = #{deliveryState}
+            </if>
+            <if test="orderState != null">
+                and order_state = #{orderState}
+            </if>
+            <if test="approvalRemarks != null">
+                approval_remarks = #{approvalRemarks},
+            </if>
+        </where>
+    </select>
+    <!--通过实体作为或者条件查询-->
+    <select id="conditionpage" resultMap="SaleDeliveryMap">
+        select * from sale_delivery
+        <where>
+            <if test="orderId != null and orderId != ''">
+                and delivery_id like CONCAT('%',#{orderId},'%')
+            </if>
+
+            <if test="deliveryTime != null and deliveryTime=='今天'" >
+                and to_days(delivery_time) = to_days(now())
+            </if>
+            <if test="deliveryTime != null and deliveryTime=='昨天'" >
+                and to_days(now())-to_days(delivery_time) = 1
+            </if>
+            <if test="deliveryTime != null and deliveryTime=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(delivery_time)
+            </if>
+            <if test="deliveryTime != null and deliveryTime=='本月'" >
+                and DATE_FORMAT( delivery_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="deliveryTime != null and deliveryTime != '' and deliveryTime=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(delivery_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
+            </if>
+
+            <if test="customer != null and customer !=''">
+                and customer = #{customer}
+            </if>
+            <if test="salesmen != null and salesmen !=''">
+                and salesmen = #{salesmen}
+            </if>
+            <if test="founder != null and founder !=''">
+                and founder = #{founder}
+            </if>
+            <if test="approvalState != null and approvalState == '草稿'" >
+                and approval_state = -2
+            </if>
+            <if test="approvalState != null and approvalState == '待审批'" >
+                and approval_state = 0
+            </if>
+            <if test="approvalState != null and approvalState == '已驳回'" >
+                and approval_state = -1
+            </if>
+            <if test="approvalState != null and approvalState == '审批通过'" >
+                and approval_state = 1
+            </if>
+        </where>
+        ORDER BY found_time DESC
+    </select>
+    <!--查询所有订单-->
+    <select id="queryAllByPage" resultMap="SaleDeliveryMap">
+        select * from sale_delivery order by found_time desc
+    </select>
+    <!--查询可退货订单-->
+    <select id="canreturn" resultMap="SaleDeliveryMap">
+        select * from sale_delivery  where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(delivery_time)
+        and approval_state=1
+        and return_id is NULL
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery(delivery_id,delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, order_id, return_id, receipt_id, cav_id, billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks)
+        values (#{deliveryId},#{deliveryTime}, #{customer}, #{salesmen}, #{disrate}, #{dismoney}, #{receivables}, #{contacts}, #{contactsPhone}, #{contactsAddress}, #{remarks}, #{approver}, #{founder}, #{foundTime}, #{updateTime}, #{orderId}, #{returnId}, #{receiptId}, #{cavId}, #{billingId}, #{lastApprovalTime}, #{approvalState}, #{deliveryState}, #{orderState},#{approvalRemarks})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery(delivery_time, customer, salesmen, disrate, dismoney, receivables,
+        contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, order_id,
+        return_id, receipt_id, cav_id, billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.disrate}, #{entity.dismoney},
+            #{entity.receivables}, #{entity.contacts}, #{entity.contactsPhone}, #{entity.contactsAddress},
+            #{entity.remarks}, #{entity.approver}, #{entity.founder}, #{entity.foundTime}, #{entity.updateTime},
+            #{entity.orderId}, #{entity.returnId}, #{entity.receiptId}, #{entity.cavId}, #{entity.billingId},
+            #{entity.lastApprovalTime}, #{entity.approvalState}, #{entity.deliveryState}, #{entity.orderState},#{approvalRemarks})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.sale_delivery(delivery_time, customer, salesmen, disrate, dismoney, receivables,
+        contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, order_id,
+        return_id, receipt_id, cav_id, billing_id, last_approval_time, approval_state, delivery_state, order_state,approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.disrate}, #{entity.dismoney},
+            #{entity.receivables}, #{entity.contacts}, #{entity.contactsPhone}, #{entity.contactsAddress},
+            #{entity.remarks}, #{entity.approver}, #{entity.founder}, #{entity.foundTime}, #{entity.updateTime},
+            #{entity.orderId}, #{entity.returnId}, #{entity.receiptId}, #{entity.cavId}, #{entity.billingId},
+            #{entity.lastApprovalTime}, #{entity.approvalState}, #{entity.deliveryState}, #{entity.orderState},#{approvalRemarks})
+        </foreach>
+        on duplicate key update
+        delivery_time = values(delivery_time) , customer = values(customer) , salesmen = values(salesmen) , disrate =
+        values(disrate) , dismoney = values(dismoney) , receivables = values(receivables) , contacts = values(contacts)
+        , contacts_phone = values(contacts_phone) , contacts_address = values(contacts_address) , remarks =
+        values(remarks) , approver = values(approver) , founder = values(founder) , found_time = values(found_time) ,
+        update_time = values(update_time) , order_id = values(order_id) , return_id = values(return_id) , receipt_id =
+        values(receipt_id) , cav_id = values(cav_id) , billing_id = values(billing_id) , last_approval_time =
+        values(last_approval_time) , approval_state = values(approval_state) , delivery_state = values(delivery_state) ,
+        order_state = values(order_state),approval_remarks=values(approval_remarks)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.sale_delivery
+        <set>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime},
+            </if>
+            <if test="customer != null and customer != ''">
+                customer = #{customer},
+            </if>
+            <if test="salesmen != null and salesmen != ''">
+                salesmen = #{salesmen},
+            </if>
+            <if test="disrate != null">
+                disrate = #{disrate},
+            </if>
+            <if test="dismoney != null">
+                dismoney = #{dismoney},
+            </if>
+            <if test="receivables != null">
+                receivables = #{receivables},
+            </if>
+            <if test="contacts != null and contacts != ''">
+                contacts = #{contacts},
+            </if>
+            <if test="contactsPhone != null and contactsPhone != ''">
+                contacts_phone = #{contactsPhone},
+            </if>
+            <if test="contactsAddress != null and contactsAddress != ''">
+                contacts_address = #{contactsAddress},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="approver != null and approver != ''">
+                approver = #{approver},
+            </if>
+            <if test="founder != null and founder != ''">
+                founder = #{founder},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{foundTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="orderId != null and orderId != ''">
+                order_id = #{orderId},
+            </if>
+            <if test="returnId != null and returnId != ''">
+                return_id = #{returnId},
+            </if>
+            <if test="receiptId != null and receiptId != ''">
+                receipt_id = #{receiptId},
+            </if>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="billingId != null and billingId != ''">
+                billing_id = #{billingId},
+            </if>
+            <if test="lastApprovalTime != null">
+                last_approval_time = #{lastApprovalTime},
+            </if>
+            <if test="approvalState != null">
+                approval_state = #{approvalState},
+            </if>
+            <if test="deliveryState != null">
+                delivery_state = #{deliveryState},
+            </if>
+            <if test="orderState != null">
+                order_state = #{orderState},
+            </if>
+            <if test="approvalRemarks != null">
+                approval_remarks = #{approvalRemarks},
+            </if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.sale_delivery where delivery_id = #{deliveryId}
+    </delete>
+
+</mapper>
+
