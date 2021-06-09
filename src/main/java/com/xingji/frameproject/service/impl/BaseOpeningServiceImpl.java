@@ -42,6 +42,17 @@ public class BaseOpeningServiceImpl implements BaseOpeningService {
     }
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseOpening 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<BaseOpening> queryAll(BaseOpening baseOpening) {
+        return this.baseOpeningDao.queryAll(baseOpening);
+    }
+
+    /**
      * 新增数据
      *
      * @param baseOpening 实例对象
