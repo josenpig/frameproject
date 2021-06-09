@@ -1,0 +1,26 @@
+{
+  "name" : "BaseUnit",
+  "preName" : "",
+  "comment" : null,
+  "templateGroupName" : "Default",
+  "fullColumn" : [ {
+    "name" : "unitId",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "unitName",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  } ],
+  "pkColumn" : null,
+  "otherColumn" : null,
+  "savePackageName" : "com.xingji.frameproject.mybatis",
+  "savePath" : "./src/main/java/com/xingji/frameproject/mybatis",
+  "saveModelName" : "frameproject"
+}

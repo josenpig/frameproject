@@ -1,19 +1,13 @@
 package com.xingji.frameproject.controller;
 
-import com.xingji.frameproject.mybatis.entity.BaseCustomer;
-import com.xingji.frameproject.mybatis.entity.BaseProduct;
-import com.xingji.frameproject.mybatis.entity.SysMenu;
-import com.xingji.frameproject.mybatis.entity.SysUser;
-import com.xingji.frameproject.service.BaseCapitalAccountService;
+import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseCustomerService;
+import com.xingji.frameproject.service.BaseVendorService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
-import com.xingji.frameproject.util.SendSms;
 import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.SaleofpeopleVo;
-import com.xingji.frameproject.vo.UserVo;
+import com.xingji.frameproject.vo.OfpeopleVo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,16 +34,22 @@ public class PersonnelController {
     SysUserService us;
     @Autowired
     BaseCustomerService bcs;
+    @Autowired
+    BaseVendorService bvs;
 
-    @GetMapping("/saleofpeople/{id}")
-    public AjaxResponse roleusers(@PathVariable("id") Integer id){
-        List<SysUser> salemens=us.roleusers(id);
+    @GetMapping("/ofpeople")
+    public AjaxResponse roleusers(){
+        List<SysUser> salemens=us.roleusers(3);
+        List<SysUser> purchasemans=us.roleusers(1);
         List<SysUser> notifiers=us.queryAll(new SysUser());
         List<BaseCustomer> customers=bcs.queryAll(new BaseCustomer());
-        SaleofpeopleVo vo=new SaleofpeopleVo();
+        List<BaseVendor> vendors=bvs.findAllVendor(new BaseVendor());
+        OfpeopleVo vo=new OfpeopleVo();
         vo.setSalemans(salemens);
+        vo.setPurchasemans(purchasemans);
         vo.setCustomers(customers);
         vo.setNotifiers(notifiers);
+        vo.setVendors(vendors);
         return AjaxResponse.success(vo);
     }
 }

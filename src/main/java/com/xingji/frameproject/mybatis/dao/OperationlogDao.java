@@ -3,6 +3,8 @@ package com.xingji.frameproject.mybatis.dao;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface OperationlogDao {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +18,5 @@ public interface OperationlogDao {
     int updateByPrimaryKeySelective(Operationlog record);
 
     int updateByPrimaryKey(Operationlog record);
+    List<Operationlog> findAll(Operationlog operationlog);
 }

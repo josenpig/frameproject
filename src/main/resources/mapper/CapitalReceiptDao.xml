@@ -21,7 +21,16 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
     </resultMap>
-
+    <resultMap type="com.xingji.frameproject.vo.CiaCapVo" id="CiaCapMap">
+        <result property="capitalId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="capitalType" column="income_type" jdbcType="VARCHAR"/>
+        <result property="otherParty" column="customer" jdbcType="VARCHAR"/>
+        <result property="capitalTime" column="receipt_time" jdbcType="TIMESTAMP"/>
+        <result property="beforeMoney" column="cia_money" jdbcType="NUMERIC"/>
+        <result property="writtenMoney" column="cia_balance-cia_money" jdbcType="NUMERIC"/>
+        <result property="unwrittenMoney" column="cia_balance" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
     <!--查询单个-->
     <select id="queryById" resultMap="CapitalReceiptMap">
         select
@@ -198,6 +207,17 @@
     <delete id="deleteById">
         delete from frameproject.capital_receipt where receipt_id = #{receiptId}
     </delete>
-
+    <!--通过实体作为筛选条件查询-->
+    <select id="querycavReceipt" resultMap="CiaCapMap">
+        select *,cia_balance-cia_money from frameproject.capital_receipt
+        <where>
+            <if test="capitalId != null and capitalId != ''">
+                and receipt_id = #{capitalId}
+            </if>
+            <if test="otherParty != null and otherParty != ''">
+                and customer = #{otherParty}
+            </if>
+        </where>
+    </select>
 </mapper>
 

@@ -19,7 +19,7 @@
         select
           id, cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money
         from frameproject.capital_cav_cia_bill
-        where id = #{id}
+        where cav_id = #{cavId}
     </select>
 
     <!--查询指定行数据-->

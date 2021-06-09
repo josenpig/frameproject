@@ -30,6 +30,14 @@ public interface BaseDepotService {
     List<BaseDepot> queryAllByLimit(int offset, int limit);
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseDepot 实例对象
+     * @return 对象列表
+     */
+    List<BaseDepot> queryAll(BaseDepot baseDepot);
+
+    /**
      * 新增数据
      *
      * @param baseDepot 实例对象

@@ -102,6 +102,9 @@ public interface SysUserDao {
      * @return 实列对象
      */
     List<SysUser> roleusers(Integer id);
+
     Integer queryUserIdByUserName(String userName);
+
+    List<String> findsysName();
 }
 

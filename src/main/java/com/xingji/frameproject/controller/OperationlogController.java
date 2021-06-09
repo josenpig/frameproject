@@ -3,10 +3,12 @@ package com.xingji.frameproject.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.annotation.Log;
-import com.xingji.frameproject.mybatis.entity.BaseCharge;
-import com.xingji.frameproject.mybatis.entity.BaseCustomer;
 import com.xingji.frameproject.mybatis.entity.Loginin;
+import com.xingji.frameproject.mybatis.entity.Operationlog;
+import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.LogininService;
+import com.xingji.frameproject.service.OperationlogService;
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class OperationlogController {
     private JwtTokenUtil jwtTokenUtil;
     @Resource
     private LogininService logininService;
+    @Resource
+    private OperationlogService operationlogService;
+    @Resource
+    private SysUserService sysUserService;
     /**
      * 通过登陆日期查询
      * @param logintime
@@ -57,4 +63,27 @@ public class OperationlogController {
         map.put("rows",list);
         return AjaxResponse.success(map);
    }
+    /**
+     * 查询所有操作日志
+     * @return 日志记录集合
+     */
+    @GetMapping("/findAllLog")
+    public AjaxResponse findAllOperationLog(Integer currentPage, Integer pageSize){
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        Operationlog operationlog=new Operationlog();
+        List<Operationlog> list= operationlogService.findAll(operationlog);
+        System.out.println(list);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    @GetMapping("/FindAllUserName")
+    public AjaxResponse findAllOperationLog(){
+        Map<String,Object> map=new HashMap<>();
+        List<String> list=sysUserService.findsysName();
+        System.out.println(list);
+        map.put("operator",list);
+        return AjaxResponse.success(list);
+    }
 }

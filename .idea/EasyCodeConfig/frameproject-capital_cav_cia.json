@@ -18,7 +18,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "customer",
+    "name" : "otherParty",
     "comment" : null,
     "type" : null,
     "shortType" : null,

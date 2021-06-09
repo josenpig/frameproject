@@ -24,6 +24,14 @@
         <result property="receiptMoney" column="receivables" jdbcType="NUMERIC"/>
         <result property="customer" column="customer" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap id="CiaBill" type="com.xingji.frameproject.vo.CiaBillVo">
+        <result property="saleId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="saleTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="notMoney" column="uncollected" jdbcType="NUMERIC"/>
+        <result property="alreadyMoney" column="received" jdbcType="NUMERIC"/>
+        <result property="shouldMoney" column="receivables" jdbcType="NUMERIC"/>
+        <result property="otherParty" column="customer" jdbcType="VARCHAR"/>
+    </resultMap>
     <select id="queryReceipt" resultMap="SaleReceipt">
         select * from capital_receivable
         <where>
@@ -33,6 +41,18 @@
             </if>
             <if test="customer != null and customer != ''">
                 and customer = #{customer}
+            </if>
+        </where>
+    </select>
+    <select id="querycavReceipt" resultMap="CiaBill">
+        select * from capital_receivable
+        <where>
+            case_state=0
+            <if test="saleId != null and saleId != ''">
+                and delivery_id = #{saleId}
+            </if>
+            <if test="otherParty != null and otherParty != ''">
+                and customer = #{otherParty}
             </if>
         </where>
     </select>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("OperationlogService")
 public class OperationlogServiceImpl implements OperationlogService {
@@ -21,5 +22,10 @@ public class OperationlogServiceImpl implements OperationlogService {
     public Operationlog InsertLog(Operationlog operationlog) {
         this.operationlogDao.insert(operationlog);
         return  operationlog;
+    }
+
+    @Override
+    public List<Operationlog> findAll(Operationlog operationlog) {
+        return this.operationlogDao.findAll(operationlog);
     }
 }

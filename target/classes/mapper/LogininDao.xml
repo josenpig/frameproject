@@ -32,6 +32,7 @@
           and c.typeofoperator LIKE CONCAT('%',#{typeofoperator,jdbcType=VARCHAR},'%')
         </if>
       </where>
+      order by logintime desc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loginin

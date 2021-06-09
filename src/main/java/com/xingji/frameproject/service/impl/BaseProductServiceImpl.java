@@ -70,6 +70,11 @@ public class BaseProductServiceImpl implements BaseProductService {
         return this.queryById(baseProduct.getProductSpec());
     }
 
+    @Override
+    public List<BaseProduct> queryAll(BaseProduct baseProduct) {
+        return this.baseProductDao.queryAll(baseProduct);
+    }
+
     /**
      * 通过主键删除数据
      *
