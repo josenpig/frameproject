@@ -1,6 +1,8 @@
 package com.xingji.frameproject.service;
 
+import com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill;
 import com.xingji.frameproject.mybatis.entity.CapitalReceivable;
+import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 
 import java.math.BigDecimal;
@@ -58,6 +60,8 @@ public interface CapitalReceivableService {
     List<CapitalReceivable> queryAllByPage();
 
     List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo);
+
+    List<CiaBillVo> querycavReceipt(CiaBillVo vo);
 
     SaleReceiptVo querythisReceipt(String saleId);
     /**

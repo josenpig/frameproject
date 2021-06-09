@@ -24,11 +24,7 @@ import java.util.*;
 @RestController
 @RequestMapping("baseCustomer")
 public class BaseCustomerController {
-    /**
-     * 服务对象
-     */
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+
     @Resource
     private BaseCustomerService baseCustomerService;
 
@@ -45,7 +41,7 @@ public class BaseCustomerController {
 
     /**
      * 查询所有客户信息
-     * @return 产品集合
+     * @return 客户集合
      */
     @GetMapping("/findAllCustomer")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
@@ -61,7 +57,7 @@ public class BaseCustomerController {
 
     /**
      * 根据客户类型或负责人查询的客户
-     * @return 产品集合
+     * @return 客户集合
      */
     @GetMapping("/findAllCustomer/ByTypeOrCharge")
     public AjaxResponse findAllCustomerByTypeOrCharge(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("selcharge") String selcharge, @Param("selCustomerType") String selCustomerType){
@@ -84,7 +80,7 @@ public class BaseCustomerController {
 
     /**
      * 根据客户编号或客户名称查询的客户
-     * @return 产品集合
+     * @return 客户集合
      */
     @GetMapping("/findAllCustomer/ByIdOrName")
     public AjaxResponse findAllProductByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select,@Param("SearchContent") String SearchContent){

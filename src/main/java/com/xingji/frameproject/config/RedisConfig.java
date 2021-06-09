@@ -44,10 +44,7 @@ public class RedisConfig {
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         //序列化时将对象全类名一起保存下来,同时指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
         ////此项必须配置，否则会报Java.lang.ClassCastException:java.util.LinkedHashMap cannot be cast to XXX
-        objectMapper.activateDefaultTyping(
-                LaissezFaireSubTypeValidator.instance ,
-                ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
 
         //简单的字符串序列化

@@ -71,7 +71,7 @@ public interface CapitalReceiptBillDao {
      * @param capitalReceiptBill 实例对象
      * @return 影响行数
      */
-    boolean update(CapitalReceiptBill capitalReceiptBill);
+    int update(CapitalReceiptBill capitalReceiptBill);
 
     /**
      * 通过主键删除数据

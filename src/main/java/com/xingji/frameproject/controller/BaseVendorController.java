@@ -127,7 +127,7 @@ public class BaseVendorController {
         return AjaxResponse.success(retList);
     };
     /**
-     * 判断供应商Id是否重复V
+     * 判断供应商Id是否重复
      * @param id
      * @return
      */

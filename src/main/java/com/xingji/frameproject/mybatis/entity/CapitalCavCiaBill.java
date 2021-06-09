@@ -1,6 +1,8 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -31,6 +33,8 @@ public class CapitalCavCiaBill implements Serializable {
     /**
      * 单据日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date saleTime;
     /**
      * 应收付款金额

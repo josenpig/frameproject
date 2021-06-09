@@ -18,10 +18,10 @@ public interface CapitalCavCiaCapDao {
     /**
      * 通过ID查询单条数据
      *
-     * @param id 主键
+     * @param cavId
      * @return 实例对象
      */
-    CapitalCavCiaCap queryById(Integer id);
+    List<CapitalCavCiaCap> queryById(String cavId);
 
     /**
      * 查询指定行数据

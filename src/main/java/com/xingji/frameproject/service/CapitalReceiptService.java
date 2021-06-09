@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalReceipt;
+import com.xingji.frameproject.vo.CiaCapVo;
 
 import java.util.List;
 
@@ -55,4 +56,5 @@ public interface CapitalReceiptService {
      */
     boolean deleteById(String receiptId);
 
+    List<CiaCapVo> querycavReceipt(CiaCapVo vo);
 }

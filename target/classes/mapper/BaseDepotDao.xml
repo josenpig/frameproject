@@ -37,25 +37,10 @@
         from frameproject.base_depot
         <where>
             <if test="depotId != null and depotId != ''">
-                and depot_id = #{depotId}
+                and depot_id LIKE CONCAT('%',#{depotId,jdbcType=VARCHAR},'%')
             </if>
             <if test="depotName != null and depotName != ''">
-                and depot_name = #{depotName}
-            </if>
-            <if test="depotAddress != null and depotAddress != ''">
-                and depot_address = #{depotAddress}
-            </if>
-            <if test="chargeId != null || chargeId != 0">
-                and charge_name = #{chargeId}
-            </if>
-            <if test="contactNumber != null and contactNumber != ''">
-                and contact_number = #{contactNumber}
-            </if>
-            <if test="remarks != null and remarks != ''">
-                and remarks = #{remarks}
-            </if>
-            <if test="state != null">
-                and state = #{state}
+                and depot_name LIKE CONCAT('%',#{depotName,jdbcType=VARCHAR},'%')
             </if>
         </where>
     </select>
@@ -68,15 +53,15 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="depotId" useGeneratedKeys="true">
-        insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
-        values (#{depotName}, #{depotAddress}, #{chargeId}, #{contactNumber}, #{remarks}, #{state})
+        insert into frameproject.base_depot(depot_id,depot_name, depot_address, charge_name, contact_number, remarks, state)
+        values (#{depotId},#{depotName}, #{depotAddress}, #{chargeName}, #{contactNumber}, #{remarks}, 1)
     </insert>
 
     <insert id="insertBatch" keyProperty="depotId" useGeneratedKeys="true">
         insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeId}, #{entity.contactNumber},
+            (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeName}, #{entity.contactNumber},
             #{entity.remarks}, #{entity.state})
         </foreach>
     </insert>
@@ -85,7 +70,7 @@
         insert into frameproject.base_depot(depot_name, depot_address, charge_name, contact_number, remarks, state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeId}, #{entity.contactNumber},
+            (#{entity.depotName}, #{entity.depotAddress}, #{entity.chargeName}, #{entity.contactNumber},
             #{entity.remarks}, #{entity.state})
         </foreach>
         on duplicate key update
@@ -103,8 +88,8 @@
             <if test="depotAddress != null and depotAddress != ''">
                 depot_address = #{depotAddress},
             </if>
-            <if test="chargeId != null">
-                charge_name = #{chargeId},
+            <if test="chargeName != null">
+                charge_name = #{chargeName},
             </if>
             <if test="contactNumber != null and contactNumber != ''">
                 contact_number = #{contactNumber},
