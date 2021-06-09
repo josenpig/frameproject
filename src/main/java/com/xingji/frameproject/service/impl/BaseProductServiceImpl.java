@@ -4,6 +4,7 @@ import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.dao.BaseProductDao;
 import com.xingji.frameproject.vo.BaseProductVo;
 import com.xingji.frameproject.service.BaseProductService;
+import com.xingji.frameproject.vo.InventoryProjectVo;
 import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.SaleProductVo;
 import org.springframework.stereotype.Service;
@@ -109,5 +110,15 @@ public class BaseProductServiceImpl implements BaseProductService {
     @Override
     public List<PurchaseProductVo> allPurchaseProduct() {
         return this.baseProductDao.allPurchaseProduct();
+    }
+
+
+    /**
+     * 查询所有的库存盘点商品
+     * @return
+     */
+    @Override
+    public List<InventoryProjectVo> allStockInventoryProduct() {
+        return this.baseProductDao.allInventoryProject();
     }
 }

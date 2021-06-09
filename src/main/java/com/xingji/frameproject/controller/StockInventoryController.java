@@ -1,13 +1,23 @@
 package com.xingji.frameproject.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.mybatis.entity.StockInventory;
+import com.xingji.frameproject.service.BaseDepotService;
+import com.xingji.frameproject.service.BaseProductService;
 import com.xingji.frameproject.service.StockInventoryService;
+import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.InventoryProjectVo;
+import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (StockInventory)表控制层
@@ -22,6 +32,10 @@ public class StockInventoryController {
      */
     @Resource
     private StockInventoryService stockInventoryService;
+    @Resource
+    private BaseDepotService depotService;
+    @Resource
+    private BaseProductService productService;
 
     /**
      * 通过主键查询单条数据
@@ -132,4 +146,31 @@ public class StockInventoryController {
     public boolean deleteBatch(@RequestBody List<Integer> ids) {
         return this.stockInventoryService.deleteBatch(ids);
     }
+
+    /**
+     * 查询所有的仓库表
+     * @return
+     */
+    @GetMapping("/stockInventory/allDepot")
+    public AjaxResponse selectAllDepot(){
+        Map<String,Object> map=new HashMap<>();
+        List<BaseDepot> depots = depotService.findAll();
+        map.put("depots",depots);
+        return AjaxResponse.success(map);
+    }
+
+
+    /**
+     * 查询所有库存盘点的产品
+     * @return 产品集合
+     */
+    @GetMapping("/stockInventory/allProduct")
+    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize){
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<InventoryProjectVo> inventoryProjectVos=productService.allStockInventoryProduct();
+        map.put("total",page.getTotal());
+        map.put("rows",inventoryProjectVos);
+        return AjaxResponse.success(map);
+    };
 }

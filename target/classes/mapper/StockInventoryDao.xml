@@ -130,7 +130,7 @@
         inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout)
         values (#{id}, #{inventoryTime}, #{depotId}, #{depotName}, #{inventorycount}, #{inventorycounter},
         #{inventorypeople}, #{inventorystate}, #{inventorypl}, #{remarks}, #{stockin}, #{stockout})
-        
+
     </insert>
 
     <!--批量新增数据 -->
