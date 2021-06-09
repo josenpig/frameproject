@@ -5,7 +5,7 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCia" id="CapitalCavCiaMap">
         <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
         <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
-        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="otherParty" column="other_party" jdbcType="VARCHAR"/>
         <result property="cavBy" column="cav_by" jdbcType="VARCHAR"/>
         <result property="cavType" column="cav_type" jdbcType="VARCHAR"/>
         <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
@@ -22,7 +22,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="CapitalCavCiaMap">
         select
-          cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
+          cav_id, order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
         from frameproject.capital_cav_cia
         where cav_id = #{cavId}
     </select>
@@ -30,7 +30,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalCavCiaMap">
         select
-          cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
+          cav_id, order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
         from frameproject.capital_cav_cia
         limit #{offset}, #{limit}
     </select>
@@ -38,7 +38,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="CapitalCavCiaMap">
         select
-        cav_id, order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver,
+        cav_id, order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver,
         approval_state, approval_remarks, last_approval_time, update_time
         from frameproject.capital_cav_cia
         <where>
@@ -48,8 +48,8 @@
             <if test="orderTime != null">
                 and order_time = #{orderTime}
             </if>
-            <if test="customer != null and customer != ''">
-                and customer = #{customer}
+            <if test="otherParty != null and otherParty != ''">
+                and other_party = #{otherParty}
             </if>
             <if test="cavBy != null and cavBy != ''">
                 and cav_by = #{cavBy}
@@ -89,32 +89,32 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="cavId" useGeneratedKeys="true">
-        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
-        values (#{orderTime}, #{customer}, #{cavBy}, #{cavType}, #{thisMoney}, #{founder}, #{foundTime}, #{remarks}, #{approver}, #{approvalState}, #{approvalRemarks}, #{lastApprovalTime}, #{updateTime})
+        insert into frameproject.capital_cav_cia(cav_id,order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
+        values (#{cavId},#{orderTime}, #{otherParty}, #{cavBy}, #{cavType}, #{thisMoney}, #{founder}, #{foundTime}, #{remarks}, #{approver}, #{approvalState}, #{approvalRemarks}, #{lastApprovalTime}, #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="cavId" useGeneratedKeys="true">
-        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder,
+        insert into frameproject.capital_cav_cia(order_time, other_party, cav_by, cav_type, this_money, founder,
         found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.orderTime}, #{entity.customer}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
+            (#{entity.orderTime}, #{entity.otherParty}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
             #{entity.founder}, #{entity.foundTime}, #{entity.remarks}, #{entity.approver}, #{entity.approvalState},
             #{entity.approvalRemarks}, #{entity.lastApprovalTime}, #{entity.updateTime})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="cavId" useGeneratedKeys="true">
-        insert into frameproject.capital_cav_cia(order_time, customer, cav_by, cav_type, this_money, founder,
+        insert into frameproject.capital_cav_cia(order_time, other_party, cav_by, cav_type, this_money, founder,
         found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.orderTime}, #{entity.customer}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
+            (#{entity.orderTime}, #{entity.otherParty}, #{entity.cavBy}, #{entity.cavType}, #{entity.thisMoney},
             #{entity.founder}, #{entity.foundTime}, #{entity.remarks}, #{entity.approver}, #{entity.approvalState},
             #{entity.approvalRemarks}, #{entity.lastApprovalTime}, #{entity.updateTime})
         </foreach>
         on duplicate key update
-        order_time = values(order_time) , customer = values(customer) , cav_by = values(cav_by) , cav_type =
+        order_time = values(order_time) , other_party = values(other_party) , cav_by = values(cav_by) , cav_type =
         values(cav_type) , this_money = values(this_money) , founder = values(founder) , found_time = values(found_time)
         , remarks = values(remarks) , approver = values(approver) , approval_state = values(approval_state) ,
         approval_remarks = values(approval_remarks) , last_approval_time = values(last_approval_time) , update_time =
@@ -128,8 +128,8 @@
             <if test="orderTime != null">
                 order_time = #{orderTime},
             </if>
-            <if test="customer != null and customer != ''">
-                customer = #{customer},
+            <if test="otherParty != null and otherParty != ''">
+                other_party = #{otherParty},
             </if>
             <if test="cavBy != null and cavBy != ''">
                 cav_by = #{cavBy},

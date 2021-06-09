@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalReceipt;
+import com.xingji.frameproject.vo.CiaCapVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -80,6 +81,11 @@ public interface CapitalReceiptDao {
      * @return 影响行数
      */
     int deleteById(String receiptId);
-
+    /**
+     * 通过实体类条件查询核销单中的收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    List<CiaCapVo> querycavReceipt(CiaCapVo vo);
 }
 

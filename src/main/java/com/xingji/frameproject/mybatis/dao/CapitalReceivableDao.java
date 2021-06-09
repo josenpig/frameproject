@@ -1,6 +1,8 @@
 package com.xingji.frameproject.mybatis.dao;
 
+import com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill;
 import com.xingji.frameproject.mybatis.entity.CapitalReceivable;
+import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -83,8 +85,24 @@ public interface CapitalReceivableDao {
      */
     int deleteById(String deliveryId);
     List<CapitalReceivable> queryAllByPage();
+    /**
+     * 通过实体类条件查询应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
     List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo);
+    /**
+     * 通过saleId查询本次应收款单
+     * @param saleId
+     * @return 影响行数
+     */
     SaleReceiptVo querythisReceipt(String saleId);
     int receivedadd(CapitalReceivable capitalReceivable);
+    /**
+     * 通过实体类条件查询核销单中的应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    List<CiaBillVo> querycavReceipt(CiaBillVo vo);
 }
 

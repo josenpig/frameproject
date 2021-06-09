@@ -122,6 +122,24 @@ public class CapitalReceiptController {
      */
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
+        //判断订单收款金额是否能够通过审批
+        if(type == 1){
+            CapitalReceipt receipt=crs.queryById(orderid);
+            List<CapitalReceiptBill> bills=crbs.queryById(receipt.getReceiptId());
+            for (int i=0;i<bills.size();i++) {
+                if (bills.get(i).getSaleType().equals("销售出库单")) {
+                    CapitalReceivable ok=crsok.queryById(bills.get(i).getSaleId());
+                    if(ok.getCaseState()==1){
+                        return AjaxResponse.success("订单："+ok.getDeliveryId()+"已结案");
+                    }
+                }else if (bills.get(i).getSaleType().equals("销售订单")){
+                    SaleOrder ok=sos.queryById(bills.get(i).getSaleId());
+                    if (ok.getAdvance()+bills.get(i).getThisMoney()>ok.getReceivables()){
+                        return AjaxResponse.success("订单："+ok.getOrderId()+"预收款金额不足");
+                    }
+                }
+            }
+        }
         //修改收款单信息
         CapitalReceipt receipt=new CapitalReceipt();
         receipt.setReceiptId(orderid);
@@ -138,11 +156,11 @@ public class CapitalReceiptController {
             for (int i=0;i<bills.size();i++) {
                 //修改单据收款金额
                 SaleOrder order=new SaleOrder();
-                CapitalReceiptBill bill=new CapitalReceiptBill();
-                bill.setReceivedMoney(bills.get(i).getReceivedMoney()+bills.get(i).getThisMoney());
-                bill.setUncollectedMoney(bills.get(i).getReceiptMoney()-bills.get(i).getReceivedMoney()-bills.get(i).getThisMoney());
-                bill.setSaleId(bills.get(i).getSaleId());
-                crbs.update(bill);
+//                CapitalReceiptBill bill=new CapitalReceiptBill();
+//                bill.setReceivedMoney(bills.get(i).getReceivedMoney()+bills.get(i).getThisMoney());
+//                bill.setUncollectedMoney(bills.get(i).getReceiptMoney()-bills.get(i).getReceivedMoney()-bills.get(i).getThisMoney());
+//                bill.setSaleId(bills.get(i).getSaleId());
+//                crbs.update(bill);
                 if (bills.get(i).getSaleType().equals("销售出库单")) {
                     //修改应收款信息
                     receivable.setDeliveryId(bills.get(i).getSaleId());
