@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseUnitDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseUnit" id="BaseUnitMap">
+        <result property="unitId" column="unit_id" jdbcType="INTEGER"/>
+        <result property="unitName" column="unit_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseUnitMap">
+        select
+          unit_id, unit_name
+        from frameproject.base_unit
+        where unit_id = #{unitId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseUnitMap">
+        select
+          unit_id, unit_name
+        from frameproject.base_unit
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseUnitMap">
+        select
+        unit_id, unit_name
+        from frameproject.base_unit
+        <where>
+            <if test="unitId != null">
+                and unit_id = #{unitId}
+            </if>
+            <if test="unitName != null and unitName != ''">
+                and unit_name = #{unitName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="unitId" useGeneratedKeys="true">
+        insert into frameproject.base_unit(unit_name)
+        values (#{unitName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="unitId" useGeneratedKeys="true">
+        insert into frameproject.base_unit(unit_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.unitName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="unitId" useGeneratedKeys="true">
+        insert into frameproject.base_unit(unit_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.unitName})
+        </foreach>
+        on duplicate key update
+        unit_name = values(unit_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_unit
+        <set>
+            <if test="unitName != null and unitName != ''">
+                unit_name = #{unitName},
+            </if>
+        </set>
+        where unit_id = #{unitId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_unit where unit_id = #{unitId}
+    </delete>
+
+</mapper>
+

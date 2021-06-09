@@ -49,6 +49,14 @@ public interface BaseProductService {
     BaseProduct update(BaseProduct baseProduct);
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseProduct 实例对象
+     * @return 对象列表
+     */
+    List<BaseProduct> queryAll(BaseProduct baseProduct);
+
+    /**
      * 通过主键删除产品数据
      *
      * @param productId 主键

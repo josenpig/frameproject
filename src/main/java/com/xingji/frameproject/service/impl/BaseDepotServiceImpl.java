@@ -42,6 +42,11 @@ public class BaseDepotServiceImpl implements BaseDepotService {
         return this.baseDepotDao.queryAllByLimit(offset, limit);
     }
 
+    @Override
+    public List<BaseDepot> queryAll(BaseDepot baseDepot) {
+        return this.baseDepotDao.queryAll(baseDepot);
+    }
+
     /**
      * 新增数据
      *
