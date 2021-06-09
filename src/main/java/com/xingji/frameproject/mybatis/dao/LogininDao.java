@@ -1,7 +1,11 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.Loginin;
+import com.xingji.frameproject.vo.LoginLogVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Date;
+import java.util.List;
 
 @Mapper
 public interface LogininDao {
@@ -16,4 +20,8 @@ public interface LogininDao {
     int updateByPrimaryKeySelective(Loginin record);
 
     int updateByPrimaryKey(Loginin record);
+
+    List<LoginLogVo>findloginlogbylogtime(Date logtime);
+
+    List<Loginin>findAll(Loginin loginin);
 }

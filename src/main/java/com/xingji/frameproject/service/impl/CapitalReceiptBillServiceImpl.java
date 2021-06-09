@@ -77,7 +77,7 @@ public class CapitalReceiptBillServiceImpl implements CapitalReceiptBillService 
     }
     @Override
     public boolean update(CapitalReceiptBill capitalReceiptBill) {
-        return this.capitalReceiptBillDao.update(capitalReceiptBill);
+        return this.capitalReceiptBillDao.update(capitalReceiptBill)>0;
     }
 
 }

@@ -69,7 +69,7 @@
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
-  "savePackageName" : "com.xingji.frameproject.mybatis",
-  "savePath" : "./src/main/java/com/xingji/frameproject/mybatis",
+  "savePackageName" : "com.xingji.frameproject",
+  "savePath" : "./src/main/java/com/xingji/frameproject",
   "saveModelName" : "frameproject"
 }

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.StockInventoryDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.StockInventory" id="StockInventoryMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="inventoryTime" column="inventory_time" jdbcType="TIMESTAMP"/>
+        <result property="depotId" column="depot_id" jdbcType="VARCHAR"/>
+        <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="inventorycount" column="inventorycount" jdbcType="INTEGER"/>
+        <result property="inventorycounter" column="inventorycounter" jdbcType="INTEGER"/>
+        <result property="inventorypeople" column="inventorypeople" jdbcType="VARCHAR"/>
+        <result property="inventorystate" column="inventorystate" jdbcType="INTEGER"/>
+        <result property="inventorypl" column="inventorypl" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="stockin" column="stockin" jdbcType="VARCHAR"/>
+        <result property="stockout" column="stockout" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StockInventoryMap">
+        select
+          id, inventory_time, depot_id, depot_name, inventorycount, inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout
+        from frameproject.stock_inventory
+        where id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryAll" resultMap="StockInventoryMap">
+        select
+          id, inventory_time, depot_id, depot_name, inventorycount, inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout
+        from (select * from StockInventory where work_point_id = #{workPointId})
+    </select>
+
+    <!--通过实体作为或者条件查询-->
+    <select id="queryOrByPojo" resultMap="StockInventoryMap">
+        select
+        id, inventory_time, depot_id, depot_name, inventorycount, inventorycounter, inventorypeople, inventorystate,
+        inventorypl, remarks, stockin, stockout
+        from (select * from StockInventory where work_point_id = #{workPointId})
+        <where>
+            <if test="id != null and id != ''">
+                or id like '%'||#{id}||'%'
+            </if>
+            <if test="inventoryTime != null">
+                or inventory_time like '%'||#{inventoryTime}||'%'
+            </if>
+            <if test="depotId != null and depotId != ''">
+                or depot_id like '%'||#{depotId}||'%'
+            </if>
+            <if test="depotName != null and depotName != ''">
+                or depot_name like '%'||#{depotName}||'%'
+            </if>
+            <if test="inventorycount != null">
+                or inventorycount like '%'||#{inventorycount}||'%'
+            </if>
+            <if test="inventorycounter != null">
+                or inventorycounter like '%'||#{inventorycounter}||'%'
+            </if>
+            <if test="inventorypeople != null and inventorypeople != ''">
+                or inventorypeople like '%'||#{inventorypeople}||'%'
+            </if>
+            <if test="inventorystate != null">
+                or inventorystate like '%'||#{inventorystate}||'%'
+            </if>
+            <if test="inventorypl != null">
+                or inventorypl like '%'||#{inventorypl}||'%'
+            </if>
+            <if test="remarks != null and remarks != ''">
+                or remarks like '%'||#{remarks}||'%'
+            </if>
+            <if test="stockin != null and stockin != ''">
+                or stockin like '%'||#{stockin}||'%'
+            </if>
+            <if test="stockout != null and stockout != ''">
+                or stockout like '%'||#{stockout}||'%'
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为并且条件查询-->
+    <select id="queryAndByPojo" resultMap="StockInventoryMap">
+        select
+        id, inventory_time, depot_id, depot_name, inventorycount, inventorycounter, inventorypeople, inventorystate,
+        inventorypl, remarks, stockin, stockout
+        from frameproject.stock_inventory
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="inventoryTime != null">
+                and inventory_time = #{inventoryTime}
+            </if>
+            <if test="depotId != null and depotId != ''">
+                and depot_id = #{depotId}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="inventorycount != null">
+                and inventorycount = #{inventorycount}
+            </if>
+            <if test="inventorycounter != null">
+                and inventorycounter = #{inventorycounter}
+            </if>
+            <if test="inventorypeople != null and inventorypeople != ''">
+                and inventorypeople = #{inventorypeople}
+            </if>
+            <if test="inventorystate != null">
+                and inventorystate = #{inventorystate}
+            </if>
+            <if test="inventorypl != null">
+                and inventorypl = #{inventorypl}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="stockin != null and stockin != ''">
+                and stockin = #{stockin}
+            </if>
+            <if test="stockout != null and stockout != ''">
+                and stockout = #{stockout}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into frameproject.stock_inventory(id, inventory_time, depot_id, depot_name, inventorycount,
+        inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout)
+        values (#{id}, #{inventoryTime}, #{depotId}, #{depotName}, #{inventorycount}, #{inventorycounter},
+        #{inventorypeople}, #{inventorystate}, #{inventorypl}, #{remarks}, #{stockin}, #{stockout})
+
+    </insert>
+
+    <!--批量新增数据 -->
+    <insert id="insertBatch">
+        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
+            insert into frameproject.stock_inventory (id, inventory_time, depot_id, depot_name, inventorycount,
+            inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout)
+            values (SEQ_stock_inventory.NEXTVAL, #{entity.inventoryTime}, #{entity.depotId}, #{entity.depotName},
+            #{entity.inventorycount}, #{entity.inventorycounter}, #{entity.inventorypeople}, #{entity.inventorystate},
+            #{entity.inventorypl}, #{entity.remarks}, #{entity.stockin}, #{entity.stockout})
+        </foreach>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.stock_inventory
+        <set>
+            <if test="inventoryTime != null">
+                inventory_time = #{inventoryTime},
+            </if>
+            <if test="depotId != null">
+                depot_id = #{depotId},
+            </if>
+            <if test="depotName != null">
+                depot_name = #{depotName},
+            </if>
+            <if test="inventorycount != null">
+                inventorycount = #{inventorycount},
+            </if>
+            <if test="inventorycounter != null">
+                inventorycounter = #{inventorycounter},
+            </if>
+            <if test="inventorypeople != null">
+                inventorypeople = #{inventorypeople},
+            </if>
+            <if test="inventorystate != null">
+                inventorystate = #{inventorystate},
+            </if>
+            <if test="inventorypl != null">
+                inventorypl = #{inventorypl},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="stockin != null">
+                stockin = #{stockin},
+            </if>
+            <if test="stockout != null">
+                stockout = #{stockout},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--批量修改数据-->
+    <update id="updateBatch">
+        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
+            update frameproject.stock_inventory
+            <set>
+                <if test="entity.inventoryTime != null">
+                    inventory_time = #{entity.inventoryTime},
+                </if>
+                <if test="entity.depotId != null">
+                    depot_id = #{entity.depotId},
+                </if>
+                <if test="entity.depotName != null">
+                    depot_name = #{entity.depotName},
+                </if>
+                <if test="entity.inventorycount != null">
+                    inventorycount = #{entity.inventorycount},
+                </if>
+                <if test="entity.inventorycounter != null">
+                    inventorycounter = #{entity.inventorycounter},
+                </if>
+                <if test="entity.inventorypeople != null">
+                    inventorypeople = #{entity.inventorypeople},
+                </if>
+                <if test="entity.inventorystate != null">
+                    inventorystate = #{entity.inventorystate},
+                </if>
+                <if test="entity.inventorypl != null">
+                    inventorypl = #{entity.inventorypl},
+                </if>
+                <if test="entity.remarks != null">
+                    remarks = #{entity.remarks},
+                </if>
+                <if test="entity.stockin != null">
+                    stockin = #{entity.stockin},
+                </if>
+                <if test="entity.stockout != null">
+                    stockout = #{entity.stockout},
+                </if>
+            </set>
+            where id = #{entity.id}
+        </foreach>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.stock_inventory where id = #{id}
+    </delete>
+
+    <!--批量删除数据-->
+    <delete id="deleteBatch">
+        delete from frameproject.stock_inventory where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

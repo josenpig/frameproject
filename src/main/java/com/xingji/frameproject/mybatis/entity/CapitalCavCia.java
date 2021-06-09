@@ -1,6 +1,8 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -9,11 +11,11 @@ import java.io.Serializable;
  * (CapitalCavCia)实体类
  *
  * @author makejava
- * @since 2021-06-08 18:35:41
+ * @since 2021-06-09 15:17:22
  */
 @Data
 public class CapitalCavCia implements Serializable {
-    private static final long serialVersionUID = -65926245902044045L;
+    private static final long serialVersionUID = 916105656043423061L;
     /**
      * 核销单编号无法手动修改  HXD+时间戳
      */
@@ -21,11 +23,13 @@ public class CapitalCavCia implements Serializable {
     /**
      * 单据日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date orderTime;
     /**
-     * 客户名称
+     * 客户或供应商名称
      */
-    private String customer;
+    private String otherParty;
     /**
      * 核销人
      */
@@ -45,6 +49,8 @@ public class CapitalCavCia implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date foundTime;
     /**
      * 单据备注
@@ -65,10 +71,14 @@ public class CapitalCavCia implements Serializable {
     /**
      * 最后审批时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastApprovalTime;
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
 
@@ -88,12 +98,12 @@ public class CapitalCavCia implements Serializable {
         this.orderTime = orderTime;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getOtherParty() {
+        return otherParty;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setOtherParty(String otherParty) {
+        this.otherParty = otherParty;
     }
 
     public String getCavBy() {

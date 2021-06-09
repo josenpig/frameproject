@@ -3,6 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.entity.CapitalReceipt;
 import com.xingji.frameproject.mybatis.dao.CapitalReceiptDao;
 import com.xingji.frameproject.service.CapitalReceiptService;
+import com.xingji.frameproject.vo.CiaCapVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -86,5 +87,8 @@ public class CapitalReceiptServiceImpl implements CapitalReceiptService {
     public boolean deleteById(String receiptId) {
         return this.capitalReceiptDao.deleteById(receiptId) > 0;
     }
-
+    @Override
+    public List<CiaCapVo> querycavReceipt(CiaCapVo vo) {
+        return this.capitalReceiptDao.querycavReceipt(vo);
+    }
 }

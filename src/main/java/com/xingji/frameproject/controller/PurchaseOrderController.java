@@ -19,6 +19,8 @@ import com.xingji.frameproject.vo.SaleOrderVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -134,8 +136,6 @@ public class PurchaseOrderController {
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setPurchaseOrderId(order.getId());
         }
-        System.out.println(order);
-        System.out.println(orderdetails);
         purchaseOrderService.insert(order);
         prds.insertBatch(orderdetails);
         return AjaxResponse.success(order.getId());
