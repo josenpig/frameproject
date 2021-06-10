@@ -97,7 +97,6 @@ public interface SysUserDao {
     SysUser gologin(String userPhone);
     /**
      * 通过角色id查询用户
-     *
      * @param id 角色id
      * @return 实列对象
      */

@@ -9,15 +9,13 @@ import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.CapitalAccountVo;
 import com.xingji.frameproject.vo.ReceiptVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * (CapitalReceipt)表控制层
@@ -50,7 +48,6 @@ public class CapitalReceiptController {
 
     /**
      * 通过主键查询单条数据
-     *
      * @param id 主键
      * @return 单条数据
      */
@@ -59,10 +56,21 @@ public class CapitalReceiptController {
         CapitalReceipt receipt=crs.queryById(id);
         List<CapitalReceiptBill> bills=crbs.queryById(id);
         List<CapitalReceiptAccount> accounts=cras.queryById(id);
+        List<CapitalAccountVo> vos=new ArrayList<>();
+        for (int i=0;i<accounts.size();i++){
+            CapitalAccountVo vo=new CapitalAccountVo();
+            BaseCapitalAccount account=bras.queryById(accounts.get(i).getFundAccount());
+            vo.setId(accounts.get(i).getId());
+            vo.setFundAccount(account.getFundAccount());
+            vo.setReceiptId(accounts.get(i).getReceiptId());
+            vo.setSettlementType(account.getSettlementType());
+            vo.setThisMoney(accounts.get(i).getThisMoney());
+            vos.add(vo);
+        }
         ReceiptVo vo=new ReceiptVo();
         vo.setReceipt(receipt);
         vo.setBills(bills);
-        vo.setAccounts(accounts);
+        vo.setAccounts(vos);
         return AjaxResponse.success(vo);
     }
     @PostMapping("/addreceipt/{type}")
