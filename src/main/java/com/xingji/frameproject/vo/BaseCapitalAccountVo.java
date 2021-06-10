@@ -1,14 +1,9 @@
-package com.xingji.frameproject.mybatis.entity;
+package com.xingji.frameproject.vo;
 
-import java.io.Serializable;
+import lombok.ToString;
 
-/**
- * (BaseCapitalAccount)实体类
- *
- * @author makejava
- * @since 2021-06-10 15:17:58
- */
-public class BaseCapitalAccount implements Serializable {
+@ToString
+public class BaseCapitalAccountVo {
     private static final long serialVersionUID = 340427089143827676L;
     /**
      * *资金账户编号
@@ -18,10 +13,6 @@ public class BaseCapitalAccount implements Serializable {
      * *资金账户名称
      */
     private String fundAccount;
-    /**
-     * *结算类型id
-     */
-    private Integer settlementTypeId;
     /**
      * *初期金额
      */
@@ -34,7 +25,18 @@ public class BaseCapitalAccount implements Serializable {
      * 是否为默认账户: （是：1；否：0）
      */
     private Integer state;
+    /**
+     * *结算类型id
+     */
+    private Integer settlementTypeId;
+    /**
+     * *结算类型名称
+     */
+    private String settlementType;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getCapitalId() {
         return capitalId;
@@ -50,14 +52,6 @@ public class BaseCapitalAccount implements Serializable {
 
     public void setFundAccount(String fundAccount) {
         this.fundAccount = fundAccount;
-    }
-
-    public Integer getSettlementTypeId() {
-        return settlementTypeId;
-    }
-
-    public void setSettlementTypeId(Integer settlementTypeId) {
-        this.settlementTypeId = settlementTypeId;
     }
 
     public Double getInitialAmount() {
@@ -84,4 +78,19 @@ public class BaseCapitalAccount implements Serializable {
         this.state = state;
     }
 
+    public Integer getSettlementTypeId() {
+        return settlementTypeId;
+    }
+
+    public void setSettlementTypeId(Integer settlementTypeId) {
+        this.settlementTypeId = settlementTypeId;
+    }
+
+    public String getSettlementType() {
+        return settlementType;
+    }
+
+    public void setSettlementType(String settlementType) {
+        this.settlementType = settlementType;
+    }
 }

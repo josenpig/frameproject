@@ -1,8 +1,9 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
-import org.apache.ibatis.annotations.Param;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * (BaseCapitalAccount)表数据库访问层
  *
  * @author makejava
- * @since 2021-06-02 18:29:45
+ * @since 2021-06-10 15:17:59
  */
 @Mapper
 public interface BaseCapitalAccountDao {
@@ -40,6 +41,14 @@ public interface BaseCapitalAccountDao {
      * @return 对象列表
      */
     List<BaseCapitalAccount> queryAll(BaseCapitalAccount baseCapitalAccount);
+
+    /**
+     * 通过Vo作为筛选条件查询
+     *
+     * @param baseCapitalAccountVo 实例对象
+     * @return 对象列表
+     */
+    List<BaseCapitalAccountVo> queryAllVo(BaseCapitalAccountVo baseCapitalAccountVo);
 
     /**
      * 新增数据
@@ -80,11 +89,14 @@ public interface BaseCapitalAccountDao {
      * @return 影响行数
      */
     int deleteById(String capitalId);
+
     /**
-     * 查询所有资金账户
-     * @return
+     * 修改当前金额数据--加
+     *
+     * @param baseCapitalAccount 实例对象
+     * @return 实例对象
      */
-    List<BaseCapitalAccount> findAllCapitalAccount();
     boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount);
+
 }
 

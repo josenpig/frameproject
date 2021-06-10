@@ -1,12 +1,15 @@
 package com.xingji.frameproject.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
+import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
+import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
 import com.xingji.frameproject.service.BaseCapitalAccountService;
-import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,7 +21,7 @@ import java.util.Map;
  * (BaseCapitalAccount)表控制层
  *
  * @author makejava
- * @since 2021-06-02 08:55:31
+ * @since 2021-06-10 15:19:50
  */
 @RestController
 @RequestMapping("baseCapitalAccount")
@@ -26,8 +29,6 @@ public class BaseCapitalAccountController {
     /**
      * 服务对象
      */
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
     @Resource
     private BaseCapitalAccountService baseCapitalAccountService;
 
@@ -44,16 +45,64 @@ public class BaseCapitalAccountController {
 
     /**
      * 查询所有资金账户信息
-     * @return 产品集合
+     * @return 资金账户集合
      */
-    @GetMapping("/findAllCapitalAccount")
+    @GetMapping("/findAllCapitalAccountVo")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<BaseCapitalAccount> baseCapitalAccountVos=baseCapitalAccountService.findAllCapitalAccount();
-        System.out.println(baseCapitalAccountVos);
+        BaseCapitalAccountVo baseCapitalAccount=new BaseCapitalAccountVo();
+        List<BaseCapitalAccountVo> list=baseCapitalAccountService.queryAllVo(baseCapitalAccount);
+        System.out.println(list);
         map.put("total",page.getTotal());
-        map.put("rows",baseCapitalAccountVos);
+        map.put("rows",list);
         return AjaxResponse.success(map);
+    };
+
+    /**
+     * 判断资金账户Id是否重复
+     * @param id
+     * @return
+     */
+    @GetMapping("/judgeCapitalId")
+    public Boolean judgeId(String id){
+        System.out.println("id:"+id);
+        BaseCapitalAccount baseCapitalAccount =baseCapitalAccountService.queryById(id);
+        Boolean result=false;
+        if (baseCapitalAccount==null){
+            result=true;
+        };
+        return result;
+    };
+
+    /**
+     * 新增资金账户
+     * @param add
+     * @return
+     */
+    @RequestMapping("/addCapitalAccount")
+    public AjaxResponse addCapitalAccount(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("CapitalAccount");
+        BaseCapitalAccount CapitalAccount = JSON.parseObject(one, BaseCapitalAccount.class);
+        System.out.println(CapitalAccount);
+        BaseCapitalAccount newc=baseCapitalAccountService.insert(CapitalAccount);
+        return AjaxResponse.success(newc);
+    };
+
+    /**
+     * 修改资金账户
+     * @param add
+     * @return
+     */
+    @RequestMapping("/updateCapitalAccount")
+    public AjaxResponse updateCapitalAccount(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("CapitalAccount");
+        BaseCapitalAccount CapitalAccount = JSON.parseObject(one, BaseCapitalAccount.class);
+        BaseCapitalAccount baseCapitalAccount=baseCapitalAccountService.update(CapitalAccount);
+        return AjaxResponse.success(baseCapitalAccount);
     };
 }

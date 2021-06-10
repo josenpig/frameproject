@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.vo.LoginLogVo;
 
 import java.util.List;
 
@@ -54,26 +55,33 @@ public interface SysUserService {
      */
     boolean deleteById(Integer userId);
     /**
-     * 通过用户名查询
-     *
+     * 账户密码登录
      * @param userName 用户账户
      * @return 实列对象
      */
     SysUser login(String userName);
     /**
-     * 通过用户名查询
-     *
+     * 手机号登录
      * @param userPhone 用户手机号
      * @return 实列对象
      */
     SysUser gologin(String userPhone);
+    /**
+     * 查询某用户所具有的菜单
+     * @param userId 用户id
+     * @return 实列对象
+     */
     List<SysMenu> usermenu(Integer userId);
-
+    /**
+     * 通过角色id查询用户
+     * @param id 角色id
+     * @return 实列对象
+     */
     List<SysUser> roleusers(Integer id);
 
     List<SysUser> queryAll(SysUser sysUser);
 
     Integer queryUserIdByUserName(String userName);
 
-    List<String> findsysName();
+    List<SysUser> findsysName();
 }
