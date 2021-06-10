@@ -189,14 +189,20 @@
         GROUP BY p.product_id
     </select>
     <select id="allInventoryProject" resultMap="InventoryProjectVo">
-        SELECT p.product_name,p.`product_id`,p.`product_spec`,t.product_type_name,u.unit_name,o.`product_number`,purchase_money,remarks
-        FROM `base_product` p
-        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
-        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
-        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
-        LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
-        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
-        GROUP BY p.product_id
+        SELECT o.`depot_name`,p.product_name,p.`product_id`,p.`product_spec`,t.product_type_name,u.unit_name,o.`product_number`,purchase_money,remarks
+        FROM `base_product` p,
+        `base_product_type` t,
+        `base_unit` u  ,
+        `base_opening` o ,
+        `base_picture` pic ,
+        `sys_user` uu
+        WHERE
+        p.product_type_id = t.product_type_id
+        AND p.unit_id = u.unit_id
+        AND p.product_id = o.product_id
+        AND p.picture_id = pic.picture_id
+        AND p.user_id = uu.user_id
+        AND o.`depot_name`=#{depotName}
     </select>
 
     <!--新增所有列-->

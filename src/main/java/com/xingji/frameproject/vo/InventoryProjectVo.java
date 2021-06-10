@@ -13,6 +13,8 @@ public class InventoryProjectVo {
     private String productType;
     private String productUnit;
     private int systemNum;
+    private int pdyk;
+    private int pdNum;
     private Double productPurchaseUnit;
     private String remark;
 

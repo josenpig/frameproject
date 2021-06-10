@@ -108,6 +108,6 @@ public interface BaseProductDao {
      * 查询所有的库存盘点商品
      * @return
      */
-    List<InventoryProjectVo> allInventoryProject();
+    List<InventoryProjectVo> allInventoryProject(String depotName);
 }
 
