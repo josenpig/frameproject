@@ -3,6 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
 import com.xingji.frameproject.mybatis.dao.BaseCapitalAccountDao;
 import com.xingji.frameproject.service.BaseCapitalAccountService;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +13,7 @@ import java.util.List;
  * (BaseCapitalAccount)表服务实现类
  *
  * @author makejava
- * @since 2021-06-02 18:29:55
+ * @since 2021-06-10 15:19:49
  */
 @Service("baseCapitalAccountService")
 public class BaseCapitalAccountServiceImpl implements BaseCapitalAccountService {
@@ -76,20 +77,24 @@ public class BaseCapitalAccountServiceImpl implements BaseCapitalAccountService 
     public boolean deleteById(String capitalId) {
         return this.baseCapitalAccountDao.deleteById(capitalId) > 0;
     }
+
     /**
-     * 查询多条数据
+     * 通过Vo作为筛选条件查询
      *
-     * @param baseCapitalAccount
+     * @param baseCapitalAccountVo 实例对象
      * @return 对象列表
      */
     @Override
-    public List<BaseCapitalAccount> queryAll(BaseCapitalAccount baseCapitalAccount) {
-        return this.baseCapitalAccountDao.queryAll(baseCapitalAccount);
+    public List<BaseCapitalAccountVo> queryAllVo(BaseCapitalAccountVo baseCapitalAccountVo) {
+        return this.baseCapitalAccountDao.queryAllVo(baseCapitalAccountVo);
     }
-    @Override
-    public List<BaseCapitalAccount> findAllCapitalAccount() {
-        return this.baseCapitalAccountDao.findAllCapitalAccount();
-    }
+
+    /**
+     * 修改当前金额数据--加
+     *
+     * @param baseCapitalAccount 实例对象
+     * @return 实例对象
+     */
     @Override
     public boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount) {
         return this.baseCapitalAccountDao.currentAmountadd(baseCapitalAccount);

@@ -38,6 +38,14 @@ public interface CapitalReceiptAccountService {
     CapitalReceiptAccount insert(CapitalReceiptAccount capitalReceiptAccount);
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param capitalReceiptAccount 实例对象
+     * @return 对象列表
+     */
+    List<CapitalReceiptAccount> queryAll(CapitalReceiptAccount capitalReceiptAccount);
+
+    /**
      * 通过主键删除数据
      *
      * @param id 主键

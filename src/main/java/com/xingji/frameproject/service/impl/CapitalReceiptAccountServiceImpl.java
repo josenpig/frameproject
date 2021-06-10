@@ -55,6 +55,17 @@ public class CapitalReceiptAccountServiceImpl implements CapitalReceiptAccountSe
     }
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param capitalReceiptAccount 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<CapitalReceiptAccount> queryAll(CapitalReceiptAccount capitalReceiptAccount) {
+        return this.capitalReceiptAccountDao.queryAll(capitalReceiptAccount);
+    }
+
+    /**
      * 通过主键删除数据
      *
      * @param id 主键
