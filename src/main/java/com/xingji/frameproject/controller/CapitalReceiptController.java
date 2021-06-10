@@ -9,6 +9,7 @@ import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 import com.xingji.frameproject.vo.CapitalAccountVo;
 import com.xingji.frameproject.vo.ReceiptVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +59,15 @@ public class CapitalReceiptController {
         List<CapitalReceiptAccount> accounts=cras.queryById(id);
         List<CapitalAccountVo> vos=new ArrayList<>();
         for (int i=0;i<accounts.size();i++){
+            BaseCapitalAccountVo basevo=new BaseCapitalAccountVo();
+            basevo.setCapitalId(accounts.get(i).getFundAccount());
+            BaseCapitalAccountVo list=bras.queryAllVo(basevo).get(0);
             CapitalAccountVo vo=new CapitalAccountVo();
             BaseCapitalAccount account=bras.queryById(accounts.get(i).getFundAccount());
             vo.setId(accounts.get(i).getId());
             vo.setFundAccount(account.getFundAccount());
             vo.setReceiptId(accounts.get(i).getReceiptId());
-            vo.setSettlementType(account.getSettlementTypeId());
+            vo.setSettlementType(list.getSettlementType());
             vo.setThisMoney(accounts.get(i).getThisMoney());
             vos.add(vo);
         }

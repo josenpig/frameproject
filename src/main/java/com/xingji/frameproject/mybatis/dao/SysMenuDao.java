@@ -21,6 +21,13 @@ public interface SysMenuDao {
      * @return 对象列表
      */
     List<SysMenu> usermenu(Integer userId);
+    /**
+     * 通过菜单id修改菜单实体类
+     *
+     * @param sysMenu 菜单
+     * @return 对象列表
+     */
+    int change(SysMenu sysMenu);
 
 }
 

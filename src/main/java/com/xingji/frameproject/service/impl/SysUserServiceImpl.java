@@ -72,7 +72,6 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 通过主键删除数据
-     *
      * @param userId 主键
      * @return 是否成功
      */
