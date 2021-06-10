@@ -86,6 +86,7 @@ public class BaseCapitalAccountController {
         JSONObject jsonObject = JSONObject.parseObject(add);
         String one = jsonObject.getString("CapitalAccount");
         BaseCapitalAccount CapitalAccount = JSON.parseObject(one, BaseCapitalAccount.class);
+        System.out.println(CapitalAccount);
         BaseCapitalAccount newc=baseCapitalAccountService.insert(CapitalAccount);
         return AjaxResponse.success(newc);
     };
