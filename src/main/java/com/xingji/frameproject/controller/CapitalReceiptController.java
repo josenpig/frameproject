@@ -63,7 +63,7 @@ public class CapitalReceiptController {
             vo.setId(accounts.get(i).getId());
             vo.setFundAccount(account.getFundAccount());
             vo.setReceiptId(accounts.get(i).getReceiptId());
-            vo.setSettlementType(account.getSettlementType());
+            vo.setSettlementType(account.getSettlementTypeId());
             vo.setThisMoney(accounts.get(i).getThisMoney());
             vos.add(vo);
         }
