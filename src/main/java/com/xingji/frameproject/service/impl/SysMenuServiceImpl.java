@@ -18,5 +18,13 @@ import java.util.List;
 public class SysMenuServiceImpl implements SysMenuService {
     @Resource
     private SysMenuDao sysMenuDao;
-
+    /**
+     * 通过实体类修改数据
+     * @param sysMenu
+     * @return 是否成功
+     */
+    @Override
+    public boolean change(SysMenu sysMenu) {
+        return this.sysMenuDao.change(sysMenu) > 0;
+    }
 }

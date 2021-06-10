@@ -11,6 +11,7 @@ import com.xingji.frameproject.service.SaleDeliveryService;
 import com.xingji.frameproject.service.SaleOrderService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -123,8 +124,8 @@ public class CapitalReceivableController {
      */
     @GetMapping("/findaccount")
     public AjaxResponse findaccount(){
-        BaseCapitalAccount baseCapitalAccount=new BaseCapitalAccount();
-        List<BaseCapitalAccount> list=bcas.queryAll(baseCapitalAccount);
+        BaseCapitalAccountVo baseCapitalAccountVo=new BaseCapitalAccountVo();
+        List<BaseCapitalAccountVo> list=bcas.queryAllVo(baseCapitalAccountVo);
         return AjaxResponse.success(list);
     }
 }

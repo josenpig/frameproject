@@ -2,6 +2,7 @@ package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.vo.BaseProductVo;
+import com.xingji.frameproject.vo.InventoryProjectVo;
 import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.SaleProductVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -102,5 +103,11 @@ public interface BaseProductDao {
      * 查询所有采购的产品
      */
     List<PurchaseProductVo> allPurchaseProduct();
+
+    /**
+     * 查询所有的库存盘点商品
+     * @return
+     */
+    List<InventoryProjectVo> allInventoryProject();
 }
 

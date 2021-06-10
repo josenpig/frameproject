@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.vo.BaseProductVo;
+import com.xingji.frameproject.vo.InventoryProjectVo;
 import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.SaleProductVo;
 
@@ -77,4 +78,10 @@ public interface BaseProductService {
      * @return
      */
     List<PurchaseProductVo> allPurchaseProduct();
+
+    /**
+     * 查询所有的库存盘点产品信息
+     * @return
+     */
+    List<InventoryProjectVo> allStockInventoryProduct();
 }

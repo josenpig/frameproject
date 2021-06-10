@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
+import com.xingji.frameproject.vo.BaseCapitalAccountVo;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * (BaseCapitalAccount)表服务接口
  *
  * @author makejava
- * @since 2021-06-02 18:29:55
+ * @since 2021-06-10 15:19:49
  */
 public interface BaseCapitalAccountService {
 
@@ -53,9 +54,13 @@ public interface BaseCapitalAccountService {
      */
     boolean deleteById(String capitalId);
 
-    List<BaseCapitalAccount> queryAll(BaseCapitalAccount baseCapitalAccount);
-
-    List<BaseCapitalAccount> findAllCapitalAccount();
+    /**
+     * 通过Vo作为筛选条件查询
+     *
+     * @param baseCapitalAccountVo 实例对象
+     * @return 对象列表
+     */
+    List<BaseCapitalAccountVo> queryAllVo(BaseCapitalAccountVo baseCapitalAccountVo);
 
     /**
      * 修改当前金额数据--加
@@ -64,4 +69,5 @@ public interface BaseCapitalAccountService {
      * @return 实例对象
      */
     boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount);
+
 }
