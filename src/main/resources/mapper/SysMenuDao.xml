@@ -6,8 +6,10 @@
         <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
         <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
         <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
         <result property="menuType" column="menu_type" jdbcType="VARCHAR"/>
         <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="icon" column="icon" jdbcType="VARCHAR"/>
         <result property="perms" column="perms" jdbcType="VARCHAR"/>
         <result property="visible" column="visible" jdbcType="INTEGER"/>
@@ -15,12 +17,37 @@
     </resultMap>
 
     <select id="usermenu" resultMap="SysMenuMap">
-        select d.* from sys_user a
-        inner join sys_user_role b on a.user_id=b.user_id
-        inner join sys_role_menu c on b.role_id=c.role_id
-        inner join sys_menu d on c.menu_id=d.menu_id
-				WHERE a.user_id=#{userId} and d.visible=0 order by d.menu_id
+        <if test="userId != null and userId == 0">
+            select * from sys_menu order by menu_id
+        </if>
+        <if test="userId != null and userId != 0">
+            select d.* from sys_user a
+            inner join sys_user_role b on a.user_id=b.user_id
+            inner join sys_role_menu c on b.role_id=c.role_id
+            inner join sys_menu d on c.menu_id=d.menu_id
+            WHERE a.user_id=#{userId} and d.visible=0 order by d.order_num
+        </if>
     </select>
+
+    <!--通过主键修改数据-->
+    <update id="change">
+        update frameproject.sys_menu
+        <set>
+            <if test="menuName != null and menuName != ''">
+                menu_name = #{menuName},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
+            </if>
+            <if test="visible != null ">
+                visible = #{visible},
+            </if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
 
 </mapper>
 

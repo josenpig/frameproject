@@ -72,7 +72,6 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 通过主键删除数据
-     *
      * @param userId 主键
      * @return 是否成功
      */
@@ -80,21 +79,38 @@ public class SysUserServiceImpl implements SysUserService {
     public boolean deleteById(Integer userId) {
         return this.sysUserDao.deleteById(userId) > 0;
     }
-
+    /**
+     * 账户密码登录
+     * @param userName 用户账户
+     * @return 实列对象
+     */
     @Override
     public SysUser login(String userName) {
         return this.sysUserDao.login(userName);
     }
-
+    /**
+     * 手机号登录
+     * @param userPhone 用户手机号
+     * @return 实列对象
+     */
     @Override
     public SysUser gologin(String userPhone) {
         return this.sysUserDao.gologin(userPhone);
     }
-
+    /**
+     * 查询某用户所具有的菜单
+     * @param userId 用户id
+     * @return 实列对象
+     */
     @Override
     public List<SysMenu> usermenu(Integer userId) {
         return this.sysMenuDao.usermenu(userId);
     }
+    /**
+     * 通过角色id查询用户
+     * @param id 角色id
+     * @return 实列对象
+     */
     @Override
     public List<SysUser> roleusers(Integer id){
         return this.sysUserDao.roleusers(id);

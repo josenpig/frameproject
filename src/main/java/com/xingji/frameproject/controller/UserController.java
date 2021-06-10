@@ -148,7 +148,6 @@ public class UserController {
 
     /**
      * 递归查询子菜单
-     *
      * @param root 根菜单
      * @param all  所有菜单
      * @return 菜单信息

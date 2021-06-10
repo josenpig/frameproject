@@ -72,6 +72,16 @@
         <result property="expectNum" column="SUM(o.current_number)" jdbcType="INTEGER"/>
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="systemNum" column="product_number" jdbcType="INTEGER"/>
+        <result property="productPurchaseUnit" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="remark" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseProductMap">
@@ -170,6 +180,16 @@
     </select>
     <select id="allPurchaseProduct" resultMap="PurchaseProductVo">
         SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe
+        FROM `base_product` p
+        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
+        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
+        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
+        LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
+        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        GROUP BY p.product_id
+    </select>
+    <select id="allInventoryProject" resultMap="InventoryProjectVo">
+        SELECT p.product_name,p.`product_id`,p.`product_spec`,t.product_type_name,u.unit_name,o.`product_number`,purchase_money,remarks
         FROM `base_product` p
         LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
         LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
