@@ -19,7 +19,28 @@
     from operationlog
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="findAll" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+      SELECT o.* FROM `operationlog` o
+      <where>
+        <if test="createtime != null and createtime != ''">
+          and c.createtime  LIKE CONCAT('%',#{createtime,jdbcType=TIMESTAMP},'%')
+        </if>
+        <if test="operator != null and operator != ''">
+          and c.operator LIKE CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="method != null and method != ''">
+          and c.method LIKE CONCAT('%',#{method,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="params != null and params != ''">
+          and c.params LIKE CONCAT('%',#{params,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="ipaddress != null and ipaddress != ''">
+          and c.ipaddress LIKE CONCAT('%',#{ipaddress,jdbcType=VARCHAR},'%')
+        </if>
+      </where>
+      order by createtime desc
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from operationlog
     where id = #{id,jdbcType=INTEGER}
   </delete>
