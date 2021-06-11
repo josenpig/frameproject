@@ -3,8 +3,10 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.dao.SysMenuDao;
 import com.xingji.frameproject.mybatis.dao.SysUserDao;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
+import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.SysUserService;
+import com.xingji.frameproject.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -115,6 +117,12 @@ public class SysUserServiceImpl implements SysUserService {
     public List<SysUser> roleusers(Integer id){
         return this.sysUserDao.roleusers(id);
     }
+
+    /**
+     * 条件查询多条数据
+     * @param sysUser  查询条件
+     * @return 对象列表
+     */
     @Override
     public List<SysUser> queryAll(SysUser sysUser){
         return this.sysUserDao.queryAll(sysUser);
@@ -122,10 +130,5 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Integer queryUserIdByUserName(String userName) {
         return this.sysUserDao.queryUserIdByUserName(userName);
-    }
-
-    @Override
-    public List<String> findsysName() {
-        return this.sysUserDao.findsysName();
     }
 }

@@ -16,11 +16,16 @@ import java.util.List;
 public interface SysMenuDao {
     /**
      * 通过用户id查询对应菜单
-     *
      * @param userId 用户id
      * @return 对象列表
      */
     List<SysMenu> usermenu(Integer userId);
+    /**
+     * 通过角色id查询对应菜单
+     * @param roleId 角色id
+     * @return 对象列表
+     */
+    List<SysMenu> rolemenu(Integer roleId);
     /**
      * 通过菜单id修改菜单实体类
      *

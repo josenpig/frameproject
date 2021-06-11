@@ -1,7 +1,9 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.SysMenu;
+import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.vo.LoginLogVo;
 
 import java.util.List;
 
@@ -82,5 +84,4 @@ public interface SysUserService {
 
     Integer queryUserIdByUserName(String userName);
 
-    List<String> findsysName();
 }

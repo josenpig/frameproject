@@ -104,6 +104,5 @@ public interface SysUserDao {
 
     Integer queryUserIdByUserName(String userName);
 
-    List<String> findsysName();
 }
 

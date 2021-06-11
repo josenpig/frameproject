@@ -1,6 +1,8 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -9,11 +11,11 @@ import java.io.Serializable;
  * (SysRole)实体类
  *
  * @author makejava
- * @since 2021-05-15 13:47:28
+ * @since 2021-06-11 09:46:02
  */
 @Data
 public class SysRole implements Serializable {
-    private static final long serialVersionUID = -33306975164235045L;
+    private static final long serialVersionUID = 248577653033882678L;
     /**
      * 角色id
      */
@@ -29,7 +31,23 @@ public class SysRole implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date foundTime;
+    /**
+     * 删除标志（0代表存在 -1代表删除）
+     */
+    private Integer delFlag;
+    /**
+     * 更新人
+     */
+    private String updatedBy;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
 
     public Integer getRoleId() {
@@ -62,6 +80,30 @@ public class SysRole implements Serializable {
 
     public void setFoundTime(Date foundTime) {
         this.foundTime = foundTime;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
 }
