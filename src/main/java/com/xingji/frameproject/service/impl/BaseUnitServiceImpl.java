@@ -1,7 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
-import com.xingji.frameproject.mybatis.entity.BaseUnit;
 import com.xingji.frameproject.mybatis.dao.BaseUnitDao;
+import com.xingji.frameproject.mybatis.entity.BaseUnit;
 import com.xingji.frameproject.service.BaseUnitService;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,6 @@ public class BaseUnitServiceImpl implements BaseUnitService {
     public BaseUnit queryById(Integer unitId) {
         return this.baseUnitDao.queryById(unitId);
     }
-
 
     /**
      * 新增数据
@@ -66,6 +65,12 @@ public class BaseUnitServiceImpl implements BaseUnitService {
         return this.baseUnitDao.deleteById(unitId) > 0;
     }
 
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseUnit 实例对象
+     * @return 对象列表
+     */
     @Override
     public List<BaseUnit> queryAll(BaseUnit baseUnit) {
         return this.baseUnitDao.queryAll(baseUnit);

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.StockInventoryDetailsDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.StockInventoryDetails" id="StockInventoryDetailsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="inventoryId" column="inventory_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productNature" column="product_nature" jdbcType="VARCHAR"/>
+        <result property="productSpe" column="product_spe" jdbcType="VARCHAR"/>
+        <result property="productType" column="product_type" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="systemNum" column="system_num" jdbcType="INTEGER"/>
+        <result property="inventoryNum" column="inventory_num" jdbcType="INTEGER"/>
+        <result property="unitPl" column="unit_pl" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StockInventoryDetailsMap">
+        select
+          id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
+        from frameproject.stock_inventory_details
+        where id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryAll" resultMap="StockInventoryDetailsMap">
+        select
+          id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
+        from (select * from StockInventoryDetails where work_point_id = #{workPointId})
+    </select>
+
+    <!--通过实体作为或者条件查询-->
+    <select id="queryOrByPojo" resultMap="StockInventoryDetailsMap">
+        select
+        id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num,
+        inventory_num, unit_pl, remarks
+        from (select * from StockInventoryDetails where work_point_id = #{workPointId})
+        <where>
+            <if test="id != null">
+                or id like '%'||#{id}||'%'
+            </if>
+            <if test="inventoryId != null and inventoryId != ''">
+                or inventory_id like '%'||#{inventoryId}||'%'
+            </if>
+            <if test="productName != null and productName != ''">
+                or product_name like '%'||#{productName}||'%'
+            </if>
+            <if test="productId != null and productId != ''">
+                or product_id like '%'||#{productId}||'%'
+            </if>
+            <if test="productNature != null and productNature != ''">
+                or product_nature like '%'||#{productNature}||'%'
+            </if>
+            <if test="productSpe != null and productSpe != ''">
+                or product_spe like '%'||#{productSpe}||'%'
+            </if>
+            <if test="productType != null and productType != ''">
+                or product_type like '%'||#{productType}||'%'
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                or product_unit like '%'||#{productUnit}||'%'
+            </if>
+            <if test="systemNum != null">
+                or system_num like '%'||#{systemNum}||'%'
+            </if>
+            <if test="inventoryNum != null">
+                or inventory_num like '%'||#{inventoryNum}||'%'
+            </if>
+            <if test="unitPl != null">
+                or unit_pl like '%'||#{unitPl}||'%'
+            </if>
+            <if test="remarks != null and remarks != ''">
+                or remarks like '%'||#{remarks}||'%'
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为并且条件查询-->
+    <select id="queryAndByPojo" resultMap="StockInventoryDetailsMap">
+        select
+        id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num,
+        inventory_num, unit_pl, remarks
+        from frameproject.stock_inventory_details
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="inventoryId != null and inventoryId != ''">
+                and inventory_id = #{inventoryId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name = #{productName}
+            </if>
+            <if test="productId != null and productId != ''">
+                and product_id = #{productId}
+            </if>
+            <if test="productNature != null and productNature != ''">
+                and product_nature = #{productNature}
+            </if>
+            <if test="productSpe != null and productSpe != ''">
+                and product_spe = #{productSpe}
+            </if>
+            <if test="productType != null and productType != ''">
+                and product_type = #{productType}
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                and product_unit = #{productUnit}
+            </if>
+            <if test="systemNum != null">
+                and system_num = #{systemNum}
+            </if>
+            <if test="inventoryNum != null">
+                and inventory_num = #{inventoryNum}
+            </if>
+            <if test="unitPl != null">
+                and unit_pl = #{unitPl}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into frameproject.stock_inventory_details(id, inventory_id, product_name, product_id, product_nature,
+        product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks)
+        values (#{id}, #{inventoryId}, #{productName}, #{productId}, #{productNature}, #{productSpe}, #{productType},
+        #{productUnit}, #{systemNum}, #{inventoryNum}, #{unitPl}, #{remarks})
+        <selectKey keyProperty="id" resultType="INTEGER" order="BEFORE">
+            select SEQ_stock_inventory_details.nextval from dual
+        </selectKey>
+    </insert>
+
+    <!--批量新增数据 -->
+    <insert id="insertBatch">
+        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
+            insert into frameproject.stock_inventory_details (id, inventory_id, product_name, product_id,
+            product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks)
+            values (SEQ_stock_inventory_details.NEXTVAL, #{entity.inventoryId}, #{entity.productName},
+            #{entity.productId}, #{entity.productNature}, #{entity.productSpe}, #{entity.productType},
+            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, #{entity.unitPl}, #{entity.remarks})
+        </foreach>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.stock_inventory_details
+        <set>
+            <if test="inventoryId != null">
+                inventory_id = #{inventoryId},
+            </if>
+            <if test="productName != null">
+                product_name = #{productName},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="productNature != null">
+                product_nature = #{productNature},
+            </if>
+            <if test="productSpe != null">
+                product_spe = #{productSpe},
+            </if>
+            <if test="productType != null">
+                product_type = #{productType},
+            </if>
+            <if test="productUnit != null">
+                product_unit = #{productUnit},
+            </if>
+            <if test="systemNum != null">
+                system_num = #{systemNum},
+            </if>
+            <if test="inventoryNum != null">
+                inventory_num = #{inventoryNum},
+            </if>
+            <if test="unitPl != null">
+                unit_pl = #{unitPl},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--批量修改数据-->
+    <update id="updateBatch">
+        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
+            update frameproject.stock_inventory_details
+            <set>
+                <if test="entity.inventoryId != null">
+                    inventory_id = #{entity.inventoryId},
+                </if>
+                <if test="entity.productName != null">
+                    product_name = #{entity.productName},
+                </if>
+                <if test="entity.productId != null">
+                    product_id = #{entity.productId},
+                </if>
+                <if test="entity.productNature != null">
+                    product_nature = #{entity.productNature},
+                </if>
+                <if test="entity.productSpe != null">
+                    product_spe = #{entity.productSpe},
+                </if>
+                <if test="entity.productType != null">
+                    product_type = #{entity.productType},
+                </if>
+                <if test="entity.productUnit != null">
+                    product_unit = #{entity.productUnit},
+                </if>
+                <if test="entity.systemNum != null">
+                    system_num = #{entity.systemNum},
+                </if>
+                <if test="entity.inventoryNum != null">
+                    inventory_num = #{entity.inventoryNum},
+                </if>
+                <if test="entity.unitPl != null">
+                    unit_pl = #{entity.unitPl},
+                </if>
+                <if test="entity.remarks != null">
+                    remarks = #{entity.remarks},
+                </if>
+            </set>
+            where id = #{entity.id}
+        </foreach>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.stock_inventory_details where id = #{id}
+    </delete>
+
+    <!--批量删除数据-->
+    <delete id="deleteBatch">
+        delete from frameproject.stock_inventory_details where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

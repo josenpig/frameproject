@@ -1,94 +1,87 @@
 {
-  "name" : "SysUser",
+  "name" : "StockInventoryDetails",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "Default",
+  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
-    "name" : "userId",
+    "name" : "id",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userName",
+    "name" : "inventoryId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userPass",
+    "name" : "productName",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userIcon",
+    "name" : "productId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userPhone",
+    "name" : "productNature",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userSex",
+    "name" : "productSpe",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "userState",
+    "name" : "productType",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "delFlag",
+    "name" : "productUnit",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "founder",
+    "name" : "systemNum",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "foundTime",
+    "name" : "inventoryNum",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updatedBy",
+    "name" : "unitPl",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updateTime",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "remark",
+    "name" : "remarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -97,7 +90,7 @@
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
-  "savePackageName" : "com.xingji.frameproject.mybatis",
-  "savePath" : "./src/main/java/com/xingji/frameproject/mybatis",
+  "savePackageName" : "com.xingji.frameproject",
+  "savePath" : "./src/main/java/com/xingji/frameproject",
   "saveModelName" : "frameproject"
 }

@@ -44,5 +44,11 @@ public interface BaseUnitService {
      */
     boolean deleteById(Integer unitId);
 
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseUnit 实例对象
+     * @return 对象列表
+     */
     List<BaseUnit> queryAll(BaseUnit baseUnit);
 }

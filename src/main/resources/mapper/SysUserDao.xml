@@ -10,6 +10,7 @@
         <result property="userPhone" column="user_phone" jdbcType="VARCHAR"/>
         <result property="userSex" column="user_sex" jdbcType="VARCHAR"/>
         <result property="userState" column="user_state" jdbcType="INTEGER"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
         <result property="founder" column="founder" jdbcType="VARCHAR"/>
         <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
         <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
@@ -157,9 +158,11 @@
     <delete id="deleteById">
         delete from frameproject.sys_user where user_id = #{userId}
     </delete>
+    <!--密码登录-->
     <select id="login" resultMap="SysUserMap">
         select * from sys_user where user_name=#{userName}
     </select>
+    <!--快速登录-->
     <select id="gologin" resultMap="SysUserMap">
         select * from sys_user where user_phone=#{userPhone}
     </select>

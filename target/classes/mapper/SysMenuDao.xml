@@ -29,6 +29,17 @@
         </if>
     </select>
 
+    <select id="rolemenu" resultMap="SysMenuMap">
+        <if test="roleId != null and roleId == 0">
+            select * from sys_menu order by menu_id
+        </if>
+        <if test="roleId != null and roleId != 0">
+            select c.* from sys_role a
+            inner join sys_role_menu b on a.role_id=b.role_id
+            inner join sys_menu c on c.menu_id=b.menu_id
+            WHERE a.role_id=#{roleId}
+        </if>
+    </select>
     <!--通过主键修改数据-->
     <update id="change">
         update frameproject.sys_menu

@@ -11,11 +11,11 @@ import java.io.Serializable;
  * (SysUser)实体类
  *
  * @author makejava
- * @since 2021-06-08 11:14:37
+ * @since 2021-06-11 09:38:39
  */
 @Data
 public class SysUser implements Serializable {
-    private static final long serialVersionUID = 595281704478655409L;
+    private static final long serialVersionUID = -90289125055086489L;
     /**
      * 用户id
      */
@@ -44,6 +44,10 @@ public class SysUser implements Serializable {
      * 帐号状态（0正常 1停用）
      */
     private Integer userState;
+    /**
+     * 删除标志（0代表存在 -1代表删除）
+     */
+    private Integer delFlag;
     /**
      * 创建人
      */
@@ -126,6 +130,14 @@ public class SysUser implements Serializable {
         this.userState = userState;
     }
 
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
     public String getFounder() {
         return founder;
     }
@@ -165,6 +177,5 @@ public class SysUser implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
 
 }

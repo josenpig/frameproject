@@ -123,7 +123,7 @@ public class BaseProductServiceImpl implements BaseProductService {
      * @return
      */
     @Override
-    public List<InventoryProjectVo> allStockInventoryProduct() {
-        return this.baseProductDao.allInventoryProject();
+    public List<InventoryProjectVo> allStockInventoryProduct(String depotName) {
+        return this.baseProductDao.allInventoryProject(depotName);
     }
 }
