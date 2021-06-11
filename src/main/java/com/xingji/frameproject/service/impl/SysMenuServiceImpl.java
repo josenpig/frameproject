@@ -27,4 +27,13 @@ public class SysMenuServiceImpl implements SysMenuService {
     public boolean change(SysMenu sysMenu) {
         return this.sysMenuDao.change(sysMenu) > 0;
     }
+    /**
+     * 查询某角色所具有的菜单
+     * @param roleId 角色id
+     * @return 实列对象
+     */
+    @Override
+    public List<SysMenu> rolemenu(Integer roleId) {
+        return this.sysMenuDao.rolemenu(roleId);
+    }
 }
