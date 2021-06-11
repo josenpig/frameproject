@@ -177,9 +177,5 @@
         from sys_user
         where user_name=#{userName}
     </select>
-<<<<<<< HEAD
-=======
-
->>>>>>> ccdf431fd75ea25bb1fd7205f3a9c42747fb17f0
 </mapper>
 
