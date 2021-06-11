@@ -6,6 +6,7 @@ import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.SysUserService;
+import com.xingji.frameproject.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -132,7 +133,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public List<String> findsysName() {
+    public List<SysUser> findsysName() {
         return this.sysUserDao.findsysName();
     }
 }

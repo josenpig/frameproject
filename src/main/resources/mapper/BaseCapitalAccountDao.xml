@@ -95,8 +95,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="capitalId" useGeneratedKeys="true">
-        insert into frameproject.base_capital_account(fund_account, settlement_type_id, initial_amount, current_amount, state)
-        values (#{fundAccount}, #{settlementTypeId}, #{initialAmount}, #{currentAmount}, #{state})
+        insert  into `base_capital_account`(`capital_id`,`fund_account`,`settlement_type_id`,`initial_amount`,`current_amount`,`state`)
+        values (#{capitalId}, #{fundAccount}, #{settlementTypeId}, #{initialAmount}, #{initialAmount}, 0)
     </insert>
 
     <insert id="insertBatch" keyProperty="capitalId" useGeneratedKeys="true">

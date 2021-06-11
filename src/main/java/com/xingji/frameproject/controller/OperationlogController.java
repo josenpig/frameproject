@@ -11,6 +11,8 @@ import com.xingji.frameproject.service.OperationlogService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.LoginLogVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +27,9 @@ import java.util.Map;
 /**
  * 登录日志（表控制层）
  */
+@Slf4j
 @RestController
-@RequestMapping("operationlog")
+@RequestMapping("/operationlog")
 public class OperationlogController {
     /**
      * 服务对象
@@ -58,7 +61,6 @@ public class OperationlogController {
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         Loginin loginin=new Loginin();
         List<Loginin> list=logininService.findAll(loginin);
-        System.out.println(list);
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -78,12 +80,11 @@ public class OperationlogController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     }
-    @GetMapping("/FindAllUserName")
+    @GetMapping("/findAllUserName")
     public AjaxResponse findAllOperationLog(){
-        Map<String,Object> map=new HashMap<>();
-        List<String> list=sysUserService.findsysName();
+        List<SysUser> list=sysUserService.findsysName();
+        log.debug(list.toString()+"------------------------------------------------");
         System.out.println(list);
-        map.put("operator",list);
         return AjaxResponse.success(list);
     }
 }

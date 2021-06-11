@@ -83,5 +83,5 @@ public interface BaseProductService {
      * 查询所有的库存盘点产品信息
      * @return
      */
-    List<InventoryProjectVo> allStockInventoryProduct();
+    List<InventoryProjectVo> allStockInventoryProduct(String depotName);
 }
