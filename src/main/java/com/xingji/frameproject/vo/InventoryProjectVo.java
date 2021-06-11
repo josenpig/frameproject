@@ -9,12 +9,12 @@ import lombok.Data;
 public class InventoryProjectVo {
     private String productName;
     private String productId;
-    private String productSpec;
+    private String productSpe;
     private String productType;
     private String productUnit;
     private int systemNum;
-    private int pdyk;
-    private int pdNum;
+    private int inventoryNum;
+    private double inventoryPl;
     private Double productPurchaseUnit;
     private String remark;
 

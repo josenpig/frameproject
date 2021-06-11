@@ -65,6 +65,7 @@ public class OperationlogController {
         map.put("rows",list);
         return AjaxResponse.success(map);
    }
+
     /**
      * 查询所有操作日志
      * @return 日志记录集合

@@ -142,7 +142,7 @@
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.inventoryId}, #{entity.productName},
             #{entity.productId}, #{entity.productSpe}, #{entity.productType},
-            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.systemNum}), #{entity.remarks})
+            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.inventoryNum}), #{entity.remarks})
         </foreach>
     </insert>
 

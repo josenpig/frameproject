@@ -75,7 +75,7 @@
     <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
-        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productSpe" column="product_spec" jdbcType="VARCHAR"/>
         <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="systemNum" column="product_number" jdbcType="INTEGER"/>

@@ -3,6 +3,7 @@ package com.xingji.frameproject.mybatis.dao;
 import com.xingji.frameproject.mybatis.entity.StockInventoryDetails;
 import com.xingji.frameproject.vo.form.StockInventoryDetailsQueryForm;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -61,7 +62,7 @@ public interface StockInventoryDetailsDao {
      * @param stockInventoryDetailsList 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(List<StockInventoryDetails> stockInventoryDetailsList);
+    int insertBatch(@Param("entities") List<StockInventoryDetails> stockInventoryDetailsList);
 
     /**
      * 修改数据
@@ -94,4 +95,11 @@ public interface StockInventoryDetailsDao {
      * @return 影响行数
      */
     int deleteBatch(List<Integer> ids);
+
+    /**
+     * 根据库存盘点的订单编号查询所有的订单详情记录
+     * @param orderId
+     * @return
+     */
+    List<StockInventoryDetails> queryAllById(String orderId);
 }
