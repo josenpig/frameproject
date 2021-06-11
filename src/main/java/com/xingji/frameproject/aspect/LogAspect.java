@@ -24,6 +24,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 /**
@@ -46,7 +48,7 @@ public class LogAspect {
 
     //切面 配置通知
     @AfterReturning("logPoinCut()")
-    public void saveSysLog(JoinPoint joinPoint) {
+    public void saveSysLog(JoinPoint joinPoint) throws UnknownHostException {
         System.out.println("切面。。。。。");
         //保存日志
         Operationlog operationlog = new Operationlog();
@@ -84,9 +86,9 @@ public class LogAspect {
 //        }
 
         //获取用户ip地址
+        String ip= InetAddress.getLocalHost().getHostAddress();
         HttpServletRequest request =((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        operationlog.setIpaddress(IpAdrressUtil.getIpAdrress(request));
+        operationlog.setIpaddress(ip);
 
         //调用service保存SysLog实体类到数据库
         operationlogService.InsertLog(operationlog);

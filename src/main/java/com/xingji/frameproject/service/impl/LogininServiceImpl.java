@@ -19,13 +19,19 @@ public class LogininServiceImpl implements LogininService {
         return this.logininDao.insert(loginin);
     }
 
-    @Override
-    public List<LoginLogVo> findloginlogbylogtime(Date logintime) {
-        return this.logininDao.findloginlogbylogtime(logintime);
-    }
 
     @Override
     public List<Loginin> findAll(Loginin loginin) {
         return this.logininDao.findAll(loginin);
+    }
+
+    @Override
+    public List<Loginin> findlogByOperator(String operator) {
+        return this.logininDao.findlogbyOperator(operator);
+    }
+
+    @Override
+    public List<Loginin> findlogbyLogintime(String time) {
+        return this.logininDao.findlogByLogintime(time);
     }
 }

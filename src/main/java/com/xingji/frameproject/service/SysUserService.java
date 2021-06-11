@@ -83,5 +83,4 @@ public interface SysUserService {
 
     Integer queryUserIdByUserName(String userName);
 
-    List<SysUser> findsysName();
 }
