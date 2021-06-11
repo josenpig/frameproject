@@ -177,10 +177,6 @@
         from sys_user
         where user_name=#{userName}
     </select>
-    <select id="findsysName" resultType="com.xingji.frameproject.mybatis.entity.SysUser">
-        select user_name
-        from sys_user
-    </select>
 
 </mapper>
 
