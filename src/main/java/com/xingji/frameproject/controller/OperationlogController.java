@@ -80,11 +80,4 @@ public class OperationlogController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     }
-    @GetMapping("/findAllUserName")
-    public AjaxResponse findAllOperationLog(){
-        List<SysUser> list=sysUserService.findsysName();
-        log.debug(list.toString()+"------------------------------------------------");
-        System.out.println(list);
-        return AjaxResponse.success(list);
-    }
 }
