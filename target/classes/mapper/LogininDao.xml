@@ -16,9 +16,6 @@
     from loginin
     where id = #{id,jdbcType=INTEGER}
   </select>
-    <select id="findloginlogbylogtime" resultType="com.xingji.frameproject.vo.LoginLogVo">
-      select * from loginin where logintime=#{LoginTime}
-    </select>
     <select id="findAll" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
       SELECT l.* FROM `loginin` l
       <where>
@@ -34,7 +31,13 @@
       </where>
       order by logintime desc
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="findlogbyOperator" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+      select * from loginin where operator = #{operator,jdbcType=VARCHAR} order by logintime desc
+    </select>
+  <select id="findlogByLogintime" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+    select * from loginin where logintime like#{time,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loginin
     where id = #{id,jdbcType=INTEGER}
   </delete>

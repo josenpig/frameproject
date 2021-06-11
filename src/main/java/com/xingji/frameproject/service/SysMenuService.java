@@ -13,4 +13,6 @@ import java.util.List;
 public interface SysMenuService {
 
     boolean change(SysMenu sysMenu);
+
+    List<SysMenu> rolemenu(Integer roleId);
 }

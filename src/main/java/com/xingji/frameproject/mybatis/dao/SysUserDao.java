@@ -1,7 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.SysUser;
-import com.xingji.frameproject.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -105,6 +104,5 @@ public interface SysUserDao {
 
     Integer queryUserIdByUserName(String userName);
 
-    List<SysUser> findsysName();
 }
 

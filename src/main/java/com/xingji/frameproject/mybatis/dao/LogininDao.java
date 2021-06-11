@@ -21,7 +21,10 @@ public interface LogininDao {
 
     int updateByPrimaryKey(Loginin record);
 
-    List<LoginLogVo>findloginlogbylogtime(Date logtime);
 
     List<Loginin>findAll(Loginin loginin);
+
+    List<Loginin> findlogbyOperator(String operator);
+
+    List<Loginin> findlogByLogintime(String time);
 }

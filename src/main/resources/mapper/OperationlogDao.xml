@@ -40,7 +40,8 @@
       </where>
       order by createtime desc
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from operationlog
     where id = #{id,jdbcType=INTEGER}
   </delete>

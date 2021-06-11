@@ -70,10 +70,10 @@
         LEFT JOIN `base_settlement_type` s ON s.id=ca.settlement_type_id
         <where>
             <if test="capitalId != null and capitalId != ''">
-                and capital_id = #{capitalId}
+                and capital_id  LIKE CONCAT('%',#{capitalId,jdbcType=VARCHAR},'%')
             </if>
             <if test="fundAccount != null and fundAccount != ''">
-                and fund_account = #{fundAccount}
+                and fund_account LIKE CONCAT('%',#{fundAccount,jdbcType=VARCHAR},'%')
             </if>
             <if test="initialAmount != null">
                 and initial_amount = #{initialAmount}
@@ -95,16 +95,16 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="capitalId" useGeneratedKeys="true">
-        insert  into `base_capital_account`(`capital_id`,`fund_account`,`settlement_type_id`,`initial_amount`,`current_amount`,`state`)
-        values (#{capitalId}, #{fundAccount}, #{settlementTypeId}, #{initialAmount}, #{initialAmount}, 0)
+       insert into frameproject.base_capital_account(capital_id,fund_account, settlement_type_id, initial_amount, current_amount,state)
+       values (#{capitalId}, #{fundAccount}, #{settlementTypeId}, #{initialAmount}, #{initialAmount}, 0)
     </insert>
 
     <insert id="insertBatch" keyProperty="capitalId" useGeneratedKeys="true">
-        insert into frameproject.base_capital_account(fund_account, settlement_type_id, initial_amount, current_amount,
+        insert into frameproject.base_capital_account(capitalId,fund_account, settlement_type_id, initial_amount, current_amount,
         state)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.fundAccount}, #{entity.settlementTypeId}, #{entity.initialAmount}, #{entity.currentAmount},
+            (#{entity.capitalId}#, {entity.fundAccount}, #{entity.settlementTypeId}, #{entity.initialAmount}, #{entity.currentAmount},
             #{entity.state})
         </foreach>
     </insert>
