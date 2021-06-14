@@ -7,10 +7,6 @@
         <result property="inventoryId" column="inventory_id" jdbcType="VARCHAR"/>
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
-<<<<<<< HEAD
-=======
-        <result property="productNature" column="product_nature" jdbcType="VARCHAR"/>
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
         <result property="productSpe" column="product_spe" jdbcType="VARCHAR"/>
         <result property="productType" column="product_type" jdbcType="VARCHAR"/>
         <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
@@ -23,11 +19,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="StockInventoryDetailsMap">
         select
-<<<<<<< HEAD
           id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
-=======
-          id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
         from frameproject.stock_inventory_details
         where id = #{id}
     </select>
@@ -35,22 +27,14 @@
     <!--查询所有-->
     <select id="queryAll" resultMap="StockInventoryDetailsMap">
         select
-<<<<<<< HEAD
           id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
-=======
-          id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
         from (select * from StockInventoryDetails where work_point_id = #{workPointId})
     </select>
 
     <!--通过实体作为或者条件查询-->
     <select id="queryOrByPojo" resultMap="StockInventoryDetailsMap">
         select
-<<<<<<< HEAD
         id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num,
-=======
-        id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num,
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
         inventory_num, unit_pl, remarks
         from (select * from StockInventoryDetails where work_point_id = #{workPointId})
         <where>
@@ -66,12 +50,6 @@
             <if test="productId != null and productId != ''">
                 or product_id like '%'||#{productId}||'%'
             </if>
-<<<<<<< HEAD
-=======
-            <if test="productNature != null and productNature != ''">
-                or product_nature like '%'||#{productNature}||'%'
-            </if>
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
             <if test="productSpe != null and productSpe != ''">
                 or product_spe like '%'||#{productSpe}||'%'
             </if>
@@ -99,11 +77,7 @@
     <!--通过实体作为并且条件查询-->
     <select id="queryAndByPojo" resultMap="StockInventoryDetailsMap">
         select
-<<<<<<< HEAD
         id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num,
-=======
-        id, inventory_id, product_name, product_id, product_nature, product_spe, product_type, product_unit, system_num,
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
         inventory_num, unit_pl, remarks
         from frameproject.stock_inventory_details
         <where>
@@ -119,12 +93,6 @@
             <if test="productId != null and productId != ''">
                 and product_id = #{productId}
             </if>
-<<<<<<< HEAD
-=======
-            <if test="productNature != null and productNature != ''">
-                and product_nature = #{productNature}
-            </if>
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
             <if test="productSpe != null and productSpe != ''">
                 and product_spe = #{productSpe}
             </if>
@@ -148,7 +116,6 @@
             </if>
         </where>
     </select>
-<<<<<<< HEAD
     <select id="queryAllById" resultMap="StockInventoryDetailsMap">
         select
         id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num,
@@ -175,29 +142,7 @@
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.inventoryId}, #{entity.productName},
             #{entity.productId}, #{entity.productSpe}, #{entity.productType},
-            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.inventoryNum}), #{entity.remarks})
-=======
-
-    <!--新增所有列-->
-    <insert id="insert">
-        insert into frameproject.stock_inventory_details(id, inventory_id, product_name, product_id, product_nature,
-        product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks)
-        values (#{id}, #{inventoryId}, #{productName}, #{productId}, #{productNature}, #{productSpe}, #{productType},
-        #{productUnit}, #{systemNum}, #{inventoryNum}, #{unitPl}, #{remarks})
-        <selectKey keyProperty="id" resultType="INTEGER" order="BEFORE">
-            select SEQ_stock_inventory_details.nextval from dual
-        </selectKey>
-    </insert>
-
-    <!--批量新增数据 -->
-    <insert id="insertBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            insert into frameproject.stock_inventory_details (id, inventory_id, product_name, product_id,
-            product_nature, product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks)
-            values (SEQ_stock_inventory_details.NEXTVAL, #{entity.inventoryId}, #{entity.productName},
-            #{entity.productId}, #{entity.productNature}, #{entity.productSpe}, #{entity.productType},
-            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, #{entity.unitPl}, #{entity.remarks})
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
+            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.systemNum}), #{entity.remarks})
         </foreach>
     </insert>
 
@@ -214,12 +159,6 @@
             <if test="productId != null">
                 product_id = #{productId},
             </if>
-<<<<<<< HEAD
-=======
-            <if test="productNature != null">
-                product_nature = #{productNature},
-            </if>
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
             <if test="productSpe != null">
                 product_spe = #{productSpe},
             </if>
@@ -259,12 +198,6 @@
                 <if test="entity.productId != null">
                     product_id = #{entity.productId},
                 </if>
-<<<<<<< HEAD
-=======
-                <if test="entity.productNature != null">
-                    product_nature = #{entity.productNature},
-                </if>
->>>>>>> 40ee1ba4ef9222dd2b3e0b54ece03731799f8198
                 <if test="entity.productSpe != null">
                     product_spe = #{entity.productSpe},
                 </if>

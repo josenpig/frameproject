@@ -215,5 +215,21 @@ public class PurchaseOrderController {
         return AjaxResponse.success(vo);
     }
 
+    /**
+     * 采购单的审核，修改采购订单的状态
+     *
+     * @param id 主键
+     * @return 数据
+     */
+    @GetMapping("/purchaseOrder/vetting")
+    public AjaxResponse selectvetting(@PathVariable("id") String id) {
+        PurchaseOrder order=purchaseOrderService.queryById(id);
+        List<PurchaseOrderDetails> orderDetails=prds.queryAllByOrderId(id);
+        PurchaseOrderVo vo=new PurchaseOrderVo();
+        vo.setPurchaseOrder(order);
+        vo.setList(orderDetails);
+        return AjaxResponse.success(vo);
+    }
+
 
 }
