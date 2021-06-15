@@ -19,4 +19,18 @@ public interface OperationlogService {
      * @return
      */
     List<Operationlog> findAll(Operationlog operationlog);
+
+    List<Operationlog> findbyCreateTimeAndOperatorAndInput(String time, String operator, String input);
+
+    List<Operationlog> findbyCreateTimeAndOperator(String time, String operator);
+
+    List<Operationlog> findbyInputAndOperator(String operator, String input);
+
+    List<Operationlog> findbyCreateTimeAndInput(String time, String input);
+
+    List<Operationlog> findbyCreateTime(String time);
+
+    List<Operationlog> findbyOperator(String operator);
+
+    List<Operationlog> findbyInput(String input);
 }

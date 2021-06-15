@@ -35,7 +35,27 @@
       select * from loginin where operator = #{operator,jdbcType=VARCHAR} order by logintime desc
     </select>
   <select id="findlogByLogintime" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
-    select * from loginin where logintime like#{time,jdbcType=VARCHAR}
+    select * from loginin where logintime like#{time,jdbcType=VARCHAR}  order by logintime desc
+  </select>
+  <select id="findlogByLogintimeAndOperator" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+    select * from loginin where logintime like #{time,jdbcType=VARCHAR} and operator=#{operator,jdbcType=VARCHAR} order by logintime desc
+  </select>
+    <select id="findlogByOperatorAndOperatorType" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+      select * from loginin where typeofoperator like #{operatorType,jdbcType=VARCHAR} and operator=#{operator,jdbcType=VARCHAR} order by logintime desc
+    </select>
+  <select id="findlogByOperatorType" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+    select * from loginin where typeofoperator like #{operatorType,jdbcType=VARCHAR} order by logintime desc
+  </select>
+  <select id="findlogByOperatorTypeAndLogintime" resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+    select * from loginin where typeofoperator like #{operatorType,jdbcType=VARCHAR} and logintime like#{time,jdbcType=VARCHAR} order by logintime desc
+  </select>
+  <select id="findlogbyLogintimeAndOperatorAndOperatorType"
+          resultType="com.xingji.frameproject.mybatis.entity.Loginin">
+    select * from loginin
+    where operator=#{operator,jdbcType=VARCHAR}
+    and logintime like #{logintime,jdbcType=VARCHAR}
+    and typeofoperator like #{typeofoperator,jdbcType=VARCHAR}
+    order by logintime desc
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from loginin

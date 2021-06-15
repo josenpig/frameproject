@@ -1,10 +1,9 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.Loginin;
-import com.xingji.frameproject.vo.LoginLogVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -27,4 +26,14 @@ public interface LogininDao {
     List<Loginin> findlogbyOperator(String operator);
 
     List<Loginin> findlogByLogintime(String time);
+
+    List<Loginin> findlogByLogintimeAndOperator(@Param("time") String time, @Param("operator") String operator);
+
+    List<Loginin> findlogByOperatorAndOperatorType(@Param("operator") String operator, @Param("operatorType") String operatorType);
+
+    List<Loginin> findlogByOperatorType(String operatorType);
+
+    List<Loginin> findlogByOperatorTypeAndLogintime(@Param("time") String time,@Param("operatorType") String operatorType);
+
+    List<Loginin> findlogbyLogintimeAndOperatorAndOperatorType(@Param("logintime") String logintime,@Param("operator") String operator, @Param("typeofoperator") String operatorType);
 }

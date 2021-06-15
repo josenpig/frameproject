@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+import java.util.List;
+
 @Mapper
 public interface SysUserRoleDao {
     int insert(SysUserRole record);
@@ -17,13 +19,18 @@ public interface SysUserRoleDao {
      */
     int insertBatch(@Param("entities") List<SysUserRole> entities);
     int insertSelective(SysUserRole record);
+
+
+    List<Integer> queryRoleIdByUserId(List<Integer> userId);
+
     /**
      * 通过角色id查询该角色下是否存在用户
      * @param roleId 角色id
      * @return SysUserRole
      */
     List<SysUserRole> findtfhasuser(Integer roleId);
-    Integer queryRoleIdByUserId(Integer userId);
+
+    List<Integer> queryRoleIdByUserId(Integer userId);
     /**
      * 通过用户id删除数据
      *
@@ -31,4 +38,5 @@ public interface SysUserRoleDao {
      * @return 影响行数
      */
     int deleteById(Integer userId);
+
 }

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -14,11 +14,11 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author 
  */
 @Data
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Operationlog implements Serializable {
     private Integer id;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "ETC/GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createtime;
 

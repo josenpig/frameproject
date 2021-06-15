@@ -87,5 +87,6 @@ public interface SysRoleDao {
      */
     List<SysRole> userhasrole(Integer userId);
     String queryRoleNameByroleId(Integer roleId);
+
 }
 
