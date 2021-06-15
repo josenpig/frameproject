@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
+import com.xingji.frameproject.mybatis.entity.StockInventoryDetails;
 
 import java.util.List;
 
@@ -68,4 +69,6 @@ public interface BaseDepotService {
     List<BaseDepot> findAllDepot();
 
     List<BaseDepot> findAll();
+
+
 }

@@ -6,14 +6,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseDepotService;
 import com.xingji.frameproject.service.BaseProductService;
+import com.xingji.frameproject.service.StockInventoryDetailsService;
 import com.xingji.frameproject.service.StockInventoryService;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.InventoryDetailsVo;
 import com.xingji.frameproject.vo.InventoryProjectVo;
 import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +33,7 @@ import java.util.Map;
  * @since 2021-06-08 21:08:23
  */
 @RestController
+@Slf4j
 public class StockInventoryController {
     /**
      * 服务对象
@@ -39,6 +44,8 @@ public class StockInventoryController {
     private BaseDepotService depotService;
     @Resource
     private BaseProductService productService;
+    @Resource
+    private StockInventoryDetailsService detailsService;
 
     /**
      * 通过主键查询单条数据
@@ -173,8 +180,8 @@ public class StockInventoryController {
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<InventoryProjectVo> inventoryProjectVos=productService.allStockInventoryProduct(depotName);
         for(InventoryProjectVo vo:inventoryProjectVos){
-            vo.setPdNum(0);
-            vo.setPdyk(vo.getPdNum()-vo.getSystemNum());
+            vo.setInventoryNum(0);
+            vo.setInventoryPl(vo.getInventoryNum()-vo.getSystemNum());
         }
         map.put("total",page.getTotal());
         map.put("rows",inventoryProjectVos);
@@ -183,37 +190,39 @@ public class StockInventoryController {
 
 
 
-//    /**
-//     * 新增销售订单
-//     * @param add 单据信息
-//     * @param type 是否为草稿
-//     * @return 订单id
-//     */
-//    @RequestMapping("/stockInventory/add/{type}")
-//    public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
-//        JSONObject jsonObject = JSONObject.parseObject(add);
-//        String one = jsonObject.getString("order");
-//        StockInventory order = JSON.parseObject(one, StockInventory.class);
-//        String two = jsonObject.getString("orderdetails");
-//        List<StockInventoryDetails> orderdetails= JSONArray.parseArray(two, StockInventoryDetails.class);
-//        order.setInventorystate(type);
-//        order.setOrderState(0);
-//        order.setDeliveryState(0);
-//        order.setAdvance(0.00);
-//        //添加销售订单单信息
-//        for(int i=0;i<orderdetails.size();i++){
-//            orderdetails.get(i).setOrderId(order.getOrderId());
-//        }
-//        sos.insert(order);
-//        sods.insertBatch(orderdetails);
-//        //订单生成减去预计库存数量
-//        if(type == 0) {
-//            List<SaleOrderDetails> orderDetails=sods.queryById(order.getOrderId());
-//            for(SaleOrderDetails sod:orderDetails){
-//                bos.expectreduce(sod.getProductId(),sod.getDepot(),sod.getProductNum());
-//            }
-//        }
-//        return AjaxResponse.success(order.getOrderId());
-//    }
+    /**
+     * 新增库存盘点订单
+     * @param add 单据信息
+     * @param type 是否为草稿
+     * @return 订单id
+     */
+    @RequestMapping("/stockInventory/add/{type}")
+    public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("order");
+        StockInventory order = JSON.parseObject(one, StockInventory.class);
+        String two = jsonObject.getString("orderdetails");
+        List<StockInventoryDetails> orderdetails= JSONArray.parseArray(two, StockInventoryDetails.class);
+        order.setInventorystate(type);
+        //添加销售订单单信息
+        for(int i=0;i<orderdetails.size();i++){
+            orderdetails.get(i).setInventoryId(order.getId());
+        }
+        stockInventoryService.insert(order);
+        detailsService.insertBatch(orderdetails);
+        return AjaxResponse.success(order.getId());
+    }
+
+    @GetMapping("/stockInventory/find/{id}")
+    public AjaxResponse selectOrder(@PathVariable("id")String orderId){
+        InventoryDetailsVo inventoryDetailsVo = new InventoryDetailsVo();
+        StockInventory stockInventory = stockInventoryService.queryById(orderId);
+        List<StockInventoryDetails> list = detailsService.queryAllById(orderId);
+        inventoryDetailsVo.setStockInventory(stockInventory);
+        inventoryDetailsVo.setList(list);
+        log.debug(inventoryDetailsVo.toString());
+        return AjaxResponse.success(inventoryDetailsVo);
+    }
+
 
 }

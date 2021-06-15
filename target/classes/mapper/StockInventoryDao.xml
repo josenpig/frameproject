@@ -125,16 +125,15 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into frameproject.stock_inventory(id, inventory_time, depot_id, depot_name, inventorycount,
         inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout)
         values (#{id}, #{inventoryTime}, #{depotId}, #{depotName}, #{inventorycount}, #{inventorycounter},
         #{inventorypeople}, #{inventorystate}, #{inventorypl}, #{remarks}, #{stockin}, #{stockout})
-
     </insert>
 
     <!--批量新增数据 -->
-    <insert id="insertBatch">
+    <insert id="insertBatch" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
         <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
             insert into frameproject.stock_inventory (id, inventory_time, depot_id, depot_name, inventorycount,
             inventorycounter, inventorypeople, inventorystate, inventorypl, remarks, stockin, stockout)

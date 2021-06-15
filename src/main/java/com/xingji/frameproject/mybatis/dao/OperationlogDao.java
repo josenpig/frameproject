@@ -1,5 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
+
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,4 +20,5 @@ public interface OperationlogDao {
 
     int updateByPrimaryKey(Operationlog record);
     List<Operationlog> findAll(Operationlog operationlog);
+
 }

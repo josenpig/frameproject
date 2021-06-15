@@ -141,4 +141,14 @@ public class StockInventoryDetailsServiceImpl implements StockInventoryDetailsSe
         int row = this.stockInventoryDetailsDao.deleteBatch(ids);
         return ids.size() == row;
     }
+
+    @Override
+    /**
+     * 根据库存盘点的订单编号查询所有的订单详情记录
+     * @param orderId
+     * @return
+     */
+    public List<StockInventoryDetails> queryAllById(String orderId) {
+        return this.stockInventoryDetailsDao.queryAllById(orderId);
+    }
 }

@@ -1,8 +1,12 @@
 package com.xingji.frameproject.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.BaseSettlementType;
+import com.xingji.frameproject.mybatis.entity.BaseSettlementType;
+import com.xingji.frameproject.service.BaseCapitalAccountService;
 import com.xingji.frameproject.service.BaseSettlementTypeService;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseCapitalAccountVo;
@@ -27,6 +31,8 @@ public class BaseSettlementTypeController {
      */
     @Resource
     private BaseSettlementTypeService baseSettlementTypeService;
+    @Resource
+    private BaseCapitalAccountService baseCapitalAccountService;
 
     /**
      * 通过主键查询单条数据
@@ -56,7 +62,7 @@ public class BaseSettlementTypeController {
     };
 
     /**
-     * 查询所有结算类型信息
+     * 查询所有结算类型信息 集合
      * @return 结算类型集合
      */
     @GetMapping("/findAllSettlementType/list")
@@ -64,5 +70,73 @@ public class BaseSettlementTypeController {
         BaseSettlementType baseSettlementType=new BaseSettlementType();
         List<BaseSettlementType> list=baseSettlementTypeService.queryAll(baseSettlementType);
         return AjaxResponse.success(list);
+    };
+
+    /**
+     * 删除单位
+     * @param uid 单位编号
+     * @return
+     */
+    @GetMapping("/delSettlementType")
+    public AjaxResponse delSettlementType(String uid){
+        Integer id=Integer.valueOf(uid);
+        System.out.println("del:"+uid+","+id);
+        BaseCapitalAccountVo baseCapitalAccountVo=new BaseCapitalAccountVo();
+        baseCapitalAccountVo.setSettlementTypeId(id);
+        List<BaseCapitalAccountVo> list=baseCapitalAccountService.queryAllVo(baseCapitalAccountVo);
+        Boolean recript=false;
+        if(list.size()==0){
+            recript=baseSettlementTypeService.deleteById(id);
+        }
+        return AjaxResponse.success(recript);
+    };
+
+    /**
+     * 判断单位名称是否重复
+     * @param settlementType
+     * @return
+     */
+    @GetMapping("/judgeSettlementType")
+    public Boolean judgeSettlementTypeName(String settlementType){
+        System.out.println("SettlementTypeName:"+settlementType);
+        BaseSettlementType baseSettlementType =new BaseSettlementType();
+        baseSettlementType.setSettlementType(settlementType);
+        List<BaseSettlementType> list=baseSettlementTypeService.queryAll(baseSettlementType);
+        Boolean result=false;
+        if (list.size()==0){
+            result=true;
+        };
+        return result;
+    };
+
+    /**
+     * 新增单位
+     * @param add
+     * @return
+     */
+    @RequestMapping("/addSettlementType")
+    public AjaxResponse addSettlementType(@RequestBody String add){
+        System.out.println("add"+add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("settlementType");
+        BaseSettlementType SettlementType = JSON.parseObject(one, BaseSettlementType.class);
+        System.out.println("SettlementType:"+SettlementType);
+        BaseSettlementType newc=baseSettlementTypeService.insert(SettlementType);
+        return AjaxResponse.success(newc);
+    };
+
+    /**
+     * 修改单位
+     * @param add
+     * @return
+     */
+    @RequestMapping("/updateSettlementType")
+    public AjaxResponse updateSettlementType(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("settlementType");
+        BaseSettlementType SettlementType = JSON.parseObject(one, BaseSettlementType.class);
+        BaseSettlementType newSettlementType= baseSettlementTypeService.update(SettlementType);
+        return AjaxResponse.success(newSettlementType);
     };
 }

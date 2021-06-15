@@ -14,7 +14,6 @@ public interface LogininService {
      */
     int insertLoginin(Loginin loginin);
 
-    List<LoginLogVo> findloginlogbylogtime(Date logintime);
 
     /**
      * 查询所有登录日志
@@ -22,4 +21,8 @@ public interface LogininService {
      * @return
      */
     List<Loginin> findAll(Loginin loginin);
+
+    List<Loginin> findlogByOperator(String operator);
+
+    List<Loginin> findlogbyLogintime( String time);
 }

@@ -1,5 +1,7 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-06-10 15:17:58
  */
+@ToString
 public class BaseCapitalAccount implements Serializable {
     private static final long serialVersionUID = 340427089143827676L;
     /**
