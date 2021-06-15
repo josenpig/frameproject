@@ -21,7 +21,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="SysUserMap">
         select
-          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, remark
+          user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state,del_flag, founder, found_time, updated_by, update_time, remark
         from frameproject.sys_user
         where user_id = #{userId}
     </select>
@@ -37,7 +37,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SysUserMap">
         select
-        user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by,
+        user_id, user_name, user_pass, user_icon, user_phone, user_sex, user_state, del_flag,founder, found_time, updated_by,
         update_time, remark
         from frameproject.sys_user
         <where>
@@ -45,7 +45,7 @@
                 and user_id = #{userId}
             </if>
             <if test="userName != null and userName != ''">
-                and user_name = #{userName}
+                and user_name like CONCAT('%',#{userName},'%')
             </if>
             <if test="userPass != null and userPass != ''">
                 and user_pass = #{userPass}
@@ -61,6 +61,12 @@
             </if>
             <if test="userState != null">
                 and user_state = #{userState}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag},
+            </if>
+            <if test="delFlag == null">
+                and del_flag = 0
             </if>
             <if test="founder != null and founder != ''">
                 and founder = #{founder}
@@ -82,17 +88,17 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder, found_time, updated_by, update_time, remark)
-        values (#{userName}, #{userPass}, #{userIcon}, #{userPhone}, #{userSex}, #{userState}, #{founder}, #{foundTime}, #{updatedBy}, #{updateTime}, #{remark})
+        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, del_flag,founder, found_time, updated_by, update_time, remark)
+        values (#{userName}, #{userPass}, #{userIcon}, #{userPhone}, #{userSex}, #{userState}, #{delFlag}, #{founder}, #{foundTime}, #{updatedBy}, #{updateTime}, #{remark})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, founder,
+        insert into frameproject.sys_user(user_name, user_pass, user_icon, user_phone, user_sex, user_state, del_flag,founder,
         found_time, updated_by, update_time, remark)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.userPass}, #{entity.userIcon}, #{entity.userPhone}, #{entity.userSex},
-            #{entity.userState}, #{entity.founder}, #{entity.foundTime}, #{entity.updatedBy}, #{entity.updateTime},
+            #{entity.userState},#{entity.delFlag}, #{entity.founder}, #{entity.foundTime}, #{entity.updatedBy}, #{entity.updateTime},
             #{entity.remark})
         </foreach>
     </insert>
@@ -147,6 +153,9 @@
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
             <if test="remark != null and remark != ''">
                 remark = #{remark},
             </if>
@@ -160,20 +169,20 @@
     </delete>
     <!--密码登录-->
     <select id="login" resultMap="SysUserMap">
-        select * from sys_user where user_name=#{userName}
+        select * from sys_user where user_name=#{userName} and del_flag=0
     </select>
     <!--快速登录-->
     <select id="gologin" resultMap="SysUserMap">
-        select * from sys_user where user_phone=#{userPhone}
+        select * from sys_user where user_phone=#{userPhone} and del_flag=0
     </select>
     <select id="roleusers" resultMap="SysUserMap">
-        select a.* from sys_user a
+        select distinct a.* from sys_user a
         inner join sys_user_role b on a.user_id=b.user_id
 				WHERE b.role_id=1 or
 				b.role_id=#{id}
 	</select>
     <select id="queryUserIdByUserName" resultType="java.lang.Integer">
-        select  user_id
+        select user_id
         from sys_user
         where user_name=#{userName}
     </select>

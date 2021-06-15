@@ -45,6 +45,8 @@ public class SaleReturnController {
     private SaleDeliveryService sds;
     @Resource
     private BaseOpeningService bos;
+    @Resource
+    private CapitalReceivableService crs;
 
     /**
      * 通过主键查询销售退货单及销售t退货单详情
@@ -113,6 +115,7 @@ public class SaleReturnController {
         order.setApprovalRemarks(approvalremarks);
         order.setLastApprovalTime(new Date());
         order.setUpdateTime(new Date());
+        SaleReturn saleReturn=srs.update(order);
         //审批通过产品入库增加当前库存数量
         if(type == 1) {
             order.setOrderState(1);
@@ -121,8 +124,20 @@ public class SaleReturnController {
                 bos.producteadd(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
                 bos.expectadd(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
             }
+            //新增应收单据
+            CapitalReceivable receivable=new CapitalReceivable();
+            receivable.setDeliveryId(saleReturn.getReturnId());
+            receivable.setDeliveryTime(saleReturn.getReturnTime());
+            receivable.setCustomer(saleReturn.getCustomer());
+            receivable.setSalesmen(saleReturn.getSalesmen());
+            receivable.setReceivables(saleReturn.getReceivables());
+            receivable.setReceived(0.00);
+            receivable.setUncollected(saleReturn.getReceivables());
+            receivable.setRemarks(saleReturn.getRemarks());
+            receivable.setFounder(saleReturn.getFounder());
+            receivable.setCaseState(0);
+            crs.insert(receivable);
         }
-        SaleReturn saleReturn=srs.update(order);
         return AjaxResponse.success(saleReturn);
     }
     /**

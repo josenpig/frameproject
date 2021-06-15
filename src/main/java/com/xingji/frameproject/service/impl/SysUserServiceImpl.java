@@ -2,9 +2,11 @@ package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.dao.SysMenuDao;
 import com.xingji.frameproject.mybatis.dao.SysUserDao;
+import com.xingji.frameproject.mybatis.dao.SysUserRoleDao;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.mybatis.entity.SysUserRole;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.vo.UserVo;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserDao sysUserDao;
     @Resource
     private SysMenuDao sysMenuDao;
+    @Resource
+    private SysUserRoleDao sysUserRoleDao;
 
     /**
      * 通过ID查询单条数据
@@ -59,7 +63,16 @@ public class SysUserServiceImpl implements SysUserService {
         this.sysUserDao.insert(sysUser);
         return sysUser;
     }
-
+    /**
+     * 批量新增用户角色（MyBatis原生foreach方法）
+     *
+     * @param SysUserRole List<SysUserRole> 实例对象列表
+     * @return 影响行数
+     */
+    @Override
+    public boolean insertBatch(List<SysUserRole> SysUserRole){
+        return this.sysUserRoleDao.insertBatch(SysUserRole)>=0;
+    }
     /**
      * 修改数据
      *
@@ -80,6 +93,15 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public boolean deleteById(Integer userId) {
         return this.sysUserDao.deleteById(userId) > 0;
+    }
+    /**
+     * 通过用户id删除用户角色
+     * @param userId 主键
+     * @return 是否成功
+     */
+    @Override
+    public boolean deleteroles(Integer userId) {
+        return this.sysUserRoleDao.deleteById(userId) > 0;
     }
     /**
      * 账户密码登录

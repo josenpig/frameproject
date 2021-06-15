@@ -2,6 +2,7 @@ package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill;
 import com.xingji.frameproject.mybatis.entity.CapitalReceivable;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.apache.ibatis.annotations.Param;
@@ -84,7 +85,7 @@ public interface CapitalReceivableDao {
      * @return 影响行数
      */
     int deleteById(String deliveryId);
-    List<CapitalReceivable> queryAllByPage();
+    List<CapitalReceivable> queryAllByPage(CapitalConditionPageVo vo);
     /**
      * 通过实体类条件查询应收款单
      * @param vo 实体类

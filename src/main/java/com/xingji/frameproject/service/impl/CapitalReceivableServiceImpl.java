@@ -4,6 +4,7 @@ import com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill;
 import com.xingji.frameproject.mybatis.entity.CapitalReceivable;
 import com.xingji.frameproject.mybatis.dao.CapitalReceivableDao;
 import com.xingji.frameproject.service.CapitalReceivableService;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.springframework.stereotype.Service;
@@ -81,8 +82,8 @@ public class CapitalReceivableServiceImpl implements CapitalReceivableService {
     }
 
     @Override
-    public List<CapitalReceivable> queryAllByPage() {
-        return this.capitalReceivableDao.queryAllByPage();
+    public List<CapitalReceivable> queryAllByPage(CapitalConditionPageVo vo) {
+        return this.capitalReceivableDao.queryAllByPage(vo);
     }
     @Override
     public List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo) {
