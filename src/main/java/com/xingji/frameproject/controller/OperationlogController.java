@@ -2,25 +2,18 @@ package com.xingji.frameproject.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
-import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.LogininService;
 import com.xingji.frameproject.service.OperationlogService;
-import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.LoginLogVo;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -57,13 +50,12 @@ public class OperationlogController {
      */
 
     @GetMapping("/findloginlogbycondition")
-    public AjaxResponse findLogbycondition(String operator,Integer currentPage, Integer pagesize ,String logintime, String operatorType) {
+    public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pagesize);
         List<Loginin> list = null;
         Loginin loginin=new Loginin();
-<<<<<<< HEAD
         //时间和操作员有一个不为空时
         if(((logintime!=null && logintime!="") &&(!logintime.equals("") && !logintime.equals(null)))
                 || ((operator!=null && operator!="")&&(!operator.equals("")&&!operator.equals(null)))
@@ -170,30 +162,11 @@ public class OperationlogController {
             list=logininService.findAll(loginin);
 
         }
-=======
-        List<Loginin> list=logininService.findAll(loginin);
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
    }
 
-    /**
-     * 查询所有操作日志
-     * @return 日志记录集合
-     */
-    @Log("查询操作日志")
-    @GetMapping("/findAllLog")
-    public AjaxResponse findAllOperationLog(Integer currentPage, Integer pageSize){
-        Map<String,Object> map=new HashMap<>();
-        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        Operationlog operationlog=new Operationlog();
-        List<Operationlog> list= operationlogService.findAll(operationlog);
-        System.out.println(list);
->>>>>>> ed5442202ac7008815ab9ba5cf69e8b886b29c21
-        map.put("total",page.getTotal());
-        map.put("rows",list);
-        return AjaxResponse.success(map);
-    }
 
     /**
      * 单条件查询、多条件查询，查询所有操作日志

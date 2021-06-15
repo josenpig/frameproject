@@ -1,6 +1,6 @@
 package com.xingji.frameproject.controller;
 
-import com.xingji.frameproject.entity.PurchaseReturns;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import com.xingji.frameproject.service.PurchaseReturnsService;
 import org.springframework.web.bind.annotation.*;
 

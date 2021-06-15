@@ -19,17 +19,18 @@ public interface SysUserRoleDao {
      */
     int insertBatch(@Param("entities") List<SysUserRole> entities);
     int insertSelective(SysUserRole record);
-<<<<<<< HEAD
 
-    List<Integer> queryRoleIdByUserId(Integer userId);
-=======
+
+    List<Integer> queryRoleIdByUserId(List<Integer> userId);
+
     /**
      * 通过角色id查询该角色下是否存在用户
      * @param roleId 角色id
      * @return SysUserRole
      */
     List<SysUserRole> findtfhasuser(Integer roleId);
-    Integer queryRoleIdByUserId(Integer userId);
+
+    List<Integer> queryRoleIdByUserId(Integer userId);
     /**
      * 通过用户id删除数据
      *
@@ -37,5 +38,5 @@ public interface SysUserRoleDao {
      * @return 影响行数
      */
     int deleteById(Integer userId);
->>>>>>> ed5442202ac7008815ab9ba5cf69e8b886b29c21
+
 }

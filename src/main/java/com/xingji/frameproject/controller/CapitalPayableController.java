@@ -1,6 +1,6 @@
 package com.xingji.frameproject.controller;
 
-import com.xingji.frameproject.entity.CapitalPayable;
+import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import com.xingji.frameproject.service.CapitalPayableService;
 import org.springframework.web.bind.annotation.*;
 

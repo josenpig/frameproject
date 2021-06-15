@@ -90,9 +90,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public boolean insertBatch(List<SysRoleMenu> sysRoleMenus){
         return this.sysRoleMenuDao.insertBatch(sysRoleMenus)>=0;
     }
-<<<<<<< HEAD
 
-=======
     /**
      * 新增角色
      *
@@ -104,5 +102,4 @@ public class SysRoleServiceImpl implements SysRoleService {
         this.sysRoleDao.insert(sysRole);
         return sysRole;
     }
->>>>>>> ed5442202ac7008815ab9ba5cf69e8b886b29c21
 }

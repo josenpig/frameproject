@@ -1,6 +1,6 @@
 package com.xingji.frameproject.service;
 
-import com.xingji.frameproject.entity.PurchaseReturns;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 
 import java.util.List;
 

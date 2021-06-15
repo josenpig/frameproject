@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
-import com.xingji.frameproject.entity.PurchaseReturns;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-06-15 18:49:01
  */
+@Mapper
 public interface PurchaseReturnsDao {
 
     /**

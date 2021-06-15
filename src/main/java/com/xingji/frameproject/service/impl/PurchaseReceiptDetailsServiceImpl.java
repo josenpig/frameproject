@@ -1,7 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
-import com.xingji.frameproject.entity.PurchaseReceiptDetails;
-import com.xingji.frameproject.dao.PurchaseReceiptDetailsDao;
+import com.xingji.frameproject.mybatis.dao.PurchaseReceiptDetailsDao;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.service.PurchaseReceiptDetailsService;
 import org.springframework.stereotype.Service;
 
