@@ -94,7 +94,7 @@ public class CapitalReceiptController {
                 saleOrder.setReceiptId(receipt.getReceiptId());
                 sos.update(saleOrder);
             }
-            if (bills.get(i).getSaleType().equals("销售出库单")){
+            if (bills.get(i).getSaleType().equals("销售出库单")||bills.get(i).getSaleType().equals("销售退货单")){
                 SaleDelivery saleDelivery=new SaleDelivery();
                 saleDelivery.setDeliveryId(bills.get(i).getSaleId());
                 saleDelivery.setReceiptId(receipt.getReceiptId());
@@ -139,7 +139,7 @@ public class CapitalReceiptController {
             CapitalReceipt receipt=crs.queryById(orderid);
             List<CapitalReceiptBill> bills=crbs.queryById(receipt.getReceiptId());
             for (int i=0;i<bills.size();i++) {
-                if (bills.get(i).getSaleType().equals("销售出库单")) {
+                if (bills.get(i).getSaleType().equals("销售出库单")||bills.get(i).getSaleType().equals("销售退货单")) {
                     CapitalReceivable ok=crsok.queryById(bills.get(i).getSaleId());
                     if(ok.getCaseState()==1){
                         return AjaxResponse.success("订单："+ok.getDeliveryId()+"已结案");
@@ -168,12 +168,7 @@ public class CapitalReceiptController {
             for (int i=0;i<bills.size();i++) {
                 //修改单据收款金额
                 SaleOrder order=new SaleOrder();
-//                CapitalReceiptBill bill=new CapitalReceiptBill();
-//                bill.setReceivedMoney(bills.get(i).getReceivedMoney()+bills.get(i).getThisMoney());
-//                bill.setUncollectedMoney(bills.get(i).getReceiptMoney()-bills.get(i).getReceivedMoney()-bills.get(i).getThisMoney());
-//                bill.setSaleId(bills.get(i).getSaleId());
-//                crbs.update(bill);
-                if (bills.get(i).getSaleType().equals("销售出库单")) {
+                if (bills.get(i).getSaleType().equals("销售出库单")||bills.get(i).getSaleType().equals("销售退货单")) {
                     //修改应收款信息
                     receivable.setDeliveryId(bills.get(i).getSaleId());
                     receivable.setLastCollectionTime(new Date());

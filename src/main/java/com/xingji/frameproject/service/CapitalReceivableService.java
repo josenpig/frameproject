@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalCavCiaBill;
 import com.xingji.frameproject.mybatis.entity.CapitalReceivable;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 
@@ -57,7 +58,7 @@ public interface CapitalReceivableService {
      */
     boolean deleteById(String deliveryId);
 
-    List<CapitalReceivable> queryAllByPage();
+    List<CapitalReceivable> queryAllByPage(CapitalConditionPageVo vo);
 
     List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo);
 
