@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2021-06-15 18:48:35
  */
+@Mapper
 public interface PurchaseReceiptDao {
 
     /**

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xingji.frameproject.dao.CapitalPayableDao">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalPayableDao">
 
-    <resultMap type="com.xingji.frameproject.entity.CapitalPayable" id="CapitalPayableMap">
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayable" id="CapitalPayableMap">
         <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer" jdbcType="VARCHAR"/>
