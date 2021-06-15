@@ -63,6 +63,7 @@ public class OperationlogController {
         Page<Object> page= PageHelper.startPage(currentPage,pagesize);
         List<Loginin> list = null;
         Loginin loginin=new Loginin();
+<<<<<<< HEAD
         //时间和操作员有一个不为空时
         if(((logintime!=null && logintime!="") &&(!logintime.equals("") && !logintime.equals(null)))
                 || ((operator!=null && operator!="")&&(!operator.equals("")&&!operator.equals(null)))
@@ -169,6 +170,26 @@ public class OperationlogController {
             list=logininService.findAll(loginin);
 
         }
+=======
+        List<Loginin> list=logininService.findAll(loginin);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+   }
+
+    /**
+     * 查询所有操作日志
+     * @return 日志记录集合
+     */
+    @Log("查询操作日志")
+    @GetMapping("/findAllLog")
+    public AjaxResponse findAllOperationLog(Integer currentPage, Integer pageSize){
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        Operationlog operationlog=new Operationlog();
+        List<Operationlog> list= operationlogService.findAll(operationlog);
+        System.out.println(list);
+>>>>>>> ed5442202ac7008815ab9ba5cf69e8b886b29c21
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);

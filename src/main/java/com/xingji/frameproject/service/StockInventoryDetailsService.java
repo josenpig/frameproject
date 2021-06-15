@@ -93,4 +93,11 @@ public interface StockInventoryDetailsService {
      * @return 是否成功
      */
     boolean deleteBatch(List<Integer> ids);
+
+    /**
+     * 根据库存盘点的订单编号查询所有的订单详情记录
+     * @param orderId
+     * @return
+     */
+    List<StockInventoryDetails> queryAllById(String orderId);
 }

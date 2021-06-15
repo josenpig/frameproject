@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.mybatis.entity.SysMenu;
-import com.xingji.frameproject.mybatis.entity.SysRole;
-import com.xingji.frameproject.mybatis.entity.SysRoleMenu;
-import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.SysMenuService;
 import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserService;
@@ -52,12 +49,6 @@ public class PowerController {
         SystemPowerVo vo=new SystemPowerVo();
         //查询角色独有菜单
         List<SysMenu> usermenu = sms.rolemenu(roleId);
-        List<SysMenu> menu = usermenu.stream().filter(m -> m.getParentId() == 0).map(
-                (m) -> {
-                    m.setChildMenu(getChildrens(m, usermenu));
-                    return m;
-                }
-        ).collect(Collectors.toList());
         //查询所有菜单
         List<SysMenu> menulist=sms.rolemenu(0);
         List<SysMenu> allmenu = menulist.stream().filter(m -> m.getParentId() == 0).map(
@@ -67,7 +58,7 @@ public class PowerController {
                 }
         ).collect(Collectors.toList());
         vo.setAllmenus(allmenu);
-        vo.setMenus(menu);
+        vo.setMenus(usermenu);
         return AjaxResponse.success(vo);
     }
     /**
@@ -85,9 +76,13 @@ public class PowerController {
         sysRole.setUpdateTime(new Date());
         //判断菜单数据是否被修改
         if (sysMenu.size()==0){
-            return AjaxResponse.success(srs.update(sysRole));
+            if(sysRole.getDelFlag()==-1 && srs.findtfhasuser(sysRole.getRoleId()).size()==0){//判断角色新是否存在用户
+                return AjaxResponse.success(srs.update(sysRole));
+            }else {
+                return AjaxResponse.success(false);
+            }
         }else {
-            srs.deletemenus(sysRole.getRoleId());
+            srs.deletemenus(sysRole.getRoleId());//先删除原有的数据
             List<SysRoleMenu> lists=new ArrayList<>();
             for (int i=0;i<sysMenu.size();i++){
                 SysRoleMenu sysRoleMenu=new SysRoleMenu();
@@ -100,20 +95,108 @@ public class PowerController {
         return AjaxResponse.success(srs.update(sysRole));
     }
     /**
-     * 用户管理 查询用户所有的角色及某个用户所具有的角色
+     * 角色管理 添加角色
+     * @param add json对象
+     * @return vo
+     */
+    @PostMapping("/addnewrole")
+    public AjaxResponse addnewrole(@RequestBody String add){
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String menus = jsonObject.getString("menus");//菜单
+        List<SysMenu> sysMenu=JSONArray.parseArray(menus, SysMenu.class);
+        String roles = jsonObject.getString("roles");//角色
+        SysRole sysRole = JSON.parseObject(roles, SysRole.class);
+        sysRole.setFoundTime(new Date());
+        sysRole.setDelFlag(0);
+        //新增角色
+        srs.insert(sysRole);
+        //新增角色菜单
+        List<SysRoleMenu> lists=new ArrayList<>();
+        for (int i=0;i<sysMenu.size();i++){
+            SysRoleMenu sysRoleMenu=new SysRoleMenu();
+            sysRoleMenu.setRoleId(sysRole.getRoleId());
+            sysRoleMenu.setMenuId(sysMenu.get(i).getMenuId());
+            lists.add(sysRoleMenu);
+        }
+        return AjaxResponse.success(srs.insertBatch(lists));
+    }
+    /**
+     * 用户管理 查询某个用户所具有的角色
      * @return 菜单信息
      */
     @PostMapping("/findroles")
     public AjaxResponse findroles(String username){
-        SystemPowerVo vo=new SystemPowerVo();
         SysUser loginuser = sus.login(username);
-        //查询所有角色
-        List<SysRole> allroles=srs.queryAll(new SysRole());
         //查询用户具有的角色
         List<SysRole> roles=srs.userhasrole(loginuser.getUserId());
-        vo.setAllroles(allroles);
-        vo.setRoles(roles);
-        return AjaxResponse.success(vo);
+        return AjaxResponse.success(roles);
+    }
+    /**
+     * 用户管理 查询用户所有的角色
+     * @return 菜单信息
+     */
+    @PostMapping("/findallroles")
+    public AjaxResponse findallroles(){
+        //查询所有角色
+        List<SysRole> allroles=srs.queryAll(new SysRole());
+        return AjaxResponse.success(allroles);
+    }
+    /**
+     * 用户管理 添加用户
+     * @param add json对象
+     * @return vo
+     */
+    @PostMapping("/addnewuser")
+    public AjaxResponse addnewuser(@RequestBody String add){
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("user");//用户
+        SysUser user=JSON.parseObject(one, SysUser.class);
+        String roles = jsonObject.getString("roles");//角色
+        List<SysRole> sysRole = JSONArray.parseArray(roles, SysRole.class);
+        user.setFoundTime(new Date());
+        user.setDelFlag(0);
+        //新增用户
+        sus.insert(user);
+        //新增用户角色
+        List<SysUserRole> lists=new ArrayList<>();
+        for (int i=0;i<sysRole.size();i++){
+            SysUserRole sysUserRole=new SysUserRole();
+            sysUserRole.setUserId(user.getUserId());
+            sysUserRole.setRoleId(sysRole.get(i).getRoleId());
+            lists.add(sysUserRole);
+        }
+        return AjaxResponse.success(sus.insertBatch(lists));
+    }
+    /**
+     * 用户管理 修改用户数据
+     * @param change json对象
+     * @return 是否成功
+     */
+    @PostMapping("/changeuesr")
+    public AjaxResponse changeuesr(@RequestBody String change){
+        JSONObject jsonObject = JSONObject.parseObject(change);
+        String one = jsonObject.getString("user");//用户
+        SysUser user=JSON.parseObject(one, SysUser.class);
+        String roles = jsonObject.getString("roles");//角色
+        List<SysRole> sysRole = JSONArray.parseArray(roles, SysRole.class);
+        user.setUpdateTime(new Date());
+        System.out.println(user.toString());
+        //修改用户
+        if(sysRole.size()==0){
+            return AjaxResponse.success(sus.update(user));
+        }else {
+        //修改用户角色
+        sus.deleteroles(user.getUserId());//先删除原有的数据
+        List<SysUserRole> lists=new ArrayList<>();
+        for (int i=0;i<sysRole.size();i++){
+            SysUserRole sysUserRole=new SysUserRole();
+            sysUserRole.setUserId(user.getUserId());
+            sysUserRole.setRoleId(sysRole.get(i).getRoleId());
+            lists.add(sysUserRole);
+        }
+        sus.insertBatch(lists);
+        return AjaxResponse.success(sus.update(user));
+        }
     }
     /**
      * 菜单管理查询所有菜单
@@ -171,10 +254,10 @@ public class PowerController {
         List<SysUser> users=sus.queryAll(user);
         map.put("total",page.getTotal());
         map.put("rows",users);
-        return AjaxResponse.success(users);
+        return AjaxResponse.success(map);
     }
     /**
-     * 条件分页查询用户信息
+     * 条件分页查询角色信息
      * @param conditionpage 查询条件
      * @return 菜单信息
      */
@@ -190,7 +273,7 @@ public class PowerController {
         List<SysRole> users=srs.queryAll(role);
         map.put("total",page.getTotal());
         map.put("rows",users);
-        return AjaxResponse.success(users);
+        return AjaxResponse.success(map);
     }
 
     /**

@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
-import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
-import com.xingji.frameproject.mybatis.entity.SaleOrder;
-import com.xingji.frameproject.mybatis.entity.SaleOrderDetails;
+import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseOpeningService;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.service.PurchaseOrderService;
@@ -213,6 +210,39 @@ public class PurchaseOrderController {
         vo.setPurchaseOrder(order);
         vo.setList(orderDetails);
         return AjaxResponse.success(vo);
+    }
+
+    /**
+     * 采购单的审核，修改采购订单的状态
+     *
+     * @param id 主键
+     * @return 数据
+     */
+    @GetMapping("/purchaseOrder/vetting")
+    public AjaxResponse selectvetting(@PathVariable("id") String id) {
+        PurchaseOrder order=purchaseOrderService.queryById(id);
+        List<PurchaseOrderDetails> orderDetails=prds.queryAllByOrderId(id);
+        PurchaseOrderVo vo=new PurchaseOrderVo();
+        vo.setPurchaseOrder(order);
+        vo.setList(orderDetails);
+        return AjaxResponse.success(vo);
+    }
+
+    /**
+     * 修改采购订单审批状态
+     * @param id 主键
+     * @return 数据
+     */
+    @GetMapping("/purchaseOrder/approval")
+    public AjaxResponse approvalorder(String id,int type,String user){
+        PurchaseOrder order = new PurchaseOrder();
+        order.setId(id);
+        order.setVettingState(type);
+        order.setVettingName(user);
+        order.setLastVettingDate(new Date());
+        order.setUpdateDate(new Date());
+        PurchaseOrder purchaseOrder=purchaseOrderService.update(order);
+        return AjaxResponse.success(purchaseOrder);
     }
 
 

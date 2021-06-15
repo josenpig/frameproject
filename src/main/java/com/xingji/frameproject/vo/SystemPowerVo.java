@@ -14,8 +14,6 @@ import java.util.List;
  */
 @Data
 public class SystemPowerVo {
-    private List<SysRole> allroles;
-    private List<SysRole> roles;
     private List<SysMenu> allmenus;
     private List<SysMenu> menus;
 }

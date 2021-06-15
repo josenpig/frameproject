@@ -3,6 +3,7 @@ package com.xingji.frameproject.service;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
+import com.xingji.frameproject.mybatis.entity.SysUserRole;
 import com.xingji.frameproject.vo.LoginLogVo;
 
 import java.util.List;
@@ -40,6 +41,8 @@ public interface SysUserService {
      */
     SysUser insert(SysUser sysUser);
 
+    boolean insertBatch(List<SysUserRole> SysUserRole);
+
     /**
      * 修改数据
      *
@@ -55,6 +58,9 @@ public interface SysUserService {
      * @return 是否成功
      */
     boolean deleteById(Integer userId);
+
+    boolean deleteroles(Integer userId);
+
     /**
      * 账户密码登录
      * @param userName 用户账户

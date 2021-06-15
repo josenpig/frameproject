@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.BaseProductTypeDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.BaseProductType" id="BaseProductTypeMap">
+        <result property="id" column="product_type_id" jdbcType="INTEGER"/>
+        <result property="label" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="productTypeParentId" column="product_type_parent_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseProductTypeMap">
+        select
+          product_type_id, product_type_name, product_type_parent_id
+        from frameproject.base_product_type
+        where product_type_id = #{productTypeId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseProductTypeMap">
+        select
+          product_type_id, product_type_name, product_type_parent_id
+        from frameproject.base_product_type
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseProductTypeMap">
+        select
+        product_type_id, product_type_name, product_type_parent_id
+        from frameproject.base_product_type
+        <where>
+            <if test="id != null">
+                and product_type_id = #{id}
+            </if>
+            <if test="label != null and label != ''">
+                and product_type_name = #{label}
+            </if>
+            <if test="productTypeParentId != null">
+                and product_type_parent_id = #{productTypeParentId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="productTypeId" useGeneratedKeys="true">
+        insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
+        values (#{productTypeName}, #{productTypeParentId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="productTypeId" useGeneratedKeys="true">
+        insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productTypeName}, #{entity.productTypeParentId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="productTypeId" useGeneratedKeys="true">
+        insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productTypeName}, #{entity.productTypeParentId})
+        </foreach>
+        on duplicate key update
+        product_type_name = values(product_type_name) , product_type_parent_id = values(product_type_parent_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.base_product_type
+        <set>
+            <if test="productTypeName != null and productTypeName != ''">
+                product_type_name = #{productTypeName},
+            </if>
+            <if test="productTypeParentId != null">
+                product_type_parent_id = #{productTypeParentId},
+            </if>
+        </set>
+        where product_type_id = #{productTypeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.base_product_type where product_type_id = #{productTypeId}
+    </delete>
+
+</mapper>
+

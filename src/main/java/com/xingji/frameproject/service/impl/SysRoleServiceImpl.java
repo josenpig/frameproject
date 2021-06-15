@@ -2,8 +2,10 @@ package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.dao.SysRoleDao;
 import com.xingji.frameproject.mybatis.dao.SysRoleMenuDao;
+import com.xingji.frameproject.mybatis.dao.SysUserRoleDao;
 import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysRoleMenu;
+import com.xingji.frameproject.mybatis.entity.SysUserRole;
 import com.xingji.frameproject.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class SysRoleServiceImpl implements SysRoleService {
     private SysRoleDao sysRoleDao;
     @Resource
     private SysRoleMenuDao sysRoleMenuDao;
+    @Resource
+    private SysUserRoleDao sysUserRoleDao;
 
     /**
      * 通过角色id获取角色名
@@ -49,6 +53,15 @@ public class SysRoleServiceImpl implements SysRoleService {
         return this.sysRoleDao.userhasrole(userId);
     }
     /**
+     * 通过角色id查询该角色下是否存在用户
+     * @param roleId 角色id
+     * @return 影响行数
+     */
+    @Override
+    public List<SysUserRole> findtfhasuser(Integer roleId){
+        return this.sysUserRoleDao.findtfhasuser(roleId);
+    }
+    /**
      * 修改数据
      *
      * @param sysRole 实例对象
@@ -77,5 +90,19 @@ public class SysRoleServiceImpl implements SysRoleService {
     public boolean insertBatch(List<SysRoleMenu> sysRoleMenus){
         return this.sysRoleMenuDao.insertBatch(sysRoleMenus)>=0;
     }
+<<<<<<< HEAD
 
+=======
+    /**
+     * 新增角色
+     *
+     * @param sysRole 实例对象
+     * @return 新增对象
+     */
+    @Override
+    public SysRole insert(SysRole sysRole){
+        this.sysRoleDao.insert(sysRole);
+        return sysRole;
+    }
+>>>>>>> ed5442202ac7008815ab9ba5cf69e8b886b29c21
 }

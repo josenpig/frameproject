@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.dao.PurchaseReceiptDao">
+
+    <resultMap type="com.xingji.frameproject.entity.PurchaseReceipt" id="PurchaseReceiptMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="inboundDate" column="inbound_date" jdbcType="TIMESTAMP"/>
+        <result property="vendorName" column="vendor_name" jdbcType="VARCHAR"/>
+        <result property="buyerName" column="buyer_name" jdbcType="VARCHAR"/>
+        <result property="buyerType" column="buyer_type" jdbcType="VARCHAR"/>
+        <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
+        <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
+        <result property="offersPrice" column="offers_price" jdbcType="NUMERIC"/>
+        <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="vettingName" column="vetting_name" jdbcType="VARCHAR"/>
+        <result property="lastVettingTime" column="last_vetting_time" jdbcType="TIMESTAMP"/>
+        <result property="vettingState" column="vetting_state" jdbcType="INTEGER"/>
+        <result property="associatedOrder" column="associated_order" jdbcType="VARCHAR"/>
+        <result property="exitOrderId" column="exit_order_id" jdbcType="VARCHAR"/>
+        <result property="paymentOrder" column="payment_order" jdbcType="VARCHAR"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="invoiceId" column="invoice_id" jdbcType="VARCHAR"/>
+        <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
+        <result property="contact" column="contact" jdbcType="VARCHAR"/>
+        <result property="updatePeople" column="update_people" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="counter" column="counter" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PurchaseReceiptMap">
+        select id,
+               inbound_date,
+               vendor_name,
+               buyer_name,
+               buyer_type,
+               disrate,
+               dismoney,
+               offers_price,
+               depot_name,
+               vetting_name,
+               last_vetting_time,
+               vetting_state,
+               associated_order,
+               exit_order_id,
+               payment_order,
+               cav_id,
+               invoice_id,
+               create_people,
+               contact,
+               update_people,
+               create_date,
+               update_date,
+               counter
+        from frameproject.purchase_receipt
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PurchaseReceiptMap">
+        select id,
+               inbound_date,
+               vendor_name,
+               buyer_name,
+               buyer_type,
+               disrate,
+               dismoney,
+               offers_price,
+               depot_name,
+               vetting_name,
+               last_vetting_time,
+               vetting_state,
+               associated_order,
+               exit_order_id,
+               payment_order,
+               cav_id,
+               invoice_id,
+               create_people,
+               contact,
+               update_people,
+               create_date,
+               update_date,
+               counter
+        from frameproject.purchase_receipt limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PurchaseReceiptMap">
+        select
+        id, inbound_date, vendor_name, buyer_name, buyer_type, disrate, dismoney, offers_price, depot_name,
+        vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id, payment_order, cav_id,
+        invoice_id, create_people, contact, update_people, create_date, update_date, counter
+        from frameproject.purchase_receipt
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="inboundDate != null">
+                and inbound_date = #{inboundDate}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                and buyer_type = #{buyerType}
+            </if>
+            <if test="disrate != null">
+                and disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                and dismoney = #{dismoney}
+            </if>
+            <if test="offersPrice != null">
+                and offers_price = #{offersPrice}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                and vetting_name = #{vettingName}
+            </if>
+            <if test="lastVettingTime != null">
+                and last_vetting_time = #{lastVettingTime}
+            </if>
+            <if test="vettingState != null">
+                and vetting_state = #{vettingState}
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                and associated_order = #{associatedOrder}
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                and exit_order_id = #{exitOrderId}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                and payment_order = #{paymentOrder}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                and invoice_id = #{invoiceId}
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                and create_people = #{createPeople}
+            </if>
+            <if test="contact != null and contact != ''">
+                and contact = #{contact}
+            </if>
+            <if test="updatePeople != null and updatePeople != ''">
+                and update_people = #{updatePeople}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="counter != null">
+                and counter = #{counter}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_receipt(inbound_date, vendor_name, buyer_name, buyer_type, disrate, dismoney,
+                                                  offers_price, depot_name, vetting_name, last_vetting_time,
+                                                  vetting_state, associated_order, exit_order_id, payment_order, cav_id,
+                                                  invoice_id, create_people, contact, update_people, create_date,
+                                                  update_date, counter)
+        values (#{inboundDate}, #{vendorName}, #{buyerName}, #{buyerType}, #{disrate}, #{dismoney}, #{offersPrice},
+                #{depotName}, #{vettingName}, #{lastVettingTime}, #{vettingState}, #{associatedOrder}, #{exitOrderId},
+                #{paymentOrder}, #{cavId}, #{invoiceId}, #{createPeople}, #{contact}, #{updatePeople}, #{createDate},
+                #{updateDate}, #{counter})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_receipt(inbound_date, vendor_name, buyer_name, buyer_type, disrate, dismoney,
+        offers_price, depot_name, vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id,
+        payment_order, cav_id, invoice_id, create_people, contact, update_people, create_date, update_date, counter)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.inboundDate}, #{entity.vendorName}, #{entity.buyerName}, #{entity.buyerType}, #{entity.disrate},
+            #{entity.dismoney}, #{entity.offersPrice}, #{entity.depotName}, #{entity.vettingName},
+            #{entity.lastVettingTime}, #{entity.vettingState}, #{entity.associatedOrder}, #{entity.exitOrderId},
+            #{entity.paymentOrder}, #{entity.cavId}, #{entity.invoiceId}, #{entity.createPeople}, #{entity.contact},
+            #{entity.updatePeople}, #{entity.createDate}, #{entity.updateDate}, #{entity.counter})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_receipt(inbound_date, vendor_name, buyer_name, buyer_type, disrate, dismoney,
+        offers_price, depot_name, vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id,
+        payment_order, cav_id, invoice_id, create_people, contact, update_people, create_date, update_date, counter)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.inboundDate}, #{entity.vendorName}, #{entity.buyerName}, #{entity.buyerType}, #{entity.disrate},
+            #{entity.dismoney}, #{entity.offersPrice}, #{entity.depotName}, #{entity.vettingName},
+            #{entity.lastVettingTime}, #{entity.vettingState}, #{entity.associatedOrder}, #{entity.exitOrderId},
+            #{entity.paymentOrder}, #{entity.cavId}, #{entity.invoiceId}, #{entity.createPeople}, #{entity.contact},
+            #{entity.updatePeople}, #{entity.createDate}, #{entity.updateDate}, #{entity.counter})
+        </foreach>
+        on duplicate key update
+        inbound_date = values(inbound_date) , vendor_name = values(vendor_name) , buyer_name = values(buyer_name) ,
+        buyer_type = values(buyer_type) , disrate = values(disrate) , dismoney = values(dismoney) , offers_price =
+        values(offers_price) , depot_name = values(depot_name) , vetting_name = values(vetting_name) , last_vetting_time
+        = values(last_vetting_time) , vetting_state = values(vetting_state) , associated_order =
+        values(associated_order) , exit_order_id = values(exit_order_id) , payment_order = values(payment_order) ,
+        cav_id = values(cav_id) , invoice_id = values(invoice_id) , create_people = values(create_people) , contact =
+        values(contact) , update_people = values(update_people) , create_date = values(create_date) , update_date =
+        values(update_date) , counter = values(counter)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.purchase_receipt
+        <set>
+            <if test="inboundDate != null">
+                inbound_date = #{inboundDate},
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                vendor_name = #{vendorName},
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                buyer_name = #{buyerName},
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                buyer_type = #{buyerType},
+            </if>
+            <if test="disrate != null">
+                disrate = #{disrate},
+            </if>
+            <if test="dismoney != null">
+                dismoney = #{dismoney},
+            </if>
+            <if test="offersPrice != null">
+                offers_price = #{offersPrice},
+            </if>
+            <if test="depotName != null and depotName != ''">
+                depot_name = #{depotName},
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                vetting_name = #{vettingName},
+            </if>
+            <if test="lastVettingTime != null">
+                last_vetting_time = #{lastVettingTime},
+            </if>
+            <if test="vettingState != null">
+                vetting_state = #{vettingState},
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                associated_order = #{associatedOrder},
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                exit_order_id = #{exitOrderId},
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                payment_order = #{paymentOrder},
+            </if>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                invoice_id = #{invoiceId},
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                create_people = #{createPeople},
+            </if>
+            <if test="contact != null and contact != ''">
+                contact = #{contact},
+            </if>
+            <if test="updatePeople != null and updatePeople != ''">
+                update_people = #{updatePeople},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="counter != null">
+                counter = #{counter},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from frameproject.purchase_receipt
+        where id = #{id}
+    </delete>
+
+</mapper>
+

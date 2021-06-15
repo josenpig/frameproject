@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.dao.PurchaseReturnsDetailsDao">
+
+    <resultMap type="com.xingji.frameproject.entity.PurchaseReturnsDetails" id="PurchaseReturnsDetailsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="returnNum" column="return_num" jdbcType="INTEGER"/>
+        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PurchaseReturnsDetailsMap">
+        select id,
+               product_name,
+               product_id,
+               return_num,
+               product_unit,
+               purchase_unit_price,
+               purchase_money,
+               depot_name,
+               ingredient,
+               gram_heavy,
+               product_describe
+        from frameproject.purchase_returns_details
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PurchaseReturnsDetailsMap">
+        select id,
+               product_name,
+               product_id,
+               return_num,
+               product_unit,
+               purchase_unit_price,
+               purchase_money,
+               depot_name,
+               ingredient,
+               gram_heavy,
+               product_describe
+        from frameproject.purchase_returns_details limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PurchaseReturnsDetailsMap">
+        select
+        id, product_name, product_id, return_num, product_unit, purchase_unit_price, purchase_money, depot_name,
+        ingredient, gram_heavy, product_describe
+        from frameproject.purchase_returns_details
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name = #{productName}
+            </if>
+            <if test="productId != null and productId != ''">
+                and product_id = #{productId}
+            </if>
+            <if test="returnNum != null">
+                and return_num = #{returnNum}
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                and product_unit = #{productUnit}
+            </if>
+            <if test="purchaseUnitPrice != null">
+                and purchase_unit_price = #{purchaseUnitPrice}
+            </if>
+            <if test="purchaseMoney != null">
+                and purchase_money = #{purchaseMoney}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                and ingredient = #{ingredient}
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                and gram_heavy = #{gramHeavy}
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                and product_describe = #{productDescribe}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_returns_details(product_name, product_id, return_num, product_unit,
+                                                          purchase_unit_price, purchase_money, depot_name, ingredient,
+                                                          gram_heavy, product_describe)
+        values (#{productName}, #{productId}, #{returnNum}, #{productUnit}, #{purchaseUnitPrice}, #{purchaseMoney},
+                #{depotName}, #{ingredient}, #{gramHeavy}, #{productDescribe})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_returns_details(product_name, product_id, return_num, product_unit,
+        purchase_unit_price, purchase_money, depot_name, ingredient, gram_heavy, product_describe)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productName}, #{entity.productId}, #{entity.returnNum}, #{entity.productUnit},
+            #{entity.purchaseUnitPrice}, #{entity.purchaseMoney}, #{entity.depotName}, #{entity.ingredient},
+            #{entity.gramHeavy}, #{entity.productDescribe})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.purchase_returns_details(product_name, product_id, return_num, product_unit,
+        purchase_unit_price, purchase_money, depot_name, ingredient, gram_heavy, product_describe)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productName}, #{entity.productId}, #{entity.returnNum}, #{entity.productUnit},
+            #{entity.purchaseUnitPrice}, #{entity.purchaseMoney}, #{entity.depotName}, #{entity.ingredient},
+            #{entity.gramHeavy}, #{entity.productDescribe})
+        </foreach>
+        on duplicate key update
+        product_name = values(product_name) , product_id = values(product_id) , return_num = values(return_num) ,
+        product_unit = values(product_unit) , purchase_unit_price = values(purchase_unit_price) , purchase_money =
+        values(purchase_money) , depot_name = values(depot_name) , ingredient = values(ingredient) , gram_heavy =
+        values(gram_heavy) , product_describe = values(product_describe)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.purchase_returns_details
+        <set>
+            <if test="productName != null and productName != ''">
+                product_name = #{productName},
+            </if>
+            <if test="productId != null and productId != ''">
+                product_id = #{productId},
+            </if>
+            <if test="returnNum != null">
+                return_num = #{returnNum},
+            </if>
+            <if test="productUnit != null and productUnit != ''">
+                product_unit = #{productUnit},
+            </if>
+            <if test="purchaseUnitPrice != null">
+                purchase_unit_price = #{purchaseUnitPrice},
+            </if>
+            <if test="purchaseMoney != null">
+                purchase_money = #{purchaseMoney},
+            </if>
+            <if test="depotName != null and depotName != ''">
+                depot_name = #{depotName},
+            </if>
+            <if test="ingredient != null and ingredient != ''">
+                ingredient = #{ingredient},
+            </if>
+            <if test="gramHeavy != null and gramHeavy != ''">
+                gram_heavy = #{gramHeavy},
+            </if>
+            <if test="productDescribe != null and productDescribe != ''">
+                product_describe = #{productDescribe},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from frameproject.purchase_returns_details
+        where id = #{id}
+    </delete>
+
+</mapper>
+
