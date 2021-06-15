@@ -1,5 +1,10 @@
 package com.xingji.frameproject.service;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c482c7c0b5ef56e44cdda9c9d903455528076527
 import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
 
 import java.util.List;

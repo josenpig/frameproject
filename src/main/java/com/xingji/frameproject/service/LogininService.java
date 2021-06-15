@@ -1,9 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.Loginin;
-import com.xingji.frameproject.vo.LoginLogVo;
 
-import java.util.Date;
 import java.util.List;
 
 public interface LogininService {
@@ -25,4 +23,14 @@ public interface LogininService {
     List<Loginin> findlogByOperator(String operator);
 
     List<Loginin> findlogbyLogintime( String time);
+
+    List<Loginin> findlogbyLogintimeAndOperator(String time, String operator);
+
+    List<Loginin> findlogByOperatorType(String operatorType);
+
+    List<Loginin> findlogByOperatorTypeAndLogintime(String time, String operatorType);
+
+    List<Loginin> findlogByOperatorAndOperatorType(String operator, String operatorType);
+
+    List<Loginin> findlogbyLogintimeAndOperatorAndOperatorType(String time , String operator, String operatorType);
 }

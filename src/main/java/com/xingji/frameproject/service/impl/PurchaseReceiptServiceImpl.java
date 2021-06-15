@@ -1,7 +1,13 @@
 package com.xingji.frameproject.service.impl;
 
+<<<<<<< HEAD
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.mybatis.dao.PurchaseReceiptDao;
+=======
+;
+import com.xingji.frameproject.mybatis.dao.PurchaseReceiptDao;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+>>>>>>> c482c7c0b5ef56e44cdda9c9d903455528076527
 import com.xingji.frameproject.service.PurchaseReceiptService;
 import org.springframework.stereotype.Service;
 

@@ -40,6 +40,28 @@
       </where>
       order by createtime desc
     </select>
+    <select id="findbyCreateTimeAndOperatorAndInput"
+            resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+      select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+    </select>
+  <select id="findbyCreateTimeAndOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+  </select>
+  <select id="findbyInputAndOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  </select>
+  <select id="findbyCreateTimeAndInput" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  </select>
+  <select id="findbyCreateTime" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+  </select>
+  <select id="findbyOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where operator = #{operator,jdbcType=VARCHAR} order by createtime desc
+  </select>
+  <select id="findbyInput" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
+    select * from operationlog where operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from operationlog

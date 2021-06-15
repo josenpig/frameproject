@@ -5,6 +5,8 @@ import com.xingji.frameproject.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 @Service("SysUserRoleService")
 public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Resource
@@ -16,7 +18,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @return
      */
     @Override
-    public Integer queryRoleIdbyUserId(Integer UserId) {
+    public List<Integer> queryRoleIdbyUserId(Integer UserId) {
         return sysUserRoleDao.queryRoleIdByUserId(UserId);
     }
 }

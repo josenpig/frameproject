@@ -26,5 +26,6 @@ public interface SysRoleService {
 
     boolean insertBatch(List<SysRoleMenu> sysRoleMenus);
 
+
     SysRole insert(SysRole sysRole);
 }
