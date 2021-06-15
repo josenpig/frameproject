@@ -166,8 +166,14 @@
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
         LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        <where>
+            <if test="productTypeId != null">
+                and p.product_type_id = #{productTypeId}
+            </if>
+        </where>
         GROUP BY p.product_id
     </select>
+
     <select id="allsaleproduct" resultMap="SaleProduct">
         SELECT p.*,t.product_type_name,u.unit_name,SUM(o.opening_number),SUM(o.product_number),SUM(o.expect_number),pic.picture_address,uu.user_name
         FROM `base_product` p
@@ -248,8 +254,8 @@
     <update id="update">
         update frameproject.base_product
         <set>
-            <if test="productId != null and productId != ''">
-                product_id = #{productId},
+            <if test="productSpec != null and productSpec != ''">
+                product_spec = #{productSpec},
             </if>
             <if test="productName != null and productName != ''">
                 product_name = #{productName},
@@ -294,7 +300,7 @@
                 gram_heavy = #{gramHeavy},
             </if>
         </set>
-        where product_spec = #{productSpec}
+        where product_id = #{productId}
     </update>
 
     <!--通过主键删除-->

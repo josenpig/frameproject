@@ -67,7 +67,7 @@ public class BaseProductServiceImpl implements BaseProductService {
     @Override
     public BaseProduct update(BaseProduct baseProduct) {
         this.baseProductDao.update(baseProduct);
-        return this.queryById(baseProduct.getProductSpec());
+        return this.queryById(baseProduct.getProductId());
     }
 
     @Override

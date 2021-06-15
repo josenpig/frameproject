@@ -2,6 +2,7 @@ package com.xingji.frameproject.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.service.BaseDepotService;
 import com.xingji.frameproject.service.BaseOpeningService;
@@ -152,5 +153,43 @@ public class BaseProductController {
             retList.add(recript);
         }
         return AjaxResponse.success(retList);
+    };
+
+    /**
+     * 禁用或启用
+     * @param Did,Dstate
+     * @return
+     */
+    @GetMapping("/disableOrEnable")
+    public AjaxResponse disableOrEnable(String Did,int Dstate){
+        System.out.println(Did+"+Dsate:"+Dstate);
+        BaseProduct baseProduct=new BaseProduct();
+        baseProduct.setProductId(Did);
+        if(Dstate==0){
+            baseProduct.setState(1);
+        }
+        if(Dstate==1){
+            baseProduct.setState(0);
+        }
+        BaseProduct baseProduct1 =baseProductService.update(baseProduct);
+        return  AjaxResponse.success(baseProduct1);
+    };
+
+    /**
+     * 根据产品分类的产品
+     * @return 产品集合
+     */
+    @GetMapping("/findAllProduct/ByTpye")
+    public AjaxResponse findAllProductByTpye(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("id") Integer id){
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        BaseProductVo baseProductVo = new BaseProductVo();
+        System.out.println("typeID:"+id);
+        baseProductVo.setProductTypeId(id);
+        List<BaseProductVo> productShowList=baseProductService.findAllProduct(baseProductVo);
+        System.out.println(productShowList);
+        map.put("total",page.getTotal());
+        map.put("rows",productShowList);
+        return AjaxResponse.success(map);
     };
 }
