@@ -2,6 +2,7 @@ package com.xingji.frameproject.vo;
 
 import com.xingji.frameproject.mybatis.entity.BaseCustomer;
 import com.xingji.frameproject.mybatis.entity.BaseVendor;
+import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import lombok.Data;
 
@@ -19,4 +20,5 @@ public class OfpeopleVo {
     private List<BaseCustomer> customers;//客户
     private List<SysUser> notifiers;//通知人
     private List<BaseVendor> vendors;//供应商
+    private List<SysRole> sysRoles;//角色
 }

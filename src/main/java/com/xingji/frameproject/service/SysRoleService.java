@@ -22,4 +22,5 @@ public interface SysRoleService {
     boolean deletemenus(Integer roleId);
 
     boolean insertBatch(List<SysRoleMenu> sysRoleMenus);
+
 }

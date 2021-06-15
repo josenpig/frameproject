@@ -8,6 +8,7 @@ import com.xingji.frameproject.service.LogininService;
 import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserRoleService;
 import com.xingji.frameproject.service.SysUserService;
+import com.xingji.frameproject.util.JacksonUtil;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.util.SendSms;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -15,15 +16,19 @@ import com.xingji.frameproject.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.resource.HttpResource;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /***
@@ -51,7 +56,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户账户登录",produces = "application/json")
-    public AjaxResponse login(@RequestBody SysUser user) {
+    public AjaxResponse login(HttpSession session, @RequestBody SysUser user) {
         SysUser loginuser = us.login(user.getUserName());
         if (loginuser == null) {
             return AjaxResponse.success("账户不存在");
@@ -64,12 +69,16 @@ public class UserController {
                 Integer userid=us.queryUserIdByUserName(loginuser.getUserName());
                 Loginin loginin=new Loginin();
                 //通过用户id获取角色id
-                Integer roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
+                List<Integer> roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
                 //通过角色id获取角色名
-                String roleName = sysRoleService.queryRoleNameByroleId(roleId);
+                List<String> roleNames=new ArrayList<String>();
+                for (int i=0;i<roleId.size();i++) {
+                  String roleName= sysRoleService.queryRoleNameByroleId(roleId.get(i));
+                  roleNames.add(roleName);
+                }
                 loginin.setLogintime(new Date());
                 loginin.setOperator(loginuser.getUserName());
-                loginin.setTypeofoperator(roleName+"");
+                loginin.setTypeofoperator(roleNames + "");
                 //插入一条登录日志
                 logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
@@ -112,16 +121,6 @@ public class UserController {
                 return  AjaxResponse.success("手机号与验证码不匹配或已失效！");
             } else {
                 Integer userid=us.queryUserIdByUserName(loginuser.getUserName());
-                Loginin loginin=new Loginin();
-                //通过用户id获取角色id
-                Integer roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
-                //通过角色id获取角色名
-                String roleName = sysRoleService.queryRoleNameByroleId(roleId);
-                loginin.setLogintime(new Date());
-                loginin.setOperator(loginuser.getUserName());
-                loginin.setTypeofoperator(roleName+"");
-                //插入一条登录日志
-                logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
                 //获取父菜单
                 List<SysMenu> treemenu = usermenu.stream().filter(m -> m.getParentId() == 0).map(

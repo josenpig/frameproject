@@ -3,6 +3,7 @@ package com.xingji.frameproject.controller;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseCustomerService;
 import com.xingji.frameproject.service.BaseVendorService;
+import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -36,6 +37,8 @@ public class PersonnelController {
     BaseCustomerService bcs;
     @Autowired
     BaseVendorService bvs;
+    @Autowired
+    SysRoleService sysRoleService;
 
     @GetMapping("/ofpeople")
     public AjaxResponse roleusers(){
@@ -44,12 +47,14 @@ public class PersonnelController {
         List<SysUser> notifiers=us.queryAll(new SysUser());
         List<BaseCustomer> customers=bcs.queryAll(new BaseCustomer());
         List<BaseVendor> vendors=bvs.findAllVendor(new BaseVendor());
+        List<SysRole> sysRoles=sysRoleService.queryAll(new SysRole());
         OfpeopleVo vo=new OfpeopleVo();
         vo.setSalemans(salemens);
         vo.setPurchasemans(purchasemans);
         vo.setCustomers(customers);
         vo.setNotifiers(notifiers);
         vo.setVendors(vendors);
+        vo.setSysRoles(sysRoles);
         return AjaxResponse.success(vo);
     }
 }

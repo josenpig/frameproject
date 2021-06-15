@@ -28,4 +28,39 @@ public class OperationlogServiceImpl implements OperationlogService {
     public List<Operationlog> findAll(Operationlog operationlog) {
         return this.operationlogDao.findAll(operationlog);
     }
+
+    @Override
+    public List<Operationlog> findbyCreateTimeAndOperatorAndInput(String time, String operator, String input) {
+        return this.operationlogDao.findbyCreateTimeAndOperatorAndInput(time,operator,input);
+    }
+
+    @Override
+    public List<Operationlog> findbyCreateTimeAndOperator(String time, String operator) {
+        return this.operationlogDao.findbyCreateTimeAndOperator(time,operator);
+    }
+
+    @Override
+    public List<Operationlog> findbyInputAndOperator(String operator, String input) {
+        return this.operationlogDao.findbyInputAndOperator(operator,input);
+    }
+
+    @Override
+    public List<Operationlog> findbyCreateTimeAndInput(String time, String input) {
+        return this.operationlogDao.findbyCreateTimeAndInput(time,input);
+    }
+
+    @Override
+    public List<Operationlog> findbyCreateTime(String time) {
+        return this.operationlogDao.findbyCreateTime(time);
+    }
+
+    @Override
+    public List<Operationlog> findbyOperator(String operator) {
+        return this.operationlogDao.findbyOperator(operator);
+    }
+
+    @Override
+    public List<Operationlog> findbyInput(String input) {
+        return this.operationlogDao.findbyInput(input);
+    }
 }
