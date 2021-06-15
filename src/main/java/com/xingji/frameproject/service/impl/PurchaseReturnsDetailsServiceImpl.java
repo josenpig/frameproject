@@ -1,7 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
-import com.xingji.frameproject.entity.PurchaseReturnsDetails;
-import com.xingji.frameproject.dao.PurchaseReturnsDetailsDao;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
+import com.xingji.frameproject.mybatis.dao.PurchaseReturnsDetailsDao;
 import com.xingji.frameproject.service.PurchaseReturnsDetailsService;
 import org.springframework.stereotype.Service;
 

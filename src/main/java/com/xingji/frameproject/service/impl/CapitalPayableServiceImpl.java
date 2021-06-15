@@ -1,7 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
-import com.xingji.frameproject.entity.CapitalPayable;
-import com.xingji.frameproject.dao.CapitalPayableDao;
+import com.xingji.frameproject.mybatis.entity.CapitalPayable;
+import com.xingji.frameproject.mybatis.dao.CapitalPayableDao;
 import com.xingji.frameproject.service.CapitalPayableService;
 import org.springframework.stereotype.Service;
 

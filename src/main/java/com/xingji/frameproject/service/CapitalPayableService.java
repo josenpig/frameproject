@@ -1,6 +1,6 @@
 package com.xingji.frameproject.service;
 
-import com.xingji.frameproject.entity.CapitalPayable;
+import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
-import com.xingji.frameproject.entity.CapitalPayable;
+import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

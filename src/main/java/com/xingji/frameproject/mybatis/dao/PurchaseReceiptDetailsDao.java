@@ -1,6 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
-import com.xingji.frameproject.entity.PurchaseReceiptDetails;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
