@@ -9,6 +9,13 @@
     insert into sys_user_role (user_id, role_id)
     values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
   </insert>
+  <insert id="insertBatch" keyProperty="" useGeneratedKeys="true">
+    insert into sys_user_role (user_id, role_id)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.userId}, #{entity.roleId})
+    </foreach>
+  </insert>
   <insert id="insertSelective" parameterType="com.xingji.frameproject.mybatis.entity.SysUserRole">
     insert into sys_user_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -28,10 +35,16 @@
       </if>
     </trim>
   </insert>
+  <delete id="deleteById">
+    delete from sys_user_role where user_id=#{userId}
+  </delete>
 
   <select id="queryRoleIdByUserId" resultType="java.lang.Integer">
     select role_id
     from sys_user_role
     where user_id=#{userId,jdbcType=INTEGER}
+  </select>
+  <select id="findtfhasuser" resultMap="BaseResultMap">
+    select * from sys_user_role where role_id=#{roleId}
   </select>
 </mapper>

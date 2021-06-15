@@ -12,6 +12,7 @@ import com.xingji.frameproject.service.SaleOrderService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseCapitalAccountVo;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -53,11 +54,12 @@ public class CapitalReceivableController {
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
         String condition = jsonObject.getString("condition");//查询条件
+        CapitalConditionPageVo vo=JSON.parseObject(condition,CapitalConditionPageVo.class);
         int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
         int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<CapitalReceivable> list=crs.queryAllByPage();
+        List<CapitalReceivable> list=crs.queryAllByPage(vo);
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);

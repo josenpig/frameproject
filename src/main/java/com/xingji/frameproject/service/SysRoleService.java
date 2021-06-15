@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysRoleMenu;
+import com.xingji.frameproject.mybatis.entity.SysUserRole;
 
 import java.util.List;
 
@@ -17,9 +18,13 @@ public interface SysRoleService {
 
     List<SysRole> userhasrole(Integer userId);
 
+    List<SysUserRole> findtfhasuser(Integer roleId);
+
     boolean update(SysRole sysRole);
 
     boolean deletemenus(Integer roleId);
 
     boolean insertBatch(List<SysRoleMenu> sysRoleMenus);
+
+    SysRole insert(SysRole sysRole);
 }
