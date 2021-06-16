@@ -1,9 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> c482c7c0b5ef56e44cdda9c9d903455528076527
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

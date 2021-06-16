@@ -1,12 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
-<<<<<<< HEAD
 import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
 import com.xingji.frameproject.mybatis.dao.PurchaseReturnsDetailsDao;
-=======
-import com.xingji.frameproject.mybatis.dao.PurchaseReturnsDetailsDao;
-import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
->>>>>>> c482c7c0b5ef56e44cdda9c9d903455528076527
 import com.xingji.frameproject.service.PurchaseReturnsDetailsService;
 import org.springframework.stereotype.Service;
 
