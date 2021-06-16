@@ -2,6 +2,7 @@ package com.xingji.frameproject.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 import com.xingji.frameproject.service.LogininService;
@@ -48,7 +49,6 @@ public class OperationlogController {
      * @param logintime
      * @return
      */
-
     @GetMapping("/findloginlogbycondition")
     public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
