@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
-import com.xingji.frameproject.service.BaseCapitalAccountService;
-import com.xingji.frameproject.service.CapitalReceivableService;
-import com.xingji.frameproject.service.SaleDeliveryService;
-import com.xingji.frameproject.service.SaleOrderService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseCapitalAccountVo;
@@ -44,6 +41,8 @@ public class CapitalReceivableController {
     private SaleDeliveryService sds;
     @Resource
     private BaseCapitalAccountService bcas;
+    @Resource
+    private SysUserService sus;
 
     /**
      * 资金应收分页条件查询
@@ -60,12 +59,16 @@ public class CapitalReceivableController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<CapitalReceivable> list=crs.queryAllByPage(vo);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
     }
     /**
-     * 销售订单收款分页条件查询
+     * 预收单收款分页条件查询
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -84,7 +87,7 @@ public class CapitalReceivableController {
         return AjaxResponse.success(map);
     }
     /**
-     * 销售出库单分页条件查询
+     * 应收单分页条件查询
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -103,7 +106,7 @@ public class CapitalReceivableController {
         return AjaxResponse.success(map);
     }
     /**
-     * 本次销售订单收款
+     * 本次预收收款
      * @return 数据
      */
     @GetMapping("/salethisReceipt")
@@ -112,7 +115,7 @@ public class CapitalReceivableController {
         return AjaxResponse.success(vo);
     }
     /**
-     * 本次销售出库单收款
+     * 本次应收收款
      * @return 数据
      */
     @GetMapping("/deliverythisReceipt")

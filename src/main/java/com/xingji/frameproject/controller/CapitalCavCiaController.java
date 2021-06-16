@@ -42,6 +42,8 @@ public class CapitalCavCiaController {
     private CapitalReceivableService crbs;
     @Resource
     private CapitalReceiptService crs;
+    @Resource
+    private SysUserService sus;
 
     /**
      * 通过主键查询核销单及核销单详情
@@ -54,6 +56,11 @@ public class CapitalCavCiaController {
         List<CapitalCavCiaBill> bills=cccbs.queryById(id);
         List<CapitalCavCiaCap> caps=ccccs.queryById(id);
         CiaVo vo=new CiaVo();
+        order.setFounder(sus.queryById(Integer.valueOf(order.getFounder())).getUserName());
+        if(order.getApprover()!=null) {
+            order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
+        }
+        order.setCavBy(sus.queryById(Integer.valueOf(order.getCavBy())).getUserName());
         vo.setOrder(order);
         vo.setBills(bills);
         vo.setCaps(caps);
@@ -106,6 +113,7 @@ public class CapitalCavCiaController {
         List<CapitalCavCiaBill> bills= JSONArray.parseArray(two, CapitalCavCiaBill.class);
         String three = jsonObject.getString("cap");
         List<CapitalCavCiaCap> caps= JSONArray.parseArray(three, CapitalCavCiaCap.class);
+        cia.setFounder(String.valueOf(sus.queryUserIdByUserName(cia.getFounder())));
         cia.setApprovalState(type);
         cia.setFoundTime(new Date());
         cia.setUpdateTime(new Date());
@@ -137,6 +145,13 @@ public class CapitalCavCiaController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<CapitalCavCia> list=cccs.queryAll(order);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null){
+                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setCavBy(sus.queryById(Integer.valueOf(list.get(i).getCavBy())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -169,7 +184,7 @@ public class CapitalCavCiaController {
         CapitalCavCia cia=new CapitalCavCia();
         cia.setCavId(orderid);
         cia.setApprovalState(type);
-        cia.setApprover(user);
+        cia.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         cia.setApprovalRemarks(approvalremarks);
         cia.setLastApprovalTime(new Date());
         cia.setUpdateTime(new Date());

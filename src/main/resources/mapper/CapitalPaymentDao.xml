@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalPaymentDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayment" id="CapitalPaymentMap">
+        <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
+        <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
+        <result property="vendor" column="vendor" jdbcType="VARCHAR"/>
+        <result property="drawee" column="drawee" jdbcType="VARCHAR"/>
+        <result property="paymentType" column="payment_type" jdbcType="VARCHAR"/>
+        <result property="paymentMoney" column="payment_money" jdbcType="NUMERIC"/>
+        <result property="piaMoney" column="pia_money" jdbcType="NUMERIC"/>
+        <result property="piaBalance" column="pia_balance" jdbcType="NUMERIC"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalPaymentMap">
+        select
+          payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_payment
+        where payment_id = #{paymentId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalPaymentMap">
+        select
+          payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_payment
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalPaymentMap">
+        select
+        payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder,
+        remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
+        from frameproject.capital_payment
+        <where>
+            <if test="paymentId != null and paymentId != ''">
+                and payment_id = #{paymentId}
+            </if>
+            <if test="paymentTime != null">
+                and payment_time = #{paymentTime}
+            </if>
+            <if test="vendor != null and vendor != ''">
+                and vendor = #{vendor}
+            </if>
+            <if test="drawee != null and drawee != ''">
+                and drawee = #{drawee}
+            </if>
+            <if test="paymentType != null and paymentType != ''">
+                and payment_type = #{paymentType}
+            </if>
+            <if test="paymentMoney != null">
+                and payment_money = #{paymentMoney}
+            </if>
+            <if test="piaMoney != null">
+                and pia_money = #{piaMoney}
+            </if>
+            <if test="piaBalance != null">
+                and pia_balance = #{piaBalance}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+            <if test="approver != null and approver != ''">
+                and approver = #{approver}
+            </if>
+            <if test="lastApprovalTime != null">
+                and last_approval_time = #{lastApprovalTime}
+            </if>
+            <if test="foundTime != null">
+                and found_time = #{foundTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                and approval_remarks = #{approvalRemarks}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="paymentId" useGeneratedKeys="true">
+        insert into frameproject.capital_payment(payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks)
+        values (#{paymentTime}, #{vendor}, #{drawee}, #{paymentType}, #{paymentMoney}, #{piaMoney}, #{piaBalance}, #{cavId}, #{founder}, #{remarks}, #{approvalState}, #{approver}, #{lastApprovalTime}, #{foundTime}, #{updateTime}, #{approvalRemarks})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="paymentId" useGeneratedKeys="true">
+        insert into frameproject.capital_payment(payment_time, vendor, drawee, payment_type, payment_money, pia_money,
+        pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time,
+        approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.paymentTime}, #{entity.vendor}, #{entity.drawee}, #{entity.paymentType}, #{entity.paymentMoney},
+            #{entity.piaMoney}, #{entity.piaBalance}, #{entity.cavId}, #{entity.founder}, #{entity.remarks},
+            #{entity.approvalState}, #{entity.approver}, #{entity.lastApprovalTime}, #{entity.foundTime},
+            #{entity.updateTime}, #{entity.approvalRemarks})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="paymentId" useGeneratedKeys="true">
+        insert into frameproject.capital_payment(payment_time, vendor, drawee, payment_type, payment_money, pia_money,
+        pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time,
+        approval_remarks)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.paymentTime}, #{entity.vendor}, #{entity.drawee}, #{entity.paymentType}, #{entity.paymentMoney},
+            #{entity.piaMoney}, #{entity.piaBalance}, #{entity.cavId}, #{entity.founder}, #{entity.remarks},
+            #{entity.approvalState}, #{entity.approver}, #{entity.lastApprovalTime}, #{entity.foundTime},
+            #{entity.updateTime}, #{entity.approvalRemarks})
+        </foreach>
+        on duplicate key update
+        payment_time = values(payment_time) , vendor = values(vendor) , drawee = values(drawee) , payment_type =
+        values(payment_type) , payment_money = values(payment_money) , pia_money = values(pia_money) , pia_balance =
+        values(pia_balance) , cav_id = values(cav_id) , founder = values(founder) , remarks = values(remarks) ,
+        approval_state = values(approval_state) , approver = values(approver) , last_approval_time =
+        values(last_approval_time) , found_time = values(found_time) , update_time = values(update_time) ,
+        approval_remarks = values(approval_remarks)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_payment
+        <set>
+            <if test="paymentTime != null">
+                payment_time = #{paymentTime},
+            </if>
+            <if test="vendor != null and vendor != ''">
+                vendor = #{vendor},
+            </if>
+            <if test="drawee != null and drawee != ''">
+                drawee = #{drawee},
+            </if>
+            <if test="paymentType != null and paymentType != ''">
+                payment_type = #{paymentType},
+            </if>
+            <if test="paymentMoney != null">
+                payment_money = #{paymentMoney},
+            </if>
+            <if test="piaMoney != null">
+                pia_money = #{piaMoney},
+            </if>
+            <if test="piaBalance != null">
+                pia_balance = #{piaBalance},
+            </if>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="founder != null and founder != ''">
+                founder = #{founder},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                remarks = #{remarks},
+            </if>
+            <if test="approvalState != null">
+                approval_state = #{approvalState},
+            </if>
+            <if test="approver != null and approver != ''">
+                approver = #{approver},
+            </if>
+            <if test="lastApprovalTime != null">
+                last_approval_time = #{lastApprovalTime},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{foundTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                approval_remarks = #{approvalRemarks},
+            </if>
+        </set>
+        where payment_id = #{paymentId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_payment where payment_id = #{paymentId}
+    </delete>
+
+</mapper>
+

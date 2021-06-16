@@ -9,18 +9,18 @@ import java.util.Date;
 
 /***
  * @author: 顾渊白
- * @date: 2021/6/1 20:07
+ * @date: 2021/6/16 8:53
  * @version 1.0
  */
 @Data
-public class SaleReceiptVo {
-    private String saleId;
-    private String saleType;
+public class PurchaseReceiptVo {
+    private String purchaseId;
+    private String purchaseType;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date saleTime;
-    private String customer;
-    private Double receiptMoney;
-    private Double receivedMoney;
-    private Double uncollectedMoney;
+    private Date purchaseTime;
+    private String vendor;
+    private Double payableMoney;
+    private Double paidMoney;
+    private Double unpaidMoney;
 }
