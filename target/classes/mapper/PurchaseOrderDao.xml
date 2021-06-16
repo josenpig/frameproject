@@ -27,7 +27,15 @@
         <result property="counter" column="counter" jdbcType="INTEGER"/>
         <result property="ostate" column="ostate" jdbcType="NUMERIC"/>
     </resultMap>
-
+    <!--资金付款-->
+    <resultMap id="PurchaseReceipt" type="com.xingji.frameproject.vo.PurchaseReceiptVo">
+        <result property="purchaseId" column="id" jdbcType="VARCHAR"/>
+        <result property="purchaseTime" column="documents_date" jdbcType="TIMESTAMP"/>
+        <result property="payableMoney" column="offers_price" jdbcType="NUMERIC"/>
+        <result property="paidMoney" column="ostate" jdbcType="NUMERIC"/>
+        <result property="unpaidMoney" column="offers_price-ostate" jdbcType="NUMERIC"/>
+        <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
+    </resultMap>
     <!--查询单个-->
     <select id="queryById" resultMap="PurchaseOrderMap">
         select
@@ -381,4 +389,8 @@
             #{id}
         </foreach>
     </delete>
+    <!--查询付款订单-->
+    <select id="querythisReceipt" resultMap="PurchaseReceipt">
+        select *,offers_price-ostate from purchase_order where id=#{purchaseId}
+    </select>
 </mapper>

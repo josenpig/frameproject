@@ -41,6 +41,8 @@ public class SaleOrderController {
     @Resource
     private SaleOrderService sos;
     @Resource
+    private SysUserService sus;
+    @Resource
     private SaleDeliveryService sds;
     @Resource
     private SaleReturnService srs;
@@ -62,6 +64,11 @@ public class SaleOrderController {
         SaleOrder order=sos.queryById(id);
         List<SaleOrderDetails> orderDetails=sods.queryById(id);
         SaleOrderVo vo=new SaleOrderVo();
+        order.setFounder(sus.queryById(Integer.valueOf(order.getFounder())).getUserName());
+        if(order.getApprover()!=null) {
+            order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
+        }
+        order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
         vo.setOrder(order);
         vo.setOrderdetails(orderDetails);
         return AjaxResponse.success(vo);
@@ -79,6 +86,7 @@ public class SaleOrderController {
         SaleOrder order =JSON.parseObject(one, SaleOrder.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleOrderDetails> orderdetails=JSONArray.parseArray(two, SaleOrderDetails.class);
+        order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
         order.setFoundTime(new Date());
         order.setUpdateTime(new Date());
         order.setApprovalState(type);
@@ -115,6 +123,13 @@ public class SaleOrderController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<SaleOrder> list=sos.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null){
+            list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -129,7 +144,7 @@ public class SaleOrderController {
         SaleOrder order=new SaleOrder();
         order.setOrderId(orderid);
         order.setApprovalState(type);
-        order.setApprover(user);
+        order.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         order.setApprovalRemarks(approvalremarks);
         order.setLastApprovalTime(new Date());
         order.setUpdateTime(new Date());

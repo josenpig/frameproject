@@ -1,6 +1,4 @@
 package com.xingji.frameproject.mybatis.dao;
-
-
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,7 +10,6 @@ import java.util.List;
  *
  * @author makejava
  * @since 2021-06-15 17:16:28
- *
  */
 @Mapper
 public interface CapitalPayableDao {

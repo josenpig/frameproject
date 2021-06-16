@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalPaymentBillDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPaymentBill" id="CapitalPaymentBillMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
+        <result property="purchaseId" column="purchase_id" jdbcType="VARCHAR"/>
+        <result property="purchaseType" column="purchase_type" jdbcType="VARCHAR"/>
+        <result property="purchaseTime" column="purchase_time" jdbcType="TIMESTAMP"/>
+        <result property="payableMoney" column="payable_money" jdbcType="NUMERIC"/>
+        <result property="paidMoney" column="paid_money" jdbcType="NUMERIC"/>
+        <result property="unpaidMoney" column="unpaid_money" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalPaymentBillMap">
+        select
+          id, payment_id, purchase_id, purchase_type, purchase_time, payable_money, paid_money, unpaid_money, this_money
+        from frameproject.capital_payment_bill
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalPaymentBillMap">
+        select
+          id, payment_id, purchase_id, purchase_type, purchase_time, payable_money, paid_money, unpaid_money, this_money
+        from frameproject.capital_payment_bill
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CapitalPaymentBillMap">
+        select
+        id, payment_id, purchase_id, purchase_type, purchase_time, payable_money, paid_money, unpaid_money, this_money
+        from frameproject.capital_payment_bill
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="paymentId != null and paymentId != ''">
+                and payment_id = #{paymentId}
+            </if>
+            <if test="purchaseId != null and purchaseId != ''">
+                and purchase_id = #{purchaseId}
+            </if>
+            <if test="purchaseType != null and purchaseType != ''">
+                and purchase_type = #{purchaseType}
+            </if>
+            <if test="purchaseTime != null">
+                and purchase_time = #{purchaseTime}
+            </if>
+            <if test="payableMoney != null">
+                and payable_money = #{payableMoney}
+            </if>
+            <if test="paidMoney != null">
+                and paid_money = #{paidMoney}
+            </if>
+            <if test="unpaidMoney != null">
+                and unpaid_money = #{unpaidMoney}
+            </if>
+            <if test="thisMoney != null">
+                and this_money = #{thisMoney}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_payment_bill(payment_id, purchase_id, purchase_type, purchase_time, payable_money, paid_money, unpaid_money, this_money)
+        values (#{paymentId}, #{purchaseId}, #{purchaseType}, #{purchaseTime}, #{payableMoney}, #{paidMoney}, #{unpaidMoney}, #{thisMoney})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_payment_bill(payment_id, purchase_id, purchase_type, purchase_time,
+        payable_money, paid_money, unpaid_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.paymentId}, #{entity.purchaseId}, #{entity.purchaseType}, #{entity.purchaseTime},
+            #{entity.payableMoney}, #{entity.paidMoney}, #{entity.unpaidMoney}, #{entity.thisMoney})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into frameproject.capital_payment_bill(payment_id, purchase_id, purchase_type, purchase_time,
+        payable_money, paid_money, unpaid_money, this_money)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.paymentId}, #{entity.purchaseId}, #{entity.purchaseType}, #{entity.purchaseTime},
+            #{entity.payableMoney}, #{entity.paidMoney}, #{entity.unpaidMoney}, #{entity.thisMoney})
+        </foreach>
+        on duplicate key update
+        payment_id = values(payment_id) , purchase_id = values(purchase_id) , purchase_type = values(purchase_type) ,
+        purchase_time = values(purchase_time) , payable_money = values(payable_money) , paid_money = values(paid_money)
+        , unpaid_money = values(unpaid_money) , this_money = values(this_money)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.capital_payment_bill
+        <set>
+            <if test="paymentId != null and paymentId != ''">
+                payment_id = #{paymentId},
+            </if>
+            <if test="purchaseId != null and purchaseId != ''">
+                purchase_id = #{purchaseId},
+            </if>
+            <if test="purchaseType != null and purchaseType != ''">
+                purchase_type = #{purchaseType},
+            </if>
+            <if test="purchaseTime != null">
+                purchase_time = #{purchaseTime},
+            </if>
+            <if test="payableMoney != null">
+                payable_money = #{payableMoney},
+            </if>
+            <if test="paidMoney != null">
+                paid_money = #{paidMoney},
+            </if>
+            <if test="unpaidMoney != null">
+                unpaid_money = #{unpaidMoney},
+            </if>
+            <if test="thisMoney != null">
+                this_money = #{thisMoney},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from frameproject.capital_payment_bill where id = #{id}
+    </delete>
+
+</mapper>
+

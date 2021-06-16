@@ -46,6 +46,8 @@ public class SaleDeliveryController {
     private BaseOpeningService bos;
     @Resource
     private CapitalReceivableService crs;
+    @Resource
+    private SysUserService sus;
 
     /**
      * 通过主键查询销售出库单及出库单详情
@@ -57,6 +59,11 @@ public class SaleDeliveryController {
         SaleDelivery delivery=sds.queryById(id);
         List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(id);
         SaleDeliveryVo vo=new SaleDeliveryVo();
+        delivery.setFounder(sus.queryById(Integer.valueOf(delivery.getFounder())).getUserName());
+        if (delivery.getApprover()!=null) {
+            delivery.setApprover(sus.queryById(Integer.valueOf(delivery.getApprover())).getUserName());
+        }
+        delivery.setSalesmen(sus.queryById(Integer.valueOf(delivery.getSalesmen())).getUserName());
         vo.setDelivery(delivery);
         vo.setDeliverydetails(deliveryDetails);
         return AjaxResponse.success(vo);
@@ -74,6 +81,7 @@ public class SaleDeliveryController {
         SaleDelivery delivery = JSON.parseObject(one, SaleDelivery.class);
         String two = jsonObject.getString("deliverydetails");
         List<SaleDeliveryDetails> deliverydetails= JSONArray.parseArray(two, SaleDeliveryDetails.class);
+        delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
         delivery.setFoundTime(new Date());
         delivery.setUpdateTime(new Date());
         delivery.setApprovalState(type);
@@ -117,6 +125,13 @@ public class SaleDeliveryController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<SaleDelivery> list=sds.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null) {
+                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -140,7 +155,7 @@ public class SaleDeliveryController {
         SaleDelivery saleorder=new SaleDelivery();
         saleorder.setDeliveryId(orderid);
         saleorder.setApprovalState(type);
-        saleorder.setApprover(user);
+        saleorder.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         saleorder.setApprovalRemarks(approvalremarks);
         saleorder.setLastApprovalTime(new Date());
         saleorder.setUpdateTime(new Date());

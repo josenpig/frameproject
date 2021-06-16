@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
+import com.xingji.frameproject.vo.PurchaseReceiptVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -94,4 +95,10 @@ public interface PurchaseOrderDao {
      * @return 影响行数
      */
     int deleteBatch(List<Integer> ids);
+    /**
+     * 通过订单id查询本次付款单信息
+     * @param purchaseId 采购单id
+     * @return 对象列表
+     */
+    PurchaseReceiptVo querythisReceipt(String purchaseId);
 }
