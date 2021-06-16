@@ -102,7 +102,7 @@
     <!--新增所有列-->
     <insert id="insert" keyProperty="paymentId" useGeneratedKeys="true">
         insert into frameproject.capital_payment(payment_id,payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks)
-        values (#{paymentId}#{paymentTime}, #{vendor}, #{drawee}, #{paymentType}, #{paymentMoney}, #{piaMoney}, #{piaBalance}, #{cavId}, #{founder}, #{remarks}, #{approvalState}, #{approver}, #{lastApprovalTime}, #{foundTime}, #{updateTime}, #{approvalRemarks})
+        values (#{paymentId},#{paymentTime}, #{vendor}, #{drawee}, #{paymentType}, #{paymentMoney}, #{piaMoney}, #{piaBalance}, #{cavId}, #{founder}, #{remarks}, #{approvalState}, #{approver}, #{lastApprovalTime}, #{foundTime}, #{updateTime}, #{approvalRemarks})
     </insert>
 
     <insert id="insertBatch" keyProperty="paymentId" useGeneratedKeys="true">
