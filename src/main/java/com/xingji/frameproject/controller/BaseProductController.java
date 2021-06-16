@@ -1,12 +1,16 @@
 package com.xingji.frameproject.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.mybatis.entity.BaseDepot;
+import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.service.BaseDepotService;
 import com.xingji.frameproject.service.BaseOpeningService;
 import com.xingji.frameproject.service.BaseProductService;
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseProductVo;
@@ -17,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * (BaseProduct)表控制层
@@ -42,7 +43,8 @@ public class BaseProductController {
     private BaseOpeningService baseOpeningService;
     @Resource
     private BaseDepotService baseDepotService;
-
+    @Resource
+    private SysUserService sysUserService;
 
     /**
      * 通过主键查询单条数据
@@ -192,4 +194,72 @@ public class BaseProductController {
         map.put("rows",productShowList);
         return AjaxResponse.success(map);
     };
+
+    /**
+     * 判断产品Id是否重复
+     * @param id
+     * @return
+     */
+    @GetMapping("/judgeProductId")
+    public Boolean judgeId(String id){
+        System.out.println("id:"+id);
+        BaseProduct baseProduct =baseProductService.queryById(id);
+        Boolean result=false;
+        if (baseProduct==null){
+            result=true;
+        };
+        return result;
+    };
+
+    @PostMapping("/addProduct")
+    public AjaxResponse addProduct(@RequestBody String add) {
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        //添加产品
+        String one = jsonObject.getString("Product");
+        BaseProduct baseProduct = JSON.parseObject(one, BaseProduct.class);
+        String user =jsonObject.getString("User");
+        System.out.println(user);
+        String user1=trimFirstAndLastChar(user,'"');
+        System.out.println(user1);
+        System.out.println(sysUserService.queryUserIdByUserName(user1));
+        Integer userid=sysUserService.queryUserIdByUserName(user1);
+        System.out.println("userID:"+userid);
+        baseProduct.setUserId(userid);
+        System.out.println("BaseProduct:"+baseProduct);
+        BaseProduct baseProduct1 =baseProductService.insert(baseProduct);
+        //添加库存
+        String two = jsonObject.getString("Stock");
+        List<BaseOpening> baseOpenings= JSONArray.parseArray(two, BaseOpening.class);
+        System.out.println("BaseOpening:"+baseOpenings+",,,"+baseOpenings.size());
+        for(int i=0;i<baseOpenings.size();i++){
+            if(baseOpenings.get(i).getDepotName()!="" && baseOpenings.get(i).getOpeningNumber()!=null){
+            Integer pon= baseOpenings.get(i).getOpeningNumber();
+            baseOpenings.get(i).setExpectNumber(pon);
+            baseOpenings.get(i).setProductNumber(pon);
+            baseOpenings.get(i).setProductId(baseProduct.getProductId());
+            BaseOpening baseOpening=baseOpeningService.insert(baseOpenings.get(i));
+            }
+        }
+        System.out.println("BaseOpening++:"+baseOpenings);
+
+        return  AjaxResponse.success(baseProduct1);
+    };
+
+    /**
+     * 去除指定字符
+     * @param source
+     * @param element
+     * @return
+     */
+    public static String trimFirstAndLastChar(String source,char element){
+                boolean beginIndexFlag = true;
+                boolean endIndexFlag = true;
+           do{ int beginIndex = source.indexOf(element) == 0 ? 1 : 0;
+                        int endIndex = source.lastIndexOf(element) + 1 == source.length() ? source.lastIndexOf(element) : source.length();
+                        source = source.substring(beginIndex, endIndex);
+                        beginIndexFlag = (source.indexOf(element) == 0);
+                        endIndexFlag = (source.lastIndexOf(element) + 1 == source.length());
+                    } while (beginIndexFlag || endIndexFlag);
+                return source;
+            }
 }

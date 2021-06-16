@@ -34,45 +34,4 @@ public class BaseOpening implements Serializable {
      */
     private String productId;
 
-
-    public String getDepotName() {
-        return depotName;
-    }
-
-    public void setDepotName(String depotName) {
-        this.depotName = depotName;
-    }
-
-    public Integer getOpeningNumber() {
-        return openingNumber;
-    }
-
-    public void setOpeningNumber(Integer openingNumber) {
-        this.openingNumber = openingNumber;
-    }
-
-    public Integer getProductNumber() {
-        return productNumber;
-    }
-
-    public void setProductNumber(Integer productNumber) {
-        this.productNumber = productNumber;
-    }
-
-    public Integer getExpectNumber() {
-        return expectNumber;
-    }
-
-    public void setExpectNumber(Integer expectNumber) {
-        this.expectNumber = expectNumber;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
 }

@@ -61,6 +61,17 @@ public class BaseProductTypeController {
     };
 
     /**
+     * 查询所有产品分类信息
+     * @return 产品集合
+     */
+    @GetMapping("/findProType/list")
+    public AjaxResponse findAllProductToList(){
+        BaseProductType baseProductType=new BaseProductType();
+        List<BaseProductType> list = baseProductTypeService.queryAll(baseProductType);
+        return AjaxResponse.success(list);
+    };
+
+    /**
      * 递归查询子菜单
      * @param root 根菜单
      * @param all  所有菜单

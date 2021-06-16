@@ -1,16 +1,16 @@
 package com.xingji.frameproject.service;
 
-import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
+import com.xingji.frameproject.mybatis.entity.CapitalPaymentBill;
 
 import java.util.List;
 
 /**
- * (PurchaseReturnsDetails)表服务接口
+ * (CapitalPaymentBill)表服务接口
  *
  * @author makejava
- * @since 2021-06-15 18:49:12
+ * @since 2021-06-16 19:13:55
  */
-public interface PurchaseReturnsDetailsService {
+public interface CapitalPaymentBillService {
 
     /**
      * 通过ID查询单条数据
@@ -18,7 +18,7 @@ public interface PurchaseReturnsDetailsService {
      * @param id 主键
      * @return 实例对象
      */
-    PurchaseReturnsDetails queryById(Integer id);
+    CapitalPaymentBill queryById(Integer id);
 
     /**
      * 查询多条数据
@@ -27,23 +27,25 @@ public interface PurchaseReturnsDetailsService {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<PurchaseReturnsDetails> queryAllByLimit(int offset, int limit);
+    List<CapitalPaymentBill> queryAllByLimit(int offset, int limit);
 
     /**
      * 新增数据
      *
-     * @param purchaseReturnsDetails 实例对象
+     * @param capitalPaymentBill 实例对象
      * @return 实例对象
      */
-    PurchaseReturnsDetails insert(PurchaseReturnsDetails purchaseReturnsDetails);
+    CapitalPaymentBill insert(CapitalPaymentBill capitalPaymentBill);
+
+    List<CapitalPaymentBill> insertBatch(List<CapitalPaymentBill> capitalPaymentBill);
 
     /**
      * 修改数据
      *
-     * @param purchaseReturnsDetails 实例对象
+     * @param capitalPaymentBill 实例对象
      * @return 实例对象
      */
-    PurchaseReturnsDetails update(PurchaseReturnsDetails purchaseReturnsDetails);
+    CapitalPaymentBill update(CapitalPaymentBill capitalPaymentBill);
 
     /**
      * 通过主键删除数据

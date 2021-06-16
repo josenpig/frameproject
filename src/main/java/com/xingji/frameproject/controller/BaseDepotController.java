@@ -9,6 +9,7 @@ import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.service.BaseDepotService;
 import com.xingji.frameproject.service.BaseOpeningService;
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -40,6 +41,7 @@ public class BaseDepotController {
     @Resource
     private BaseOpeningService baseOpeningService;
 
+
     /**
      * 通过主键查询单条数据
      *
@@ -65,6 +67,17 @@ public class BaseDepotController {
         map.put("rows",baseDepotVoList);
         return AjaxResponse.success(map);
     };
+
+    /**
+     * 查询所有仓库信息返回集合
+     * @return 仓库集合
+     */
+    @GetMapping("/findAllDepot/list")
+    public AjaxResponse findAllProductToList(){
+        List<BaseDepot> baseDepotVoList=baseDepotService.findAllDepot();
+        return AjaxResponse.success(baseDepotVoList);
+    };
+
     /**
      * 根据仓库编号或仓库名称查询的仓库
      * @return 产品集合
