@@ -8,7 +8,7 @@ import java.util.List;
  * (CapitalPayable)表服务接口
  *
  * @author makejava
- * @since 2021-06-15 17:16:34
+ * @since 2021-06-17 15:23:42
  */
 public interface CapitalPayableService {
 

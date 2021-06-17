@@ -62,9 +62,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xingji.frameproject.mybatis.entity.Loginin" useGeneratedKeys="true">
-    insert into loginin (loginTime, operator, TypeOfOperator
+    insert into loginin (loginTime, operator, TypeOfOperator,logintype
       )
-    values (#{logintime,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{typeofoperator,jdbcType=VARCHAR}
+    values (#{logintime,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{typeofoperator,jdbcType=VARCHAR},#{logintype,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xingji.frameproject.mybatis.entity.Loginin" useGeneratedKeys="true">

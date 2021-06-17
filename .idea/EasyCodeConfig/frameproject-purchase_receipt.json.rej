@@ -1,0 +1,9 @@
+diff a/.idea/EasyCodeConfig/frameproject-purchase_receipt.json b/.idea/EasyCodeConfig/frameproject-purchase_receipt.json	(rejected hunks)
+@@ -2,7 +2,6 @@
+   "name" : "PurchaseReceipt",
+   "preName" : "",
+   "comment" : null,
+-  "templateGroupName" : "Default",
+   "templateGroupName" : "EIMS",
+   "fullColumn" : [ {
+     "name" : "id",

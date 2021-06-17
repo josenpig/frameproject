@@ -54,8 +54,6 @@ public interface SaleReturnService {
      */
     boolean deleteById(String returnId);
 
-    List<SaleReturn> queryAllByPage();
-
     //@Cacheable(cacheNames = "allsaleorder")
     List<SaleReturn> conditionpage(SaleConditionPageVo order);
 }

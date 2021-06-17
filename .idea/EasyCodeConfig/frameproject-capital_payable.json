@@ -18,35 +18,35 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "customer",
+    "name" : "vendor",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "salesmen",
+    "name" : "buyer",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "receivables",
+    "name" : "payables",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "received",
+    "name" : "paid",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "uncollected",
+    "name" : "unpaid",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -74,7 +74,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "receiptRemark",
+    "name" : "paymentRemark",
     "comment" : null,
     "type" : null,
     "shortType" : null,

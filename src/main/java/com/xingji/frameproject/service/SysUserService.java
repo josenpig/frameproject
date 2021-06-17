@@ -96,5 +96,7 @@ public interface SysUserService {
     Integer queryUserIdByUserName(String userName);
 
 
+    Integer queryUserIdByPhone(String phone);
 
+    String queryUserNameByUserId(Integer userid);
 }

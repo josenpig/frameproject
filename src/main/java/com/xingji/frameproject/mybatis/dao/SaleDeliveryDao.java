@@ -20,10 +20,16 @@ public interface SaleDeliveryDao {
      * 通过ID查询单条数据
      *
      * @param deliveryId 主键
+     * @return 实例对象vo
+     */
+    SaleDelivery queryByIdVo(String deliveryId);
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param deliveryId 主键
      * @return 实例对象
      */
     SaleDelivery queryById(String deliveryId);
-
     /**
      * 查询指定行数据
      *
@@ -81,12 +87,7 @@ public interface SaleDeliveryDao {
      * @return 影响行数
      */
     int deleteById(String deliveryId);
-    /**
-     * 分页查询
-     *
-     * @return 影响行数
-     */
-    List <SaleDelivery> queryAllByPage();
+
     /**
      * 查询可退换单据
      *

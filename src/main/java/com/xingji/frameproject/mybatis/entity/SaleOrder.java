@@ -34,7 +34,7 @@ public class SaleOrder implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date deliveryTime;
     /**
-     * 客户
+     * 客户id
      */
     private String customer;
     /**

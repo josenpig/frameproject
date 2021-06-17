@@ -159,4 +159,14 @@ public class SysUserServiceImpl implements SysUserService {
     public Integer queryUserIdByUserName(String userName) {
         return this.sysUserDao.queryUserIdByUserName(userName);
     }
+
+    @Override
+    public Integer queryUserIdByPhone(String phone) {
+        return this.sysUserDao.queryUserIdByPhone(phone);
+    }
+
+    @Override
+    public String queryUserNameByUserId(Integer userid) {
+        return this.sysUserDao.queryUserNameByUserId(userid);
+    }
 }

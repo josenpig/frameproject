@@ -20,7 +20,13 @@ public interface SaleDeliveryService {
      * @return 实例对象
      */
     SaleDelivery queryById(String deliveryId);
-
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param deliveryId 主键
+     * @return 实例对象vo
+     */
+    SaleDelivery queryByIdVo(String deliveryId);
     /**
      * 查询多条数据
      *
@@ -59,7 +65,6 @@ public interface SaleDeliveryService {
      * @return 是否成功
      */
     boolean deleteById(String deliveryId);
-    List<SaleDelivery> queryAllByPage();
 
     List<SaleDelivery> canreturn();
 

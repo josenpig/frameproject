@@ -1,16 +1,16 @@
 package com.xingji.frameproject.mybatis.entity;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.io.Serializable;
 
 /**
  * (CapitalPayable)实体类
  *
  * @author makejava
- * @since 2021-06-15 17:16:18
+ * @since 2021-06-17 15:23:31
  */
 public class CapitalPayable implements Serializable {
-    private static final long serialVersionUID = -45273393782735898L;
+    private static final long serialVersionUID = -20948961804988009L;
     /**
      * 单据编号
      */
@@ -20,25 +20,25 @@ public class CapitalPayable implements Serializable {
      */
     private Date deliveryTime;
     /**
-     * 客户
+     * 供应商
      */
-    private String customer;
+    private String vendor;
     /**
-     * 销售人员
+     * 采购人员
      */
-    private String salesmen;
+    private String buyer;
     /**
-     * 应收金额
+     * 应付金额
      */
-    private Double receivables;
+    private Double payables;
     /**
-     * 已收金额
+     * 已付金额
      */
-    private Double received;
+    private Double paid;
     /**
-     * 未收金额
+     * 未付金额
      */
-    private Double uncollected;
+    private Double unpaid;
     /**
      * 单据备注
      */
@@ -52,11 +52,11 @@ public class CapitalPayable implements Serializable {
      */
     private Integer caseState;
     /**
-     * 最后收款备注
+     * 最后付款备注
      */
-    private String receiptRemark;
+    private String paymentRemark;
     /**
-     * 最后收款时间
+     * 最后付款时间
      */
     private Date lastCollectionTime;
 
@@ -77,44 +77,44 @@ public class CapitalPayable implements Serializable {
         this.deliveryTime = deliveryTime;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getVendor() {
+        return vendor;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
-    public String getSalesmen() {
-        return salesmen;
+    public String getBuyer() {
+        return buyer;
     }
 
-    public void setSalesmen(String salesmen) {
-        this.salesmen = salesmen;
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
     }
 
-    public Double getReceivables() {
-        return receivables;
+    public Double getPayables() {
+        return payables;
     }
 
-    public void setReceivables(Double receivables) {
-        this.receivables = receivables;
+    public void setPayables(Double payables) {
+        this.payables = payables;
     }
 
-    public Double getReceived() {
-        return received;
+    public Double getPaid() {
+        return paid;
     }
 
-    public void setReceived(Double received) {
-        this.received = received;
+    public void setPaid(Double paid) {
+        this.paid = paid;
     }
 
-    public Double getUncollected() {
-        return uncollected;
+    public Double getUnpaid() {
+        return unpaid;
     }
 
-    public void setUncollected(Double uncollected) {
-        this.uncollected = uncollected;
+    public void setUnpaid(Double unpaid) {
+        this.unpaid = unpaid;
     }
 
     public String getRemarks() {
@@ -141,12 +141,12 @@ public class CapitalPayable implements Serializable {
         this.caseState = caseState;
     }
 
-    public String getReceiptRemark() {
-        return receiptRemark;
+    public String getPaymentRemark() {
+        return paymentRemark;
     }
 
-    public void setReceiptRemark(String receiptRemark) {
-        this.receiptRemark = receiptRemark;
+    public void setPaymentRemark(String paymentRemark) {
+        this.paymentRemark = paymentRemark;
     }
 
     public Date getLastCollectionTime() {

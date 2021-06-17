@@ -78,10 +78,6 @@ public class SaleReturnServiceImpl implements SaleReturnService {
         return this.saleReturnDao.deleteById(returnId) > 0;
     }
     @Override
-    public List<SaleReturn> queryAllByPage() {
-        return this.saleReturnDao.queryAllByPage();
-    }
-    @Override
     //@Cacheable(cacheNames = "allsaleorder")
     public List<SaleReturn> conditionpage(SaleConditionPageVo order) {
         return this.saleReturnDao.conditionpage(order);

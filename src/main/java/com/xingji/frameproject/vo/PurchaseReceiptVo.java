@@ -1,26 +1,16 @@
 package com.xingji.frameproject.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
-/***
- * @author: 顾渊白
- * @date: 2021/6/16 8:53
- * @version 1.0
+/**
+ * 采购入库单详情Vo
  */
 @Data
 public class PurchaseReceiptVo {
-    private String purchaseId;
-    private String purchaseType;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date purchaseTime;
-    private String vendor;
-    private Double payableMoney;
-    private Double paidMoney;
-    private Double unpaidMoney;
+    private PurchaseReceipt receipt;
+    private List<PurchaseReceiptDetails> receiptDetails;
 }

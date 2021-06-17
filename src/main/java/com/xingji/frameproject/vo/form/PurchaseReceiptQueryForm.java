@@ -1,7 +1,6 @@
-package com.xingji.frameproject.mybatis.entity;
+package com.xingji.frameproject.vo.form;
 
 import java.util.Date;
-import java.math.BigDecimal;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -9,18 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * (PurchaseReceipt)实体类
- *
- * @author makejava
- * @since 2021-06-16 10:15:40
- */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class PurchaseReceipt implements Serializable {
-    private static final long serialVersionUID = -11234392647483049L;
+public class PurchaseReceiptQueryForm implements Serializable {
+    private static final long serialVersionUID = 687195858929888253L;
     /**
      * 入库单编号
      */
@@ -117,4 +110,19 @@ public class PurchaseReceipt implements Serializable {
      * 打印次数
      */
     private Integer counter;
+
+    private Integer pageNum;    //当前页
+    private Integer pageSize;   //页大小
+
+    public Integer getPageNum() {
+        if (pageNum == null)
+            return 1;
+        return pageNum;
+    }
+
+    public Integer getPageSize() {
+        if (pageSize == null)
+            return 0;
+        return pageSize;
+    }
 }

@@ -8,7 +8,7 @@ import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseCapitalAccountVo;
-import com.xingji.frameproject.vo.PurchaseReceiptVo;
+import com.xingji.frameproject.vo.PurchaseCapitalVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +63,7 @@ public class CapitalPayableController {
      */
     @GetMapping("/purchasethisReceipt")
     public AjaxResponse purchasethisReceipt(String purchaseId){
-        PurchaseReceiptVo vo=pos.querythisReceipt(purchaseId);
+        PurchaseCapitalVo vo=pos.querythisReceipt(purchaseId);
         return AjaxResponse.success(vo);
     }
     /**
@@ -75,45 +75,5 @@ public class CapitalPayableController {
         BaseCapitalAccountVo baseCapitalAccountVo=new BaseCapitalAccountVo();
         List<BaseCapitalAccountVo> list=bcas.queryAllVo(baseCapitalAccountVo);
         return AjaxResponse.success(list);
-    }
-    @PostMapping("/addpayment/{type}")
-    public AjaxResponse addreceipt(@PathVariable("type") int type,@RequestBody String add) {
-        JSONObject jsonObject = JSONObject.parseObject(add);
-        String one = jsonObject.getString("payment");
-        CapitalPayment payment = JSON.parseObject(one, CapitalPayment.class);
-        String two = jsonObject.getString("bill");
-        List<CapitalPaymentBill> bills= JSONArray.parseArray(two, CapitalPaymentBill.class);
-        String three = jsonObject.getString("account");
-        List<CapitalPaymentAccount> accounts= JSONArray.parseArray(three, CapitalPaymentAccount.class);
-        System.out.println(bills.toString());
-        System.out.println(payment.toString());
-        System.out.println(accounts.toString());
-        //绑定收款单
-        for (int i=0;i<bills.size();i++){
-            if (bills.get(i).getPurchaseType().equals("采购订单")){
-                PurchaseOrder order=new PurchaseOrder();
-                order.setId(bills.get(i).getPurchaseId());
-                order.setPaymentOrder(payment.getPaymentId());
-                pos.update(order);
-            }
-            if (bills.get(i).getPurchaseType().equals("采购出库单")||bills.get(i).getPurchaseType().equals("采购退货单")){
-                PurchaseReceipt receipt=new PurchaseReceipt();
-                receipt.setId(bills.get(i).getPurchaseId());
-                receipt.setPaymentOrder(receipt.getPaymentOrder());
-                prs.update(receipt);
-            }
-            bills.get(i).setPaymentId(payment.getPaymentId());
-        }
-        for (int j=0;j<accounts.size();j++){
-            accounts.get(j).setPaymentId(payment.getPaymentId());
-        }
-        payment.setFounder(String.valueOf(sus.queryUserIdByUserName(payment.getFounder())));
-        payment.setApprovalState(type);
-        payment.setFoundTime(new Date());
-        payment.setUpdateTime(new Date());
-        cpsok.insert(payment);
-        cpbs.insertBatch(bills);
-        cpas.insertBatch(accounts);
-        return AjaxResponse.success(payment.getPaymentId());
     }
 }

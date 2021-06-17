@@ -12,7 +12,7 @@ import java.util.List;
  * (CapitalPayable)表服务实现类
  *
  * @author makejava
- * @since 2021-06-15 17:16:35
+ * @since 2021-06-17 15:23:44
  */
 @Service("capitalPayableService")
 public class CapitalPayableServiceImpl implements CapitalPayableService {

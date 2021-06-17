@@ -8,12 +8,12 @@
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productNum" column="product_num" jdbcType="INTEGER"/>
-        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
         <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
         <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
-        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="remark" column="remarks" jdbcType="VARCHAR"/>
         <result property="depot" column="depot" jdbcType="VARCHAR"/>
         <result property="saleUnitPrice" column="sale_unit_price" jdbcType="NUMERIC"/>
         <result property="saleMoney" column="sale_money" jdbcType="NUMERIC"/>
@@ -21,16 +21,19 @@
 
     <!--查询单个-->
     <select id="queryById" resultMap="SaleOrderDetailsMap">
-        select
-          id, order_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money
-        from frameproject.sale_order_details
+        select a.id, a.order_id, a.product_id, b.product_name, a.product_num,
+        c.unit_name,  b.gram_heavy,  b.ingredient,  b.product_spec,  b.product_describe,
+        b.remarks, a.depot,  a.sale_unit_price,  a.sale_money
+        from sale_order_details a
+        INNER JOIN base_product b on a.product_id=b.product_id
+        INNER JOIN base_unit c on b.unit_id=c.unit_id
         where order_id = #{orderId}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SaleOrderDetailsMap">
         select
-          id, order_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money
+          id, order_id, product_id, product_num, depot, sale_unit_price, sale_money
         from frameproject.sale_order_details
         limit #{offset}, #{limit}
     </select>
@@ -38,8 +41,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SaleOrderDetailsMap">
         select
-        id, order_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec,
-        product_describe, remark, depot, sale_unit_price, sale_money
+        id, order_id, product_id, product_num, depot, sale_unit_price, sale_money
         from frameproject.sale_order_details
         <where>
             <if test="id != null">
@@ -51,29 +53,8 @@
             <if test="productId != null and productId != ''">
                 and product_id = #{productId}
             </if>
-            <if test="productName != null and productName != ''">
-                and product_name = #{productName}
-            </if>
             <if test="productNum != null">
                 and product_num = #{productNum}
-            </if>
-            <if test="productUnit != null and productUnit != ''">
-                and product_unit = #{productUnit}
-            </if>
-            <if test="gramHeavy != null and gramHeavy != ''">
-                and gram_heavy = #{gramHeavy}
-            </if>
-            <if test="ingredient != null and ingredient != ''">
-                and ingredient = #{ingredient}
-            </if>
-            <if test="productSpec != null and productSpec != ''">
-                and product_spec = #{productSpec}
-            </if>
-            <if test="productDescribe != null and productDescribe != ''">
-                and product_describe = #{productDescribe}
-            </if>
-            <if test="remark != null and remark != ''">
-                and remark = #{remark}
             </if>
             <if test="depot != null and depot != ''">
                 and depot = #{depot}
@@ -89,36 +70,31 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.sale_order_details(order_id, product_id, product_name, product_num, product_unit, gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
-        values (#{orderId}, #{productId}, #{productName}, #{productNum}, #{productUnit}, #{gramHeavy}, #{ingredient}, #{productSpec}, #{productDescribe}, #{remark}, #{depot}, #{saleUnitPrice}, #{saleMoney})
+        insert into frameproject.sale_order_details(order_id, product_id, product_num, depot, sale_unit_price, sale_money)
+        values (#{orderId}, #{productId}, #{productNum}, #{depot}, #{saleUnitPrice}, #{saleMoney})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.sale_order_details(order_id, product_id, product_name, product_num, product_unit,
-        gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
+        insert into frameproject.sale_order_details(order_id, product_id, product_num, depot, sale_unit_price,
+        sale_money)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.orderId}, #{entity.productId}, #{entity.productName}, #{entity.productNum}, #{entity.productUnit},
-            #{entity.gramHeavy}, #{entity.ingredient}, #{entity.productSpec}, #{entity.productDescribe},
-            #{entity.remark}, #{entity.depot}, #{entity.saleUnitPrice}, #{entity.saleMoney})
+            (#{entity.orderId}, #{entity.productId}, #{entity.productNum}, #{entity.depot}, #{entity.saleUnitPrice},
+            #{entity.saleMoney})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.sale_order_details(order_id, product_id, product_name, product_num, product_unit,
-        gram_heavy, ingredient, product_spec, product_describe, remark, depot, sale_unit_price, sale_money)
+        insert into frameproject.sale_order_details(order_id, product_id, product_num, depot, sale_unit_price,
+        sale_money)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.orderId}, #{entity.productId}, #{entity.productName}, #{entity.productNum}, #{entity.productUnit},
-            #{entity.gramHeavy}, #{entity.ingredient}, #{entity.productSpec}, #{entity.productDescribe},
-            #{entity.remark}, #{entity.depot}, #{entity.saleUnitPrice}, #{entity.saleMoney}, #{entity.payMoney})
+            (#{entity.orderId}, #{entity.productId}, #{entity.productNum}, #{entity.depot}, #{entity.saleUnitPrice},
+            #{entity.saleMoney})
         </foreach>
         on duplicate key update
-        order_id = values(order_id) , product_id = values(product_id) , product_name = values(product_name) ,
-        product_num = values(product_num) , product_unit = values(product_unit) , gram_heavy = values(gram_heavy) ,
-        ingredient = values(ingredient) , product_spec = values(product_spec) , product_describe =
-        values(product_describe) , remark = values(remark) , depot = values(depot) , sale_unit_price =
-        values(sale_unit_price) , sale_money = values(sale_money)
+        order_id = values(order_id) , product_id = values(product_id) , product_num = values(product_num) , depot =
+        values(depot) , sale_unit_price = values(sale_unit_price) , sale_money = values(sale_money)
     </insert>
 
     <!--通过主键修改数据-->
@@ -131,29 +107,8 @@
             <if test="productId != null and productId != ''">
                 product_id = #{productId},
             </if>
-            <if test="productName != null and productName != ''">
-                product_name = #{productName},
-            </if>
             <if test="productNum != null">
                 product_num = #{productNum},
-            </if>
-            <if test="productUnit != null and productUnit != ''">
-                product_unit = #{productUnit},
-            </if>
-            <if test="gramHeavy != null and gramHeavy != ''">
-                gram_heavy = #{gramHeavy},
-            </if>
-            <if test="ingredient != null and ingredient != ''">
-                ingredient = #{ingredient},
-            </if>
-            <if test="productSpec != null and productSpec != ''">
-                product_spec = #{productSpec},
-            </if>
-            <if test="productDescribe != null and productDescribe != ''">
-                product_describe = #{productDescribe},
-            </if>
-            <if test="remark != null and remark != ''">
-                remark = #{remark},
             </if>
             <if test="depot != null and depot != ''">
                 depot = #{depot},

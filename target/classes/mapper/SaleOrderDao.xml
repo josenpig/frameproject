@@ -11,9 +11,33 @@
         <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
         <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
         <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
-        <result property="contacts" column="contacts" jdbcType="VARCHAR"/>
-        <result property="contactsPhone" column="contacts_phone" jdbcType="VARCHAR"/>
-        <result property="contactsAddress" column="contacts_address" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
+        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="deliveryState" column="delivery_state" jdbcType="INTEGER"/>
+        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
+        <result property="advance" column="advance" jdbcType="NUMERIC"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap type="com.xingji.frameproject.mybatis.entity.SaleOrder" id="SaleOrderView">
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
+        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
+        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
+        <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
+        <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
+        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
+        <result property="contacts" column="contact" jdbcType="VARCHAR"/>
+        <result property="contactsPhone" column="contact_number" jdbcType="VARCHAR"/>
+        <result property="contactsAddress" column="contact_address" jdbcType="VARCHAR"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
         <result property="approver" column="approver" jdbcType="VARCHAR"/>
         <result property="founder" column="founder" jdbcType="VARCHAR"/>
@@ -39,7 +63,7 @@
     </resultMap>
     <!--查询收款订单-->
     <select id="queryReceipt" resultMap="SaleReceipt">
-        select * from frameproject.sale_order
+        select *,receivables-advance from sale_order
         <where>
             approval_state=1
             <if test="saleId != null and saleId != ''">
@@ -56,15 +80,15 @@
         where order_id=#{saleId}
     </select>
     <!--查询单个-->
-    <select id="queryById" resultMap="SaleOrderMap">
-        select * from frameproject.sale_order
+    <select id="queryById" resultMap="SaleOrderView">
+        select a.*,b.* from sale_order a INNER JOIN base_customer b on a.customer=b.customer_number
         where order_id = #{orderId}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SaleOrderMap">
         select
-          order_id, order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance,approval_remarks
+          order_id, order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance, approval_remarks
         from frameproject.sale_order
         limit #{offset}, #{limit}
     </select>
@@ -72,9 +96,9 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SaleOrderMap">
         select
-        order_id, order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts,
-        contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, delivery_id, return_id,
-        receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance,approval_remarks
+        order_id, order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, remarks, approver,
+        founder, found_time, update_time, delivery_id, return_id, receipt_id, last_approval_time, approval_state,
+        delivery_state, order_state, advance, approval_remarks
         from frameproject.sale_order
         <where>
             <if test="orderId != null and orderId != ''">
@@ -100,15 +124,6 @@
             </if>
             <if test="receivables != null">
                 and receivables = #{receivables}
-            </if>
-            <if test="contacts != null and contacts != ''">
-                and contacts = #{contacts}
-            </if>
-            <if test="contactsPhone != null and contactsPhone != ''">
-                and contacts_phone = #{contactsPhone}
-            </if>
-            <if test="contactsAddress != null and contactsAddress != ''">
-                and contacts_address = #{contactsAddress}
             </if>
             <if test="remarks != null and remarks != ''">
                 and remarks = #{remarks}
@@ -149,15 +164,15 @@
             <if test="advance != null">
                 and advance = #{advance}
             </if>
-            <if test="approvalRemarks != null">
-                and  approval_remarks= #{approvalRemarks}
+            <if test="approvalRemarks != null and approvalRemarks != ''">
+                and approval_remarks = #{approvalRemarks}
             </if>
         </where>
     </select>
 
     <!--通过实体作为或者条件查询-->
-    <select id="conditionpage" resultMap="SaleOrderMap">
-        select * from sale_order
+    <select id="conditionpage" resultMap="SaleOrderView">
+        select a.*,b.* from sale_order a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="orderId != null and orderId != ''">
                 and order_id like CONCAT('%',#{orderId},'%')
@@ -177,7 +192,7 @@
 
             <if test="orderTime != null and orderTime != '' and orderTime=='自定义' and otimeState!=null and otimeEnd!=null">
                 and DATE_FORMAT(order_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
-                 AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
+                AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
             </if>
             <if test="deliveryTime != null and deliveryTime=='今天'" >
                 and to_days(delivery_time) = to_days(now())
@@ -219,50 +234,46 @@
         </where>
         ORDER BY found_time DESC
     </select>
-
     <!--新增所有列-->
     <insert id="insert" keyProperty="orderId" useGeneratedKeys="true">
-        insert into frameproject.sale_order(order_id,order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance,approval_remarks)
-        values (#{orderId},#{orderTime}, #{deliveryTime}, #{customer}, #{salesmen}, #{disrate}, #{dismoney}, #{receivables}, #{contacts}, #{contactsPhone}, #{contactsAddress}, #{remarks}, #{approver}, #{founder}, #{foundTime}, #{updateTime}, #{deliveryId}, #{returnId}, #{receiptId}, #{lastApprovalTime}, #{approvalState}, #{deliveryState}, #{orderState}, #{advance},#{approvalRemarks})
+        insert into frameproject.sale_order(order_id,order_time, delivery_time, customer, salesmen, disrate, dismoney, receivables, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance, approval_remarks)
+        values (#{orderId},#{orderTime}, #{deliveryTime}, #{customer}, #{salesmen}, #{disrate}, #{dismoney}, #{receivables}, #{remarks}, #{approver}, #{founder}, #{foundTime}, #{updateTime}, #{deliveryId}, #{returnId}, #{receiptId}, #{lastApprovalTime}, #{approvalState}, #{deliveryState}, #{orderState}, #{advance}, #{approvalRemarks})
     </insert>
 
     <insert id="insertBatch" keyProperty="orderId" useGeneratedKeys="true">
         insert into frameproject.sale_order(order_time, delivery_time, customer, salesmen, disrate, dismoney,
-        receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time,
-        delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance,approval_remarks)
+        receivables, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id,
+        last_approval_time, approval_state, delivery_state, order_state, advance, approval_remarks)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.orderTime}, #{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.disrate},
-            #{entity.dismoney}, #{entity.receivables}, #{entity.contacts}, #{entity.contactsPhone},
-            #{entity.contactsAddress}, #{entity.remarks}, #{entity.approver}, #{entity.founder}, #{entity.foundTime},
-            #{entity.updateTime}, #{entity.deliveryId}, #{entity.returnId}, #{entity.receiptId},
+            #{entity.dismoney}, #{entity.receivables}, #{entity.remarks}, #{entity.approver}, #{entity.founder},
+            #{entity.foundTime}, #{entity.updateTime}, #{entity.deliveryId}, #{entity.returnId}, #{entity.receiptId},
             #{entity.lastApprovalTime}, #{entity.approvalState}, #{entity.deliveryState}, #{entity.orderState},
-            #{entity.advance},#{approvalRemarks})
+            #{entity.advance}, #{entity.approvalRemarks})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="orderId" useGeneratedKeys="true">
         insert into frameproject.sale_order(order_time, delivery_time, customer, salesmen, disrate, dismoney,
-        receivables, contacts, contacts_phone, contacts_address, remarks, approver, founder, found_time, update_time,
-        delivery_id, return_id, receipt_id, last_approval_time, approval_state, delivery_state, order_state, advance,approval_remarks)
+        receivables, remarks, approver, founder, found_time, update_time, delivery_id, return_id, receipt_id,
+        last_approval_time, approval_state, delivery_state, order_state, advance, approval_remarks)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.orderTime}, #{entity.deliveryTime}, #{entity.customer}, #{entity.salesmen}, #{entity.disrate},
-            #{entity.dismoney}, #{entity.receivables}, #{entity.contacts}, #{entity.contactsPhone},
-            #{entity.contactsAddress}, #{entity.remarks}, #{entity.approver}, #{entity.founder}, #{entity.foundTime},
-            #{entity.updateTime}, #{entity.deliveryId}, #{entity.returnId}, #{entity.receiptId},
+            #{entity.dismoney}, #{entity.receivables}, #{entity.remarks}, #{entity.approver}, #{entity.founder},
+            #{entity.foundTime}, #{entity.updateTime}, #{entity.deliveryId}, #{entity.returnId}, #{entity.receiptId},
             #{entity.lastApprovalTime}, #{entity.approvalState}, #{entity.deliveryState}, #{entity.orderState},
-            #{entity.advance},#{approvalRemarks})
+            #{entity.advance}, #{entity.approvalRemarks})
         </foreach>
         on duplicate key update
         order_time = values(order_time) , delivery_time = values(delivery_time) , customer = values(customer) , salesmen
         = values(salesmen) , disrate = values(disrate) , dismoney = values(dismoney) , receivables = values(receivables)
-        , contacts = values(contacts) , contacts_phone = values(contacts_phone) , contacts_address =
-        values(contacts_address) , remarks = values(remarks) , approver = values(approver) , founder = values(founder) ,
-        found_time = values(found_time) , update_time = values(update_time) , delivery_id = values(delivery_id) ,
-        return_id = values(return_id) , receipt_id = values(receipt_id) , last_approval_time =
-        values(last_approval_time) , approval_state = values(approval_state) , delivery_state = values(delivery_state) ,
-        order_state = values(order_state) , advance = values(advance),approval_remarks=values(approval_remarks)
+        , remarks = values(remarks) , approver = values(approver) , founder = values(founder) , found_time =
+        values(found_time) , update_time = values(update_time) , delivery_id = values(delivery_id) , return_id =
+        values(return_id) , receipt_id = values(receipt_id) , last_approval_time = values(last_approval_time) ,
+        approval_state = values(approval_state) , delivery_state = values(delivery_state) , order_state =
+        values(order_state) , advance = values(advance) , approval_remarks = values(approval_remarks)
     </insert>
 
     <!--通过主键修改数据-->
@@ -289,15 +300,6 @@
             </if>
             <if test="receivables != null">
                 receivables = #{receivables},
-            </if>
-            <if test="contacts != null and contacts != ''">
-                contacts = #{contacts},
-            </if>
-            <if test="contactsPhone != null and contactsPhone != ''">
-                contacts_phone = #{contactsPhone},
-            </if>
-            <if test="contactsAddress != null and contactsAddress != ''">
-                contacts_address = #{contactsAddress},
             </if>
             <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
@@ -338,12 +340,13 @@
             <if test="advance != null">
                 advance = #{advance},
             </if>
-            <if test="approvalRemarks != null">
+            <if test="approvalRemarks != null and approvalRemarks != ''">
                 approval_remarks = #{approvalRemarks},
             </if>
         </set>
         where order_id = #{orderId}
     </update>
+    <!--修改订单预收款-->
     <update id="advanceadd">
         update frameproject.sale_order
         <set>
@@ -356,7 +359,6 @@
         </set>
         where order_id = #{orderId}
     </update>
-
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from frameproject.sale_order where order_id = #{orderId}

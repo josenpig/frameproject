@@ -1,39 +1,38 @@
 {
-  "name" : "PurchaseReceipt",
+  "name" : "SaleOrder",
   "preName" : "",
   "comment" : null,
   "templateGroupName" : "Default",
-  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
-    "name" : "id",
+    "name" : "orderId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "inboundDate",
+    "name" : "orderTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "vendorName",
+    "name" : "deliveryTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "buyerName",
+    "name" : "customer",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "buyerType",
+    "name" : "salesmen",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -54,112 +53,105 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "offersPrice",
+    "name" : "receivables",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "depotName",
+    "name" : "remarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "vettingName",
+    "name" : "approver",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "lastVettingTime",
+    "name" : "founder",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "vettingState",
+    "name" : "foundTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "associatedOrder",
+    "name" : "updateTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "exitOrderId",
+    "name" : "deliveryId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "paymentOrder",
+    "name" : "returnId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "cavId",
+    "name" : "receiptId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "invoiceId",
+    "name" : "lastApprovalTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "createPeople",
+    "name" : "approvalState",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "contact",
+    "name" : "deliveryState",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updatePeople",
+    "name" : "orderState",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "createDate",
+    "name" : "advance",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updateDate",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "counter",
+    "name" : "approvalRemarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -168,7 +160,7 @@
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
-  "savePackageName" : "com.xingji.frameproject",
-  "savePath" : "./src/main/java/com/xingji/frameproject",
+  "savePackageName" : "com.xingji.frameproject.mybatis",
+  "savePath" : "./src/main/java/com/xingji/frameproject/mybatis",
   "saveModelName" : "frameproject"
 }

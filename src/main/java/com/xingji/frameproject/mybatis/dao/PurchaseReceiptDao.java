@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * (PurchaseReceipt)表数据库访问层
  *
  * @author makejava
- * @since 2021-06-15 18:48:35
+ * @since 2021-06-16 10:15:41
  */
 @Mapper
 public interface PurchaseReceiptDao {
@@ -24,22 +25,28 @@ public interface PurchaseReceiptDao {
     PurchaseReceipt queryById(String id);
 
     /**
-     * 查询指定行数据
+     * 查询所有数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
-     * @return 对象列表
+     * @param purchaseReceiptQueryForm 实例对象
+     * @return 实例对象
      */
-    List<PurchaseReceipt> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
+    List<PurchaseReceipt> queryAll(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
 
     /**
-     * 通过实体作为筛选条件查询
+     * 通过实体作为或者条件查询
      *
-     * @param purchaseReceipt 实例对象
+     * @param purchaseReceiptQueryForm 实例对象
      * @return 对象列表
      */
-    List<PurchaseReceipt> queryAll(PurchaseReceipt purchaseReceipt);
+    List<PurchaseReceipt> queryOrByPojo(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
+
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param purchaseReceiptQueryForm 实例对象
+     * @return 对象列表
+     */
+    List<PurchaseReceipt> queryAndByPojo(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
 
     /**
      * 新增数据
@@ -50,20 +57,12 @@ public interface PurchaseReceiptDao {
     int insert(PurchaseReceipt purchaseReceipt);
 
     /**
-     * 批量新增数据（MyBatis原生foreach方法）
+     * 批量新增数据
      *
-     * @param entities List<PurchaseReceipt> 实例对象列表
+     * @param purchaseReceiptList 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<PurchaseReceipt> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<PurchaseReceipt> 实例对象列表
-     * @return 影响行数
-     */
-    int insertOrUpdateBatch(@Param("entities") List<PurchaseReceipt> entities);
+    int insertBatch(List<PurchaseReceipt> purchaseReceiptList);
 
     /**
      * 修改数据
@@ -74,6 +73,14 @@ public interface PurchaseReceiptDao {
     int update(PurchaseReceipt purchaseReceipt);
 
     /**
+     * 批量修改数据
+     *
+     * @param purchaseReceiptList 实例对象列表
+     * @return 影响行数
+     */
+    int updateBatch(List<PurchaseReceipt> purchaseReceiptList);
+
+    /**
      * 通过主键删除数据
      *
      * @param id 主键
@@ -81,5 +88,20 @@ public interface PurchaseReceiptDao {
      */
     int deleteById(String id);
 
+    /**
+     * 通过主键列表删除数据
+     *
+     * @param ids 主键列表
+     * @return 影响行数
+     */
+    int deleteBatch(List<Integer> ids);
+
+    /**
+     * 批量对象列表删除数据
+     *
+     * @param purchaseReceiptList 实例对象列表
+     * @return 影响行数
+     */
+    int deleteBatchByEntities(List<PurchaseReceipt> purchaseReceiptList);
 }
 

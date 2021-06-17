@@ -6,9 +6,8 @@ import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.PurchaseOrderDao;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
 import com.xingji.frameproject.service.PurchaseOrderService;
-import com.xingji.frameproject.vo.PurchaseReceiptVo;
+import com.xingji.frameproject.vo.PurchaseCapitalVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -158,7 +157,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
      * @return 对象列表
      */
     @Override
-    public PurchaseReceiptVo querythisReceipt(String purchaseId){
+    public PurchaseCapitalVo querythisReceipt(String purchaseId){
         return this.purchaseOrderDao.querythisReceipt(purchaseId);
     }
 }
