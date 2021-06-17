@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalCavCia;
+import com.xingji.frameproject.vo.CavConditionPageVo;
 
 import java.util.List;
 
@@ -30,6 +31,10 @@ public interface CapitalCavCiaService {
     List<CapitalCavCia> queryAllByLimit(int offset, int limit);
 
     List<CapitalCavCia> queryAll(CapitalCavCia capitalCavCia);
+
+    List<CapitalCavCia> queryonePage(CavConditionPageVo vo);
+
+    List<CapitalCavCia> querytwoPage(CavConditionPageVo vo);
 
     /**
      * 新增数据

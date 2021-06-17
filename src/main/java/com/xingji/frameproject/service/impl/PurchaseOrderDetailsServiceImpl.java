@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.PurchaseOrderDetailsDao;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import org.springframework.stereotype.Service;
@@ -152,5 +153,16 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
     public boolean deleteBatch(List<Integer> ids) {
         int row = this.purchaseOrderDetailsDao.deleteBatch(ids);
         return ids.size() == row;
+    }
+
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param purchaseOrderDetailsQueryForm 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm) {
+        return this.purchaseOrderDetailsDao.queryAndByPojo(purchaseOrderDetailsQueryForm);
     }
 }

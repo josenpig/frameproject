@@ -18,12 +18,26 @@
         <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
-
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCia" id="CapitalCavCiaView">
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
+        <result property="otherParty" column="customer_name" jdbcType="VARCHAR"/>
+        <result property="otherParty" column="vendor_name" jdbcType="VARCHAR"/>
+        <result property="cavBy" column="cav_by" jdbcType="VARCHAR"/>
+        <result property="cavType" column="cav_type" jdbcType="VARCHAR"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalCavCiaMap">
-        select
-          cav_id, order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver, approval_state, approval_remarks, last_approval_time, update_time
-        from frameproject.capital_cav_cia
+    <select id="queryById" resultMap="CapitalCavCiaView">
+        select a.*,b.* from capital_cav_cia a INNER JOIN base_customer b on a.other_party=b.customer_number
         where cav_id = #{cavId}
     </select>
 
@@ -35,12 +49,65 @@
         limit #{offset}, #{limit}
     </select>
 
+    <!--通过实体作为筛选条件查询   预收冲应收-->
+    <select id="queryonePage" resultMap="CapitalCavCiaView">
+            select a.*,b.* from capital_cav_cia a
+            INNER JOIN base_customer b on a.other_party=b.customer_number
+        <where>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="orderTime != null">
+                and order_time = #{orderTime}
+            </if>
+            <if test="customer != null and customer != ''">
+                and other_party = #{customer}
+            </if>
+            <if test="cavBy != null and cavBy != ''">
+                and cav_by = #{cavBy}
+            </if>
+            <if test="cavType != null and cavType != ''">
+                and cav_type = #{cavType}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+        </where>
+    </select>
+    <!--通过实体作为筛选条件查询   预付冲应付-->
+    <select id="querytwoPage" resultMap="CapitalCavCiaView">
+            select a.*,b.* from capital_cav_cia a
+            INNER JOIN base_vendor b on a.other_party=b.vendor_id
+        <where>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="orderTime != null">
+                and order_time = #{orderTime}
+            </if>
+            <if test="vendor != null and vendor != '' ">
+                and other_party = #{vendor}
+            </if>
+            <if test="cavBy != null and cavBy != ''">
+                and cav_by = #{cavBy}
+            </if>
+            <if test="cavType != null and cavType != ''">
+                and cav_type = #{cavType}
+            </if>
+            <if test="founder != null and founder != ''">
+                and founder = #{founder}
+            </if>
+            <if test="approvalState != null">
+                and approval_state = #{approvalState}
+            </if>
+        </where>
+    </select>
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="CapitalCavCiaMap">
-        select
-        cav_id, order_time, other_party, cav_by, cav_type, this_money, founder, found_time, remarks, approver,
-        approval_state, approval_remarks, last_approval_time, update_time
-        from frameproject.capital_cav_cia
+    <select id="queryAll" resultMap="CapitalCavCiaView">
+        select * from capital_cav_cia
         <where>
             <if test="cavId != null and cavId != ''">
                 and cav_id = #{cavId}
