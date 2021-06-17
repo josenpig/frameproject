@@ -56,7 +56,7 @@ public class SaleDeliveryController {
      */
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
-        SaleDelivery delivery=sds.queryById(id);
+        SaleDelivery delivery=sds.queryByIdVo(id);
         List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(id);
         SaleDeliveryVo vo=new SaleDeliveryVo();
         delivery.setFounder(sus.queryById(Integer.valueOf(delivery.getFounder())).getUserName());
