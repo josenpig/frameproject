@@ -82,14 +82,13 @@ public class BaseProductServiceImpl implements BaseProductService {
      * @return 是否成功
      */
     @Override
-    public String deleteById(String productId) {
-        boolean pro=this.baseProductDao.deleteById(productId)>0?true:false;
-        boolean open=this.baseProductDao.deleteOpingById(productId)>0?true:false;
-        String receipt;
-        if(pro==true && open==true){
-            receipt="删除成功";
-        }else{
-            receipt="删除失败";
+    public Boolean deleteById(String productId) {
+        boolean pro=this.baseProductDao.deleteById(productId)>0;
+        boolean open=this.baseProductDao.deleteOpingById(productId)>0;
+        System.out.println("pro"+pro);
+        Boolean receipt=false;
+        if(pro==true){
+            receipt=true;
         }
         return receipt;
     }

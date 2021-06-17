@@ -5,17 +5,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
-import com.xingji.frameproject.service.BaseDepotService;
-import com.xingji.frameproject.service.BaseOpeningService;
-import com.xingji.frameproject.service.BaseProductService;
-import com.xingji.frameproject.service.SysUserService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseProductVo;
 import com.xingji.frameproject.vo.PurchaseProductVo;
 import com.xingji.frameproject.vo.SaleProductVo;
+import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
+import com.xingji.frameproject.vo.form.StockInventoryDetailsQueryForm;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +45,10 @@ public class BaseProductController {
     private BaseDepotService baseDepotService;
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private PurchaseOrderDetailsService purchaseOrderDetailsService;
+    @Resource
+    private StockInventoryDetailsService stockInventoryDetailsService;
 
     /**
      * 通过主键查询单条数据
@@ -73,6 +77,7 @@ public class BaseProductController {
         map.put("rows",SaleProductVo);
         return AjaxResponse.success(map);
     };
+
     /**
      * 查询所有采购的产品
      * @return 产品集合
@@ -90,6 +95,7 @@ public class BaseProductController {
         map.put("rows",purchaseProductVos);
         return AjaxResponse.success(map);
     };
+
     /**
      * 查询所有类别的产品
      * @return 产品集合
@@ -137,8 +143,22 @@ public class BaseProductController {
     @GetMapping("/delProduct")
     public AjaxResponse delProduct(String id){
         System.out.println("del:"+id);
-        String recript=baseProductService.deleteById(id);
-        return AjaxResponse.success(recript);
+        //根据产品Id查询采购单
+        PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
+        purchaseOrderDetailsQueryForm.setProductId(id);
+        List<PurchaseOrderDetails> list =purchaseOrderDetailsService.queryAndByPojo(purchaseOrderDetailsQueryForm);
+        System.out.println(list);
+        //根据产品id查询盘点单
+        StockInventoryDetailsQueryForm stockInventoryDetails=new StockInventoryDetailsQueryForm();
+        stockInventoryDetails.setProductId(id);
+        List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
+        System.out.println(list2);
+        Boolean del=false;
+        if(list.size()==0 && list2.size()==0){
+            del=baseProductService.deleteById(id);
+        }
+        System.out.println("删除是否成功："+del);
+        return AjaxResponse.success(del);
     };
 
     /**
@@ -149,12 +169,29 @@ public class BaseProductController {
     @DeleteMapping("/delProduct/batch")
     public AjaxResponse bacthDelProduct(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
-        List<String> retList= new ArrayList<String>();
+        String ret=null;
         for(int i=0;i < ids.size();i++){
-            String recript=baseProductService.deleteById(ids.get(i));
-            retList.add(recript);
+            //根据产品Id查询采购单
+            PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
+            purchaseOrderDetailsQueryForm.setProductId(ids.get(i));
+            List<PurchaseOrderDetails> list =purchaseOrderDetailsService.queryAndByPojo(purchaseOrderDetailsQueryForm);
+            System.out.println(list);
+            //根据产品id查询盘点单
+            StockInventoryDetailsQueryForm stockInventoryDetails=new StockInventoryDetailsQueryForm();
+            stockInventoryDetails.setProductId(ids.get(i));
+            List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
+            System.out.println(list2);
+            Boolean del=false;
+            if(list.size()==0 && list2.size()==0){
+                del=baseProductService.deleteById(ids.get(i));
+            }
+            System.out.println("删除是否成功："+del);
+            if(del==false){
+                ret = "产品编号为："+ids.get(i)+"已存在相关单据记录，无法删除";
+                break;
+            }
         }
-        return AjaxResponse.success(retList);
+        return AjaxResponse.success(ret);
     };
 
     /**
@@ -218,21 +255,18 @@ public class BaseProductController {
         String one = jsonObject.getString("Product");
         BaseProduct baseProduct = JSON.parseObject(one, BaseProduct.class);
         String user =jsonObject.getString("User");
-        System.out.println(user);
         String user1=trimFirstAndLastChar(user,'"');
-        System.out.println(user1);
         System.out.println(sysUserService.queryUserIdByUserName(user1));
         Integer userid=sysUserService.queryUserIdByUserName(user1);
-        System.out.println("userID:"+userid);
         baseProduct.setUserId(userid);
         System.out.println("BaseProduct:"+baseProduct);
         BaseProduct baseProduct1 =baseProductService.insert(baseProduct);
         //添加库存
         String two = jsonObject.getString("Stock");
         List<BaseOpening> baseOpenings= JSONArray.parseArray(two, BaseOpening.class);
-        System.out.println("BaseOpening:"+baseOpenings+",,,"+baseOpenings.size());
+        String n=null;
         for(int i=0;i<baseOpenings.size();i++){
-            if(baseOpenings.get(i).getDepotName()!="" && baseOpenings.get(i).getOpeningNumber()!=null){
+            if(baseOpenings.get(i).getDepotName()!=null && baseOpenings.get(i).getDepotName()!="" && !baseOpenings.get(i).getDepotName().equals(n) && !baseOpenings.get(i).getDepotName().equals("")){
             Integer pon= baseOpenings.get(i).getOpeningNumber();
             baseOpenings.get(i).setExpectNumber(pon);
             baseOpenings.get(i).setProductNumber(pon);
@@ -240,7 +274,7 @@ public class BaseProductController {
             BaseOpening baseOpening=baseOpeningService.insert(baseOpenings.get(i));
             }
         }
-        System.out.println("BaseOpening++:"+baseOpenings);
+        System.out.println("BaseOpening++:"+baseOpenings+",,,"+baseOpenings.size());
 
         return  AjaxResponse.success(baseProduct1);
     };

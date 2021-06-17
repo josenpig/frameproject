@@ -151,4 +151,15 @@ public class StockInventoryDetailsServiceImpl implements StockInventoryDetailsSe
     public List<StockInventoryDetails> queryAllById(String orderId) {
         return this.stockInventoryDetailsDao.queryAllById(orderId);
     }
+
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param stockInventoryDetailsQueryForm 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<StockInventoryDetails> queryAndByPojo(StockInventoryDetailsQueryForm stockInventoryDetailsQueryForm) {
+        return this.stockInventoryDetailsDao.queryAndByPojo(stockInventoryDetailsQueryForm);
+    }
 }

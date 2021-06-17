@@ -102,4 +102,5 @@ public interface StockInventoryDetailsDao {
      * @return
      */
     List<StockInventoryDetails> queryAllById(String orderId);
+
 }

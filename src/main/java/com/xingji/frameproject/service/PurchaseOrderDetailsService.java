@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import java.util.List;
 import com.github.pagehelper.PageInfo;
@@ -94,4 +95,13 @@ public interface PurchaseOrderDetailsService {
      * @return 是否成功
      */
     boolean deleteBatch(List<Integer> ids);
+
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param purchaseOrderDetailsQueryForm 实例对象
+     * @return 对象列表
+     */
+    List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm);
+
 }

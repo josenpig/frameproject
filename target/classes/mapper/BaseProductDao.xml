@@ -305,7 +305,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.base_product where product_spec = #{productSpec}
+        delete from frameproject.base_product where product_id = #{productID}
     </delete>
     <!--通过主键删除该产品库存数据-->
     <delete id="deleteOpingById">
