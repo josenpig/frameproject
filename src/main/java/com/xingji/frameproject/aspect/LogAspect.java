@@ -1,23 +1,20 @@
 package com.xingji.frameproject.aspect;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.OperationlogService;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 
 
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JacksonUtil;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,6 +26,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 系统日志：切面处理类
@@ -43,10 +41,62 @@ public class LogAspect {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
+    private SysUserService us;
+    private static String username;
+    @Pointcut("execution(public * com.xingji.frameproject.controller.UserController.gologinByPhone(..))")
+    public void getuserByPhone(){
+        System.out.println("loginByphone");
+    }
+    @Before("getuserByPhone()")
+    public void doBefore1(JoinPoint joinPoint){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        // 记录下请求内容
+        log.info("URL : " + request.getRequestURL().toString());
+        log.info("HTTP_METHOD : " + request.getMethod());
+        log.info("REQUEST：" + joinPoint.getArgs().toString());
+        String xx=JSONObject.toJSONString(joinPoint.getArgs());
+        System.out.println(">>>>>>>>>>>"+xx);
+        int index=xx.indexOf("["+'"');
+        int index2=xx.indexOf('"'+","+'"');
+        String cha=xx.substring(index+2,index2);
+        Integer userid=us.queryUserIdByPhone(cha);
+        //用户名
+        String  userName=us.queryUserNameByUserId(userid);
+        username = userName;
+    }
+    /**
+     * 定义切点l
+     */
+    @Pointcut("execution(public * com.xingji.frameproject.controller.UserController.login(..))")
+    public void getuserByUserName(){
+        System.out.println("loginByusername");
+        // this.
+    }
+
+    /**
+     * 用户名密码登录时
+     * @param joinPoint
+     */
+    @Before("getuserByUserName()")
+    public void doBefore(JoinPoint joinPoint){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        // 记录下请求内容
+        log.info("URL : " + request.getRequestURL().toString());
+        log.info("HTTP_METHOD : " + request.getMethod());
+        log.info("REQUEST：" + joinPoint.getArgs().toString());
+        String xx=JSONObject.toJSONString(joinPoint.getArgs());
+        int index=xx.indexOf("userName");
+        int index2=xx.indexOf('"'+","+'"'+"userPass");
+        String cha=xx.substring(index+11,index2);
+        username = cha;
+    }
     //定义切点 @Pointcut
     //在注解的位置切入代码
     @Pointcut("@annotation(com.xingji.frameproject.annotation.Log)")
     public void logPoinCut() {
+
     }
     //切面 配置通知
     @AfterReturning("logPoinCut()")
@@ -85,21 +135,9 @@ public class LogAspect {
         //获取操作时间
         operationlog.setCreatetime(new Date());
         //获取用户名
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//            Object principal = authentication.getPrincipal();
-//            if (principal instanceof SysUser) {
-//                SysUser u = (SysUser) principal;
-//                operationlog.setOperator(u.getUserName());
-//            }
-//        }
-
-        operationlog.setOperator("suan");
-
-
+        operationlog.setOperator(username);
         //获取用户ip地址
         String ip= InetAddress.getLocalHost().getHostAddress();
-//         request =((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         operationlog.setIpaddress(ip);
         //调用service保存SysLog实体类到数据库
         operationlogService.InsertLog(operationlog);

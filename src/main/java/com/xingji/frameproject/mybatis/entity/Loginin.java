@@ -39,6 +39,10 @@ public class Loginin implements Serializable {
      * 操作员类别
      */
     private String typeofoperator;
+    /**
+     * 登陆方式
+     */
+    private String logintype;
 
     private static final long serialVersionUID = 1L;
 }
