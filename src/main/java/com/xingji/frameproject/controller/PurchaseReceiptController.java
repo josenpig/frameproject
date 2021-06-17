@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
-import com.xingji.frameproject.service.PurchaseOrderService;
-import com.xingji.frameproject.service.PurchaseReceiptDetailsService;
-import com.xingji.frameproject.service.PurchaseReceiptService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseReceiptVo;
 import com.xingji.frameproject.vo.SaleDeliveryVo;
@@ -35,6 +33,12 @@ public class PurchaseReceiptController {
     private PurchaseReceiptDetailsService detailsService;
     @Resource
     private PurchaseOrderService orderService;
+    @Resource
+    private BaseOpeningService bos;
+    @Resource
+    private PurchaseOrderService purchaseOrderService;
+    @Resource
+    private CapitalPayableService payableService;
 
     /**
      * 通过主键查询单条数据
@@ -94,6 +98,51 @@ public class PurchaseReceiptController {
         vo.setReceipt(receipt);
         vo.setReceiptDetails(deliveryDetails);
         return AjaxResponse.success(vo);
+    }
+
+    /**
+     * 修改采购出入库单审批状态
+     * @param orderid 主键
+     * @return 数据
+     */
+    @GetMapping("/approval")
+    public AjaxResponse approvalorder(String orderid,int type,String user){
+        PurchaseReceipt receipt = purchaseReceiptService.queryById(orderid);
+        receipt.setUpdateDate(new Date());
+        receipt.setVettingState(type);
+        receipt.setVettingName(user);
+        receipt.setUpdatePeople(user);
+
+        purchaseReceiptService.update(receipt);
+        //审批通过产品入库加上当前库存数量与预计库存数量
+        if(type == 1) {
+            List<PurchaseReceiptDetails> details=detailsService.queryAllByOrderId(receipt.getId());
+            for(PurchaseReceiptDetails prd:details){
+                bos.producteadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
+                bos.expectadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
+            }
+            //新增应付单据
+            CapitalPayable payable=new CapitalPayable();
+            payable.setDeliveryId(receipt.getId());
+            payable.setDeliveryTime(receipt.getInboundDate());
+            payable.setVendor(receipt.getVendorName());
+            payable.setBuyer(receipt.getBuyerName());
+            payable.setPayables(receipt.getOffersPrice());
+            payable.setPaid(0.00);
+            payable.setUnpaid(receipt.getOffersPrice());
+            payable.setFounder(user);
+            payable.setCaseState(0);
+            payableService.insert(payable);
+        }
+        //如果绑定了订单就修改订单为已出库
+        if (type == 1 && receipt.getAssociatedOrder()!=null){
+            PurchaseOrder order= purchaseOrderService.queryById(receipt.getAssociatedOrder());
+            order.setUpdateDate(new Date());
+            order.setInboundState(1);
+            order.setOrderState(1);
+            purchaseOrderService.update(order);
+        }
+        return AjaxResponse.success(receipt);
     }
 
 }

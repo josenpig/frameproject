@@ -136,7 +136,7 @@
         select
         <include refid="PurchaseReceiptDetailsCol"></include>
         from frameproject.purchase_receipt_details
-        where rereceiptid=#{id}
+        where receiptid=#{id}
     </select>
 
     <!--新增所有列-->
