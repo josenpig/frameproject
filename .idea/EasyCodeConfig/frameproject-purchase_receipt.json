@@ -3,6 +3,7 @@
   "preName" : "",
   "comment" : null,
   "templateGroupName" : "Default",
+  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
