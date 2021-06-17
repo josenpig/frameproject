@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalPayableDao">
-    <!-- 结果集 -->
+
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayable" id="CapitalPayableMap">
         <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
@@ -17,31 +17,28 @@
         <result property="lastCollectionTime" column="last_collection_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <!-- 基本字段 -->
-    <sql id="Base_Column_List">
-        delivery_id
-        , delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time    </sql>
-
-    <!-- 查询单个 -->
-    <select id="selectById" resultMap="CapitalPayableMap">
+    <!--查询单个-->
+    <select id="queryById" resultMap="CapitalPayableMap">
         select
-        <include refid="Base_Column_List"/>
-        from capital_payable
+          delivery_id, delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time
+        from frameproject.capital_payable
         where delivery_id = #{deliveryId}
     </select>
 
-    <!-- 查询全部 -->
-    <select id="selectAll" resultMap="CapitalPayableMap">
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CapitalPayableMap">
         select
-        <include refid="Base_Column_List"/>
-        from capital_payable
+          delivery_id, delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time
+        from frameproject.capital_payable
+        limit #{offset}, #{limit}
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="selectList" resultMap="CapitalPayableMap">
+    <select id="queryAll" resultMap="CapitalPayableMap">
         select
-        <include refid="Base_Column_List"/>
-        from capital_payable
+        delivery_id, delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark,
+        last_collection_time
+        from frameproject.capital_payable
         <where>
             <if test="deliveryId != null and deliveryId != ''">
                 and delivery_id = #{deliveryId}
@@ -82,28 +79,40 @@
         </where>
     </select>
 
-    <!-- 新增所有列 -->
+    <!--新增所有列-->
     <insert id="insert" keyProperty="deliveryId" useGeneratedKeys="true">
-        insert into capital_payable(delivery_id, delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder,
-                                    case_state, payment_remark, last_collection_time)
-        values (#{deliveryId}, #{deliveryTime}, #{vendor}, #{buyer}, #{payables}, #{paid}, #{unpaid}, #{remarks},
-                #{founder}, #{caseState}, #{paymentRemark}, #{lastCollectionTime})
+        insert into frameproject.capital_payable(delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time)
+        values (#{deliveryTime}, #{vendor}, #{buyer}, #{payables}, #{paid}, #{unpaid}, #{remarks}, #{founder}, #{caseState}, #{paymentRemark}, #{lastCollectionTime})
     </insert>
 
-    <!-- 批量新增 -->
-    <insert id="batchInsert">
-        insert into capital_payable(delivery_id, delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder,
+    <insert id="insertBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.capital_payable(delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder,
         case_state, payment_remark, last_collection_time)
         values
-        <foreach collection="capitalPayables" item="item" index="index" separator=",">
-            (
-            #{item.deliveryId}, #{item.deliveryTime}, #{item.vendor}, #{item.buyer}, #{item.payables}, #{item.paid},
-            #{item.unpaid}, #{item.remarks}, #{item.founder}, #{item.caseState}, #{item.paymentRemark},
-            #{item.lastCollectionTime} )
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.vendor}, #{entity.buyer}, #{entity.payables}, #{entity.paid},
+            #{entity.unpaid}, #{entity.remarks}, #{entity.founder}, #{entity.caseState}, #{entity.paymentRemark},
+            #{entity.lastCollectionTime})
         </foreach>
     </insert>
 
-    <!-- 通过主键修改数据 -->
+    <insert id="insertOrUpdateBatch" keyProperty="deliveryId" useGeneratedKeys="true">
+        insert into frameproject.capital_payable(delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder,
+        case_state, payment_remark, last_collection_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deliveryTime}, #{entity.vendor}, #{entity.buyer}, #{entity.payables}, #{entity.paid},
+            #{entity.unpaid}, #{entity.remarks}, #{entity.founder}, #{entity.caseState}, #{entity.paymentRemark},
+            #{entity.lastCollectionTime})
+        </foreach>
+        on duplicate key update
+        delivery_time = values(delivery_time) , vendor = values(vendor) , buyer = values(buyer) , payables =
+        values(payables) , paid = values(paid) , unpaid = values(unpaid) , remarks = values(remarks) , founder =
+        values(founder) , case_state = values(case_state) , payment_remark = values(payment_remark) ,
+        last_collection_time = values(last_collection_time)
+    </insert>
+
+    <!--通过主键修改数据-->
     <update id="update">
         update frameproject.capital_payable
         <set>
@@ -146,14 +155,8 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete
-        from capital_payable
-        where delivery_id = #{deliveryId}
+        delete from frameproject.capital_payable where delivery_id = #{deliveryId}
     </delete>
 
-    <!-- 总数 -->
-    <select id="count" resultType="int">
-        select count(*)
-        from capital_payable
-    </select>
 </mapper>
+

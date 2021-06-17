@@ -2,7 +2,7 @@
   "name" : "CapitalPayable",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "EIMS",
+  "templateGroupName" : "Default",
   "fullColumn" : [ {
     "name" : "deliveryId",
     "comment" : null,
