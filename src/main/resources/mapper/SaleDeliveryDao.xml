@@ -60,7 +60,7 @@
     </select>
     <!--查询单个-->
     <select id="queryById" resultMap="SaleDeliveryMap">
-        select a.*,b.* from sale_delivery a INNER JOIN base_customer b on a.customer=b.customer_number
+        select * from sale_delivery
         where delivery_id = #{deliveryId}
     </select>
     <!--查询指定行数据-->
@@ -148,7 +148,7 @@
         </where>
     </select>
     <!--通过实体作为或者条件查询-->
-    <select id="conditionpage" resultMap="SaleDeliveryMap">
+    <select id="conditionpage" resultMap="SaleDeliveryView">
         select a.*,b.* from sale_delivery a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="orderId != null and orderId != ''">
