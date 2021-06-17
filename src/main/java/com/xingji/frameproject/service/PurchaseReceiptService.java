@@ -1,14 +1,17 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 
 import java.util.List;
+
+import com.github.pagehelper.PageInfo;
 
 /**
  * (PurchaseReceipt)表服务接口
  *
  * @author makejava
- * @since 2021-06-15 18:48:35
+ * @since 2021-06-16 10:00:49
  */
 public interface PurchaseReceiptService {
 
@@ -21,13 +24,28 @@ public interface PurchaseReceiptService {
     PurchaseReceipt queryById(String id);
 
     /**
-     * 查询多条数据
+     * 查询所有数据
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
+     * @param purchaseReceiptQueryForm 实例对象
+     * @return 实例对象
+     */
+    PageInfo<PurchaseReceipt> queryAll(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
+
+    /**
+     * 根据查询条件搜索数据
+     *
+     * @param purchaseReceiptQueryForm
      * @return 对象列表
      */
-    List<PurchaseReceipt> queryAllByLimit(int offset, int limit);
+    PageInfo<PurchaseReceipt> queryBySearch(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
+
+    /**
+     * 根据查询条件筛选数据
+     *
+     * @param purchaseReceiptQueryForm
+     * @return 对象列表
+     */
+    PageInfo<PurchaseReceipt> queryByScreen(PurchaseReceiptQueryForm purchaseReceiptQueryForm);
 
     /**
      * 新增数据
@@ -38,12 +56,28 @@ public interface PurchaseReceiptService {
     PurchaseReceipt insert(PurchaseReceipt purchaseReceipt);
 
     /**
+     * 批量新增数据
+     *
+     * @param PurchaseReceiptList 实例对象列表
+     * @return 影响行数
+     */
+    boolean insertBatch(List<PurchaseReceipt> PurchaseReceiptList);
+
+    /**
      * 修改数据
      *
      * @param purchaseReceipt 实例对象
      * @return 实例对象
      */
     PurchaseReceipt update(PurchaseReceipt purchaseReceipt);
+
+    /**
+     * 批量修改数据
+     *
+     * @param purchaseReceiptList 实例对象列表
+     * @return 影响行数
+     */
+    boolean updateBatch(List<PurchaseReceipt> purchaseReceiptList);
 
     /**
      * 通过主键删除数据
@@ -53,4 +87,11 @@ public interface PurchaseReceiptService {
      */
     boolean deleteById(String id);
 
+    /**
+     * 批量删除数据
+     *
+     * @param ids 主键列表
+     * @return 是否成功
+     */
+    boolean deleteBatch(List<Integer> ids);
 }
