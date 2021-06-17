@@ -20,7 +20,7 @@ public class SaleReceiptVo {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date saleTime;
     private String customer;
-    private BigDecimal receiptMoney;
-    private BigDecimal receivedMoney;
-    private BigDecimal uncollectedMoney;
+    private Double receiptMoney;
+    private Double receivedMoney;
+    private Double uncollectedMoney;
 }

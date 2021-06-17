@@ -1,5 +1,4 @@
 package com.xingji.frameproject.mybatis.dao;
-
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

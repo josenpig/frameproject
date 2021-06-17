@@ -35,6 +35,8 @@ public class CapitalReceiptController {
     @Resource
     private CapitalReceiptService crs;
     @Resource
+    private SysUserService sus;
+    @Resource
     private CapitalReceivableService crsok;
     @Resource
     private CapitalReceiptBillService crbs;
@@ -58,6 +60,11 @@ public class CapitalReceiptController {
         List<CapitalReceiptBill> bills=crbs.queryById(id);
         List<CapitalReceiptAccount> accounts=cras.queryById(id);
         List<CapitalAccountVo> vos=new ArrayList<>();
+        receipt.setFounder(sus.queryById(Integer.valueOf(receipt.getFounder())).getUserName());
+        if(receipt.getApprover()!=null) {
+            receipt.setApprover(sus.queryById(Integer.valueOf(receipt.getApprover())).getUserName());
+        }
+        receipt.setPayee(sus.queryById(Integer.valueOf(receipt.getPayee())).getUserName());
         for (int i=0;i<accounts.size();i++){
             BaseCapitalAccountVo basevo=new BaseCapitalAccountVo();
             basevo.setCapitalId(accounts.get(i).getFundAccount());
@@ -105,6 +112,7 @@ public class CapitalReceiptController {
         for (int j=0;j<accounts.size();j++){
             accounts.get(j).setReceiptId(receipt.getReceiptId());
         }
+        receipt.setFounder(String.valueOf(sus.queryUserIdByUserName(receipt.getFounder())));
         receipt.setApprovalState(type);
         receipt.setFoundTime(new Date());
         receipt.setUpdateTime(new Date());
@@ -123,6 +131,13 @@ public class CapitalReceiptController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<CapitalReceipt> list=crs.queryAll(capitalReceipt);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null){
+                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setPayee(sus.queryById(Integer.valueOf(list.get(i).getPayee())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -156,7 +171,7 @@ public class CapitalReceiptController {
         CapitalReceipt receipt=new CapitalReceipt();
         receipt.setReceiptId(orderid);
         receipt.setApprovalState(type);
-        receipt.setApprover(user);
+        receipt.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         receipt.setApprovalRemarks(approvalremarks);
         receipt.setLastApprovalTime(new Date());
         receipt.setUpdateTime(new Date());

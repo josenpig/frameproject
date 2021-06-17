@@ -88,6 +88,13 @@ public interface SysUserService {
 
     List<SysUser> queryAll(SysUser sysUser);
 
+    /**
+     * 通过UsernName查询user
+     * @param userName
+     * @return
+     */
     Integer queryUserIdByUserName(String userName);
+
+
 
 }

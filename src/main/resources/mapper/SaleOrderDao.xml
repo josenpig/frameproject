@@ -34,6 +34,7 @@
         <result property="saleTime" column="order_time" jdbcType="TIMESTAMP"/>
         <result property="receivedMoney" column="advance" jdbcType="NUMERIC"/>
         <result property="receiptMoney" column="receivables" jdbcType="NUMERIC"/>
+        <result property="uncollectedMoney" column="receivables-advance" jdbcType="NUMERIC"/>
         <result property="customer" column="customer" jdbcType="VARCHAR"/>
     </resultMap>
     <!--查询收款订单-->
@@ -51,7 +52,7 @@
     </select>
     <!--查询收款订单-->
     <select id="querythisReceipt" resultMap="SaleReceipt">
-        select * from frameproject.sale_order
+        select *,receivables-advance from frameproject.sale_order
         where order_id=#{saleId}
     </select>
     <!--查询单个-->

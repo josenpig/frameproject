@@ -47,6 +47,8 @@ public class SaleReturnController {
     private BaseOpeningService bos;
     @Resource
     private CapitalReceivableService crs;
+    @Resource
+    private SysUserService sus;
 
     /**
      * 通过主键查询销售退货单及销售t退货单详情
@@ -58,6 +60,11 @@ public class SaleReturnController {
         SaleReturn saleReturn=srs.queryById(id);
         List<SaleReturnDetails> returnDetails=srds.queryById(id);
         SaleReturnVo vo=new SaleReturnVo();
+        saleReturn.setFounder(sus.queryById(Integer.valueOf(saleReturn.getFounder())).getUserName());
+        if(saleReturn.getApprover()!=null) {
+            saleReturn.setApprover(sus.queryById(Integer.valueOf(saleReturn.getApprover())).getUserName());
+        }
+        saleReturn.setSalesmen(sus.queryById(Integer.valueOf(saleReturn.getSalesmen())).getUserName());
         vo.setSalereturn(saleReturn);
         vo.setReturndetails(returnDetails);
         return AjaxResponse.success(vo);
@@ -75,6 +82,8 @@ public class SaleReturnController {
         SaleReturn salereturn = JSON.parseObject(one, SaleReturn.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleReturnDetails> salereturndetails= JSONArray.parseArray(two, SaleReturnDetails.class);
+        salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
+        salereturn.setSalesmen(String.valueOf(sus.queryUserIdByUserName(salereturn.getSalesmen())));
         salereturn.setFoundTime(new Date());
         salereturn.setUpdateTime(new Date());
         salereturn.setApprovalState(type);
@@ -111,7 +120,7 @@ public class SaleReturnController {
         SaleReturn order=new SaleReturn();
         order.setReturnId(orderid);
         order.setApprovalState(type);
-        order.setApprover(user);
+        order.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         order.setApprovalRemarks(approvalremarks);
         order.setLastApprovalTime(new Date());
         order.setUpdateTime(new Date());
@@ -155,6 +164,13 @@ public class SaleReturnController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<SaleReturn> list=srs.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null){
+                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);

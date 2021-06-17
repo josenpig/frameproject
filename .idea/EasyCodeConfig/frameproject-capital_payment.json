@@ -1,109 +1,59 @@
 {
-  "name" : "PurchaseReceipt",
+  "name" : "CapitalPayment",
   "preName" : "",
   "comment" : null,
   "templateGroupName" : "Default",
-  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
-    "name" : "id",
+    "name" : "paymentId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "inboundDate",
+    "name" : "paymentTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "vendorName",
+    "name" : "vendor",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "buyerName",
+    "name" : "drawee",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "buyerType",
+    "name" : "paymentType",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "disrate",
+    "name" : "paymentMoney",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "dismoney",
+    "name" : "piaMoney",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "offersPrice",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "depotName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "vettingName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "lastVettingTime",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "vettingState",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "associatedOrder",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "exitOrderId",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "paymentOrder",
+    "name" : "piaBalance",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -117,49 +67,56 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "invoiceId",
+    "name" : "founder",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "createPeople",
+    "name" : "remarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "contact",
+    "name" : "approvalState",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updatePeople",
+    "name" : "approver",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "createDate",
+    "name" : "lastApprovalTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "updateDate",
+    "name" : "foundTime",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "counter",
+    "name" : "updateTime",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "approvalRemarks",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -168,7 +125,7 @@
   } ],
   "pkColumn" : null,
   "otherColumn" : null,
-  "savePackageName" : "com.xingji.frameproject",
-  "savePath" : "./src/main/java/com/xingji/frameproject",
+  "savePackageName" : "com.xingji.frameproject.mybatis",
+  "savePath" : "./src/main/java/com/xingji/frameproject/mybatis",
   "saveModelName" : "frameproject"
 }

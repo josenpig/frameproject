@@ -3,6 +3,7 @@ package com.xingji.frameproject.service;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
 import com.xingji.frameproject.mybatis.entity.SaleOrder;
+import com.xingji.frameproject.vo.PurchaseReceiptVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
 
 import java.util.List;
@@ -100,4 +101,6 @@ public interface PurchaseOrderService {
      * @return
      */
     List<PurchaseOrder> queryAllByPage(PurchaseOrderQueryForm queryForm);
+
+    PurchaseReceiptVo querythisReceipt(String purchaseId);
 }
