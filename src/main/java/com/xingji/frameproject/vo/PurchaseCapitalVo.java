@@ -1,5 +1,20 @@
 package com.xingji.frameproject.vo;
 
+<<<<<<< HEAD
+import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
+import lombok.Data;
+
+import java.util.List;
+
+/**
+ * 采购入库单详情Vo
+ */
+@Data
+public class PurchaseReceiptVo {
+    private PurchaseReceipt receipt;
+    private List<PurchaseReceiptDetails> receiptDetails;
+=======
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,4 +38,5 @@ public class PurchaseCapitalVo {
     private Double payableMoney;
     private Double paidMoney;
     private Double unpaidMoney;
+>>>>>>> 462ab7b18968e3b4066d2ecb0fff950ccb45c82e
 }

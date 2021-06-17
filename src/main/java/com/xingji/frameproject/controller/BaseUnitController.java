@@ -61,6 +61,17 @@ public class BaseUnitController {
     };
 
     /**
+     * 查询所有单位信息返回集合
+     * @return 单位集合
+     */
+    @GetMapping("/findAllUnit/list")
+    public AjaxResponse findAllUnitToList(){
+        BaseUnit baseUnit=new BaseUnit();
+        List<BaseUnit> list=baseUnitService.queryAll(baseUnit);
+        return AjaxResponse.success(list);
+    };
+
+    /**
      * 删除单位
      * @param uid 单位编号
      * @return

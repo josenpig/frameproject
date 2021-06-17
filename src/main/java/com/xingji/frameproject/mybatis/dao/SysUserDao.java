@@ -102,7 +102,15 @@ public interface SysUserDao {
      */
     List<SysUser> roleusers(Integer id);
 
+    /**
+     * 通过UsernName查询user
+     * @param userName
+     * @return
+     */
     Integer queryUserIdByUserName(String userName);
 
+    Integer queryUserIdByPhone(String phone);
+
+    String queryUserNameByUserId(Integer userid);
 }
 

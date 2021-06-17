@@ -186,5 +186,15 @@
         from sys_user
         where user_name=#{userName}
     </select>
+    <select id="queryUserIdByPhone" resultType="java.lang.Integer">
+        select user_id
+        from sys_user
+        where user_phone=#{phone}
+    </select>
+    <select id="queryUserNameByUserId" resultType="java.lang.String">
+        select user_name
+        from sys_user
+        where user_id=#{userid}
+    </select>
 </mapper>
 
