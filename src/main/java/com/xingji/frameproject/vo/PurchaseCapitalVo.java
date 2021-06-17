@@ -13,7 +13,7 @@ import java.util.Date;
  * @version 1.0
  */
 @Data
-public class PurchaseReceiptVo {
+public class PurchaseCapitalVo {
     private String purchaseId;
     private String purchaseType;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")

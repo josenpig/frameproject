@@ -83,10 +83,8 @@ public interface SaleReturnDao {
     int deleteById(String returnId);
     /**
      * 分页查询
-     *
      * @return 影响行数
      */
-    List <SaleReturn> queryAllByPage();
     List <SaleReturn> conditionpage(SaleConditionPageVo order);
 }
 

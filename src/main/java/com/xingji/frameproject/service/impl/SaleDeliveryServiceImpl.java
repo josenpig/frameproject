@@ -24,13 +24,22 @@ public class SaleDeliveryServiceImpl implements SaleDeliveryService {
      * 通过ID查询单条数据
      *
      * @param deliveryId 主键
+     * @return 实例对象vo
+     */
+    @Override
+    public SaleDelivery queryByIdVo(String deliveryId) {
+        return this.saleDeliveryDao.queryByIdVo(deliveryId);
+    }
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param deliveryId 主键
      * @return 实例对象
      */
     @Override
     public SaleDelivery queryById(String deliveryId) {
         return this.saleDeliveryDao.queryById(deliveryId);
     }
-
     /**
      * 查询多条数据
      *
@@ -83,10 +92,6 @@ public class SaleDeliveryServiceImpl implements SaleDeliveryService {
         return this.saleDeliveryDao.deleteById(deliveryId) > 0;
     }
 
-    @Override
-    public List<SaleDelivery> queryAllByPage() {
-        return this.saleDeliveryDao.queryAllByPage();
-    }
     @Override
     public List<SaleDelivery> canreturn() {
         return this.saleDeliveryDao.canreturn();

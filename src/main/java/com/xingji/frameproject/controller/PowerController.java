@@ -73,6 +73,7 @@ public class PowerController {
         List<SysMenu> sysMenu=JSONArray.parseArray(menus, SysMenu.class);
         String roles = jsonObject.getString("roles");//角色
         SysRole sysRole = JSON.parseObject(roles, SysRole.class);
+        sysRole.setUpdatedBy(String.valueOf(sus.queryUserIdByUserName(sysRole.getUpdatedBy())));
         sysRole.setUpdateTime(new Date());
         //判断菜单数据是否被修改
         if (sysMenu.size()==0){
@@ -106,6 +107,7 @@ public class PowerController {
         List<SysMenu> sysMenu=JSONArray.parseArray(menus, SysMenu.class);
         String roles = jsonObject.getString("roles");//角色
         SysRole sysRole = JSON.parseObject(roles, SysRole.class);
+        sysRole.setFounder(String.valueOf(sus.queryUserIdByUserName(sysRole.getFounder())));
         sysRole.setFoundTime(new Date());
         sysRole.setDelFlag(0);
         //新增角色
@@ -153,6 +155,7 @@ public class PowerController {
         SysUser user=JSON.parseObject(one, SysUser.class);
         String roles = jsonObject.getString("roles");//角色
         List<SysRole> sysRole = JSONArray.parseArray(roles, SysRole.class);
+        user.setFounder(String.valueOf(sus.queryUserIdByUserName(user.getFounder())));
         user.setFoundTime(new Date());
         user.setDelFlag(0);
         //新增用户
@@ -180,7 +183,7 @@ public class PowerController {
         String roles = jsonObject.getString("roles");//角色
         List<SysRole> sysRole = JSONArray.parseArray(roles, SysRole.class);
         user.setUpdateTime(new Date());
-        System.out.println(user.toString());
+        user.setUpdatedBy(String.valueOf(sus.queryUserIdByUserName(user.getUpdatedBy())));
         //修改用户
         if(sysRole.size()==0){
             return AjaxResponse.success(sus.update(user));
@@ -252,6 +255,10 @@ public class PowerController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<SysUser> users=sus.queryAll(user);
+        for(int i=0;i<users.size();i++){
+            users.get(i).setFounder(sus.queryById(Integer.valueOf(users.get(i).getFounder())).getUserName());
+            users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",users);
         return AjaxResponse.success(map);
@@ -271,6 +278,10 @@ public class PowerController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<SysRole> users=srs.queryAll(role);
+        for(int i=0;i<users.size();i++){
+            users.get(i).setFounder(sus.queryById(Integer.valueOf(users.get(i).getFounder())).getUserName());
+            users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+        }
         map.put("total",page.getTotal());
         map.put("rows",users);
         return AjaxResponse.success(map);

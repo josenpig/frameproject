@@ -1,7 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
-import com.xingji.frameproject.vo.PurchaseReceiptVo;
+import com.xingji.frameproject.vo.PurchaseCapitalVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -100,5 +100,5 @@ public interface PurchaseOrderDao {
      * @param purchaseId 采购单id
      * @return 对象列表
      */
-    PurchaseReceiptVo querythisReceipt(String purchaseId);
+    PurchaseCapitalVo querythisReceipt(String purchaseId);
 }

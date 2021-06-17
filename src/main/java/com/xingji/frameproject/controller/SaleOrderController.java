@@ -94,6 +94,7 @@ public class SaleOrderController {
         order.setDeliveryState(0);
         order.setAdvance(0.00);
         //添加销售订单单信息
+        System.out.println(orderdetails.toString());
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setOrderId(order.getOrderId());
         }

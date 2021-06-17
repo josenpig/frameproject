@@ -28,7 +28,7 @@
         <result property="ostate" column="ostate" jdbcType="NUMERIC"/>
     </resultMap>
     <!--资金付款-->
-    <resultMap id="PurchaseReceipt" type="com.xingji.frameproject.vo.PurchaseReceiptVo">
+    <resultMap id="PurchaseReceipt" type="com.xingji.frameproject.vo.PurchaseCapitalVo">
         <result property="purchaseId" column="id" jdbcType="VARCHAR"/>
         <result property="purchaseTime" column="documents_date" jdbcType="TIMESTAMP"/>
         <result property="payableMoney" column="offers_price" jdbcType="NUMERIC"/>
