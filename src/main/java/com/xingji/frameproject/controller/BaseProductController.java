@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.service.*;
@@ -103,6 +102,7 @@ public class BaseProductController {
     @GetMapping("/findAllProduct")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
+        System.out.println(currentPage+","+pageSize);
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         BaseProductVo baseProductVo=new BaseProductVo();
         List<BaseProductVo> productShowList=baseProductService.findAllProduct(baseProductVo);
@@ -279,6 +279,30 @@ public class BaseProductController {
         return  AjaxResponse.success(baseProduct1);
     };
 
+    /**
+     * 修改产品
+     * @param add
+     * @return
+     */
+    @RequestMapping("/updateProduct")
+    public AjaxResponse updateProduct(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("Product");
+        BaseProduct product = JSON.parseObject(one, BaseProduct.class);
+        //获取最初产品信息 如果新的产品信息和旧的不同则更新数据
+        BaseProduct after= baseProductService.queryById(product.getProductId());
+        BaseProduct newc=new BaseProduct();
+        if(after.getProductName().equals(product.getProductName()) && after.getIngredient().equals(product.getIngredient()) &&  after.getProductSpec().equals(product.getProductSpec()) &&  Double.doubleToLongBits(after.getPurchaseMoney())==Double.doubleToLongBits(product.getPurchaseMoney()) &&  Double.doubleToLongBits(after.getPurchaseUnitPrice())==Double.doubleToLongBits(product.getPurchaseUnitPrice()) &&  after.getRemarks().equals(product.getRemarks()) &&  after.getProductDescribe().equals(product.getProductDescribe())
+        ){
+            newc = after;
+        }else{
+            product.setUpdateTime(new Date());
+            newc = baseProductService.update(product);
+        };
+        return AjaxResponse.success(newc);
+    };
+    
     /**
      * 去除指定字符
      * @param source
