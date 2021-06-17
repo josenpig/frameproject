@@ -56,7 +56,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户账户登录",produces = "application/json")
-    public AjaxResponse login(HttpSession session, @RequestBody SysUser user) {
+    public AjaxResponse login(@RequestBody SysUser user) {
         SysUser loginuser = us.login(user.getUserName());
         if (loginuser == null) {
             return AjaxResponse.success("账户不存在");
@@ -79,6 +79,7 @@ public class UserController {
                 loginin.setLogintime(new Date());
                 loginin.setOperator(loginuser.getUserName());
                 loginin.setTypeofoperator(roleNames + "");
+                loginin.setLogintype("用户名密码");
                 //插入一条登录日志
                 logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
@@ -110,7 +111,7 @@ public class UserController {
 
     @PostMapping("/login/fast")
     @ApiOperation(value = "用户手机号登录",produces = "application/json")
-    public AjaxResponse gologin(String phone,String code) {
+    public AjaxResponse gologinByPhone(String phone,String code) {
         SysUser loginuser = us.gologin(phone);
         if (loginuser == null) {
             return  AjaxResponse.success("手机号不存在");
@@ -120,7 +121,26 @@ public class UserController {
             }else if (sendSms.isphonecode(phone)==null || !sendSms.isphonecode(phone).equals(code)) {
                 return  AjaxResponse.success("手机号与验证码不匹配或已失效！");
             } else {
-                Integer userid=us.queryUserIdByUserName(loginuser.getUserName());
+                //记录登录日志
+                //用户id
+                Integer userid=us.queryUserIdByPhone(phone);
+                //用户名
+                String  username=us.queryUserNameByUserId(userid);
+                Loginin loginin=new Loginin();
+                //通过用户id获取角色id
+                List<Integer> roleId =  sysUserRoleService.queryRoleIdbyUserId(userid);
+                //通过角色id获取角色名
+                List<String> roleNames=new ArrayList<String>();
+                for (int i=0;i<roleId.size();i++) {
+                    String roleName= sysRoleService.queryRoleNameByroleId(roleId.get(i));
+                    roleNames.add(roleName);
+                }
+                loginin.setLogintime(new Date());
+                loginin.setOperator(username);
+                loginin.setTypeofoperator(roleNames + "");
+                loginin.setLogintype("手机号验证码");
+                //插入一条登录日志
+                logininService.insertLoginin(loginin);
                 List<SysMenu> usermenu = us.usermenu(loginuser.getUserId());
                 //获取父菜单
                 List<SysMenu> treemenu = usermenu.stream().filter(m -> m.getParentId() == 0).map(

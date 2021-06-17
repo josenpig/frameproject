@@ -49,6 +49,7 @@ public class OperationlogController {
      * @param logintime
      * @return
      */
+    @Log("test111")
     @GetMapping("/findloginlogbycondition")
     public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
@@ -210,7 +211,7 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTimeAndOperatorAndInput(time,"ss",input);
+                list=operationlogService.findbyCreateTimeAndOperatorAndInput(time,operator,input);
             }
             //时间和操作员不为空时
             else if(((createtime!=null && createtime!="") && (!createtime.equals("") && !createtime.equals(null)))
@@ -228,13 +229,13 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTimeAndOperator(time,"ss");
+                list=operationlogService.findbyCreateTimeAndOperator(time,operator);
             }
             //操作员和操作内容不为空时
             else if(((operator!=null && operator!="")&&(!operator.equals("") && !operator.equals(null)))
                     && ((input!=null && input!="") && (!input.equals("") && !input.equals(null)))){
                 System.out.println("______________findbyInputAndOperator");
-                list=operationlogService.findbyInputAndOperator("ss",input);
+                list=operationlogService.findbyInputAndOperator(operator,input);
             }
             //时间和操作内容不为空时
             else if(((createtime!=null && createtime!="") && (!createtime.equals("") && !createtime.equals(null)))
@@ -279,7 +280,7 @@ public class OperationlogController {
             //操作员不为空时
             else if((operator!=null && operator!="") && (!operator.equals("") && !operator.equals(null))){
                 System.out.println("______________findbyOperator");
-                list=operationlogService.findbyOperator("ss");
+                list=operationlogService.findbyOperator(operator);
             }
         }else{
             list=operationlogService.findAll(operationlog);

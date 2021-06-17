@@ -108,5 +108,9 @@ public interface SysUserDao {
      * @return
      */
     Integer queryUserIdByUserName(String userName);
+
+    Integer queryUserIdByPhone(String phone);
+
+    String queryUserNameByUserId(Integer userid);
 }
 
