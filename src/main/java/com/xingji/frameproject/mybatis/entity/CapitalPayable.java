@@ -1,16 +1,19 @@
 package com.xingji.frameproject.mybatis.entity;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * (CapitalPayable)实体类
  *
  * @author makejava
- * @since 2021-06-15 17:16:18
+ * @since 2021-06-17 11:19:04
  */
+@Data
 public class CapitalPayable implements Serializable {
-    private static final long serialVersionUID = -45273393782735898L;
+    private static final long serialVersionUID = -35489164059059817L;
     /**
      * 单据编号
      */
@@ -20,25 +23,25 @@ public class CapitalPayable implements Serializable {
      */
     private Date deliveryTime;
     /**
-     * 客户
+     * 供应商
      */
-    private String customer;
+    private String vendor;
     /**
-     * 销售人员
+     * 采购人员
      */
-    private String salesmen;
+    private String buyer;
     /**
-     * 应收金额
+     * 应付金额
      */
-    private Double receivables;
+    private Double payables;
     /**
-     * 已收金额
+     * 已付金额
      */
-    private Double received;
+    private Double paid;
     /**
-     * 未收金额
+     * 未付金额
      */
-    private Double uncollected;
+    private Double unpaid;
     /**
      * 单据备注
      */
@@ -52,109 +55,11 @@ public class CapitalPayable implements Serializable {
      */
     private Integer caseState;
     /**
-     * 最后收款备注
+     * 最后付款备注
      */
-    private String receiptRemark;
+    private String paymentRemark;
     /**
-     * 最后收款时间
+     * 最后付款时间
      */
     private Date lastCollectionTime;
-
-
-    public String getDeliveryId() {
-        return deliveryId;
-    }
-
-    public void setDeliveryId(String deliveryId) {
-        this.deliveryId = deliveryId;
-    }
-
-    public Date getDeliveryTime() {
-        return deliveryTime;
-    }
-
-    public void setDeliveryTime(Date deliveryTime) {
-        this.deliveryTime = deliveryTime;
-    }
-
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
-    public String getSalesmen() {
-        return salesmen;
-    }
-
-    public void setSalesmen(String salesmen) {
-        this.salesmen = salesmen;
-    }
-
-    public Double getReceivables() {
-        return receivables;
-    }
-
-    public void setReceivables(Double receivables) {
-        this.receivables = receivables;
-    }
-
-    public Double getReceived() {
-        return received;
-    }
-
-    public void setReceived(Double received) {
-        this.received = received;
-    }
-
-    public Double getUncollected() {
-        return uncollected;
-    }
-
-    public void setUncollected(Double uncollected) {
-        this.uncollected = uncollected;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
-    public String getFounder() {
-        return founder;
-    }
-
-    public void setFounder(String founder) {
-        this.founder = founder;
-    }
-
-    public Integer getCaseState() {
-        return caseState;
-    }
-
-    public void setCaseState(Integer caseState) {
-        this.caseState = caseState;
-    }
-
-    public String getReceiptRemark() {
-        return receiptRemark;
-    }
-
-    public void setReceiptRemark(String receiptRemark) {
-        this.receiptRemark = receiptRemark;
-    }
-
-    public Date getLastCollectionTime() {
-        return lastCollectionTime;
-    }
-
-    public void setLastCollectionTime(Date lastCollectionTime) {
-        this.lastCollectionTime = lastCollectionTime;
-    }
-
 }

@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="frameproject" />
-        <module name="frame" />
         <module name="nacos-test-1" />
+        <module name="frame" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
