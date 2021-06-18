@@ -138,7 +138,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
      * @return 对象列表
      */
     @Override
-    public PurchaseCapitalVo querythisReceipt(String purchaseId){
-        return this.purchaseOrderDao.querythisReceipt(purchaseId);
+    public PurchaseCapitalVo querythisPayment(String purchaseId){
+        return this.purchaseOrderDao.querythisPayment(purchaseId);
     }
 }
