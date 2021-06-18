@@ -1,17 +1,13 @@
 package com.xingji.frameproject.vo.form;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
 
 import java.io.Serializable;
-import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Data
-@ToString
 public class PurchaseOrderQueryForm implements Serializable {
     private static final long serialVersionUID = -82383033756037587L;
     /**

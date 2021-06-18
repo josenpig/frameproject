@@ -133,77 +133,71 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
+    <!--通过实体作为或者条件查询-->
     <select id="queryOrByPojo" resultMap="PurchaseOrderMap">
         select
-        <include refid="Base_Column_List"/>
+        id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state,
+        depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state,
+        buyer_name, create_people, create_date, update_date, counter, ostate
         from purchase_order
         <where>
-            <if test="id != null and id != ''">
-                or id = #{id}
+            <if test="orderid != null and orderid != ''">
+                and id like '%'||#{orderid}||'%'
             </if>
-            <if test="deliceryDate != null">
-                or delicery_date = #{deliceryDate}
+            <if test="delicerydate != null and delicerydate=='今天'">
+                and to_days(delicery_date) = to_days(now())
             </if>
-            <if test="vendorName != null and vendorName != ''">
-                or vendor_name = #{vendorName}
+            <if test="delicerydate != null and delicerydate=='昨天'">
+                and TO_DAYS( NOW( ) ) - TO_DAYS(delicery_date) = 1
             </if>
-            <if test="documentsDate != null">
-                or documents_date = #{documentsDate}
+            <if test="delicerydate != null and delicerydate=='本周'">
+                <![CDATA[and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(delicery_date)]]>
             </if>
-            <if test="vettingName != null and vettingName != ''">
-                or vetting_name = #{vettingName}
+            <if test="delicerydate != null and delicerydate=='本月'">
+                and DATE_FORMAT( delicery_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
             </if>
-            <if test="disrate != null">
-                or disrate = #{disrate}
+            <if test="vendor != null and vendor != ''">
+                and vendor_name like '%'||#{vendor}||'%'
             </if>
-            <if test="dismoney != null">
-                or dismoney = #{dismoney}
+
+            <if test="documentsdate != null and documentsdate=='今天'">
+                and to_days(documents_date) = to_days(now())
             </if>
-            <if test="offersPrice != null">
-                or offers_price = #{offersPrice}
+            <if test="documentsdate != null and documentsdate=='昨天'">
+                and TO_DAYS( NOW( ) ) - TO_DAYS(documents_date) = 1
             </if>
-            <if test="orderState != null">
-                or order_state = #{orderState}
+            <if test="documentsdate != null and documentsdate=='本周'">
+                <![CDATA[and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(documents_date)]]>
             </if>
-            <if test="depotName != null and depotName != ''">
-                or depot_name = #{depotName}
+            <if test="documentsdate != null and documentsdate=='本月'">
+                and DATE_FORMAT( documents_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
             </if>
-            <if test="receiptOrderId != null and receiptOrderId != ''">
-                or receipt_order_id = #{receiptOrderId}
+
+            <if test="oraderstate != null and oraderstate=='执行中'">
+                and order_state =0
             </if>
-            <if test="exitOrderId != null and exitOrderId != ''">
-                or exit_order_id = #{exitOrderId}
+            <if test="oraderstate != null and oraderstate=='已结束'">
+                and order_state =1
             </if>
-            <if test="paymentOrder != null and paymentOrder != ''">
-                or payment_order = #{paymentOrder}
+
+
+            <if test="vettingstate != null and vettingstate=='草稿'">
+                and vetting_state =-2
             </if>
-            <if test="vettingState != null">
-                or vetting_state = #{vettingState}
+            <if test="vettingstate != null and vettingstate=='审批不通过'">
+                and vetting_state =-1
             </if>
-            <if test="lastVettingDate != null">
-                or last_vetting_date = #{lastVettingDate}
+            <if test="vettingstate != null and vettingstate=='待审批'">
+                and vetting_state =0
             </if>
-            <if test="inboundState != null">
-                or inbound_state = #{inboundState}
+            <if test="vettingstate != null and vettingstate=='审批通过'">
+                and vetting_state =1
             </if>
-            <if test="buyerName != null and buyerName != ''">
-                or buyer_name = #{buyerName}
+
+            <if test="buyer != null and buyer != ''">
+                and buyer_name like '%'||#{buyer}||'%'
             </if>
-            <if test="createPeople != null and createPeople != ''">
-                or create_people = #{createPeople}
-            </if>
-            <if test="createDate != null">
-                or create_date = #{createDate}
-            </if>
-            <if test="updateDate != null">
-                or update_date = #{updateDate}
-            </if>
-            <if test="counter != null">
-                or counter = #{counter}
-            </if>
-            <if test="ostate != null">
-                or ostate = #{ostate}
-            </if>
+
         </where>
     </select>
 
