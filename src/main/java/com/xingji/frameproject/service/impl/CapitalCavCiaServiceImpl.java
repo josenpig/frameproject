@@ -3,6 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.entity.CapitalCavCia;
 import com.xingji.frameproject.mybatis.dao.CapitalCavCiaDao;
 import com.xingji.frameproject.service.CapitalCavCiaService;
+import com.xingji.frameproject.vo.CavConditionPageVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -50,6 +51,26 @@ public class CapitalCavCiaServiceImpl implements CapitalCavCiaService {
     @Override
     public List<CapitalCavCia> queryAll(CapitalCavCia capitalCavCia) {
         return this.capitalCavCiaDao.queryAll(capitalCavCia);
+    }
+    /**
+     * 通过实体作为筛选条件查询   预收冲应收
+     *
+     * @param vo 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<CapitalCavCia> queryonePage(CavConditionPageVo vo) {
+        return this.capitalCavCiaDao.queryonePage(vo);
+    }
+    /**
+     * 通过实体作为筛选条件查询   预付冲应付
+     *
+     * @param vo 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<CapitalCavCia> querytwoPage(CavConditionPageVo vo) {
+        return this.capitalCavCiaDao.querytwoPage(vo);
     }
     /**
      * 新增数据

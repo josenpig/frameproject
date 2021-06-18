@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * (CapitalCavCia)表控制层
@@ -139,12 +136,18 @@ public class CapitalCavCiaController {
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
         String condition = jsonObject.getString("condition");//查询条件
-        CapitalCavCia order =JSON.parseObject(condition, CapitalCavCia.class);
+        CavConditionPageVo order =JSON.parseObject(condition, CavConditionPageVo.class);
         int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
         int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<CapitalCavCia> list=cccs.queryAll(order);
+        List<CapitalCavCia> list=new ArrayList<>();
+        if(order.getCavType().equals("预收冲应收")){
+        list=cccs.queryonePage(order);
+        }else {
+        list=cccs.querytwoPage(order);
+        }
+        System.out.println(order.toString());
         for(int i=0;i<list.size();i++){
             list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
             if(list.get(i).getApprover()!=null){

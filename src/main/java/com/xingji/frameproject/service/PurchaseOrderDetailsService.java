@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import java.util.List;
 import com.github.pagehelper.PageInfo;
@@ -80,6 +81,7 @@ public interface PurchaseOrderDetailsService {
      * @return 是否成功
      */
     boolean deleteById(Integer id);
+
 
 
 }

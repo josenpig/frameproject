@@ -174,7 +174,7 @@ public class BaseCustomerController {
         //获取最初客户信息 如果新的客户信息和旧的不同则更新数据
         BaseCustomer afterCustomer= baseCustomerService.queryById(customer.getCustomerNumber());
         BaseCustomer newc=new BaseCustomer();
-        if(afterCustomer.getCustomerType().equals(customer.getCustomerType()) &&  afterCustomer.getChargeName().equals(customer.getChargeName()) &&  Double.doubleToLongBits(afterCustomer.getRatio())==Double.doubleToLongBits(customer.getRatio()) &&  afterCustomer.getRemarks().equals(customer.getRemarks()) &&  afterCustomer.getContact().equals(customer.getContact()) &&  afterCustomer.getContactNumber().equals(customer.getContactNumber()) &&  afterCustomer.getContactAddress().equals(customer.getContactAddress())
+        if(afterCustomer.getCustomerName().equals(customer.getCustomerName()) && afterCustomer.getCustomerType().equals(customer.getCustomerType()) &&  afterCustomer.getChargeName().equals(customer.getChargeName()) &&  Double.doubleToLongBits(afterCustomer.getRatio())==Double.doubleToLongBits(customer.getRatio()) &&  afterCustomer.getRemarks().equals(customer.getRemarks()) &&  afterCustomer.getContact().equals(customer.getContact()) &&  afterCustomer.getContactNumber().equals(customer.getContactNumber()) &&  afterCustomer.getContactAddress().equals(customer.getContactAddress())
         ){
             newc = afterCustomer;
         }else{

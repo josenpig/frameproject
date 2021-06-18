@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalCavCia;
+import com.xingji.frameproject.vo.CavConditionPageVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -40,7 +41,20 @@ public interface CapitalCavCiaDao {
      * @return 对象列表
      */
     List<CapitalCavCia> queryAll(CapitalCavCia capitalCavCia);
-
+    /**
+     * 通过实体作为筛选条件查询---预收冲应收
+     *
+     * @param vo 实例对象
+     * @return 对象列表
+     */
+    List<CapitalCavCia> queryonePage(CavConditionPageVo vo);
+    /**
+     * 通过实体作为筛选条件查询---预付冲应付
+     *
+     * @param vo 实例对象
+     * @return 对象列表
+     */
+    List<CapitalCavCia> querytwoPage(CavConditionPageVo vo);
     /**
      * 新增数据
      *
