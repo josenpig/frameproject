@@ -127,5 +127,15 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
         return this.purchaseOrderDetailsDao.deleteById(id) > 0;
     }
 
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param purchaseOrderDetailsQueryForm 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm) {
+        return this.purchaseOrderDetailsDao.queryAndByPojo(purchaseOrderDetailsQueryForm);
+    }
 
 }

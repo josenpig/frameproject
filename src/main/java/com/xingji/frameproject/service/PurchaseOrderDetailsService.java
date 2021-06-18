@@ -83,5 +83,11 @@ public interface PurchaseOrderDetailsService {
     boolean deleteById(Integer id);
 
 
-
+    /**
+     * 通过实体作为并且条件查询
+     *
+     * @param purchaseOrderDetailsQueryForm 实例对象
+     * @return 对象列表
+     */
+    List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm);
 }
