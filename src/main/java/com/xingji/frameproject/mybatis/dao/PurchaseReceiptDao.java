@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -72,13 +73,7 @@ public interface PurchaseReceiptDao {
      */
     int update(PurchaseReceipt purchaseReceipt);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptList 实例对象列表
-     * @return 影响行数
-     */
-    int updateBatch(List<PurchaseReceipt> purchaseReceiptList);
+
 
     /**
      * 通过主键删除数据
@@ -89,19 +84,12 @@ public interface PurchaseReceiptDao {
     int deleteById(String id);
 
     /**
-     * 通过主键列表删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
+     * 查询有多少条采购订单入库记录
+     * @return
      */
-    int deleteBatch(List<Integer> ids);
+    int count();
 
-    /**
-     * 批量对象列表删除数据
-     *
-     * @param purchaseReceiptList 实例对象列表
-     * @return 影响行数
-     */
-    int deleteBatchByEntities(List<PurchaseReceipt> purchaseReceiptList);
+
+    List<PurchaseReceipt> queryAllByVettingState();
 }
 

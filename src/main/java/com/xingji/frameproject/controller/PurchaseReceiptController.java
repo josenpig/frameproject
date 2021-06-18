@@ -8,7 +8,7 @@ import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseReceiptVo;
-import com.xingji.frameproject.vo.SaleDeliveryVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("purchaseReceipt")
+@Slf4j
 public class PurchaseReceiptController {
     /**
      * 服务对象
@@ -39,6 +40,10 @@ public class PurchaseReceiptController {
     private PurchaseOrderService purchaseOrderService;
     @Resource
     private CapitalPayableService payableService;
+    @Resource
+    private SysUserService sysUserService;
+    @Resource
+    private BaseVendorService vendorService;
 
     /**
      * 通过主键查询单条数据
@@ -68,19 +73,23 @@ public class PurchaseReceiptController {
         delivery.setCreateDate(new Date());
         delivery.setState(type);
         delivery.setVettingState(0);
+        delivery.setVettingName(null);
+        delivery.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getCreatePeople())));
         //添加销售出库单信息
         for(int i=0;i<deliverydetails.size();i++){
             deliverydetails.get(i).setReceiptid(delivery.getId());
         }
-        purchaseReceiptService.insert(delivery);
-        detailsService.insertBatch(deliverydetails);
         //如果存在采购订单，修改订单状态--绑定入库单
         if (delivery.getAssociatedOrder()!=null){
             PurchaseOrder saleOrder=orderService.queryById(delivery.getAssociatedOrder());
             saleOrder.setReceiptOrderId(delivery.getId());
             saleOrder.setUpdateDate(new Date());
             orderService.update(saleOrder);
+            delivery.setBuyerName(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getBuyerName())));
+            delivery.setVendorName(vendorService.findVendorId(delivery.getVendorName()));
         }
+        purchaseReceiptService.insert(delivery);
+        detailsService.insertBatch(deliverydetails);
         return AjaxResponse.success(delivery.getId());
     }
 
@@ -94,6 +103,18 @@ public class PurchaseReceiptController {
     public AjaxResponse find(@PathVariable("id") String id) {
         PurchaseReceipt receipt=purchaseReceiptService.queryById(id);
         List<PurchaseReceiptDetails> deliveryDetails=detailsService.queryAllByOrderId(id);
+        receipt.setVendorName(vendorService.findVendorName(receipt.getVendorName()));
+        receipt.setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getBuyerName())));
+
+        if(!(receipt.getCreatePeople().equals("null"))&&receipt.getCreatePeople().length()!=0){
+            receipt.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getCreatePeople())));
+        }
+//        if (receipt.getVettingName()!=""||receipt.getVettingName()!=null){
+//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
+//        }
+//        if (receipt.getUpdatePeople()!=""||receipt.getUpdatePeople()!=null){
+//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
+//        }
         PurchaseReceiptVo vo=new PurchaseReceiptVo();
         vo.setReceipt(receipt);
         vo.setReceiptDetails(deliveryDetails);
@@ -110,8 +131,8 @@ public class PurchaseReceiptController {
         PurchaseReceipt receipt = purchaseReceiptService.queryById(orderid);
         receipt.setUpdateDate(new Date());
         receipt.setVettingState(type);
-        receipt.setVettingName(user);
-        receipt.setUpdatePeople(user);
+        receipt.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
+        receipt.setUpdatePeople(String.valueOf(sysUserService.queryUserIdByUserName(user)));
 
         purchaseReceiptService.update(receipt);
         //审批通过产品入库加上当前库存数量与预计库存数量
@@ -132,6 +153,7 @@ public class PurchaseReceiptController {
             payable.setUnpaid(receipt.getOffersPrice());
             payable.setFounder(user);
             payable.setCaseState(0);
+            payable.setFounder(receipt.getCreatePeople());
             payableService.insert(payable);
         }
         //如果绑定了订单就修改订单为已出库
@@ -144,5 +166,7 @@ public class PurchaseReceiptController {
         }
         return AjaxResponse.success(receipt);
     }
+
+
 
 }

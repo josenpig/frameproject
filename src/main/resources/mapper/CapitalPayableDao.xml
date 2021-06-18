@@ -81,8 +81,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="deliveryId" useGeneratedKeys="true">
-        insert into frameproject.capital_payable(delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time)
-        values (#{deliveryTime}, #{vendor}, #{buyer}, #{payables}, #{paid}, #{unpaid}, #{remarks}, #{founder}, #{caseState}, #{paymentRemark}, #{lastCollectionTime})
+        insert into frameproject.capital_payable(delivery_id,delivery_time, vendor, buyer, payables, paid, unpaid, remarks, founder, case_state, payment_remark, last_collection_time)
+        values (#{deliveryId},#{deliveryTime}, #{vendor}, #{buyer}, #{payables}, #{paid}, #{unpaid}, #{remarks}, #{founder}, #{caseState}, #{paymentRemark}, #{lastCollectionTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="deliveryId" useGeneratedKeys="true">

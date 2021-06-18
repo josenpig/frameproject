@@ -63,7 +63,7 @@ public interface BaseProductService {
      * @param productId 主键
      * @return 是否成功
      */
-    String deleteById(String productId);
+    Boolean deleteById(String productId);
 
     /**
      * 查询所有类别的产品

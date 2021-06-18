@@ -7,9 +7,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.entity.*;
-import com.xingji.frameproject.service.BaseOpeningService;
-import com.xingji.frameproject.service.PurchaseOrderDetailsService;
-import com.xingji.frameproject.service.PurchaseOrderService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseOrderVo;
 import com.xingji.frameproject.vo.SaleOrderVo;
@@ -47,6 +45,12 @@ public class PurchaseOrderController {
     private PurchaseOrderDetailsService prds;
     @Resource
     private BaseOpeningService bos;
+    @Resource
+    private SysUserService sysUserService;
+    @Resource
+    private BaseVendorService vendorService;
+
+
 
 
 
@@ -123,6 +127,8 @@ public class PurchaseOrderController {
         PurchaseOrder order = JSON.parseObject(one, PurchaseOrder.class);
         String two = jsonObject.getString("orderdetails");
         List<PurchaseOrderDetails> orderdetails= JSONArray.parseArray(two, PurchaseOrderDetails.class);
+        order.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(order.getCreatePeople())));
+        order.setVendorName(vendorService.findVendorName(order.getVendorName()));
         order.setCreateDate(new Date());
         order.setUpdateDate(new Date());
         order.setVettingState(type);
@@ -136,8 +142,6 @@ public class PurchaseOrderController {
         purchaseOrderService.insert(order);
         prds.insertBatch(orderdetails);
         return AjaxResponse.success(order.getId());
-
-
     }
 
     /**
@@ -162,16 +166,7 @@ public class PurchaseOrderController {
         return this.purchaseOrderService.update(purchaseOrder);
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderList 实例对象列表
-     * @return 影响行数
-     */
-    @PutMapping("/purchaseOrder/batch")
-    public boolean updateBatch(@RequestBody List<PurchaseOrder> purchaseOrderList) {
-        return this.purchaseOrderService.updateBatch(purchaseOrderList);
-    }
+
 
     /**
      * 通过主键删除数据
@@ -184,17 +179,6 @@ public class PurchaseOrderController {
         return this.purchaseOrderService.deleteById(id);
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    @DeleteMapping("/purchaseOrder/batch")
-    public boolean deleteBatch(@RequestBody List<Integer> ids) {
-        return this.purchaseOrderService.deleteBatch(ids);
-    }
-
 
     /**
      * 通过主键查询数据
@@ -205,6 +189,12 @@ public class PurchaseOrderController {
     @GetMapping("/purchaseOrder/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         PurchaseOrder order=purchaseOrderService.queryById(id);
+        order.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getCreatePeople())));
+        order.setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getBuyerName())));
+        if (order.getVettingName()!=null){
+            order.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getVettingName())));
+        }
+
         List<PurchaseOrderDetails> orderDetails=prds.queryAllByOrderId(id);
         PurchaseOrderVo vo=new PurchaseOrderVo();
         vo.setPurchaseOrder(order);
@@ -238,7 +228,7 @@ public class PurchaseOrderController {
         PurchaseOrder order = new PurchaseOrder();
         order.setId(id);
         order.setVettingState(type);
-        order.setVettingName(user);
+        order.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
         order.setLastVettingDate(new Date());
         order.setUpdateDate(new Date());
         PurchaseOrder purchaseOrder=purchaseOrderService.update(order);

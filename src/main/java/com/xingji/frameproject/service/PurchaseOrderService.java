@@ -71,13 +71,7 @@ public interface PurchaseOrderService {
      */
     PurchaseOrder update(PurchaseOrder purchaseOrder);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderList 实例对象列表
-     * @return 影响行数
-     */
-    boolean updateBatch(List<PurchaseOrder> purchaseOrderList);
+
 
     /**
      * 通过主键删除数据
@@ -87,13 +81,6 @@ public interface PurchaseOrderService {
      */
     boolean deleteById(String id);
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    boolean deleteBatch(List<Integer> ids);
 
     /**
      * 查询所有的采购订单

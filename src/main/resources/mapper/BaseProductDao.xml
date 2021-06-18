@@ -170,6 +170,12 @@
             <if test="productTypeId != null">
                 and p.product_type_id = #{productTypeId}
             </if>
+            <if test="productId != null">
+                and p.product_id LIKE CONCAT('%',#{productId},'%')
+            </if>
+            <if test="productName != null and productName != ''">
+                and p.product_name LIKE CONCAT('%',#{productName,jdbcType=VARCHA},'%')
+            </if>
         </where>
         GROUP BY p.product_id
     </select>
@@ -294,7 +300,7 @@
                 creation_time = #{creationTime},
             </if>
             <if test="updateTime != null">
-                update_time = #{updateTime},
+                update_time = NOW(),
             </if>
             <if test="gramHeavy != null and gramHeavy != ''">
                 gram_heavy = #{gramHeavy},
@@ -305,7 +311,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.base_product where product_spec = #{productSpec}
+        delete from frameproject.base_product where product_id = #{productID}
     </delete>
     <!--通过主键删除该产品库存数据-->
     <delete id="deleteOpingById">

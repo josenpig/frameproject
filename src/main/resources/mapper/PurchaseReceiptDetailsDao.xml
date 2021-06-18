@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.PurchaseReceiptDetailsDao">
-
+    <!-- 结果集 -->
     <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails" id="PurchaseReceiptDetailsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="receiptid" column="receiptid" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="plannedPrice" column="planned_price" jdbcType="NUMERIC"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails" id="PurchaseReceiptDMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="receiptid" column="receiptid" jdbcType="VARCHAR"/>
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
         <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
         <result property="productNum" column="product_num" jdbcType="INTEGER"/>
-        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="plannedPrice" column="planned_price" jdbcType="NUMERIC"/>
         <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
         <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
@@ -18,87 +28,41 @@
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <sql id="PurchaseReceiptDetailsCol">
-        id
-        , receiptid, product_name, product_id, depot_name, product_num, product_unit, planned_price, purchase_unit_price, purchase_money, ingredient, gram_heavy, product_describe    </sql>
 
-    <!--查询单个-->
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        id
+        , receiptid, product_id, depot_name, product_num, planned_price, purchase_money    </sql>
+    <sql id="Column_List">
+        p.id
+        , p.receiptid, p.product_id, p.depot_name, p.product_num, p.planned_price, p.purchase_money    </sql>
+
+    <!-- 查询单个 -->
     <select id="queryById" resultMap="PurchaseReceiptDetailsMap">
         select
-        <include refid="PurchaseReceiptDetailsCol"></include>
-        from frameproject.purchase_receipt_details
+        <include refid="Base_Column_List"/>
+        from purchase_receipt_details
         where id = #{id}
     </select>
 
-    <!--查询所有-->
+    <!-- 查询全部 -->
     <select id="queryAll" resultMap="PurchaseReceiptDetailsMap">
         select
-        <include refid="PurchaseReceiptDetailsCol"></include>
-        from (select * from frameproject.purchase_receipt_details where work_point_id = #{workPointId})
+        <include refid="Base_Column_List"/>
+        from purchase_receipt_details
     </select>
 
-    <!--通过实体作为或者条件查询-->
-    <select id="queryOrByPojo" resultMap="PurchaseReceiptDetailsMap">
-        select
-        <include refid="PurchaseReceiptDetailsCol"></include>
-        from (select * from frameproject.purchase_receipt_details where work_point_id = #{workPointId})
-        <where>
-            <if test="id != null">
-                or id like '%'||#{id}||'%'
-            </if>
-            <if test="receiptid != null and receiptid != ''">
-                or receiptid like '%'||#{receiptid}||'%'
-            </if>
-            <if test="productName != null and productName != ''">
-                or product_name like '%'||#{productName}||'%'
-            </if>
-            <if test="productId != null and productId != ''">
-                or product_id like '%'||#{productId}||'%'
-            </if>
-            <if test="depotName != null and depotName != ''">
-                or depot_name like '%'||#{depotName}||'%'
-            </if>
-            <if test="productNum != null">
-                or product_num like '%'||#{productNum}||'%'
-            </if>
-            <if test="productUnit != null and productUnit != ''">
-                or product_unit like '%'||#{productUnit}||'%'
-            </if>
-            <if test="plannedPrice != null">
-                or planned_price like '%'||#{plannedPrice}||'%'
-            </if>
-            <if test="purchaseUnitPrice != null">
-                or purchase_unit_price like '%'||#{purchaseUnitPrice}||'%'
-            </if>
-            <if test="purchaseMoney != null">
-                or purchase_money like '%'||#{purchaseMoney}||'%'
-            </if>
-            <if test="ingredient != null and ingredient != ''">
-                or ingredient like '%'||#{ingredient}||'%'
-            </if>
-            <if test="gramHeavy != null and gramHeavy != ''">
-                or gram_heavy like '%'||#{gramHeavy}||'%'
-            </if>
-            <if test="productDescribe != null and productDescribe != ''">
-                or product_describe like '%'||#{productDescribe}||'%'
-            </if>
-        </where>
-    </select>
-
-    <!--通过实体作为并且条件查询-->
+    <!--通过实体作为筛选条件查询-->
     <select id="queryAndByPojo" resultMap="PurchaseReceiptDetailsMap">
         select
-        <include refid="PurchaseReceiptDetailsCol"></include>
-        from frameproject.purchase_receipt_details
+        <include refid="Base_Column_List"/>
+        from purchase_receipt_details
         <where>
             <if test="id != null">
                 and id = #{id}
             </if>
             <if test="receiptid != null and receiptid != ''">
                 and receiptid = #{receiptid}
-            </if>
-            <if test="productName != null and productName != ''">
-                and product_name = #{productName}
             </if>
             <if test="productId != null and productId != ''">
                 and product_id = #{productId}
@@ -109,245 +73,110 @@
             <if test="productNum != null">
                 and product_num = #{productNum}
             </if>
-            <if test="productUnit != null and productUnit != ''">
-                and product_unit = #{productUnit}
-            </if>
             <if test="plannedPrice != null">
                 and planned_price = #{plannedPrice}
-            </if>
-            <if test="purchaseUnitPrice != null">
-                and purchase_unit_price = #{purchaseUnitPrice}
             </if>
             <if test="purchaseMoney != null">
                 and purchase_money = #{purchaseMoney}
             </if>
-            <if test="ingredient != null and ingredient != ''">
-                and ingredient = #{ingredient}
+        </where>
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryOrByPojo" resultMap="PurchaseReceiptDetailsMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_receipt_details
+        <where>
+            <if test="id != null">
+                or id = #{id}
             </if>
-            <if test="gramHeavy != null and gramHeavy != ''">
-                and gram_heavy = #{gramHeavy}
+            <if test="receiptid != null and receiptid != ''">
+                or receiptid = #{receiptid}
             </if>
-            <if test="productDescribe != null and productDescribe != ''">
-                and product_describe = #{productDescribe}
+            <if test="productId != null and productId != ''">
+                or product_id = #{productId}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                or depot_name = #{depotName}
+            </if>
+            <if test="productNum != null">
+                or product_num = #{productNum}
+            </if>
+            <if test="plannedPrice != null">
+                or planned_price = #{plannedPrice}
+            </if>
+            <if test="purchaseMoney != null">
+                or purchase_money = #{purchaseMoney}
             </if>
         </where>
     </select>
-    <select id="queryAllByOrderId" resultMap="PurchaseReceiptDetailsMap">
-        select
-        <include refid="PurchaseReceiptDetailsCol"></include>
-        from frameproject.purchase_receipt_details
-        where receiptid=#{id}
-    </select>
 
-    <!--新增所有列-->
-    <insert id="insert">
-        insert into frameproject.purchase_receipt_details
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            id,
-            <if test="receiptid != null">
-                receiptid,
-            </if>
-            <if test="productName != null">
-                product_name,
-            </if>
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="depotName != null">
-                depot_name,
-            </if>
-            <if test="productNum != null">
-                product_num,
-            </if>
-            <if test="productUnit != null">
-                product_unit,
-            </if>
-            <if test="plannedPrice != null">
-                planned_price,
-            </if>
-            <if test="purchaseUnitPrice != null">
-                purchase_unit_price,
-            </if>
-            <if test="purchaseMoney != null">
-                purchase_money,
-            </if>
-            <if test="ingredient != null">
-                ingredient,
-            </if>
-            <if test="gramHeavy != null">
-                gram_heavy,
-            </if>
-            <if test="productDescribe != null">
-                product_describe,
-            </if>
-        </trim>
-        values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            #{id},
-            <if test="receiptid != null">
-                #{receiptid},
-            </if>
-            <if test="productName != null">
-                #{productName},
-            </if>
-            <if test="productId != null">
-                #{productId},
-            </if>
-            <if test="depotName != null">
-                #{depotName},
-            </if>
-            <if test="productNum != null">
-                #{productNum},
-            </if>
-            <if test="productUnit != null">
-                #{productUnit},
-            </if>
-            <if test="plannedPrice != null">
-                #{plannedPrice},
-            </if>
-            <if test="purchaseUnitPrice != null">
-                #{purchaseUnitPrice},
-            </if>
-            <if test="purchaseMoney != null">
-                #{purchaseMoney},
-            </if>
-            <if test="ingredient != null">
-                #{ingredient},
-            </if>
-            <if test="gramHeavy != null">
-                #{gramHeavy},
-            </if>
-            <if test="productDescribe != null">
-                #{productDescribe},
-            </if>
-        </trim>
-        <selectKey keyProperty="id" resultType="INTEGER" order="BEFORE">
-            select SEQ_purchase_receipt_details.nextval from dual
-        </selectKey>
+    <!-- 新增所有列 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into purchase_receipt_details(receiptid, product_id, depot_name, product_num, planned_price,
+                                             purchase_money)
+        values ( #{receiptid}, #{productId}, #{depotName}, #{productNum}, #{plannedPrice}, #{purchaseMoney})
     </insert>
 
-
-
-    <!--批量新增数据 -->
-    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-            insert into frameproject.purchase_receipt_details(receiptid,product_Name,product_Id,depot_Name,product_Num,product_Unit,planned_Price,purchase_Unit_Price,purchase_Money,ingredient,gram_Heavy,product_Describe)
-            values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.receiptid},#{entity.productName},#{entity.productId},#{entity.depotName},#{entity.productNum},#{entity.productUnit},#{entity.plannedPrice},#{entity.purchaseUnitPrice},#{entity.purchaseMoney},#{entity.ingredient},#{entity.gramHeavy},#{entity.productDescribe})
+    <!-- 批量新增 -->
+    <insert id="insertBatch">
+        insert into purchase_receipt_details(id, receiptid, product_id, depot_name, product_num, planned_price,
+        purchase_money)
+        values
+        <foreach collection="entities" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.receiptid}, #{item.productId}, #{item.depotName}, #{item.productNum},
+            #{item.plannedPrice}, #{item.purchaseMoney} )
         </foreach>
     </insert>
 
-    <!--通过主键修改数据-->
+    <!-- 通过主键修改数据 -->
     <update id="update">
         update frameproject.purchase_receipt_details
         <set>
-            <if test="receiptid != null">
+            <if test="receiptid != null and receiptid != ''">
                 receiptid = #{receiptid},
             </if>
-            <if test="productName != null">
-                product_name = #{productName},
-            </if>
-            <if test="productId != null">
+            <if test="productId != null and productId != ''">
                 product_id = #{productId},
             </if>
-            <if test="depotName != null">
+            <if test="depotName != null and depotName != ''">
                 depot_name = #{depotName},
             </if>
             <if test="productNum != null">
                 product_num = #{productNum},
             </if>
-            <if test="productUnit != null">
-                product_unit = #{productUnit},
-            </if>
             <if test="plannedPrice != null">
                 planned_price = #{plannedPrice},
             </if>
-            <if test="purchaseUnitPrice != null">
-                purchase_unit_price = #{purchaseUnitPrice},
-            </if>
             <if test="purchaseMoney != null">
                 purchase_money = #{purchaseMoney},
-            </if>
-            <if test="ingredient != null">
-                ingredient = #{ingredient},
-            </if>
-            <if test="gramHeavy != null">
-                gram_heavy = #{gramHeavy},
-            </if>
-            <if test="productDescribe != null">
-                product_describe = #{productDescribe},
             </if>
         </set>
         where id = #{id}
     </update>
 
-    <!--批量修改数据-->
-    <update id="updateBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            update frameproject.purchase_receipt_details
-            <set>
-                <if test="entity.receiptid != null">
-                    receiptid = #{entity.receiptid},
-                </if>
-                <if test="entity.productName != null">
-                    product_name = #{entity.productName},
-                </if>
-                <if test="entity.productId != null">
-                    product_id = #{entity.productId},
-                </if>
-                <if test="entity.depotName != null">
-                    depot_name = #{entity.depotName},
-                </if>
-                <if test="entity.productNum != null">
-                    product_num = #{entity.productNum},
-                </if>
-                <if test="entity.productUnit != null">
-                    product_unit = #{entity.productUnit},
-                </if>
-                <if test="entity.plannedPrice != null">
-                    planned_price = #{entity.plannedPrice},
-                </if>
-                <if test="entity.purchaseUnitPrice != null">
-                    purchase_unit_price = #{entity.purchaseUnitPrice},
-                </if>
-                <if test="entity.purchaseMoney != null">
-                    purchase_money = #{entity.purchaseMoney},
-                </if>
-                <if test="entity.ingredient != null">
-                    ingredient = #{entity.ingredient},
-                </if>
-                <if test="entity.gramHeavy != null">
-                    gram_heavy = #{entity.gramHeavy},
-                </if>
-                <if test="entity.productDescribe != null">
-                    product_describe = #{entity.productDescribe},
-                </if>
-            </set>
-            where id = #{entity.id}
-        </foreach>
-    </update>
-
-    <!--通过主键删除数据-->
+    <!--通过主键删除-->
     <delete id="deleteById">
         delete
-        from frameproject.purchase_receipt_details
+        from purchase_receipt_details
         where id = #{id}
     </delete>
 
-    <!--通过主键列表批量删除数据-->
-    <delete id="deleteBatch">
-        delete from frameproject.purchase_receipt_details where id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
+    <!-- 总数 -->
+    <select id="count" resultType="int">
+        select count(*)
+        from purchase_receipt_details
+    </select>
 
-    <!--通过实体列表批量删除数据-->
-    <delete id="deleteBatchByEntities">
-        delete from frameproject.purchase_receipt_details where id in
-        <foreach collection="list" item="entity" open="(" separator="," close=")">
-            #{entity.id}
-        </foreach>
-    </delete>
+    <select id="queryAllByOrderId" resultMap="PurchaseReceiptDMap">
+        select
+        <include refid="Column_List"/>,b.product_name,c.unit_name,b.purchase_unit_price,b.ingredient,b.gram_heavy,b.product_describe
+        from frameproject.purchase_receipt_details p
+        INNER JOIN base_product b on p.product_id=b.product_id
+        INNER JOIN base_unit c on b.unit_id=c.unit_id
+        where receiptid=#{id}
+    </select>
 </mapper>
-

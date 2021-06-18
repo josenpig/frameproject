@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/operationlog")
+
 public class OperationlogController {
     /**
      * 服务对象
@@ -49,7 +49,7 @@ public class OperationlogController {
      * @param logintime
      * @return
      */
-    @Log("test111")
+    @Log("查询登录日志")
     @GetMapping("/findloginlogbycondition")
     public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
@@ -179,7 +179,7 @@ public class OperationlogController {
      * @return
      */
     @GetMapping("/findoperationlogbycondition")
-    public AjaxResponse findoperatorLogByCondition(Integer currentPage, Integer pagesize,String createtime ,String input,String operator) {
+    public AjaxResponse findoperatorLogByCondition(String operator,Integer currentPage, Integer pagesize,String createtime ,String input) {
         System.out.println("operator: "+operator+"-------currenPage: "+currentPage+"------pagesize: "
                 +pagesize+"----------createtime: "+createtime+"-------input: "+input);
         if((input!=null && input!="") && (!input.equals("") && !input.equals(null))){
@@ -189,6 +189,7 @@ public class OperationlogController {
         Page<Object> page= PageHelper.startPage(currentPage,pagesize);
         List<Operationlog> list = null;
         Operationlog operationlog=new Operationlog();
+
         //时间,操作员,操作内容有一个不为空时
         if(((createtime!=null && createtime!="") &&(!createtime.equals("") && ! createtime.equals(null)))
                 || ((operator!=null && operator!="")&&(!operator.equals("")&&! operator.equals(null)))

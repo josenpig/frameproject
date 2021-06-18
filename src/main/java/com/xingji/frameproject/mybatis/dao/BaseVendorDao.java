@@ -87,5 +87,7 @@ public interface BaseVendorDao {
      * @return
      */
     List<BaseVendor> findAllVendor(BaseVendor baseVendor);
+
+    BaseVendor queryByName(String vendorName);
 }
 

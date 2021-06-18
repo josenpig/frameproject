@@ -1,13 +1,11 @@
 package com.xingji.frameproject.controller;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
-import com.xingji.frameproject.vo.form.PurchaseReceiptDetailsQueryForm;
 import com.xingji.frameproject.service.PurchaseReceiptDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -59,16 +57,6 @@ public class PurchaseReceiptDetailsController {
         return this.purchaseReceiptDetailsService.update(purchaseReceiptDetails);
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    @PutMapping("/purchaseReceiptDetails/batch")
-    public boolean updateBatch(@RequestBody List<PurchaseReceiptDetails> purchaseReceiptDetailsList) {
-        return this.purchaseReceiptDetailsService.updateBatch(purchaseReceiptDetailsList);
-    }
 
     /**
      * 通过主键删除数据
@@ -81,14 +69,4 @@ public class PurchaseReceiptDetailsController {
         return this.purchaseReceiptDetailsService.deleteById(id);
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    @DeleteMapping("/purchaseReceiptDetails/batch")
-    public boolean deleteBatch(@RequestBody List<Integer> ids) {
-        return this.purchaseReceiptDetailsService.deleteBatch(ids);
-    }
 }

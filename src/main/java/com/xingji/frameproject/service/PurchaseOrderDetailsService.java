@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
+import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import java.util.List;
 import com.github.pagehelper.PageInfo;
@@ -61,7 +62,7 @@ public interface PurchaseOrderDetailsService {
      * @param PurchaseOrderDetailsList 实例对象列表
      * @return 影响行数
      */
-    boolean insertBatch(List<PurchaseOrderDetails> PurchaseOrderDetailsList);
+    int insertBatch(List<PurchaseOrderDetails> PurchaseOrderDetailsList);
 
     /**
      * 修改数据
@@ -71,13 +72,7 @@ public interface PurchaseOrderDetailsService {
      */
     PurchaseOrderDetails update(PurchaseOrderDetails purchaseOrderDetails);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    boolean updateBatch(List<PurchaseOrderDetails> purchaseOrderDetailsList);
+
 
     /**
      * 通过主键删除数据
@@ -87,11 +82,6 @@ public interface PurchaseOrderDetailsService {
      */
     boolean deleteById(Integer id);
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    boolean deleteBatch(List<Integer> ids);
+
+
 }

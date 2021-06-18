@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 
 import java.util.List;
@@ -71,13 +72,6 @@ public interface PurchaseReceiptService {
      */
     PurchaseReceipt update(PurchaseReceipt purchaseReceipt);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptList 实例对象列表
-     * @return 影响行数
-     */
-    boolean updateBatch(List<PurchaseReceipt> purchaseReceiptList);
 
     /**
      * 通过主键删除数据
@@ -87,11 +81,10 @@ public interface PurchaseReceiptService {
      */
     boolean deleteById(String id);
 
+
     /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
+     * 查询所有的可可以采购退货的订单
+     * @return
      */
-    boolean deleteBatch(List<Integer> ids);
+    List<PurchaseReceipt> queryAllByVettingState();
 }

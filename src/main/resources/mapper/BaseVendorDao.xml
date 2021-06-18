@@ -97,6 +97,12 @@
             </if>
         </where>
     </select>
+    <select id="queryByName" resultMap="BaseVendorMap" >
+        select
+            vendor_id, vendor_name, vendor_type, address, charge, contact_name, contact_address, contact_number, user, creation_time, update_time, accounts_payable
+        from frameproject.base_vendor
+        where vendor_name = #{vendorName}
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="vendorId" useGeneratedKeys="true">

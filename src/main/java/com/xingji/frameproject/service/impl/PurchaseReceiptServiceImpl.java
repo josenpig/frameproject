@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
+import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 import com.xingji.frameproject.mybatis.dao.PurchaseReceiptDao;
 import com.xingji.frameproject.service.PurchaseReceiptService;
@@ -109,16 +110,8 @@ public class PurchaseReceiptServiceImpl implements PurchaseReceiptService {
         return this.queryById(purchaseReceipt.getId());
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptList 实例对象列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean updateBatch(List<PurchaseReceipt> purchaseReceiptList) {
-        return this.purchaseReceiptDao.updateBatch(purchaseReceiptList) == -1;
-    }
+
+
 
     /**
      * 通过主键删除数据
@@ -132,14 +125,14 @@ public class PurchaseReceiptServiceImpl implements PurchaseReceiptService {
     }
 
     /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
+     * 查询所有的可可以采购退货的订单
+     *      * @return
+     * @return
      */
     @Override
-    public boolean deleteBatch(List<Integer> ids) {
-        int row = this.purchaseReceiptDao.deleteBatch(ids);
-        return ids.size() == row;
+    public List<PurchaseReceipt> queryAllByVettingState() {
+        return this.purchaseReceiptDao.queryAllByVettingState();
     }
+
+
 }
