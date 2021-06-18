@@ -109,16 +109,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return this.queryById(purchaseOrder.getId());
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderList 实例对象列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean updateBatch(List<PurchaseOrder> purchaseOrderList) {
-        return this.purchaseOrderDao.updateBatch(purchaseOrderList) == -1;
-    }
+
 
     /**
      * 通过主键删除数据
@@ -131,17 +122,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return this.purchaseOrderDao.deleteById(id) > 0;
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean deleteBatch(List<Integer> ids) {
-        int row = this.purchaseOrderDao.deleteBatch(ids);
-        return ids.size() == row;
-    }
+
 
     /**
      * 查询所有的采购订单

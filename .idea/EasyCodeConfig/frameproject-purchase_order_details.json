@@ -1,5 +1,5 @@
 {
-  "name" : "PurchaseReceiptDetails",
+  "name" : "PurchaseOrderDetails",
   "preName" : "",
   "comment" : null,
   "templateGroupName" : "EIMS",
@@ -11,7 +11,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "receiptid",
+    "name" : "purchaseOrderId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -25,13 +25,6 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "depotName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
     "name" : "productNum",
     "comment" : null,
     "type" : null,
@@ -39,14 +32,21 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "plannedPrice",
+    "name" : "purchaseMoney",
     "comment" : null,
     "type" : null,
     "shortType" : null,
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "purchaseMoney",
+    "name" : "depotName",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "remark",
     "comment" : null,
     "type" : null,
     "shortType" : null,

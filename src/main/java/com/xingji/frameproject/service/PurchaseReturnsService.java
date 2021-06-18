@@ -53,4 +53,9 @@ public interface PurchaseReturnsService {
      */
     boolean deleteById(String id);
 
+    /**
+     * 查询所有的可可以采购退货的订单
+     * @return
+     */
+    List<PurchaseReturns> findReturn();
 }

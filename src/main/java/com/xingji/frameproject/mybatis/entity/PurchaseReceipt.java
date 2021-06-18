@@ -1,26 +1,21 @@
 package com.xingji.frameproject.mybatis.entity;
 
 import java.util.Date;
-import java.math.BigDecimal;
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * (PurchaseReceipt)实体类
  *
  * @author makejava
- * @since 2021-06-16 10:15:40
+ * @since 2021-06-17 19:02:48
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@ToString
 public class PurchaseReceipt implements Serializable {
-    private static final long serialVersionUID = -11234392647483049L;
+    private static final long serialVersionUID = 681325297909336992L;
     /**
      * 入库单编号
      */
@@ -28,13 +23,15 @@ public class PurchaseReceipt implements Serializable {
     /**
      * 入库日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date inboundDate;
     /**
-     * 供应商用户名
+     * 供应商用户名id
      */
     private String vendorName;
     /**
-     * 采购人用户名
+     * 采购人用户名id
      */
     private String buyerName;
     /**
@@ -62,12 +59,14 @@ public class PurchaseReceipt implements Serializable {
      */
     private String depotName;
     /**
-     * 当前审批人用户名
+     * 当前审批人用户名id
      */
     private String vettingName;
     /**
      * 最后审批时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date lastVettingTime;
     /**
      * 审批状态
@@ -94,24 +93,24 @@ public class PurchaseReceipt implements Serializable {
      */
     private String invoiceId;
     /**
-     * 创建人用户名
+     * 创建人用户名id
      */
     private String createPeople;
     /**
-     * 联系人
-     */
-    private String contact;
-    /**
-     * 更新人
+     * 更新人id
      */
     private String updatePeople;
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
     /**
      * 打印次数

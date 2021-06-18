@@ -95,18 +95,11 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
         return purchaseOrderDetails;
     }
 
-    /**
-     * 批量新增数据
-     *
-     * @param PurchaseOrderDetailsList 实例对象列表
-     * @return 影响行数
-     */
     @Override
-    public boolean insertBatch(List<PurchaseOrderDetails> PurchaseOrderDetailsList) {
-        System.out.println(PurchaseOrderDetailsList);
-        return this.purchaseOrderDetailsDao.insertBatch(PurchaseOrderDetailsList)==-1;
-
+    public int insertBatch(List<PurchaseOrderDetails> PurchaseOrderDetailsList) {
+        return this.purchaseOrderDetailsDao.batchInsert(PurchaseOrderDetailsList);
     }
+
 
     /**
      * 修改数据
@@ -120,16 +113,7 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
         return this.queryById(purchaseOrderDetails.getId());
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean updateBatch(List<PurchaseOrderDetails> purchaseOrderDetailsList) {
-        return this.purchaseOrderDetailsDao.updateBatch(purchaseOrderDetailsList) == -1;
-    }
+
 
     /**
      * 通过主键删除数据
@@ -142,15 +126,5 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
         return this.purchaseOrderDetailsDao.deleteById(id) > 0;
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean deleteBatch(List<Integer> ids) {
-        int row = this.purchaseOrderDetailsDao.deleteBatch(ids);
-        return ids.size() == row;
-    }
+
 }

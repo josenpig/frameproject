@@ -85,7 +85,7 @@ public class PurchaseOrderDetailsController {
      * @return 影响行数
      */
     @PostMapping("/purchaseOrderDetails/batch")
-    public boolean insertBatch(@RequestBody List<PurchaseOrderDetails> PurchaseOrderDetailsList) {
+    public int insertBatch(@RequestBody List<PurchaseOrderDetails> PurchaseOrderDetailsList) {
         return this.purchaseOrderDetailsService.insertBatch(PurchaseOrderDetailsList);
     }
 
@@ -100,16 +100,7 @@ public class PurchaseOrderDetailsController {
         return this.purchaseOrderDetailsService.update(purchaseOrderDetails);
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    @PutMapping("/purchaseOrderDetails/batch")
-    public boolean updateBatch(@RequestBody List<PurchaseOrderDetails> purchaseOrderDetailsList) {
-        return this.purchaseOrderDetailsService.updateBatch(purchaseOrderDetailsList);
-    }
+
 
     /**
      * 通过主键删除数据
@@ -122,14 +113,5 @@ public class PurchaseOrderDetailsController {
         return this.purchaseOrderDetailsService.deleteById(id);
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    @DeleteMapping("/purchaseOrderDetails/batch")
-    public boolean deleteBatch(@RequestBody List<Integer> ids) {
-        return this.purchaseOrderDetailsService.deleteBatch(ids);
-    }
+
 }

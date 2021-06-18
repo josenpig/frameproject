@@ -72,4 +72,6 @@ public class PurchaseReceiptDetails implements Serializable {
      * 产品描述
      */
     private String productDescribe;
+
+    private int returnNum;
 }

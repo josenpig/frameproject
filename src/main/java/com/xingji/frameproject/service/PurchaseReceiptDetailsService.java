@@ -72,13 +72,6 @@ public interface PurchaseReceiptDetailsService {
      */
     PurchaseReceiptDetails update(PurchaseReceiptDetails purchaseReceiptDetails);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    boolean updateBatch(List<PurchaseReceiptDetails> purchaseReceiptDetailsList);
 
     /**
      * 通过主键删除数据
@@ -88,13 +81,7 @@ public interface PurchaseReceiptDetailsService {
      */
     boolean deleteById(Integer id);
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    boolean deleteBatch(List<Integer> ids);
+
 
     /**
      * 根据采购入库单查询采购入库单商品详情

@@ -1,8 +1,8 @@
 {
-  "name" : "PurchaseReturns",
+  "name" : "PurchaseOrder",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "Default",
+  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
@@ -11,7 +11,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "exitDate",
+    "name" : "deliceryDate",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -25,21 +25,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "buyerName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "depotName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "offersPrice",
+    "name" : "documentsDate",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -53,7 +39,56 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "lastVettingTime",
+    "name" : "disrate",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "dismoney",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "offersPrice",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "orderState",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "depotName",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "receiptOrderId",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "exitOrderId",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "paymentOrder",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -67,7 +102,28 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "contact",
+    "name" : "lastVettingDate",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "inboundState",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "buyerName",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "createPeople",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -95,28 +151,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "purchaseOrder",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "receiptOrder",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "paymentOrder",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "cavOrder",
+    "name" : "ostate",
     "comment" : null,
     "type" : null,
     "shortType" : null,

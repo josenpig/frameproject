@@ -53,4 +53,5 @@ public interface PurchaseReturnsDetailsService {
      */
     boolean deleteById(Integer id);
 
+    int insertBatch(List<PurchaseReturnsDetails> deliverydetails);
 }

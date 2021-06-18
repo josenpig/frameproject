@@ -70,7 +70,7 @@ public interface PurchaseOrderDetailsDao {
      * @param purchaseOrderDetailsList 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<PurchaseOrderDetails> purchaseOrderDetailsList);
+    int batchInsert(@Param("entities") List<PurchaseOrderDetails> purchaseOrderDetailsList);
 
     /**
      * 修改数据
@@ -80,13 +80,7 @@ public interface PurchaseOrderDetailsDao {
      */
     int update(PurchaseOrderDetails purchaseOrderDetails);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    int updateBatch(List<PurchaseOrderDetails> purchaseOrderDetailsList);
+
 
     /**
      * 通过主键删除数据
@@ -97,10 +91,8 @@ public interface PurchaseOrderDetailsDao {
     int deleteById(Integer id);
 
     /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
+     * 查询有多少条数据
+     * @return
      */
-    int deleteBatch(List<Integer> ids);
+    int count();
 }
