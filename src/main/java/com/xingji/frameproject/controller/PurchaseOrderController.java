@@ -102,15 +102,11 @@ public class PurchaseOrderController {
         String three = jsonObject.getString("condition");
         System.out.println(three);
         PurchaseOrderQueryForm queryForm = JSON.parseObject(three,PurchaseOrderQueryForm.class);
-        queryForm.setPageNum(currentPage);
-        queryForm.setPageSize(5);
         Map<String,Object> map=new HashMap<>();
-        Page<Object> page= PageHelper.startPage(currentPage,5);
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<PurchaseOrder> list=purchaseOrderService.queryAllByPage(queryForm);
         map.put("total",page.getTotal());
         map.put("rows",list);
-        System.out.println(page);
-        System.out.println(map.toString());
         return AjaxResponse.success(map);
     }
 
