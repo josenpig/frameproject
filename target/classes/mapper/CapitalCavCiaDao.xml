@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.CapitalCavCiaDao">
-
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalCavCia" id="CapitalCavCiaMap">
         <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
         <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
@@ -36,11 +35,20 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalCavCiaView">
-        select a.*,b.* from capital_cav_cia a INNER JOIN base_customer b on a.other_party=b.customer_number
-        where cav_id = #{cavId}
+    <select id="queryById" resultMap="CapitalCavCiaMap">
+        select * from capital_cav_cia where cav_id = #{cavId}
     </select>
-
+    <!--查询单个-->
+    <select id="queryByIdTpye" resultMap="CapitalCavCiaView">
+        <if test="cavType=='预收冲应收'">
+            select a.*,b.customer_name from capital_cav_cia a INNER JOIN base_customer b on a.other_party=b.customer_number
+            where cav_id = #{cavId}
+        </if>
+        <if test="cavType=='预付冲应付'">
+            select a.*,b.vendor_name from capital_cav_cia a INNER JOIN base_vendor b on a.other_party=b.vendor_id
+            where cav_id = #{cavId}
+        </if>
+    </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalCavCiaMap">
         select
@@ -51,13 +59,13 @@
 
     <!--通过实体作为筛选条件查询   预收冲应收-->
     <select id="queryonePage" resultMap="CapitalCavCiaView">
-            select a.*,b.* from capital_cav_cia a
-            INNER JOIN base_customer b on a.other_party=b.customer_number
+        select a.*,b.customer_name from capital_cav_cia a INNER JOIN base_customer b on a.other_party=b.customer_number
         <where>
+            cav_type = '预收冲应收'
             <if test="cavId != null and cavId != ''">
                 and cav_id = #{cavId}
             </if>
-            <if test="orderTime != null">
+            <if test="orderTime != null and orderTime != ''">
                 and order_time = #{orderTime}
             </if>
             <if test="customer != null and customer != ''">
@@ -66,26 +74,24 @@
             <if test="cavBy != null and cavBy != ''">
                 and cav_by = #{cavBy}
             </if>
-            <if test="cavType != null and cavType != ''">
-                and cav_type = #{cavType}
-            </if>
             <if test="founder != null and founder != ''">
                 and founder = #{founder}
             </if>
-            <if test="approvalState != null">
+            <if test="approvalState != null and  approvalState != ''">
                 and approval_state = #{approvalState}
             </if>
         </where>
     </select>
     <!--通过实体作为筛选条件查询   预付冲应付-->
     <select id="querytwoPage" resultMap="CapitalCavCiaView">
-            select a.*,b.* from capital_cav_cia a
+            select a.*,b.vendor_name from capital_cav_cia a
             INNER JOIN base_vendor b on a.other_party=b.vendor_id
         <where>
+            cav_type = '预付冲应付'
             <if test="cavId != null and cavId != ''">
                 and cav_id = #{cavId}
             </if>
-            <if test="orderTime != null">
+            <if test="orderTime != null and orderTime != ''">
                 and order_time = #{orderTime}
             </if>
             <if test="vendor != null and vendor != '' ">
@@ -94,13 +100,10 @@
             <if test="cavBy != null and cavBy != ''">
                 and cav_by = #{cavBy}
             </if>
-            <if test="cavType != null and cavType != ''">
-                and cav_type = #{cavType}
-            </if>
             <if test="founder != null and founder != ''">
                 and founder = #{founder}
             </if>
-            <if test="approvalState != null">
+            <if test="approvalState != null and  approvalState != ''">
                 and approval_state = #{approvalState}
             </if>
         </where>

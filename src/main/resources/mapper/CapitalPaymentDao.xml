@@ -21,12 +21,28 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
     </resultMap>
-
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayment" id="CapitalPaymentView">
+        <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
+        <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
+        <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
+        <result property="drawee" column="drawee" jdbcType="VARCHAR"/>
+        <result property="paymentType" column="payment_type" jdbcType="VARCHAR"/>
+        <result property="paymentMoney" column="payment_money" jdbcType="NUMERIC"/>
+        <result property="piaMoney" column="pia_money" jdbcType="NUMERIC"/>
+        <result property="piaBalance" column="pia_balance" jdbcType="NUMERIC"/>
+        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+        <result property="approver" column="approver" jdbcType="VARCHAR"/>
+        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
+        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
+    </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalPaymentMap">
-        select
-          payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
-        from frameproject.capital_payment
+    <select id="queryById" resultMap="CapitalPaymentView">
+        select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         where payment_id = #{paymentId}
     </select>
 
@@ -39,11 +55,8 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="CapitalPaymentMap">
-        select
-        payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder,
-        remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
-        from frameproject.capital_payment
+    <select id="queryAll" resultMap="CapitalPaymentView">
+        select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         <where>
             <if test="paymentId != null and paymentId != ''">
                 and payment_id = #{paymentId}

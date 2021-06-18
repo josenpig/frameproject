@@ -66,7 +66,7 @@
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="CapitalReceiptView">
-        select a.*,b.* from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
+        select a.*,b.customer_name from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="receiptId != null and receiptId != ''">
                 and receipt_id = #{receiptId}

@@ -3,6 +3,8 @@ package com.xingji.frameproject.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (CapitalPayment)表控制层
@@ -27,7 +31,7 @@ public class CapitalPaymentController {
     @Resource
     private SysUserService sus;
     @Resource
-    private CapitalPayableService cps;
+    private CapitalPayableService cpsok;
     @Resource
     private PurchaseOrderService pos;
     @Resource
@@ -35,7 +39,7 @@ public class CapitalPaymentController {
     @Resource
     private BaseCapitalAccountService bcas;
     @Resource
-    private CapitalPaymentService cpsok;
+    private CapitalPaymentService cps;
     @Resource
     private CapitalPaymentBillService cpbs;
     @Resource
@@ -49,7 +53,7 @@ public class CapitalPaymentController {
      */
     @GetMapping("/selectOne")
     public CapitalPayment selectOne(String id) {
-        return this.cpsok.queryById(id);
+        return this.cps.queryById(id);
     }
     @PostMapping("/addpayment/{type}")
     public AjaxResponse addreceipt(@PathVariable("type") int type, @RequestBody String add) {
@@ -60,7 +64,7 @@ public class CapitalPaymentController {
         List<CapitalPaymentBill> bills= JSONArray.parseArray(two, CapitalPaymentBill.class);
         String three = jsonObject.getString("account");
         List<CapitalPaymentAccount> accounts= JSONArray.parseArray(three, CapitalPaymentAccount.class);
-        //绑定收款单
+        //绑定付款单
         for (int i=0;i<bills.size();i++){
             if (bills.get(i).getPurchaseType().equals("采购订单")){
                 PurchaseOrder order=new PurchaseOrder();
@@ -83,9 +87,30 @@ public class CapitalPaymentController {
         payment.setApprovalState(type);
         payment.setFoundTime(new Date());
         payment.setUpdateTime(new Date());
-        cpsok.insert(payment);
+        cps.insert(payment);
         cpbs.insertBatch(bills);
         cpas.insertBatch(accounts);
         return AjaxResponse.success(payment.getPaymentId());
+    }
+    @PostMapping("/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CapitalPayment capitalPayment=JSON.parseObject(condition, CapitalPayment.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CapitalPayment> list=cps.queryAll(capitalPayment);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+            if(list.get(i).getApprover()!=null){
+                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+            }
+            list.get(i).setDrawee(sus.queryById(Integer.valueOf(list.get(i).getDrawee())).getUserName());
+        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
     }
 }

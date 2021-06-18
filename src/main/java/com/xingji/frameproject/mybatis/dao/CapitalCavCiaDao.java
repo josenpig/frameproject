@@ -23,6 +23,13 @@ public interface CapitalCavCiaDao {
      * @return 实例对象
      */
     CapitalCavCia queryById(String cavId);
+    /**
+     * 通过ID及核算类型查询单条数据
+     *
+     * @param cavId 主键
+     * @return 实例对象
+     */
+    CapitalCavCia queryByIdTpye(@Param("cavId") String cavId,@Param("cavType") String cavType);
 
     /**
      * 查询指定行数据

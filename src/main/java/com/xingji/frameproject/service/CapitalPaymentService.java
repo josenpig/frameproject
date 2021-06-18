@@ -20,6 +20,8 @@ public interface CapitalPaymentService {
      */
     CapitalPayment queryById(String paymentId);
 
+    List<CapitalPayment> queryAll(CapitalPayment capitalPayment);
+
     /**
      * 查询多条数据
      *

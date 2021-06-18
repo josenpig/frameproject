@@ -29,6 +29,16 @@ public class CapitalPaymentServiceImpl implements CapitalPaymentService {
     public CapitalPayment queryById(String paymentId) {
         return this.capitalPaymentDao.queryById(paymentId);
     }
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param capitalPayment 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<CapitalPayment> queryAll(CapitalPayment capitalPayment) {
+        return this.capitalPaymentDao.queryAll(capitalPayment);
+    }
 
     /**
      * 查询多条数据
