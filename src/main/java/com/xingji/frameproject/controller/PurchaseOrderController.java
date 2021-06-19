@@ -96,14 +96,16 @@ public class PurchaseOrderController {
     public AjaxResponse selectAllByPage(@RequestBody String find){
         JSONObject jsonObject = JSONObject.parseObject(find);
         String one = jsonObject.getString("currentPage");
-        Integer currentPage = JSON.parseObject(one, Integer.class);
+        int currentPage = JSON.parseObject(one, int.class);
         String two = jsonObject.getString("pageSize");
-        Integer pageSize = JSON.parseObject(one, Integer.class);
+        int pageSize = JSON.parseObject(two, int.class);
         String three = jsonObject.getString("condition");
+        System.out.println(one);
+        System.out.println(two);
         System.out.println(three);
         PurchaseOrderQueryForm queryForm = JSON.parseObject(three,PurchaseOrderQueryForm.class);
         Map<String,Object> map=new HashMap<>();
-        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        Page<PurchaseOrder> page= PageHelper.startPage(currentPage,pageSize);
         List<PurchaseOrder> list=purchaseOrderService.queryAllByPage(queryForm);
         map.put("total",page.getTotal());
         map.put("rows",list);
@@ -124,7 +126,6 @@ public class PurchaseOrderController {
         String two = jsonObject.getString("orderdetails");
         List<PurchaseOrderDetails> orderdetails= JSONArray.parseArray(two, PurchaseOrderDetails.class);
         order.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(order.getCreatePeople())));
-        order.setVendorName(vendorService.findVendorName(order.getVendorName()));
         order.setCreateDate(new Date());
         order.setUpdateDate(new Date());
         order.setVettingState(type);
@@ -187,6 +188,7 @@ public class PurchaseOrderController {
         PurchaseOrder order=purchaseOrderService.queryById(id);
         order.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getCreatePeople())));
         order.setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getBuyerName())));
+        order.setVendorName(vendorService.findVendorName(order.getVendorName()));
         if (order.getVettingName()!=null){
             order.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getVettingName())));
         }

@@ -2,6 +2,7 @@ package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -91,5 +92,12 @@ public interface PurchaseReceiptDao {
 
 
     List<PurchaseReceipt> queryAllByVettingState();
+
+    /**
+     * 根据condition进行多条件查询采购入库单
+     * @param condition
+     * @return
+     */
+    List<PurchaseReceipt> conditionpage(PurchaseReceiptConditionVo condition);
 }
 

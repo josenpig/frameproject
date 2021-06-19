@@ -324,6 +324,82 @@
         from purchase_receipt
         where vetting_state=1
     </select>
+    <select id="conditionpage" resultMap="PurchaseReceiptMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="inboundDate != null">
+                and inbound_date = #{inboundDate}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                and buyer_type = #{buyerType}
+            </if>
+            <if test="disrate != null">
+                and disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                and dismoney = #{dismoney}
+            </if>
+            <if test="offersPrice != null">
+                and offers_price = #{offersPrice}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                and vetting_name = #{vettingName}
+            </if>
+            <if test="lastVettingTime != null">
+                and last_vetting_time = #{lastVettingTime}
+            </if>
+            <if test="vettingState != null">
+                and vetting_state = #{vettingState}
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                and associated_order = #{associatedOrder}
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                and exit_order_id = #{exitOrderId}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                and payment_order = #{paymentOrder}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                and invoice_id = #{invoiceId}
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                and create_people = #{createPeople}
+            </if>
+            <if test="updatePeople != null and updatePeople != ''">
+                and update_people = #{updatePeople}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="counter != null">
+                and counter = #{counter}
+            </if>
+        </where>
+    </select>
 
 
 </mapper>
