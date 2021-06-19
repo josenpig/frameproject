@@ -1,6 +1,8 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
+import com.xingji.frameproject.vo.PurchaseCapitalVo;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ public interface CapitalPayableService {
      */
     List<CapitalPayable> queryAllByLimit(int offset, int limit);
 
+    List<CapitalPayable> queryAllByPage(CapitalConditionPageVo vo);
+
     /**
      * 新增数据
      *
@@ -53,4 +57,5 @@ public interface CapitalPayableService {
      */
     boolean deleteById(String deliveryId);
 
+    PurchaseCapitalVo querythisPayment(String purchaseId);
 }

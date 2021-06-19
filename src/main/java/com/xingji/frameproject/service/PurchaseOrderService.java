@@ -88,5 +88,5 @@ public interface PurchaseOrderService {
      */
     List<PurchaseOrder> queryAllByPage(PurchaseOrderQueryForm queryForm);
 
-    PurchaseCapitalVo querythisReceipt(String purchaseId);
+    PurchaseCapitalVo querythisPayment(String purchaseId);
 }

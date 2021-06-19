@@ -5,6 +5,20 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceivable" id="CapitalReceivableMap">
         <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="customer" column="customer" jdbcType="VARCHAR"/>
+        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
+        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
+        <result property="received" column="received" jdbcType="NUMERIC"/>
+        <result property="uncollected" column="uncollected" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="founder" column="founder" jdbcType="VARCHAR"/>
+        <result property="caseState" column="case_state" jdbcType="INTEGER"/>
+        <result property="receiptRemark" column="receipt_remark" jdbcType="VARCHAR"/>
+        <result property="lastCollectionTime" column="last_collection_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceivable" id="CapitalReceivableView">
+        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
         <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
@@ -56,11 +70,12 @@
             </if>
         </where>
     </select>
+    <!--查询本次收款-->
     <select id="querythisReceipt" resultMap="SaleReceipt">
         select * from capital_receivable where delivery_id=#{saleId}
     </select>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalReceivableMap">
+    <select id="queryById" resultMap="CapitalReceivableView">
         select
           delivery_id, delivery_time, customer, salesmen, receivables, received, uncollected, remarks, founder, case_state, receipt_remark, last_collection_time
         from frameproject.capital_receivable
@@ -121,8 +136,8 @@
         </where>
     </select>
     <!--通过实体作为或者条件查询-->
-    <select id="queryAllByPage" resultMap="CapitalReceivableMap">
-        select a.*,b.* from capital_receivable a INNER JOIN base_customer b on a.customer=b.customer_number
+    <select id="queryAllByPage" resultMap="CapitalReceivableView">
+        select a.*,b.customer_name from capital_receivable a INNER JOIN base_customer b on a.customer=b.customer_number
             <where>
                 <if test="deliveryId != null and deliveryId != ''">
                     and delivery_id like CONCAT('%',#{deliveryId},'%')

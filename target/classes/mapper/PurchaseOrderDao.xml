@@ -313,7 +313,7 @@
         from purchase_order
     </select>
 
-    <select id="querythisReceipt" resultMap="PurchaseReceipt">
+    <select id="querythisPayment" resultMap="PurchaseReceipt">
         select *,offers_price-ostate from purchase_order where id=#{purchaseId}
     </select>
 

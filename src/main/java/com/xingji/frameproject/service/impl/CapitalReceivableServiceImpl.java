@@ -93,6 +93,10 @@ public class CapitalReceivableServiceImpl implements CapitalReceivableService {
     public List<CiaBillVo> querycavReceipt(CiaBillVo vo) {
         return this.capitalReceivableDao.querycavReceipt(vo);
     }
+    /**
+     * 本次销售出库单收款--应收
+     * @return 数据
+     */
     @Override
     public SaleReceiptVo querythisReceipt(String saleId) {
         return this.capitalReceivableDao.querythisReceipt(saleId);

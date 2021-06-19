@@ -93,5 +93,5 @@ public interface PurchaseOrderDao {
      * @param purchaseId 采购单id
      * @return 对象列表
      */
-    PurchaseCapitalVo querythisReceipt(String purchaseId);
+    PurchaseCapitalVo querythisPayment(String purchaseId);
 }

@@ -63,7 +63,10 @@ public interface CapitalReceivableService {
     List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo);
 
     List<CiaBillVo> querycavReceipt(CiaBillVo vo);
-
+    /**
+     * 本次销售出库单收款--应收
+     * @return 数据
+     */
     SaleReceiptVo querythisReceipt(String saleId);
     /**
      * 修改已收金额数据
