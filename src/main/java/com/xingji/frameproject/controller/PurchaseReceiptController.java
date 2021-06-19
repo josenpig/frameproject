@@ -3,17 +3,23 @@ package com.xingji.frameproject.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.PurchaseReceiptVo;
+import com.xingji.frameproject.vo.SaleConditionPageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (PurchaseReceipt)表控制层
@@ -168,5 +174,31 @@ public class PurchaseReceiptController {
     }
 
 
+    /**
+     * 分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<PurchaseReceipt> list=purchaseReceiptService.conditionpage(order);
+//        for(int i=0;i<list.size();i++){
+//            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+//            if(list.get(i).getApprover()!=null) {
+//                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+//            }
+//            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+//        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
 
 }

@@ -2,6 +2,7 @@ package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 import com.xingji.frameproject.mybatis.dao.PurchaseReceiptDao;
 import com.xingji.frameproject.service.PurchaseReceiptService;
@@ -132,6 +133,16 @@ public class PurchaseReceiptServiceImpl implements PurchaseReceiptService {
     @Override
     public List<PurchaseReceipt> queryAllByVettingState() {
         return this.purchaseReceiptDao.queryAllByVettingState();
+    }
+
+    /**
+     * 根据condition进行多条件查询采购入库单
+     * @param condition
+     * @return
+     */
+    @Override
+    public List<PurchaseReceipt> conditionpage(PurchaseReceiptConditionVo condition) {
+        return this.purchaseReceiptDao.conditionpage(condition);
     }
 
 

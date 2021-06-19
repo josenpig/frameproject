@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.PurchaseReceiptQueryForm;
 
 import java.util.List;
@@ -87,4 +88,11 @@ public interface PurchaseReceiptService {
      * @return
      */
     List<PurchaseReceipt> queryAllByVettingState();
+
+    /**
+     * 根据条件查询采购入库单
+     * @param condition
+     * @return
+     */
+    List<PurchaseReceipt> conditionpage(PurchaseReceiptConditionVo condition);
 }
