@@ -15,7 +15,7 @@
         select
           id, payment_id, fund_account, settlement_type, this_money
         from frameproject.capital_payment_account
-        where id = #{id}
+        where payment_id = #{id}
     </select>
 
     <!--查询指定行数据-->

@@ -141,4 +141,23 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     public PurchaseCapitalVo querythisPayment(String purchaseId){
         return this.purchaseOrderDao.querythisPayment(purchaseId);
     }
+    /**
+     * 通过实体类查询所有可付款单
+     * @param vo 实体类
+     * @return 对象列表
+     */
+    @Override
+    public List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo) {
+        return this.purchaseOrderDao.queryPayment(vo);
+    }
+    /**
+     * 修改订单已付款数据
+     *
+     * @param purchaseOrder 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public boolean ostateadd(PurchaseOrder purchaseOrder) {
+        return this.purchaseOrderDao.ostateadd(purchaseOrder);
+    }
 }

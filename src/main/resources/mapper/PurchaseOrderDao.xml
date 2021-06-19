@@ -312,9 +312,34 @@
         select count(*)
         from purchase_order
     </select>
-
+    <!--查询本次付款订单-->
     <select id="querythisPayment" resultMap="PurchaseReceipt">
         select *,offers_price-ostate from purchase_order where id=#{purchaseId}
     </select>
-
+    <!--查询所有可付款款订单-->
+    <select id="queryPayment" resultMap="PurchaseReceipt">
+        select *,offers_price-ostate from purchase_order
+        <where>
+            vetting_state=1
+            <if test="purchaseId != null and purchaseId != ''">
+                and id = #{purchaseId}
+            </if>
+            <if test="vendor != null and vendor != ''">
+                and vendor_name = #{vendor}
+            </if>
+        </where>
+    </select>
+    <!--修改订单预付款-->
+    <update id="ostateadd">
+        update purchase_order
+        <set>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="ostate != null">
+                ostate =ostate + #{ostate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

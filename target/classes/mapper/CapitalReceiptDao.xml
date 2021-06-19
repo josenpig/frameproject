@@ -5,25 +5,6 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceipt" id="CapitalReceiptMap">
         <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
         <result property="receiptTime" column="receipt_time" jdbcType="TIMESTAMP"/>
-        <result property="customer" column="customer" jdbcType="VARCHAR"/>
-        <result property="payee" column="payee" jdbcType="VARCHAR"/>
-        <result property="incomeType" column="income_type" jdbcType="VARCHAR"/>
-        <result property="receiptMoney" column="receipt_money" jdbcType="NUMERIC"/>
-        <result property="ciaMoney" column="cia_money" jdbcType="NUMERIC"/>
-        <result property="ciaBalance" column="cia_balance" jdbcType="NUMERIC"/>
-        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
-        <result property="approver" column="approver" jdbcType="VARCHAR"/>
-        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
-        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
-    </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceipt" id="CapitalReceiptView">
-        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
-        <result property="receiptTime" column="receipt_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="payee" column="payee" jdbcType="VARCHAR"/>
         <result property="incomeType" column="income_type" jdbcType="VARCHAR"/>
@@ -51,7 +32,7 @@
         <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
     </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalReceiptView">
+    <select id="queryById" resultMap="CapitalReceiptMap">
         select a.*,b.* from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
         where receipt_id = #{receiptId}
     </select>
@@ -65,7 +46,7 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="CapitalReceiptView">
+    <select id="queryAll" resultMap="CapitalReceiptMap">
         select a.*,b.customer_name from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="receiptId != null and receiptId != ''">

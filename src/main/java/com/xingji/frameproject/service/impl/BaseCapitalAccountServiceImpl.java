@@ -99,4 +99,14 @@ public class BaseCapitalAccountServiceImpl implements BaseCapitalAccountService 
     public boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount) {
         return this.baseCapitalAccountDao.currentAmountadd(baseCapitalAccount);
     }
+    /**
+     * 修改当前金额数据--减
+     *
+     * @param baseCapitalAccount 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public boolean currentAmountreduce(BaseCapitalAccount baseCapitalAccount) {
+        return this.baseCapitalAccountDao.currentAmountreduce(baseCapitalAccount);
+    }
 }

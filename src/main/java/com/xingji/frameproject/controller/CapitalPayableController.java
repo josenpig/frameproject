@@ -77,6 +77,44 @@ public class CapitalPayableController {
         return AjaxResponse.success(map);
     }
     /**
+     * 预付单付款分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/findpurchasepage")
+    public AjaxResponse findsalepage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        PurchaseCapitalVo vo=JSON.parseObject(condition, PurchaseCapitalVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<PurchaseCapitalVo> list=pos.queryPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 应付单分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/findreceiptpage")
+    public AjaxResponse finddeliverypage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        PurchaseCapitalVo vo=JSON.parseObject(condition, PurchaseCapitalVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<PurchaseCapitalVo> list=cps.queryPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
      * 本次采购订单付款--预付
      * @return 数据
      */

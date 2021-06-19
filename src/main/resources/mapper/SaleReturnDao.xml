@@ -5,38 +5,11 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.SaleReturn" id="SaleReturnMap">
         <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
         <result property="returnTime" column="return_time" jdbcType="TIMESTAMP"/>
-        <result property="customer" column="customer" jdbcType="VARCHAR"/>
-        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
-        <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
-        <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
-        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="approver" column="approver" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
-        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
-        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
-        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
-        <result property="billingId" column="billing_id" jdbcType="VARCHAR"/>
-        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
-        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
-        <result property="returnState" column="return_state" jdbcType="INTEGER"/>
-        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
-        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
-    </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.SaleReturn" id="SaleReturnView">
-        <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
-        <result property="returnTime" column="return_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
         <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
         <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
         <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
-        <result property="contacts" column="contact" jdbcType="VARCHAR"/>
-        <result property="contactsPhone" column="contact_number" jdbcType="VARCHAR"/>
-        <result property="contactsAddress" column="contact_address" jdbcType="VARCHAR"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
         <result property="approver" column="approver" jdbcType="VARCHAR"/>
         <result property="founder" column="founder" jdbcType="VARCHAR"/>
@@ -55,12 +28,12 @@
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="SaleReturnView">
+    <select id="queryById" resultMap="SaleReturnMap">
         select a.*,b.* from sale_return a INNER JOIN base_customer b on a.customer=b.customer_number
         where return_id = #{returnId}
     </select>
     <!--通过实体作为或者条件查询-->
-    <select id="conditionpage" resultMap="SaleReturnView">
+    <select id="conditionpage" resultMap="SaleReturnMap">
         select a.*,b.* from sale_return a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="orderId != null and orderId != ''">

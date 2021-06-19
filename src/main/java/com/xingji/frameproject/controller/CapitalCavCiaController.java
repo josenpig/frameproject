@@ -40,6 +40,10 @@ public class CapitalCavCiaController {
     @Resource
     private CapitalReceiptService crs;
     @Resource
+    private CapitalPayableService cpbs;
+    @Resource
+    private CapitalPaymentService cps;
+    @Resource
     private SysUserService sus;
 
     /**
@@ -64,7 +68,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(vo);
     }
     /**
-     * 核销单应收款分页条件查询
+     * 核销单应收款分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -83,7 +87,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(map);
     }
     /**
-     * 核销单收款单据分页条件查询
+     * 核销单收款单据分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -97,6 +101,44 @@ public class CapitalCavCiaController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<CiaCapVo> list=crs.querycavReceipt(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 核销单应付款分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/payablepage")
+    public AjaxResponse payablepage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaBillVo vo= JSON.parseObject(condition, CiaBillVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaBillVo> list=cpbs.querycavPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 核销单付款单据分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/paymentpage")
+    public AjaxResponse paymentpage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaCapVo vo= JSON.parseObject(condition, CiaCapVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaCapVo> list=cps.querycavPayment(vo);
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
