@@ -59,4 +59,18 @@ public interface BaseVendorService {
      * @param baseVendor
      */
     List<BaseVendor> findAllVendor(BaseVendor baseVendor);
+
+    /**
+     * 根据供应商id查询供应商用户名
+     * @param vendorId
+     * @return
+     */
+    String findVendorName(String vendorId);
+
+    /**
+     * 根据供应商用户名查询供应商id
+     * @param vendorName
+     * @return
+     */
+    String findVendorId(String vendorName);
 }

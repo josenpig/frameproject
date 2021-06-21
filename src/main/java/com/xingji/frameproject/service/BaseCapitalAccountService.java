@@ -70,4 +70,5 @@ public interface BaseCapitalAccountService {
      */
     boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount);
 
+    boolean currentAmountreduce(BaseCapitalAccount baseCapitalAccount);
 }

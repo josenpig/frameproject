@@ -2,12 +2,14 @@
   <dictionary name="asus">
     <words>
       <w>allmenu</w>
+      <w>approvalorder</w>
       <w>changemenu</w>
       <w>cianew</w>
       <w>findmenulist</w>
       <w>gologin</w>
       <w>loginuser</w>
       <w>menulist</w>
+      <w>orderid</w>
       <w>treemenu</w>
       <w>usermenu</w>
     </words>

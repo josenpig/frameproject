@@ -1,7 +1,6 @@
 package com.xingji.frameproject.aspect;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.OperationlogService;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
@@ -20,13 +19,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.Principal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 系统日志：切面处理类
@@ -45,8 +41,13 @@ public class LogAspect {
     private static String username;
     @Pointcut("execution(public * com.xingji.frameproject.controller.UserController.gologinByPhone(..))")
     public void getuserByPhone(){
-        System.out.println("loginByphone");
+     //this.
     }
+
+    /**
+     * 手机号登录
+     * @param joinPoint
+     */
     @Before("getuserByPhone()")
     public void doBefore1(JoinPoint joinPoint){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -56,7 +57,6 @@ public class LogAspect {
         log.info("HTTP_METHOD : " + request.getMethod());
         log.info("REQUEST：" + joinPoint.getArgs().toString());
         String xx=JSONObject.toJSONString(joinPoint.getArgs());
-        System.out.println(">>>>>>>>>>>"+xx);
         int index=xx.indexOf("["+'"');
         int index2=xx.indexOf('"'+","+'"');
         String cha=xx.substring(index+2,index2);
@@ -70,7 +70,6 @@ public class LogAspect {
      */
     @Pointcut("execution(public * com.xingji.frameproject.controller.UserController.login(..))")
     public void getuserByUserName(){
-        System.out.println("loginByusername");
         // this.
     }
 

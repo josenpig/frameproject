@@ -30,7 +30,16 @@ public class CapitalCavCiaServiceImpl implements CapitalCavCiaService {
     public CapitalCavCia queryById(String cavId) {
         return this.capitalCavCiaDao.queryById(cavId);
     }
-
+    /**
+     * 通过ID及核算类型查询单条数据
+     *
+     * @param cavId 主键
+     * @return 实例对象
+     */
+    @Override
+    public CapitalCavCia queryByIdTpye(String cavId, String cavType) {
+        return this.capitalCavCiaDao.queryByIdTpye(cavId,cavType);
+    }
     /**
      * 查询多条数据
      *

@@ -5,7 +5,7 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayment" id="CapitalPaymentMap">
         <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
         <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
-        <result property="vendor" column="vendor" jdbcType="VARCHAR"/>
+        <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
         <result property="drawee" column="drawee" jdbcType="VARCHAR"/>
         <result property="paymentType" column="payment_type" jdbcType="VARCHAR"/>
         <result property="paymentMoney" column="payment_money" jdbcType="NUMERIC"/>
@@ -21,12 +21,19 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
     </resultMap>
-
+    <resultMap type="com.xingji.frameproject.vo.CiaCapVo" id="CiaCapMap">
+        <result property="capitalId" column="payment_id" jdbcType="VARCHAR"/>
+        <result property="capitalType" column="payment_type" jdbcType="VARCHAR"/>
+        <result property="otherParty" column="vendor" jdbcType="VARCHAR"/>
+        <result property="capitalTime" column="payment_time" jdbcType="TIMESTAMP"/>
+        <result property="beforeMoney" column="pia_money" jdbcType="NUMERIC"/>
+        <result property="writtenMoney" column="pia_balance-pia_money" jdbcType="NUMERIC"/>
+        <result property="unwrittenMoney" column="pia_balance" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
     <!--查询单个-->
     <select id="queryById" resultMap="CapitalPaymentMap">
-        select
-          payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder, remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
-        from frameproject.capital_payment
+        select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         where payment_id = #{paymentId}
     </select>
 
@@ -40,10 +47,7 @@
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="CapitalPaymentMap">
-        select
-        payment_id, payment_time, vendor, drawee, payment_type, payment_money, pia_money, pia_balance, cav_id, founder,
-        remarks, approval_state, approver, last_approval_time, found_time, update_time, approval_remarks
-        from frameproject.capital_payment
+        select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         <where>
             <if test="paymentId != null and paymentId != ''">
                 and payment_id = #{paymentId}
@@ -198,6 +202,17 @@
     <delete id="deleteById">
         delete from frameproject.capital_payment where payment_id = #{paymentId}
     </delete>
-
+    <!--通过实体作为筛选条件查询-->
+    <select id="querycavPayment" resultMap="CiaCapMap">
+        select *,pia_balance-pia_money from frameproject.capital_payment
+        <where>
+            <if test="capitalId != null and capitalId != ''">
+                and payment_id = #{capitalId}
+            </if>
+            <if test="otherParty != null and otherParty != ''">
+                and vendor = #{otherParty}
+            </if>
+        </where>
+    </select>
 </mapper>
 

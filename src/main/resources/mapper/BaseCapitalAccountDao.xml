@@ -155,6 +155,16 @@
         </set>
         where capital_id = #{fundAccount}
     </update>
+    <!--修改当前金额数据 减-->
+    <update id="currentAmountreduce">
+        update frameproject.base_capital_account
+        <set>
+            <if test="currentAmount != null">
+                current_amount =current_amount - #{currentAmount}
+            </if>
+        </set>
+        where capital_id = #{fundAccount}
+    </update>
 
     <!--通过主键删除-->
     <delete id="deleteById">

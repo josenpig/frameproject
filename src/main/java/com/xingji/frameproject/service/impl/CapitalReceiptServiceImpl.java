@@ -87,6 +87,11 @@ public class CapitalReceiptServiceImpl implements CapitalReceiptService {
     public boolean deleteById(String receiptId) {
         return this.capitalReceiptDao.deleteById(receiptId) > 0;
     }
+    /**
+     * 通过实体类条件查询核销单中的收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
     @Override
     public List<CiaCapVo> querycavReceipt(CiaCapVo vo) {
         return this.capitalReceiptDao.querycavReceipt(vo);

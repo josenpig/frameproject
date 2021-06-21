@@ -43,11 +43,13 @@ public class CapitalReceiptController {
     @Resource
     private CapitalReceiptAccountService cras;
     @Resource
-    private BaseCapitalAccountService bras;
+    private BaseCapitalAccountService bcas;
     @Resource
     private SaleOrderService sos;
     @Resource
     private SaleDeliveryService sds;
+    @Resource
+    private SaleReturnService srs;
 
     /**
      * 通过主键查询单条数据
@@ -59,29 +61,23 @@ public class CapitalReceiptController {
         CapitalReceipt receipt=crs.queryById(id);
         List<CapitalReceiptBill> bills=crbs.queryById(id);
         List<CapitalReceiptAccount> accounts=cras.queryById(id);
-        List<CapitalAccountVo> vos=new ArrayList<>();
+        ReceiptVo vo = new ReceiptVo();
         receipt.setFounder(sus.queryById(Integer.valueOf(receipt.getFounder())).getUserName());
         if(receipt.getApprover()!=null) {
             receipt.setApprover(sus.queryById(Integer.valueOf(receipt.getApprover())).getUserName());
         }
         receipt.setPayee(sus.queryById(Integer.valueOf(receipt.getPayee())).getUserName());
-        for (int i=0;i<accounts.size();i++){
-            BaseCapitalAccountVo basevo=new BaseCapitalAccountVo();
+        for (int i=0;i<accounts.size();i++) {
+            BaseCapitalAccountVo basevo = new BaseCapitalAccountVo();
             basevo.setCapitalId(accounts.get(i).getFundAccount());
-            BaseCapitalAccountVo list=bras.queryAllVo(basevo).get(0);
-            CapitalAccountVo vo=new CapitalAccountVo();
-            BaseCapitalAccount account=bras.queryById(accounts.get(i).getFundAccount());
-            vo.setId(accounts.get(i).getId());
-            vo.setFundAccount(account.getFundAccount());
-            vo.setReceiptId(accounts.get(i).getReceiptId());
-            vo.setSettlementType(list.getSettlementType());
-            vo.setThisMoney(accounts.get(i).getThisMoney());
-            vos.add(vo);
+            BaseCapitalAccountVo list = bcas.queryAllVo(basevo).get(0);
+            BaseCapitalAccount account = bcas.queryById(accounts.get(i).getFundAccount());
+            accounts.get(i).setFundAccount(account.getFundAccount());
+            accounts.get(i).setSettlementType(list.getSettlementType());
+            vo.setReceipt(receipt);
+            vo.setBills(bills);
+            vo.setAccounts(accounts);
         }
-        ReceiptVo vo=new ReceiptVo();
-        vo.setReceipt(receipt);
-        vo.setBills(bills);
-        vo.setAccounts(vos);
         return AjaxResponse.success(vo);
     }
     @PostMapping("/addreceipt/{type}")
@@ -96,16 +92,35 @@ public class CapitalReceiptController {
         //绑定收款单
         for (int i=0;i<bills.size();i++){
             if (bills.get(i).getSaleType().equals("销售订单")){
-                SaleOrder saleOrder=new SaleOrder();
-                saleOrder.setOrderId(bills.get(i).getSaleId());
-                saleOrder.setReceiptId(receipt.getReceiptId());
-                sos.update(saleOrder);
-            }
-            if (bills.get(i).getSaleType().equals("销售出库单")||bills.get(i).getSaleType().equals("销售退货单")){
-                SaleDelivery saleDelivery=new SaleDelivery();
-                saleDelivery.setDeliveryId(bills.get(i).getSaleId());
-                saleDelivery.setReceiptId(receipt.getReceiptId());
-                sds.update(saleDelivery);
+                SaleOrder saleOrder=sos.queryById(bills.get(i).getSaleId());
+                SaleOrder neworder=new SaleOrder();
+                neworder.setOrderId(bills.get(i).getSaleId());
+                if(saleOrder.getReceiptId()==null) {
+                    neworder.setReceiptId(receipt.getReceiptId());
+                }else {
+                    neworder.setReceiptId(saleOrder.getReceiptId()+",3"+receipt.getReceiptId());
+                }
+                sos.update(neworder);
+            }else if (bills.get(i).getSaleType().equals("销售出库单")){
+                SaleDelivery saleDelivery=sds.queryById(bills.get(i).getSaleId());
+                SaleDelivery neworder=new SaleDelivery();
+                neworder.setOrderId(bills.get(i).getSaleId());
+                if(saleDelivery.getReceiptId()==null) {
+                    neworder.setReceiptId(receipt.getReceiptId());
+                }else {
+                    neworder.setReceiptId(saleDelivery.getReceiptId()+","+receipt.getReceiptId());
+                }
+                sds.update(neworder);
+            }else {
+                SaleReturn returns=srs.queryById(bills.get(i).getSaleId());
+                SaleReturn neworder=new SaleReturn();
+                neworder.setOrderId(bills.get(i).getSaleId());
+                if(returns.getReceiptId()==null) {
+                    neworder.setReceiptId(receipt.getReceiptId());
+                }else {
+                    neworder.setReceiptId(returns.getReceiptId()+","+receipt.getReceiptId());
+                }
+                srs.update(neworder);
             }
             bills.get(i).setReceiptId(receipt.getReceiptId());
         }
@@ -209,7 +224,7 @@ public class CapitalReceiptController {
             for (int j=0;j<accounts.size();j++) {
                 baseaccount.setFundAccount(accounts.get(j).getFundAccount());
                 baseaccount.setCurrentAmount(accounts.get(j).getThisMoney());
-                bras.currentAmountadd(baseaccount);
+                bcas.currentAmountadd(baseaccount);
             }
         }
         return AjaxResponse.success(true);

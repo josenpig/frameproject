@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPayment;
+import com.xingji.frameproject.vo.CiaCapVo;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface CapitalPaymentService {
      * @return 实例对象
      */
     CapitalPayment queryById(String paymentId);
+
+    List<CapitalPayment> queryAll(CapitalPayment capitalPayment);
 
     /**
      * 查询多条数据
@@ -52,5 +55,10 @@ public interface CapitalPaymentService {
      * @return 是否成功
      */
     boolean deleteById(String paymentId);
-
+    /**
+     * 通过实体类条件查询核销单中的付款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    List<CiaCapVo> querycavPayment(CiaCapVo vo);
 }

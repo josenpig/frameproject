@@ -109,16 +109,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return this.queryById(purchaseOrder.getId());
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderList 实例对象列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean updateBatch(List<PurchaseOrder> purchaseOrderList) {
-        return this.purchaseOrderDao.updateBatch(purchaseOrderList) == -1;
-    }
+
 
     /**
      * 通过主键删除数据
@@ -131,17 +122,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return this.purchaseOrderDao.deleteById(id) > 0;
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean deleteBatch(List<Integer> ids) {
-        int row = this.purchaseOrderDao.deleteBatch(ids);
-        return ids.size() == row;
-    }
+
 
     /**
      * 查询所有的采购订单
@@ -157,7 +138,26 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
      * @return 对象列表
      */
     @Override
-    public PurchaseCapitalVo querythisReceipt(String purchaseId){
-        return this.purchaseOrderDao.querythisReceipt(purchaseId);
+    public PurchaseCapitalVo querythisPayment(String purchaseId){
+        return this.purchaseOrderDao.querythisPayment(purchaseId);
+    }
+    /**
+     * 通过实体类查询所有可付款单
+     * @param vo 实体类
+     * @return 对象列表
+     */
+    @Override
+    public List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo) {
+        return this.purchaseOrderDao.queryPayment(vo);
+    }
+    /**
+     * 修改订单已付款数据
+     *
+     * @param purchaseOrder 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public boolean ostateadd(PurchaseOrder purchaseOrder) {
+        return this.purchaseOrderDao.ostateadd(purchaseOrder);
     }
 }

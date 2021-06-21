@@ -98,6 +98,12 @@ public interface CapitalReceivableDao {
      * @return 影响行数
      */
     SaleReceiptVo querythisReceipt(String saleId);
+    /**
+     * 修改已收金额数据
+     *
+     * @param capitalReceivable 实例对象
+     * @return 实例对象
+     */
     int receivedadd(CapitalReceivable capitalReceivable);
     /**
      * 通过实体类条件查询核销单中的应收款单

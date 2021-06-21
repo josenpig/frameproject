@@ -110,16 +110,7 @@ public class PurchaseReceiptDetailsServiceImpl implements PurchaseReceiptDetails
         return this.queryById(purchaseReceiptDetails.getId());
     }
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean updateBatch(List<PurchaseReceiptDetails> purchaseReceiptDetailsList) {
-        return this.purchaseReceiptDetailsDao.updateBatch(purchaseReceiptDetailsList) == -1;
-    }
+
 
     /**
      * 通过主键删除数据
@@ -132,17 +123,7 @@ public class PurchaseReceiptDetailsServiceImpl implements PurchaseReceiptDetails
         return this.purchaseReceiptDetailsDao.deleteById(id) > 0;
     }
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
-     */
-    @Override
-    public boolean deleteBatch(List<Integer> ids) {
-        int row = this.purchaseReceiptDetailsDao.deleteBatch(ids);
-        return ids.size() == row;
-    }
+
     /**
      * 根据采购入库单查询采购入库单商品详情
      * @param id

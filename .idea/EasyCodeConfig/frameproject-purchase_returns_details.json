@@ -2,7 +2,7 @@
   "name" : "PurchaseReturnsDetails",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "Default",
+  "templateGroupName" : "EIMS",
   "fullColumn" : [ {
     "name" : "id",
     "comment" : null,
@@ -11,7 +11,7 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "productName",
+    "name" : "returnId",
     "comment" : null,
     "type" : null,
     "shortType" : null,
@@ -32,20 +32,6 @@
     "custom" : false,
     "ext" : { }
   }, {
-    "name" : "productUnit",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "purchaseUnitPrice",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
     "name" : "purchaseMoney",
     "comment" : null,
     "type" : null,
@@ -54,27 +40,6 @@
     "ext" : { }
   }, {
     "name" : "depotName",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "ingredient",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "gramHeavy",
-    "comment" : null,
-    "type" : null,
-    "shortType" : null,
-    "custom" : false,
-    "ext" : { }
-  }, {
-    "name" : "productDescribe",
     "comment" : null,
     "type" : null,
     "shortType" : null,

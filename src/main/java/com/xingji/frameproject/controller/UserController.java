@@ -2,13 +2,11 @@ package com.xingji.frameproject.controller;
 
 import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
-import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.LogininService;
 import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserRoleService;
 import com.xingji.frameproject.service.SysUserService;
-import com.xingji.frameproject.util.JacksonUtil;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.util.SendSms;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -16,18 +14,15 @@ import com.xingji.frameproject.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpResponse;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.resource.HttpResource;
+
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

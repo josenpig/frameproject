@@ -40,18 +40,22 @@ public class CapitalCavCiaController {
     @Resource
     private CapitalReceiptService crs;
     @Resource
+    private CapitalPayableService cpbs;
+    @Resource
+    private CapitalPaymentService cps;
+    @Resource
     private SysUserService sus;
 
     /**
      * 通过主键查询核销单及核销单详情
-     * @param id 主键
+     * @param cavId 主键
      * @return 数据
      */
-    @GetMapping("/find/{id}")
-    public AjaxResponse selectOne(@PathVariable("id") String id) {
-        CapitalCavCia order=cccs.queryById(id);
-        List<CapitalCavCiaBill> bills=cccbs.queryById(id);
-        List<CapitalCavCiaCap> caps=ccccs.queryById(id);
+    @GetMapping("/find")
+    public AjaxResponse selectOne(String cavId,String cavType) {
+        CapitalCavCia order=cccs.queryByIdTpye(cavId,cavType);
+        List<CapitalCavCiaBill> bills=cccbs.queryById(cavId);
+        List<CapitalCavCiaCap> caps=ccccs.queryById(cavId);
         CiaVo vo=new CiaVo();
         order.setFounder(sus.queryById(Integer.valueOf(order.getFounder())).getUserName());
         if(order.getApprover()!=null) {
@@ -64,7 +68,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(vo);
     }
     /**
-     * 核销单应收款分页条件查询
+     * 核销单应收款分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -83,7 +87,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(map);
     }
     /**
-     * 核销单收款单据分页条件查询
+     * 核销单收款单据分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -101,6 +105,49 @@ public class CapitalCavCiaController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     }
+    /**
+     * 核销单应付款分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/payablepage")
+    public AjaxResponse payablepage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaBillVo vo= JSON.parseObject(condition, CiaBillVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaBillVo> list=cpbs.querycavPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 核销单付款单据分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/paymentpage")
+    public AjaxResponse paymentpage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaCapVo vo= JSON.parseObject(condition, CiaCapVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaCapVo> list=cps.querycavPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 新增核销单
+     * @param add 添加数据
+     * @return 单据id
+     */
     @PostMapping("/add/{type}")
     public AjaxResponse addreceipt(@PathVariable("type") int type,@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -147,7 +194,7 @@ public class CapitalCavCiaController {
         }else {
         list=cccs.querytwoPage(order);
         }
-        System.out.println(order.toString());
+
         for(int i=0;i<list.size();i++){
             list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
             if(list.get(i).getApprover()!=null){

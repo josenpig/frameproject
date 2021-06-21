@@ -71,13 +71,7 @@ public interface PurchaseOrderService {
      */
     PurchaseOrder update(PurchaseOrder purchaseOrder);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseOrderList 实例对象列表
-     * @return 影响行数
-     */
-    boolean updateBatch(List<PurchaseOrder> purchaseOrderList);
+
 
     /**
      * 通过主键删除数据
@@ -87,19 +81,24 @@ public interface PurchaseOrderService {
      */
     boolean deleteById(String id);
 
-    /**
-     * 批量删除数据
-     *
-     * @param ids 主键列表
-     * @return 是否成功
-     */
-    boolean deleteBatch(List<Integer> ids);
 
     /**
      * 查询所有的采购订单
      * @return
      */
     List<PurchaseOrder> queryAllByPage(PurchaseOrderQueryForm queryForm);
+    /**
+     * 通过订单id查询本次付款单信息
+     * @param purchaseId 采购单id
+     * @return 对象列表
+     */
+    PurchaseCapitalVo querythisPayment(String purchaseId);
+    /**
+     * 通过实体类查询所有可付款单
+     * @param vo 实体类
+     * @return 对象列表
+     */
+    List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo);
 
-    PurchaseCapitalVo querythisReceipt(String purchaseId);
+    boolean ostateadd(PurchaseOrder purchaseOrder);
 }

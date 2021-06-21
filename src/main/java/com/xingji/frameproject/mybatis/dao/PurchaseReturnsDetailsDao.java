@@ -1,16 +1,18 @@
 package com.xingji.frameproject.mybatis.dao;
 
+
 import com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 
 import java.util.List;
 
 /**
  * (PurchaseReturnsDetails)表数据库访问层
  *
- * @author makejava
- * @since 2021-06-15 18:49:12
+ * @author protagonist
+ * @since 2021-06-18 00:47:00
  */
 @Mapper
 public interface PurchaseReturnsDetailsDao {
@@ -21,17 +23,14 @@ public interface PurchaseReturnsDetailsDao {
      * @param id 主键
      * @return 实例对象
      */
-    PurchaseReturnsDetails queryById(Integer id);
+    PurchaseReturnsDetails selectById(Integer id);
 
     /**
-     * 查询指定行数据
+     * 查询全部
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
-    List<PurchaseReturnsDetails> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
+    List<PurchaseReturnsDetails> selectAll();
 
     /**
      * 通过实体作为筛选条件查询
@@ -39,7 +38,7 @@ public interface PurchaseReturnsDetailsDao {
      * @param purchaseReturnsDetails 实例对象
      * @return 对象列表
      */
-    List<PurchaseReturnsDetails> queryAll(PurchaseReturnsDetails purchaseReturnsDetails);
+    List<PurchaseReturnsDetails> selectList(PurchaseReturnsDetails purchaseReturnsDetails);
 
     /**
      * 新增数据
@@ -50,20 +49,12 @@ public interface PurchaseReturnsDetailsDao {
     int insert(PurchaseReturnsDetails purchaseReturnsDetails);
 
     /**
-     * 批量新增数据（MyBatis原生foreach方法）
+     * 批量新增
      *
-     * @param entities List<PurchaseReturnsDetails> 实例对象列表
+     * @param purchaseReturnsDetailss 实例对象的集合
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<PurchaseReturnsDetails> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<PurchaseReturnsDetails> 实例对象列表
-     * @return 影响行数
-     */
-    int insertOrUpdateBatch(@Param("entities") List<PurchaseReturnsDetails> entities);
+    int batchInsert(@Param("entities")List<PurchaseReturnsDetails> purchaseReturnsDetailss);
 
     /**
      * 修改数据
@@ -81,5 +72,10 @@ public interface PurchaseReturnsDetailsDao {
      */
     int deleteById(Integer id);
 
+    /**
+     * 查询总数据数
+     *
+     * @return 数据总数
+     */
+    int count();
 }
-

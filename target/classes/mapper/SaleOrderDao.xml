@@ -6,38 +6,11 @@
         <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
         <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
-        <result property="customer" column="customer" jdbcType="VARCHAR"/>
-        <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
-        <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
-        <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
-        <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="approver" column="approver" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
-        <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
-        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
-        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
-        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
-        <result property="deliveryState" column="delivery_state" jdbcType="INTEGER"/>
-        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
-        <result property="advance" column="advance" jdbcType="NUMERIC"/>
-        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
-    </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.SaleOrder" id="SaleOrderView">
-        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
-        <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
-        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
         <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
         <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
         <result property="receivables" column="receivables" jdbcType="NUMERIC"/>
-        <result property="contacts" column="contact" jdbcType="VARCHAR"/>
-        <result property="contactsPhone" column="contact_number" jdbcType="VARCHAR"/>
-        <result property="contactsAddress" column="contact_address" jdbcType="VARCHAR"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
         <result property="approver" column="approver" jdbcType="VARCHAR"/>
         <result property="founder" column="founder" jdbcType="VARCHAR"/>
@@ -61,7 +34,7 @@
         <result property="uncollectedMoney" column="receivables-advance" jdbcType="NUMERIC"/>
         <result property="customer" column="customer" jdbcType="VARCHAR"/>
     </resultMap>
-    <!--查询收款订单-->
+    <!--查询所有可收款订单-->
     <select id="queryReceipt" resultMap="SaleReceipt">
         select *,receivables-advance from sale_order
         <where>
@@ -74,13 +47,13 @@
             </if>
         </where>
     </select>
-    <!--查询收款订单-->
+    <!--查询本次收款订单-->
     <select id="querythisReceipt" resultMap="SaleReceipt">
         select *,receivables-advance from frameproject.sale_order
         where order_id=#{saleId}
     </select>
     <!--查询单个-->
-    <select id="queryById" resultMap="SaleOrderView">
+    <select id="queryById" resultMap="SaleOrderMap">
         select a.*,b.* from sale_order a INNER JOIN base_customer b on a.customer=b.customer_number
         where order_id = #{orderId}
     </select>
@@ -171,7 +144,7 @@
     </select>
 
     <!--通过实体作为或者条件查询-->
-    <select id="conditionpage" resultMap="SaleOrderView">
+    <select id="conditionpage" resultMap="SaleOrderMap">
         select a.*,b.* from sale_order a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
             <if test="orderId != null and orderId != ''">
@@ -189,11 +162,11 @@
             <if test="orderTime != null and orderTime=='本月'" >
                 and DATE_FORMAT( order_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
             </if>
-
             <if test="orderTime != null and orderTime != '' and orderTime=='自定义' and otimeState!=null and otimeEnd!=null">
                 and DATE_FORMAT(order_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
                 AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
             </if>
+
             <if test="deliveryTime != null and deliveryTime=='今天'" >
                 and to_days(delivery_time) = to_days(now())
             </if>

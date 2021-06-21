@@ -16,12 +16,12 @@ import java.util.List;
 public interface CapitalPaymentBillDao {
 
     /**
-     * 通过ID查询单条数据
+     * 通过ID查询多条数据
      *
      * @param id 主键
      * @return 实例对象
      */
-    CapitalPaymentBill queryById(Integer id);
+    List<CapitalPaymentBill> queryById(String id);
 
     /**
      * 查询指定行数据

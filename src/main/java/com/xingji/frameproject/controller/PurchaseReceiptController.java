@@ -3,17 +3,23 @@ package com.xingji.frameproject.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.PurchaseReceiptVo;
-import com.xingji.frameproject.vo.SaleDeliveryVo;
+import com.xingji.frameproject.vo.SaleConditionPageVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (PurchaseReceipt)表控制层
@@ -23,6 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("purchaseReceipt")
+@Slf4j
 public class PurchaseReceiptController {
     /**
      * 服务对象
@@ -39,6 +46,10 @@ public class PurchaseReceiptController {
     private PurchaseOrderService purchaseOrderService;
     @Resource
     private CapitalPayableService payableService;
+    @Resource
+    private SysUserService sysUserService;
+    @Resource
+    private BaseVendorService vendorService;
 
     /**
      * 通过主键查询单条数据
@@ -68,19 +79,23 @@ public class PurchaseReceiptController {
         delivery.setCreateDate(new Date());
         delivery.setState(type);
         delivery.setVettingState(0);
+        delivery.setVettingName(null);
+        delivery.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getCreatePeople())));
         //添加销售出库单信息
         for(int i=0;i<deliverydetails.size();i++){
             deliverydetails.get(i).setReceiptid(delivery.getId());
         }
-        purchaseReceiptService.insert(delivery);
-        detailsService.insertBatch(deliverydetails);
         //如果存在采购订单，修改订单状态--绑定入库单
         if (delivery.getAssociatedOrder()!=null){
             PurchaseOrder saleOrder=orderService.queryById(delivery.getAssociatedOrder());
             saleOrder.setReceiptOrderId(delivery.getId());
             saleOrder.setUpdateDate(new Date());
             orderService.update(saleOrder);
+            delivery.setBuyerName(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getBuyerName())));
+            delivery.setVendorName(vendorService.findVendorId(delivery.getVendorName()));
         }
+        purchaseReceiptService.insert(delivery);
+        detailsService.insertBatch(deliverydetails);
         return AjaxResponse.success(delivery.getId());
     }
 
@@ -94,6 +109,18 @@ public class PurchaseReceiptController {
     public AjaxResponse find(@PathVariable("id") String id) {
         PurchaseReceipt receipt=purchaseReceiptService.queryById(id);
         List<PurchaseReceiptDetails> deliveryDetails=detailsService.queryAllByOrderId(id);
+        receipt.setVendorName(vendorService.findVendorName(receipt.getVendorName()));
+        receipt.setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getBuyerName())));
+
+        if(!(receipt.getCreatePeople().equals("null"))&&receipt.getCreatePeople().length()!=0){
+            receipt.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getCreatePeople())));
+        }
+//        if (receipt.getVettingName()!=""||receipt.getVettingName()!=null){
+//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
+//        }
+//        if (receipt.getUpdatePeople()!=""||receipt.getUpdatePeople()!=null){
+//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
+//        }
         PurchaseReceiptVo vo=new PurchaseReceiptVo();
         vo.setReceipt(receipt);
         vo.setReceiptDetails(deliveryDetails);
@@ -110,8 +137,8 @@ public class PurchaseReceiptController {
         PurchaseReceipt receipt = purchaseReceiptService.queryById(orderid);
         receipt.setUpdateDate(new Date());
         receipt.setVettingState(type);
-        receipt.setVettingName(user);
-        receipt.setUpdatePeople(user);
+        receipt.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
+        receipt.setUpdatePeople(String.valueOf(sysUserService.queryUserIdByUserName(user)));
 
         purchaseReceiptService.update(receipt);
         //审批通过产品入库加上当前库存数量与预计库存数量
@@ -132,6 +159,7 @@ public class PurchaseReceiptController {
             payable.setUnpaid(receipt.getOffersPrice());
             payable.setFounder(user);
             payable.setCaseState(0);
+            payable.setFounder(receipt.getCreatePeople());
             payableService.insert(payable);
         }
         //如果绑定了订单就修改订单为已出库
@@ -143,6 +171,34 @@ public class PurchaseReceiptController {
             purchaseOrderService.update(order);
         }
         return AjaxResponse.success(receipt);
+    }
+
+
+    /**
+     * 分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<PurchaseReceipt> list=purchaseReceiptService.conditionpage(order);
+//        for(int i=0;i<list.size();i++){
+//            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
+//            if(list.get(i).getApprover()!=null) {
+//                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
+//            }
+//            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
+//        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
     }
 
 }

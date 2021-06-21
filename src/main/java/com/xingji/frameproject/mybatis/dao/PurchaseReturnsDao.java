@@ -1,5 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
+
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,8 +10,8 @@ import java.util.List;
 /**
  * (PurchaseReturns)表数据库访问层
  *
- * @author makejava
- * @since 2021-06-15 18:49:01
+ * @author protagonist
+ * @since 2021-06-18 00:46:46
  */
 @Mapper
 public interface PurchaseReturnsDao {
@@ -21,17 +22,14 @@ public interface PurchaseReturnsDao {
      * @param id 主键
      * @return 实例对象
      */
-    PurchaseReturns queryById(String id);
+    PurchaseReturns selectById(String id);
 
     /**
-     * 查询指定行数据
+     * 查询全部
      *
-     * @param offset 查询起始位置
-     * @param limit  查询条数
      * @return 对象列表
      */
-    List<PurchaseReturns> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
+    List<PurchaseReturns> selectAll();
 
     /**
      * 通过实体作为筛选条件查询
@@ -39,7 +37,7 @@ public interface PurchaseReturnsDao {
      * @param purchaseReturns 实例对象
      * @return 对象列表
      */
-    List<PurchaseReturns> queryAll(PurchaseReturns purchaseReturns);
+    List<PurchaseReturns> selectList(PurchaseReturns purchaseReturns);
 
     /**
      * 新增数据
@@ -50,20 +48,12 @@ public interface PurchaseReturnsDao {
     int insert(PurchaseReturns purchaseReturns);
 
     /**
-     * 批量新增数据（MyBatis原生foreach方法）
+     * 批量新增
      *
-     * @param entities List<PurchaseReturns> 实例对象列表
+     * @param purchaseReturnss 实例对象的集合
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<PurchaseReturns> entities);
-
-    /**
-     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
-     *
-     * @param entities List<PurchaseReturns> 实例对象列表
-     * @return 影响行数
-     */
-    int insertOrUpdateBatch(@Param("entities") List<PurchaseReturns> entities);
+    int batchInsert(List<PurchaseReturns> purchaseReturnss);
 
     /**
      * 修改数据
@@ -81,5 +71,10 @@ public interface PurchaseReturnsDao {
      */
     int deleteById(String id);
 
+    /**
+     * 查询总数据数
+     *
+     * @return 数据总数
+     */
+    int count();
 }
-

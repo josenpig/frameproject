@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.PurchaseReceiptDao">
-
+    <!-- 结果集 -->
     <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseReceipt" id="PurchaseReceiptMap">
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="inboundDate" column="inbound_date" jdbcType="TIMESTAMP"/>
@@ -22,118 +22,37 @@
         <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
         <result property="invoiceId" column="invoice_id" jdbcType="VARCHAR"/>
         <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
-        <result property="contact" column="contact" jdbcType="VARCHAR"/>
         <result property="updatePeople" column="update_people" jdbcType="VARCHAR"/>
         <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
         <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
         <result property="counter" column="counter" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="PurchaseReceiptCol">
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
         id
-        , inbound_date, vendor_name, buyer_name, state, buyer_type, disrate, dismoney, offers_price, depot_name, vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id, payment_order, cav_id, invoice_id, create_people, contact, update_people, create_date, update_date, counter    </sql>
+        , inbound_date, vendor_name, buyer_name, state, buyer_type, disrate, dismoney, offers_price, depot_name, vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id, payment_order, cav_id, invoice_id, create_people,  update_people, create_date, update_date, counter    </sql>
 
-    <!--查询单个-->
+    <!-- 查询单个 -->
     <select id="queryById" resultMap="PurchaseReceiptMap">
         select
-        <include refid="PurchaseReceiptCol"></include>
-        from frameproject.purchase_receipt
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
         where id = #{id}
     </select>
 
-    <!--查询所有-->
+    <!-- 查询全部 -->
     <select id="queryAll" resultMap="PurchaseReceiptMap">
         select
-        <include refid="PurchaseReceiptCol"></include>
-        from (select * from frameproject.purchase_receipt where work_point_id = #{workPointId})
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
     </select>
 
-    <!--通过实体作为或者条件查询-->
-    <select id="queryOrByPojo" resultMap="PurchaseReceiptMap">
-        select
-        <include refid="PurchaseReceiptCol"></include>
-        from (select * from frameproject.purchase_receipt where work_point_id = #{workPointId})
-        <where>
-            <if test="id != null and id != ''">
-                or id like '%'||#{id}||'%'
-            </if>
-            <if test="inboundDate != null">
-                or inbound_date like '%'||#{inboundDate}||'%'
-            </if>
-            <if test="vendorName != null and vendorName != ''">
-                or vendor_name like '%'||#{vendorName}||'%'
-            </if>
-            <if test="buyerName != null and buyerName != ''">
-                or buyer_name like '%'||#{buyerName}||'%'
-            </if>
-            <if test="state != null">
-                or state like '%'||#{state}||'%'
-            </if>
-            <if test="buyerType != null and buyerType != ''">
-                or buyer_type like '%'||#{buyerType}||'%'
-            </if>
-            <if test="disrate != null">
-                or disrate like '%'||#{disrate}||'%'
-            </if>
-            <if test="dismoney != null">
-                or dismoney like '%'||#{dismoney}||'%'
-            </if>
-            <if test="offersPrice != null">
-                or offers_price like '%'||#{offersPrice}||'%'
-            </if>
-            <if test="depotName != null and depotName != ''">
-                or depot_name like '%'||#{depotName}||'%'
-            </if>
-            <if test="vettingName != null and vettingName != ''">
-                or vetting_name like '%'||#{vettingName}||'%'
-            </if>
-            <if test="lastVettingTime != null">
-                or last_vetting_time like '%'||#{lastVettingTime}||'%'
-            </if>
-            <if test="vettingState != null">
-                or vetting_state like '%'||#{vettingState}||'%'
-            </if>
-            <if test="associatedOrder != null and associatedOrder != ''">
-                or associated_order like '%'||#{associatedOrder}||'%'
-            </if>
-            <if test="exitOrderId != null and exitOrderId != ''">
-                or exit_order_id like '%'||#{exitOrderId}||'%'
-            </if>
-            <if test="paymentOrder != null and paymentOrder != ''">
-                or payment_order like '%'||#{paymentOrder}||'%'
-            </if>
-            <if test="cavId != null and cavId != ''">
-                or cav_id like '%'||#{cavId}||'%'
-            </if>
-            <if test="invoiceId != null and invoiceId != ''">
-                or invoice_id like '%'||#{invoiceId}||'%'
-            </if>
-            <if test="createPeople != null and createPeople != ''">
-                or create_people like '%'||#{createPeople}||'%'
-            </if>
-            <if test="contact != null and contact != ''">
-                or contact like '%'||#{contact}||'%'
-            </if>
-            <if test="updatePeople != null and updatePeople != ''">
-                or update_people like '%'||#{updatePeople}||'%'
-            </if>
-            <if test="createDate != null">
-                or create_date like '%'||#{createDate}||'%'
-            </if>
-            <if test="updateDate != null">
-                or update_date like '%'||#{updateDate}||'%'
-            </if>
-            <if test="counter != null">
-                or counter like '%'||#{counter}||'%'
-            </if>
-        </where>
-    </select>
-
-    <!--通过实体作为并且条件查询-->
+    <!--通过实体作为筛选条件查询-->
     <select id="queryAndByPojo" resultMap="PurchaseReceiptMap">
         select
-        <include refid="PurchaseReceiptCol"></include>
-        from frameproject.purchase_receipt
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
         <where>
             <if test="id != null and id != ''">
                 and id = #{id}
@@ -192,8 +111,280 @@
             <if test="createPeople != null and createPeople != ''">
                 and create_people = #{createPeople}
             </if>
-            <if test="contact != null and contact != ''">
-                and contact = #{contact}
+            <if test="updatePeople != null and updatePeople != ''">
+                and update_people = #{updatePeople}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="counter != null">
+                and counter = #{counter}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryOrByPojo" resultMap="PurchaseReceiptMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
+        <where>
+            <if test="id != null and id != ''">
+                or id = #{id}
+            </if>
+            <if test="inboundDate != null">
+                or inbound_date = #{inboundDate}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                or vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                or buyer_name = #{buyerName}
+            </if>
+            <if test="state != null">
+                or state = #{state}
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                or buyer_type = #{buyerType}
+            </if>
+            <if test="disrate != null">
+                or disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                or dismoney = #{dismoney}
+            </if>
+            <if test="offersPrice != null">
+                or offers_price = #{offersPrice}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                or depot_name = #{depotName}
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                or vetting_name = #{vettingName}
+            </if>
+            <if test="lastVettingTime != null">
+                or last_vetting_time = #{lastVettingTime}
+            </if>
+            <if test="vettingState != null">
+                or vetting_state = #{vettingState}
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                or associated_order = #{associatedOrder}
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                or exit_order_id = #{exitOrderId}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                or payment_order = #{paymentOrder}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                or cav_id = #{cavId}
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                or invoice_id = #{invoiceId}
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                or create_people = #{createPeople}
+            </if>
+            <if test="updatePeople != null and updatePeople != ''">
+                or update_people = #{updatePeople}
+            </if>
+            <if test="createDate != null">
+                or create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                or update_date = #{updateDate}
+            </if>
+            <if test="counter != null">
+                or counter = #{counter}
+            </if>
+        </where>
+    </select>
+
+    <!-- 新增所有列 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into purchase_receipt(id, inbound_date, vendor_name, buyer_name, state, buyer_type, disrate, dismoney,
+                                     offers_price, depot_name, vetting_name, last_vetting_time, vetting_state,
+                                     associated_order, exit_order_id, payment_order, cav_id, invoice_id, create_people,
+                                     update_people, create_date, update_date, counter)
+        values (#{id}, #{inboundDate}, #{vendorName}, #{buyerName}, #{state}, #{buyerType}, #{disrate}, #{dismoney},
+                #{offersPrice}, #{depotName}, #{vettingName}, #{lastVettingTime}, #{vettingState}, #{associatedOrder},
+                #{exitOrderId}, #{paymentOrder}, #{cavId}, #{invoiceId}, #{createPeople},  #{updatePeople},
+                #{createDate}, #{updateDate}, #{counter})
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="insertBatch">
+        insert into purchase_receipt(id, inbound_date, vendor_name, buyer_name, state, buyer_type, disrate, dismoney,
+        offers_price, depot_name, vetting_name, last_vetting_time, vetting_state, associated_order, exit_order_id,
+        payment_order, cav_id, invoice_id, create_people, update_people, create_date, update_date, counter)
+        values
+        <foreach collection="purchaseReceipts" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.inboundDate}, #{item.vendorName}, #{item.buyerName}, #{item.state}, #{item.buyerType},
+            #{item.disrate}, #{item.dismoney}, #{item.offersPrice}, #{item.depotName}, #{item.vettingName},
+            #{item.lastVettingTime}, #{item.vettingState}, #{item.associatedOrder}, #{item.exitOrderId},
+            #{item.paymentOrder}, #{item.cavId}, #{item.invoiceId}, #{item.createPeople},
+            #{item.updatePeople}, #{item.createDate}, #{item.updateDate}, #{item.counter} )
+        </foreach>
+    </insert>
+
+    <!-- 通过主键修改数据 -->
+    <update id="update">
+        update frameproject.purchase_receipt
+        <set>
+            <if test="inboundDate != null">
+                inbound_date = #{inboundDate},
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                vendor_name = #{vendorName},
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                buyer_name = #{buyerName},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                buyer_type = #{buyerType},
+            </if>
+            <if test="disrate != null">
+                disrate = #{disrate},
+            </if>
+            <if test="dismoney != null">
+                dismoney = #{dismoney},
+            </if>
+            <if test="offersPrice != null">
+                offers_price = #{offersPrice},
+            </if>
+            <if test="depotName != null and depotName != ''">
+                depot_name = #{depotName},
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                vetting_name = #{vettingName},
+            </if>
+            <if test="lastVettingTime != null">
+                last_vetting_time = #{lastVettingTime},
+            </if>
+            <if test="vettingState != null">
+                vetting_state = #{vettingState},
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                associated_order = #{associatedOrder},
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                exit_order_id = #{exitOrderId},
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                payment_order = #{paymentOrder},
+            </if>
+            <if test="cavId != null and cavId != ''">
+                cav_id = #{cavId},
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                invoice_id = #{invoiceId},
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                create_people = #{createPeople},
+            </if>
+            <if test="updatePeople != null and updatePeople != ''">
+                update_people = #{updatePeople},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="counter != null">
+                counter = #{counter},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from purchase_receipt
+        where id = #{id}
+    </delete>
+
+    <!-- 总数 -->
+    <select id="count" resultType="int">
+        select count(*)
+        from purchase_receipt
+    </select>
+    <select id="queryAllByVettingState" resultMap="PurchaseReceiptMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
+        where vetting_state=1
+    </select>
+    <select id="conditionpage" resultMap="PurchaseReceiptMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_receipt
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="inboundDate != null">
+                and inbound_date = #{inboundDate}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="buyerType != null and buyerType != ''">
+                and buyer_type = #{buyerType}
+            </if>
+            <if test="disrate != null">
+                and disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                and dismoney = #{dismoney}
+            </if>
+            <if test="offersPrice != null">
+                and offers_price = #{offersPrice}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                and vetting_name = #{vettingName}
+            </if>
+            <if test="lastVettingTime != null">
+                and last_vetting_time = #{lastVettingTime}
+            </if>
+            <if test="vettingState != null">
+                and vetting_state = #{vettingState}
+            </if>
+            <if test="associatedOrder != null and associatedOrder != ''">
+                and associated_order = #{associatedOrder}
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                and exit_order_id = #{exitOrderId}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                and payment_order = #{paymentOrder}
+            </if>
+            <if test="cavId != null and cavId != ''">
+                and cav_id = #{cavId}
+            </if>
+            <if test="invoiceId != null and invoiceId != ''">
+                and invoice_id = #{invoiceId}
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                and create_people = #{createPeople}
             </if>
             <if test="updatePeople != null and updatePeople != ''">
                 and update_people = #{updatePeople}
@@ -210,486 +401,5 @@
         </where>
     </select>
 
-    <!--新增所有列-->
-    <insert id="insert">
-        insert into frameproject.purchase_receipt
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            id,
-            <if test="inboundDate != null">
-                inbound_date,
-            </if>
-            <if test="vendorName != null">
-                vendor_name,
-            </if>
-            <if test="buyerName != null">
-                buyer_name,
-            </if>
-            <if test="state != null">
-                state,
-            </if>
-            <if test="buyerType != null">
-                buyer_type,
-            </if>
-            <if test="disrate != null">
-                disrate,
-            </if>
-            <if test="dismoney != null">
-                dismoney,
-            </if>
-            <if test="offersPrice != null">
-                offers_price,
-            </if>
-            <if test="depotName != null">
-                depot_name,
-            </if>
-            <if test="vettingName != null">
-                vetting_name,
-            </if>
-            <if test="lastVettingTime != null">
-                last_vetting_time,
-            </if>
-            <if test="vettingState != null">
-                vetting_state,
-            </if>
-            <if test="associatedOrder != null">
-                associated_order,
-            </if>
-            <if test="exitOrderId != null">
-                exit_order_id,
-            </if>
-            <if test="paymentOrder != null">
-                payment_order,
-            </if>
-            <if test="cavId != null">
-                cav_id,
-            </if>
-            <if test="invoiceId != null">
-                invoice_id,
-            </if>
-            <if test="createPeople != null">
-                create_people,
-            </if>
-            <if test="contact != null">
-                contact,
-            </if>
-            <if test="updatePeople != null">
-                update_people,
-            </if>
-            <if test="createDate != null">
-                create_date,
-            </if>
-            <if test="updateDate != null">
-                update_date,
-            </if>
-            <if test="counter != null">
-                counter,
-            </if>
-        </trim>
-        values
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            #{id},
-            <if test="inboundDate != null">
-                #{inboundDate},
-            </if>
-            <if test="vendorName != null">
-                #{vendorName},
-            </if>
-            <if test="buyerName != null">
-                #{buyerName},
-            </if>
-            <if test="state != null">
-                #{state},
-            </if>
-            <if test="buyerType != null">
-                #{buyerType},
-            </if>
-            <if test="disrate != null">
-                #{disrate},
-            </if>
-            <if test="dismoney != null">
-                #{dismoney},
-            </if>
-            <if test="offersPrice != null">
-                #{offersPrice},
-            </if>
-            <if test="depotName != null">
-                #{depotName},
-            </if>
-            <if test="vettingName != null">
-                #{vettingName},
-            </if>
-            <if test="lastVettingTime != null">
-                #{lastVettingTime},
-            </if>
-            <if test="vettingState != null">
-                #{vettingState},
-            </if>
-            <if test="associatedOrder != null">
-                #{associatedOrder},
-            </if>
-            <if test="exitOrderId != null">
-                #{exitOrderId},
-            </if>
-            <if test="paymentOrder != null">
-                #{paymentOrder},
-            </if>
-            <if test="cavId != null">
-                #{cavId},
-            </if>
-            <if test="invoiceId != null">
-                #{invoiceId},
-            </if>
-            <if test="createPeople != null">
-                #{createPeople},
-            </if>
-            <if test="contact != null">
-                #{contact},
-            </if>
-            <if test="updatePeople != null">
-                #{updatePeople},
-            </if>
-            <if test="createDate != null">
-                #{createDate},
-            </if>
-            <if test="updateDate != null">
-                #{updateDate},
-            </if>
-            <if test="counter != null">
-                #{counter},
-            </if>
-        </trim>
 
-    </insert>
-
-    <!--批量新增数据 -->
-    <insert id="insertBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            insert into frameproject.purchase_receipt
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                id,
-                <if test="entity.inboundDate != null">
-                    inbound_date,
-                </if>
-                <if test="entity.vendorName != null">
-                    vendor_name,
-                </if>
-                <if test="entity.buyerName != null">
-                    buyer_name,
-                </if>
-                <if test="entity.state != null">
-                    state,
-                </if>
-                <if test="entity.buyerType != null">
-                    buyer_type,
-                </if>
-                <if test="entity.disrate != null">
-                    disrate,
-                </if>
-                <if test="entity.dismoney != null">
-                    dismoney,
-                </if>
-                <if test="entity.offersPrice != null">
-                    offers_price,
-                </if>
-                <if test="entity.depotName != null">
-                    depot_name,
-                </if>
-                <if test="entity.vettingName != null">
-                    vetting_name,
-                </if>
-                <if test="entity.lastVettingTime != null">
-                    last_vetting_time,
-                </if>
-                <if test="entity.vettingState != null">
-                    vetting_state,
-                </if>
-                <if test="entity.associatedOrder != null">
-                    associated_order,
-                </if>
-                <if test="entity.exitOrderId != null">
-                    exit_order_id,
-                </if>
-                <if test="entity.paymentOrder != null">
-                    payment_order,
-                </if>
-                <if test="entity.cavId != null">
-                    cav_id,
-                </if>
-                <if test="entity.invoiceId != null">
-                    invoice_id,
-                </if>
-                <if test="entity.createPeople != null">
-                    create_people,
-                </if>
-                <if test="entity.contact != null">
-                    contact,
-                </if>
-                <if test="entity.updatePeople != null">
-                    update_people,
-                </if>
-                <if test="entity.createDate != null">
-                    create_date,
-                </if>
-                <if test="entity.updateDate != null">
-                    update_date,
-                </if>
-                <if test="entity.counter != null">
-                    counter,
-                </if>
-            </trim>
-            values
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                SEQ_purchase_receipt.NEXTVAL,
-                <if test="entity.inboundDate != null">
-                    #{entity.inboundDate},
-                </if>
-                <if test="entity.vendorName != null">
-                    #{entity.vendorName},
-                </if>
-                <if test="entity.buyerName != null">
-                    #{entity.buyerName},
-                </if>
-                <if test="entity.state != null">
-                    #{entity.state},
-                </if>
-                <if test="entity.buyerType != null">
-                    #{entity.buyerType},
-                </if>
-                <if test="entity.disrate != null">
-                    #{entity.disrate},
-                </if>
-                <if test="entity.dismoney != null">
-                    #{entity.dismoney},
-                </if>
-                <if test="entity.offersPrice != null">
-                    #{entity.offersPrice},
-                </if>
-                <if test="entity.depotName != null">
-                    #{entity.depotName},
-                </if>
-                <if test="entity.vettingName != null">
-                    #{entity.vettingName},
-                </if>
-                <if test="entity.lastVettingTime != null">
-                    #{entity.lastVettingTime},
-                </if>
-                <if test="entity.vettingState != null">
-                    #{entity.vettingState},
-                </if>
-                <if test="entity.associatedOrder != null">
-                    #{entity.associatedOrder},
-                </if>
-                <if test="entity.exitOrderId != null">
-                    #{entity.exitOrderId},
-                </if>
-                <if test="entity.paymentOrder != null">
-                    #{entity.paymentOrder},
-                </if>
-                <if test="entity.cavId != null">
-                    #{entity.cavId},
-                </if>
-                <if test="entity.invoiceId != null">
-                    #{entity.invoiceId},
-                </if>
-                <if test="entity.createPeople != null">
-                    #{entity.createPeople},
-                </if>
-                <if test="entity.contact != null">
-                    #{entity.contact},
-                </if>
-                <if test="entity.updatePeople != null">
-                    #{entity.updatePeople},
-                </if>
-                <if test="entity.createDate != null">
-                    #{entity.createDate},
-                </if>
-                <if test="entity.updateDate != null">
-                    #{entity.updateDate},
-                </if>
-                <if test="entity.counter != null">
-                    #{entity.counter},
-                </if>
-            </trim>
-        </foreach>
-    </insert>
-
-    <!--通过主键修改数据-->
-    <update id="update">
-        update frameproject.purchase_receipt
-        <set>
-            <if test="inboundDate != null">
-                inbound_date = #{inboundDate},
-            </if>
-            <if test="vendorName != null">
-                vendor_name = #{vendorName},
-            </if>
-            <if test="buyerName != null">
-                buyer_name = #{buyerName},
-            </if>
-            <if test="state != null">
-                state = #{state},
-            </if>
-            <if test="buyerType != null">
-                buyer_type = #{buyerType},
-            </if>
-            <if test="disrate != null">
-                disrate = #{disrate},
-            </if>
-            <if test="dismoney != null">
-                dismoney = #{dismoney},
-            </if>
-            <if test="offersPrice != null">
-                offers_price = #{offersPrice},
-            </if>
-            <if test="depotName != null">
-                depot_name = #{depotName},
-            </if>
-            <if test="vettingName != null">
-                vetting_name = #{vettingName},
-            </if>
-            <if test="lastVettingTime != null">
-                last_vetting_time = #{lastVettingTime},
-            </if>
-            <if test="vettingState != null">
-                vetting_state = #{vettingState},
-            </if>
-            <if test="associatedOrder != null">
-                associated_order = #{associatedOrder},
-            </if>
-            <if test="exitOrderId != null">
-                exit_order_id = #{exitOrderId},
-            </if>
-            <if test="paymentOrder != null">
-                payment_order = #{paymentOrder},
-            </if>
-            <if test="cavId != null">
-                cav_id = #{cavId},
-            </if>
-            <if test="invoiceId != null">
-                invoice_id = #{invoiceId},
-            </if>
-            <if test="createPeople != null">
-                create_people = #{createPeople},
-            </if>
-            <if test="contact != null">
-                contact = #{contact},
-            </if>
-            <if test="updatePeople != null">
-                update_people = #{updatePeople},
-            </if>
-            <if test="createDate != null">
-                create_date = #{createDate},
-            </if>
-            <if test="updateDate != null">
-                update_date = #{updateDate},
-            </if>
-            <if test="counter != null">
-                counter = #{counter},
-            </if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <!--批量修改数据-->
-    <update id="updateBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            update frameproject.purchase_receipt
-            <set>
-                <if test="entity.inboundDate != null">
-                    inbound_date = #{entity.inboundDate},
-                </if>
-                <if test="entity.vendorName != null">
-                    vendor_name = #{entity.vendorName},
-                </if>
-                <if test="entity.buyerName != null">
-                    buyer_name = #{entity.buyerName},
-                </if>
-                <if test="entity.state != null">
-                    state = #{entity.state},
-                </if>
-                <if test="entity.buyerType != null">
-                    buyer_type = #{entity.buyerType},
-                </if>
-                <if test="entity.disrate != null">
-                    disrate = #{entity.disrate},
-                </if>
-                <if test="entity.dismoney != null">
-                    dismoney = #{entity.dismoney},
-                </if>
-                <if test="entity.offersPrice != null">
-                    offers_price = #{entity.offersPrice},
-                </if>
-                <if test="entity.depotName != null">
-                    depot_name = #{entity.depotName},
-                </if>
-                <if test="entity.vettingName != null">
-                    vetting_name = #{entity.vettingName},
-                </if>
-                <if test="entity.lastVettingTime != null">
-                    last_vetting_time = #{entity.lastVettingTime},
-                </if>
-                <if test="entity.vettingState != null">
-                    vetting_state = #{entity.vettingState},
-                </if>
-                <if test="entity.associatedOrder != null">
-                    associated_order = #{entity.associatedOrder},
-                </if>
-                <if test="entity.exitOrderId != null">
-                    exit_order_id = #{entity.exitOrderId},
-                </if>
-                <if test="entity.paymentOrder != null">
-                    payment_order = #{entity.paymentOrder},
-                </if>
-                <if test="entity.cavId != null">
-                    cav_id = #{entity.cavId},
-                </if>
-                <if test="entity.invoiceId != null">
-                    invoice_id = #{entity.invoiceId},
-                </if>
-                <if test="entity.createPeople != null">
-                    create_people = #{entity.createPeople},
-                </if>
-                <if test="entity.contact != null">
-                    contact = #{entity.contact},
-                </if>
-                <if test="entity.updatePeople != null">
-                    update_people = #{entity.updatePeople},
-                </if>
-                <if test="entity.createDate != null">
-                    create_date = #{entity.createDate},
-                </if>
-                <if test="entity.updateDate != null">
-                    update_date = #{entity.updateDate},
-                </if>
-                <if test="entity.counter != null">
-                    counter = #{entity.counter},
-                </if>
-            </set>
-            where id = #{entity.id}
-        </foreach>
-    </update>
-
-    <!--通过主键删除数据-->
-    <delete id="deleteById">
-        delete
-        from frameproject.purchase_receipt
-        where id = #{id}
-    </delete>
-
-    <!--通过主键列表批量删除数据-->
-    <delete id="deleteBatch">
-        delete from frameproject.purchase_receipt where id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
-
-    <!--通过实体列表批量删除数据-->
-    <delete id="deleteBatchByEntities">
-        delete from frameproject.purchase_receipt where id in
-        <foreach collection="list" item="entity" open="(" separator="," close=")">
-            #{entity.id}
-        </foreach>
-    </delete>
 </mapper>
-
