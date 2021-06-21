@@ -21,6 +21,11 @@
         from frameproject.capital_payment_bill
         where payment_id = #{id}
     </select>
+    <!--关联单据查询-->
+    <select id="relation" resultMap="CapitalPaymentBillMap">
+        select  payment_id from frameproject.capital_payment_bill
+        where purchase_id = #{id}
+    </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalPaymentBillMap">

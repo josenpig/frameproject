@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (SaleOrder)实体类
@@ -127,4 +128,8 @@ public class SaleOrder implements Serializable {
      * 审批备注
      */
     private String approvalRemarks;
+    /**
+     * 关联收款单id
+     */
+    private List<CapitalReceiptBill> receipts;
 }

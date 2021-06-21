@@ -8,6 +8,9 @@
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="salesmen" column="salesmen" jdbcType="VARCHAR"/>
+        <result property="contacts" column="contact" jdbcType="VARCHAR"/>
+        <result property="contactsPhone" column="contact_number" jdbcType="VARCHAR"/>
+        <result property="contactsAddress" column="contact_address" jdbcType="VARCHAR"/>
         <result property="disrate" column="disrate" jdbcType="NUMERIC"/>
         <result property="dismoney" column="dismoney" jdbcType="NUMERIC"/>
         <result property="receivables" column="receivables" jdbcType="NUMERIC"/>

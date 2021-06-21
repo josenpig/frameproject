@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalReceipt;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaCapVo;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public interface CapitalReceiptService {
      */
     List<CapitalReceipt> queryAllByLimit(int offset, int limit);
 
-    List<CapitalReceipt> queryAll(CapitalReceipt capitalReceipt);
+    List<CapitalReceipt> queryAll(CapitalConditionPageVo vo);
 
     /**
      * 新增数据

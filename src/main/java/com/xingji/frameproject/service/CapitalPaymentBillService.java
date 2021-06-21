@@ -20,6 +20,8 @@ public interface CapitalPaymentBillService {
      */
     List<CapitalPaymentBill> queryById(String id);
 
+    List<CapitalPaymentBill> relation(String id);
+
     /**
      * 查询多条数据
      *

@@ -22,6 +22,13 @@ public interface CapitalPaymentBillDao {
      * @return 实例对象
      */
     List<CapitalPaymentBill> queryById(String id);
+    /**
+     * 通过ID查询关联单据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    List<CapitalPaymentBill> relation(String id);
 
     /**
      * 查询指定行数据

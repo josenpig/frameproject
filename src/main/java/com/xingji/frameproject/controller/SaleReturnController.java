@@ -57,7 +57,7 @@ public class SaleReturnController {
      */
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
-        SaleReturn saleReturn=srs.queryById(id);
+        SaleReturn saleReturn=srs.queryByIdVo(id);
         List<SaleReturnDetails> returnDetails=srds.queryById(id);
         SaleReturnVo vo=new SaleReturnVo();
         saleReturn.setFounder(sus.queryById(Integer.valueOf(saleReturn.getFounder())).getUserName());
