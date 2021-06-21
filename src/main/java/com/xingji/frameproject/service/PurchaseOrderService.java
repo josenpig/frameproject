@@ -87,6 +87,18 @@ public interface PurchaseOrderService {
      * @return
      */
     List<PurchaseOrder> queryAllByPage(PurchaseOrderQueryForm queryForm);
-
+    /**
+     * 通过订单id查询本次付款单信息
+     * @param purchaseId 采购单id
+     * @return 对象列表
+     */
     PurchaseCapitalVo querythisPayment(String purchaseId);
+    /**
+     * 通过实体类查询所有可付款单
+     * @param vo 实体类
+     * @return 对象列表
+     */
+    List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo);
+
+    boolean ostateadd(PurchaseOrder purchaseOrder);
 }

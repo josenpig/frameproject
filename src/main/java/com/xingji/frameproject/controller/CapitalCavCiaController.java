@@ -40,6 +40,10 @@ public class CapitalCavCiaController {
     @Resource
     private CapitalReceiptService crs;
     @Resource
+    private CapitalPayableService cpbs;
+    @Resource
+    private CapitalPaymentService cps;
+    @Resource
     private SysUserService sus;
 
     /**
@@ -64,7 +68,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(vo);
     }
     /**
-     * 核销单应收款分页条件查询
+     * 核销单应收款分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -83,7 +87,7 @@ public class CapitalCavCiaController {
         return AjaxResponse.success(map);
     }
     /**
-     * 核销单收款单据分页条件查询
+     * 核销单收款单据分页条件查询-----预收冲应收
      * @param conditionpage 条件查询信息
      * @return map数据
      */
@@ -97,6 +101,44 @@ public class CapitalCavCiaController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<CiaCapVo> list=crs.querycavReceipt(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 核销单应付款分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/payablepage")
+    public AjaxResponse payablepage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaBillVo vo= JSON.parseObject(condition, CiaBillVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaBillVo> list=cpbs.querycavPayment(vo);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
+    /**
+     * 核销单付款单据分页条件查询-----预付冲应付
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/paymentpage")
+    public AjaxResponse paymentpage(@RequestBody String conditionpage){
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件--实体类
+        CiaCapVo vo= JSON.parseObject(condition, CiaCapVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<CiaCapVo> list=cps.querycavPayment(vo);
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -166,21 +208,22 @@ public class CapitalCavCiaController {
     }
     /**
      * 修改订单审批状态
-     * @param orderid 主键
+     * @param cavId 主键
      * @return 数据
      */
     @GetMapping("/approval")
-    public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
-        CapitalCavCia tf=cccs.queryById(orderid);
-        if(type==1 && tf.getCavType().equals("预收冲应收")){
-            List<CapitalCavCiaBill> bills=cccbs.queryById(orderid);
+    public AjaxResponse approvalorder(String cavId,String cavType,int type,String user,String approvalremarks){
+        //预收冲应收
+        if(type==1 && cavType.equals("预收冲应收")){
+            //判断核销单是否能够审批通过
+            List<CapitalCavCiaBill> bills=cccbs.queryById(cavId);
             for (int i=0;i<bills.size();i++) {
                 CapitalReceivable receivable = crbs.queryById(bills.get(i).getSaleId());
                 if (receivable.getCaseState()==1){
                     return AjaxResponse.success("订单："+receivable.getDeliveryId()+"已结案");
                 }
             }
-            List<CapitalCavCiaCap> caps=ccccs.queryById(orderid);
+            List<CapitalCavCiaCap> caps=ccccs.queryById(cavId);
             for (int i=0;i<bills.size();i++) {
                 CapitalReceipt receipt = crs.queryById(caps.get(i).getCapitalId());
                 if (receipt.getCiaBalance()==0){
@@ -188,15 +231,34 @@ public class CapitalCavCiaController {
                 }
             }
         }
+        //预付冲应付
+        if(type==1 && cavType.equals("预付冲应付")){
+            //判断核销单是否能够审批通过
+            List<CapitalCavCiaBill> bills=cccbs.queryById(cavId);
+            for (int i=0;i<bills.size();i++) {
+                CapitalPayable payable = cpbs.queryById(bills.get(i).getSaleId());
+                if (payable.getCaseState()==1){
+                    return AjaxResponse.success("订单："+payable.getDeliveryId()+"已结案");
+                }
+            }
+            List<CapitalCavCiaCap> caps=ccccs.queryById(cavId);
+            for (int i=0;i<bills.size();i++) {
+                CapitalPayment payment = cps.queryById(caps.get(i).getCapitalId());
+                if (payment.getPiaBalance()==0){
+                    return AjaxResponse.success("订单："+payment.getPaymentId()+"预付余额不足");
+                }
+            }
+        }
         //修改收款单信息
         CapitalCavCia cia=new CapitalCavCia();
-        cia.setCavId(orderid);
+        cia.setCavId(cavId);
         cia.setApprovalState(type);
         cia.setApprover(String.valueOf(sus.queryUserIdByUserName(user)));
         cia.setApprovalRemarks(approvalremarks);
         cia.setLastApprovalTime(new Date());
         cia.setUpdateTime(new Date());
         CapitalCavCia cianew=cccs.update(cia);
+        //预收冲应收
         if(type == 1 && cianew.getCavType().equals("预收冲应收")){
             //订单通过修改单据已收款
             List<CapitalCavCiaBill> bills=cccbs.queryById(cianew.getCavId());
@@ -211,15 +273,44 @@ public class CapitalCavCiaController {
                     crbs.update(receivablenew);
                 }
             }
-            //订单通过增加账户资金
+            //订单通过减少预收余额
             List<CapitalCavCiaCap> caps=ccccs.queryById(cianew.getCavId());
             for (int j=0;j<caps.size();j++) {
                 //修改收款单据的预收余额
                 CapitalReceipt receipt=crs.queryById(caps.get(j).getCapitalId());
-                receipt.setCiaBalance(receipt.getCiaBalance()-caps.get(j).getThisMoney());
-                crs.update(receipt);
+                CapitalReceipt newreceipt=new CapitalReceipt();
+                newreceipt.setReceiptId(caps.get(j).getCapitalId());
+                newreceipt.setCiaBalance(receipt.getCiaBalance()-caps.get(j).getThisMoney());
+                crs.update(newreceipt);
             }
         }
-        return AjaxResponse.success(true);
+        //预付冲应付
+        if(type == 1 && cianew.getCavType().equals("预付冲应付")){
+            //订单通过修改单据已付款
+            List<CapitalCavCiaBill> bills=cccbs.queryById(cianew.getCavId());
+            for (int i=0;i<bills.size();i++) {
+                //修改应付款单据的已付款金额
+                CapitalPayable payable=cpbs.queryById(bills.get(i).getSaleId());
+                payable.setPaid(payable.getPaid()+bills.get(i).getThisMoney());
+                payable.setUnpaid(payable.getUnpaid()-bills.get(i).getThisMoney());
+                CapitalPayable payablenew=cpbs.update(payable);
+                System.out.println(payablenew.toString());
+                if (payablenew.getUnpaid()==0){
+                    payablenew.setCaseState(1);
+                    cpbs.update(payablenew);
+                }
+            }
+            //订单通过减少预付余额
+            List<CapitalCavCiaCap> caps=ccccs.queryById(cianew.getCavId());
+            for (int j=0;j<caps.size();j++) {
+                //修改收款单据的预收余额
+                CapitalPayment payment=cps.queryById(caps.get(j).getCapitalId());
+                CapitalPayment newpayment=new CapitalPayment();
+                newpayment.setPaymentId(caps.get(j).getCapitalId());
+                newpayment.setPiaBalance(payment.getPiaBalance()-caps.get(j).getThisMoney());
+                cps.update(newpayment);
+            }
+        }
+        return AjaxResponse.success(cianew!=null);
     }
 }

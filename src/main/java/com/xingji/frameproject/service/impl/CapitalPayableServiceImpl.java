@@ -4,6 +4,7 @@ import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import com.xingji.frameproject.mybatis.dao.CapitalPayableDao;
 import com.xingji.frameproject.service.CapitalPayableService;
 import com.xingji.frameproject.vo.CapitalConditionPageVo;
+import com.xingji.frameproject.vo.CiaBillVo;
 import com.xingji.frameproject.vo.PurchaseCapitalVo;
 import com.xingji.frameproject.vo.SaleReceiptVo;
 import org.springframework.stereotype.Service;
@@ -96,5 +97,34 @@ public class CapitalPayableServiceImpl implements CapitalPayableService {
     @Override
     public PurchaseCapitalVo querythisPayment(String purchaseId) {
         return this.capitalPayableDao.querythisPayment(purchaseId);
+    }
+    /**
+     * 通过实体类条件查询应付款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    @Override
+    public List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo) {
+        return this.capitalPayableDao.queryPayment(vo);
+    }
+    /**
+     * 修改已付金额数据
+     *
+     * @param capitalPayable 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public CapitalPayable receivedadd(CapitalPayable capitalPayable) {
+        this.capitalPayableDao.paidadd(capitalPayable);
+        return this.queryById(capitalPayable.getDeliveryId());
+    }
+    /**
+     * 通过实体类条件查询核销单中的应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    @Override
+    public List<CiaBillVo> querycavPayment(CiaBillVo vo) {
+        return this.capitalPayableDao.querycavPayment(vo);
     }
 }

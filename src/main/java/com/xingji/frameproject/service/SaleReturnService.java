@@ -19,6 +19,8 @@ public interface SaleReturnService {
      * @param returnId 主键
      * @return 实例对象
      */
+    SaleReturn queryByIdVo(String returnId);
+
     SaleReturn queryById(String returnId);
 
     /**

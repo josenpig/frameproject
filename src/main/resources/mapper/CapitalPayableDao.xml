@@ -5,7 +5,7 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayable" id="CapitalPayableMap">
         <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
         <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
-        <result property="vendor" column="vendor" jdbcType="VARCHAR"/>
+        <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
         <result property="buyer" column="buyer" jdbcType="VARCHAR"/>
         <result property="payables" column="payables" jdbcType="NUMERIC"/>
         <result property="paid" column="paid" jdbcType="NUMERIC"/>
@@ -24,19 +24,14 @@
         <result property="payableMoney" column="payables" jdbcType="NUMERIC"/>
         <result property="vendor" column="vendor" jdbcType="VARCHAR"/>
     </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayable" id="CapitalPayableView">
-        <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
-        <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
-        <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
-        <result property="buyer" column="buyer" jdbcType="VARCHAR"/>
-        <result property="payables" column="payables" jdbcType="NUMERIC"/>
-        <result property="paid" column="paid" jdbcType="NUMERIC"/>
-        <result property="unpaid" column="unpaid" jdbcType="NUMERIC"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="caseState" column="case_state" jdbcType="INTEGER"/>
-        <result property="paymentRemark" column="payment_remark" jdbcType="VARCHAR"/>
-        <result property="lastCollectionTime" column="last_collection_time" jdbcType="TIMESTAMP"/>
+
+    <resultMap id="CiaBill" type="com.xingji.frameproject.vo.CiaBillVo">
+        <result property="saleId" column="delivery_id" jdbcType="VARCHAR"/>
+        <result property="saleTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+        <result property="notMoney" column="unpaid" jdbcType="NUMERIC"/>
+        <result property="alreadyMoney" column="paid" jdbcType="NUMERIC"/>
+        <result property="shouldMoney" column="payables" jdbcType="NUMERIC"/>
+        <result property="otherParty" column="vendor" jdbcType="VARCHAR"/>
     </resultMap>
     <!--查询单个-->
     <select id="queryById" resultMap="CapitalPayableMap">
@@ -45,9 +40,52 @@
         from frameproject.capital_payable
         where delivery_id = #{deliveryId}
     </select>
+    <!--修改订单已收款-->
+    <update id="paidadd">
+        update capital_payable
+        <set>
+            <if test="paymentRemark != null and paymentRemark != ''">
+                payment_remark = #{paymentRemark},
+            </if>
+            <if test="lastCollectionTime != null">
+                last_collection_time = #{lastCollectionTime},
+            </if>
+            <if test="paid != null">
+                paid = paid + #{paid},
+                unpaid = payables - paid
+            </if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+
     <!--查询本次付款-->
     <select id="querythisPayment" resultMap="PurchaseCapital">
         select * from capital_payable where delivery_id=#{purchaseId}
+    </select>
+    <!--查询所有可付款-->
+    <select id="queryPayment" resultMap="PurchaseCapital">
+        select * from capital_payable
+        <where>
+            case_state=0
+            <if test="purchaseId != null and purchaseId != ''">
+                and delivery_id = #{purchaseId}
+            </if>
+            <if test="vendor != null and vendor != ''">
+                and vendor = #{vendor}
+            </if>
+        </where>
+    </select>
+    <select id="querycavPayment" resultMap="CiaBill">
+        select * from capital_payable
+        <where>
+            case_state=0
+            <if test="saleId != null and saleId != ''">
+                and delivery_id = #{saleId}
+            </if>
+            <if test="otherParty != null and otherParty != ''">
+                and vendor = #{otherParty}
+            </if>
+        </where>
     </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalPayableMap">
@@ -104,7 +142,7 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAllByPage" resultMap="CapitalPayableView">
+    <select id="queryAllByPage" resultMap="CapitalPayableMap">
         select a.*,b.vendor_name from capital_payable a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         <where>
             <if test="deliveryId != null and deliveryId != ''">

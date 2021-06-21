@@ -16,5 +16,5 @@ import java.util.List;
 public class ReceiptVo {
     private CapitalReceipt receipt;
     private List<CapitalReceiptBill> bills;
-    private List<CapitalAccountVo> accounts;
+    private List<CapitalReceiptAccount> accounts;
 }

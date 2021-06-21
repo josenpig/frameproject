@@ -19,6 +19,13 @@ public interface CapitalReceiptBillService {
      * @return 实例对象
      */
     List<CapitalReceiptBill> queryById(String id);
+    /**
+     * 通过ID查询关联单据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    List<CapitalReceiptBill> relation(String id);
 
     /**
      * 查询多条数据

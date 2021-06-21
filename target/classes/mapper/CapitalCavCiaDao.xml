@@ -65,8 +65,21 @@
             <if test="cavId != null and cavId != ''">
                 and cav_id = #{cavId}
             </if>
-            <if test="orderTime != null and orderTime != ''">
-                and order_time = #{orderTime}
+            <if test="orderTime != null and orderTime=='今天'" >
+                and to_days(order_time) = to_days(now())
+            </if>
+            <if test="orderTime != null and orderTime=='昨天'" >
+                and to_days(now())-to_days(order_time) = 1
+            </if>
+            <if test="orderTime != null and orderTime=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(order_time)
+            </if>
+            <if test="orderTime != null and orderTime=='本月'" >
+                and DATE_FORMAT( order_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="orderTime != null and orderTime != '' and orderTime=='自定义' and otimeState!=null and otimeEnd!=null">
+                and DATE_FORMAT(order_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
             </if>
             <if test="customer != null and customer != ''">
                 and other_party = #{customer}
@@ -77,22 +90,43 @@
             <if test="founder != null and founder != ''">
                 and founder = #{founder}
             </if>
-            <if test="approvalState != null and  approvalState != ''">
-                and approval_state = #{approvalState}
+            <if test="approvalState != null and approvalState == '草稿'" >
+                and approval_state = -2
+            </if>
+            <if test="approvalState != null and approvalState == '待审批'" >
+                and approval_state = 0
+            </if>
+            <if test="approvalState != null and approvalState == '已驳回'" >
+                and approval_state = -1
+            </if>
+            <if test="approvalState != null and approvalState == '审批通过'" >
+                and approval_state = 1
             </if>
         </where>
     </select>
     <!--通过实体作为筛选条件查询   预付冲应付-->
     <select id="querytwoPage" resultMap="CapitalCavCiaView">
-            select a.*,b.vendor_name from capital_cav_cia a
-            INNER JOIN base_vendor b on a.other_party=b.vendor_id
+            select a.*,b.vendor_name from capital_cav_cia a INNER JOIN base_vendor b on a.other_party=b.vendor_id
         <where>
             cav_type = '预付冲应付'
             <if test="cavId != null and cavId != ''">
                 and cav_id = #{cavId}
             </if>
-            <if test="orderTime != null and orderTime != ''">
-                and order_time = #{orderTime}
+            <if test="orderTime != null and orderTime=='今天'" >
+                and to_days(order_time) = to_days(now())
+            </if>
+            <if test="orderTime != null and orderTime=='昨天'" >
+                and to_days(now())-to_days(order_time) = 1
+            </if>
+            <if test="orderTime != null and orderTime=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(order_time)
+            </if>
+            <if test="orderTime != null and orderTime=='本月'" >
+                and DATE_FORMAT( order_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="orderTime != null and orderTime != '' and orderTime=='自定义' and otimeState!=null and otimeEnd!=null">
+                and DATE_FORMAT(order_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
             </if>
             <if test="vendor != null and vendor != '' ">
                 and other_party = #{vendor}
@@ -103,8 +137,17 @@
             <if test="founder != null and founder != ''">
                 and founder = #{founder}
             </if>
-            <if test="approvalState != null and  approvalState != ''">
-                and approval_state = #{approvalState}
+            <if test="approvalState != null and approvalState == '草稿'" >
+                and approval_state = -2
+            </if>
+            <if test="approvalState != null and approvalState == '待审批'" >
+                and approval_state = 0
+            </if>
+            <if test="approvalState != null and approvalState == '已驳回'" >
+                and approval_state = -1
+            </if>
+            <if test="approvalState != null and approvalState == '审批通过'" >
+                and approval_state = 1
             </if>
         </where>
     </select>

@@ -97,6 +97,12 @@ public interface BaseCapitalAccountDao {
      * @return 实例对象
      */
     boolean currentAmountadd(BaseCapitalAccount baseCapitalAccount);
-
+    /**
+     * 修改当前金额数据--减
+     *
+     * @param baseCapitalAccount 实例对象
+     * @return 实例对象
+     */
+    boolean currentAmountreduce(BaseCapitalAccount baseCapitalAccount);
 }
 

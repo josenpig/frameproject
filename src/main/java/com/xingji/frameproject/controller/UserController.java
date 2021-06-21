@@ -8,6 +8,7 @@ import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserRoleService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MD5;
 import com.xingji.frameproject.util.SendSms;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.UserVo;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,14 +54,14 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户账户登录",produces = "application/json")
-    public AjaxResponse login(@RequestBody SysUser user) {
+    public AjaxResponse login(@RequestBody SysUser user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         SysUser loginuser = us.login(user.getUserName());
         if (loginuser == null) {
             return AjaxResponse.success("账户不存在");
         } else {
             if(loginuser.getUserState()!=0){
                 return AjaxResponse.success("账户已停用！请联系超级管理员！");
-            }else if (!user.getUserPass().equals(loginuser.getUserPass())) {
+            }else if (!MD5.validPassword(user.getUserPass(),loginuser.getUserPass())) {
                 return AjaxResponse.success("密码错误");
             } else {
                 Integer userid=us.queryUserIdByUserName(loginuser.getUserName());

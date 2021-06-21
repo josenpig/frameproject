@@ -13,12 +13,12 @@ import java.util.List;
 public interface CapitalPaymentAccountService {
 
     /**
-     * 通过ID查询单条数据
+     * 通过ID查询duo条数据
      *
      * @param id 主键
      * @return 实例对象
      */
-    CapitalPaymentAccount queryById(Integer id);
+    List<CapitalPaymentAccount> queryById(String id);
 
     /**
      * 查询多条数据
@@ -38,14 +38,6 @@ public interface CapitalPaymentAccountService {
     CapitalPaymentAccount insert(CapitalPaymentAccount capitalPaymentAccount);
 
     List<CapitalPaymentAccount> insertBatch(List<CapitalPaymentAccount> capitalPaymentAccount);
-
-    /**
-     * 修改数据
-     *
-     * @param capitalPaymentAccount 实例对象
-     * @return 实例对象
-     */
-    CapitalPaymentAccount update(CapitalPaymentAccount capitalPaymentAccount);
 
     /**
      * 通过主键删除数据

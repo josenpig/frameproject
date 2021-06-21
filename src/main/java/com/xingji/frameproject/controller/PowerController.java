@@ -10,6 +10,7 @@ import com.xingji.frameproject.service.SysMenuService;
 import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MD5;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
 import com.xingji.frameproject.vo.SystemPowerVo;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -149,7 +152,7 @@ public class PowerController {
      * @return vo
      */
     @PostMapping("/addnewuser")
-    public AjaxResponse addnewuser(@RequestBody String add){
+    public AjaxResponse addnewuser(@RequestBody String add) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(add);
         String one = jsonObject.getString("user");//用户
         SysUser user=JSON.parseObject(one, SysUser.class);
@@ -158,6 +161,7 @@ public class PowerController {
         user.setFounder(String.valueOf(sus.queryUserIdByUserName(user.getFounder())));
         user.setFoundTime(new Date());
         user.setDelFlag(0);
+        user.setUserPass(MD5.getEncryptedPwd("a123456"));
         //新增用户
         sus.insert(user);
         //新增用户角色
@@ -176,7 +180,7 @@ public class PowerController {
      * @return 是否成功
      */
     @PostMapping("/changeuesr")
-    public AjaxResponse changeuesr(@RequestBody String change){
+    public AjaxResponse changeuesr(@RequestBody String change) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(change);
         String one = jsonObject.getString("user");//用户
         SysUser user=JSON.parseObject(one, SysUser.class);
@@ -184,6 +188,9 @@ public class PowerController {
         List<SysRole> sysRole = JSONArray.parseArray(roles, SysRole.class);
         user.setUpdateTime(new Date());
         user.setUpdatedBy(String.valueOf(sus.queryUserIdByUserName(user.getUpdatedBy())));
+        if(user.getUserPass()!=null){
+            user.setUserPass(MD5.getEncryptedPwd(user.getUserPass()));
+        }
         //修改用户
         if(sysRole.size()==0){
             return AjaxResponse.success(sus.update(user));

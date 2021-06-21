@@ -5,25 +5,6 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayment" id="CapitalPaymentMap">
         <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
         <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
-        <result property="vendor" column="vendor" jdbcType="VARCHAR"/>
-        <result property="drawee" column="drawee" jdbcType="VARCHAR"/>
-        <result property="paymentType" column="payment_type" jdbcType="VARCHAR"/>
-        <result property="paymentMoney" column="payment_money" jdbcType="NUMERIC"/>
-        <result property="piaMoney" column="pia_money" jdbcType="NUMERIC"/>
-        <result property="piaBalance" column="pia_balance" jdbcType="NUMERIC"/>
-        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
-        <result property="approver" column="approver" jdbcType="VARCHAR"/>
-        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
-        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
-    </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalPayment" id="CapitalPaymentView">
-        <result property="paymentId" column="payment_id" jdbcType="VARCHAR"/>
-        <result property="paymentTime" column="payment_time" jdbcType="TIMESTAMP"/>
         <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
         <result property="drawee" column="drawee" jdbcType="VARCHAR"/>
         <result property="paymentType" column="payment_type" jdbcType="VARCHAR"/>
@@ -40,8 +21,18 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap type="com.xingji.frameproject.vo.CiaCapVo" id="CiaCapMap">
+        <result property="capitalId" column="payment_id" jdbcType="VARCHAR"/>
+        <result property="capitalType" column="payment_type" jdbcType="VARCHAR"/>
+        <result property="otherParty" column="vendor" jdbcType="VARCHAR"/>
+        <result property="capitalTime" column="payment_time" jdbcType="TIMESTAMP"/>
+        <result property="beforeMoney" column="pia_money" jdbcType="NUMERIC"/>
+        <result property="writtenMoney" column="pia_money-pia_balance" jdbcType="NUMERIC"/>
+        <result property="unwrittenMoney" column="pia_balance" jdbcType="NUMERIC"/>
+        <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
+    </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalPaymentView">
+    <select id="queryById" resultMap="CapitalPaymentMap">
         select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         where payment_id = #{paymentId}
     </select>
@@ -55,59 +46,52 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="CapitalPaymentView">
+    <select id="queryAll" resultMap="CapitalPaymentMap">
         select a.*,b.vendor_name from capital_payment a INNER JOIN base_vendor b on a.vendor=b.vendor_id
         <where>
-            <if test="paymentId != null and paymentId != ''">
-                and payment_id = #{paymentId}
+            <if test="deliveryId != null and deliveryId != ''">
+                and payment_id like CONCAT('%',#{deliveryId},'%')
             </if>
-            <if test="paymentTime != null">
-                and payment_time = #{paymentTime}
+            <if test="deliveryTime != null and deliveryTime=='今天'" >
+                and to_days(payment_time) = to_days(now())
             </if>
-            <if test="vendor != null and vendor != ''">
-                and vendor = #{vendor}
+            <if test="deliveryTime != null and deliveryTime=='昨天'" >
+                and to_days(now())-to_days(payment_time) = 1
             </if>
-            <if test="drawee != null and drawee != ''">
-                and drawee = #{drawee}
+            <if test="deliveryTime != null and deliveryTime=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(payment_time)
             </if>
-            <if test="paymentType != null and paymentType != ''">
+            <if test="deliveryTime != null and deliveryTime=='本月'" >
+                and DATE_FORMAT( payment_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+
+            <if test="deliveryTime != null and deliveryTime != '' and deliveryTime=='自定义' and otimeState!=null and otimeEnd!=null">
+                and DATE_FORMAT(payment_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="paymentType != '全部' and paymentType != null and paymentType !=''">
                 and payment_type = #{paymentType}
             </if>
-            <if test="paymentMoney != null">
-                and payment_money = #{paymentMoney}
+            <if test="vendor != null and vendor !=''">
+                and vendor = #{vendor}
             </if>
-            <if test="piaMoney != null">
-                and pia_money = #{piaMoney}
+            <if test="drawee != null and drawee !=''">
+                and drawee = #{drawee}
             </if>
-            <if test="piaBalance != null">
-                and pia_balance = #{piaBalance}
-            </if>
-            <if test="cavId != null and cavId != ''">
-                and cav_id = #{cavId}
-            </if>
-            <if test="founder != null and founder != ''">
+            <if test="founder != null and founder !=''">
                 and founder = #{founder}
             </if>
-            <if test="remarks != null and remarks != ''">
-                and remarks = #{remarks}
+            <if test="approvalState != null and approvalState == '草稿'" >
+                and approval_state = -2
             </if>
-            <if test="approvalState != null">
-                and approval_state = #{approvalState}
+            <if test="approvalState != null and approvalState == '待审批'" >
+                and approval_state = 0
             </if>
-            <if test="approver != null and approver != ''">
-                and approver = #{approver}
+            <if test="approvalState != null and approvalState == '已驳回'" >
+                and approval_state = -1
             </if>
-            <if test="lastApprovalTime != null">
-                and last_approval_time = #{lastApprovalTime}
-            </if>
-            <if test="foundTime != null">
-                and found_time = #{foundTime}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
-            <if test="approvalRemarks != null and approvalRemarks != ''">
-                and approval_remarks = #{approvalRemarks}
+            <if test="approvalState != null and approvalState == '审批通过'" >
+                and approval_state = 1
             </if>
         </where>
     </select>
@@ -211,6 +195,17 @@
     <delete id="deleteById">
         delete from frameproject.capital_payment where payment_id = #{paymentId}
     </delete>
-
+    <!--通过实体作为筛选条件查询-->
+    <select id="querycavPayment" resultMap="CiaCapMap">
+        select *,pia_money-pia_balance from frameproject.capital_payment
+        <where>
+            <if test="capitalId != null and capitalId != ''">
+                and payment_id = #{capitalId}
+            </if>
+            <if test="otherParty != null and otherParty != ''">
+                and vendor = #{otherParty}
+            </if>
+        </where>
+    </select>
 </mapper>
 

@@ -19,9 +19,14 @@
         select
           id, receipt_id, sale_id, sale_type, sale_time, receipt_money, received_money, uncollected_money, this_money
         from frameproject.capital_receipt_bill
-        where receipt_id = #{receiptId}
+        where receipt_id = #{id}
     </select>
 
+    <!--关联单据查询-->
+    <select id="relation" resultMap="CapitalReceiptBillMap">
+        select receipt_id from frameproject.capital_receipt_bill
+        where sale_id = #{id}
+    </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalReceiptBillMap">
         select

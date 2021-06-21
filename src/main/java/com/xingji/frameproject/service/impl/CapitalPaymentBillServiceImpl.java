@@ -21,16 +21,25 @@ public class CapitalPaymentBillServiceImpl implements CapitalPaymentBillService 
     private CapitalPaymentBillDao capitalPaymentBillDao;
 
     /**
-     * 通过ID查询单条数据
+     * 通过ID查询多条数据
      *
      * @param id 主键
      * @return 实例对象
      */
     @Override
-    public CapitalPaymentBill queryById(Integer id) {
+    public List<CapitalPaymentBill> queryById(String id) {
         return this.capitalPaymentBillDao.queryById(id);
     }
-
+    /**
+     * 通过ID查询关联单据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    @Override
+    public List<CapitalPaymentBill> relation(String id) {
+        return this.capitalPaymentBillDao.relation(id);
+    }
     /**
      * 查询多条数据
      *
@@ -64,17 +73,6 @@ public class CapitalPaymentBillServiceImpl implements CapitalPaymentBillService 
     public List<CapitalPaymentBill> insertBatch(List<CapitalPaymentBill> capitalPaymentBill) {
         this.capitalPaymentBillDao.insertBatch(capitalPaymentBill);
         return capitalPaymentBill;
-    }
-    /**
-     * 修改数据
-     *
-     * @param capitalPaymentBill 实例对象
-     * @return 实例对象
-     */
-    @Override
-    public CapitalPaymentBill update(CapitalPaymentBill capitalPaymentBill) {
-        this.capitalPaymentBillDao.update(capitalPaymentBill);
-        return this.queryById(capitalPaymentBill.getId());
     }
 
     /**

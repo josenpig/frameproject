@@ -21,7 +21,7 @@ public interface CapitalPaymentAccountDao {
      * @param id 主键
      * @return 实例对象
      */
-    CapitalPaymentAccount queryById(Integer id);
+    List<CapitalPaymentAccount> queryById(String id);
 
     /**
      * 查询指定行数据
