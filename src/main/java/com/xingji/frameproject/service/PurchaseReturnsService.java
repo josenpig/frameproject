@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 
 import java.util.List;
 
@@ -58,4 +59,11 @@ public interface PurchaseReturnsService {
      * @return
      */
     List<PurchaseReturns> findReturn();
+
+    /**
+     * 根据条件查询采购退货单
+     * @param order
+     * @return
+     */
+    List<PurchaseReturns> conditionpage(PurchaseReceiptConditionVo order);
 }

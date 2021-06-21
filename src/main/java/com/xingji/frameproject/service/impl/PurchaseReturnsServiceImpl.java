@@ -4,6 +4,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.dao.PurchaseReturnsDao;
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
 import com.xingji.frameproject.service.PurchaseReturnsService;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ public class PurchaseReturnsServiceImpl implements PurchaseReturnsService {
 
     @Override
     public PurchaseReturns queryById(String id) {
-        return null;
+        return this.purchaseReturnsDao.selectById(id);
     }
 
     @Override
@@ -70,5 +71,15 @@ public class PurchaseReturnsServiceImpl implements PurchaseReturnsService {
     @Override
     public List<PurchaseReturns> findReturn() {
         return purchaseReturnsDao.selectAll();
+    }
+
+    /**
+     * 根据条件查询采购退货单
+     * @param order
+     * @return
+     */
+    @Override
+    public List<PurchaseReturns> conditionpage(PurchaseReceiptConditionVo order) {
+        return purchaseReturnsDao.conditionpage(order);
     }
 }

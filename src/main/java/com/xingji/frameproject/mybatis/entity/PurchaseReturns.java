@@ -3,7 +3,9 @@ package com.xingji.frameproject.mybatis.entity;
 import java.util.Date;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * (PurchaseReturns)实体类
@@ -21,6 +23,8 @@ public class PurchaseReturns implements Serializable {
     /**
      * 退货日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date exitDate;
     /**
      * 供应商用户名id
@@ -45,6 +49,8 @@ public class PurchaseReturns implements Serializable {
     /**
      * 最后审批时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date lastVettingTime;
     /**
      * 审批状态
@@ -57,10 +63,14 @@ public class PurchaseReturns implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
     /**
      * 打印次数

@@ -54,4 +54,11 @@ public interface PurchaseReturnsDetailsService {
     boolean deleteById(Integer id);
 
     int insertBatch(List<PurchaseReturnsDetails> deliverydetails);
+
+    /**
+     * 根据采购退货单查询采购退货单详情
+     * @param id
+     * @return
+     */
+    List<PurchaseReturnsDetails> queryAllByOrderId(String id);
 }

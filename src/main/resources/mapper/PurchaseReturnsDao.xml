@@ -12,7 +12,6 @@
         <result property="vettingName" column="vetting_name" jdbcType="VARCHAR"/>
         <result property="lastVettingTime" column="last_vetting_time" jdbcType="TIMESTAMP"/>
         <result property="vettingState" column="vetting_state" jdbcType="INTEGER"/>
-        <result property="contact" column="contact" jdbcType="VARCHAR"/>
         <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
         <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
         <result property="counter" column="counter" jdbcType="INTEGER"/>
@@ -25,7 +24,7 @@
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
         id
-        , exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name, last_vetting_time, vetting_state, contact, create_date, update_date, counter, purchase_order, receipt_order, payment_order, cav_order    </sql>
+        , exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name, last_vetting_time, vetting_state, create_date, update_date, counter, purchase_order, receipt_order, payment_order, cav_order    </sql>
 
     <!-- 查询单个 -->
     <select id="selectById" resultMap="PurchaseReturnsMap">
@@ -194,5 +193,54 @@
     <select id="count" resultType="int">
         select count(*)
         from purchase_returns
+    </select>
+
+
+    <select id="conditionpage" resultMap="PurchaseReturnsMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_returns
+        <where>
+            <if test="orderId != null and orderId != ''">
+                and id like CONCAT('%',#{orderId},'%')
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='今天'" >
+                and to_days(exit_date) = to_days(now())
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='昨天'" >
+                and to_days(now())-to_days(exit_date) = 1
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(exit_date)
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本月'" >
+                and DATE_FORMAT( exit_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="inBoundDate != null and inBoundDate != '' and inBoundDate=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(exit_date,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+
+            <if test="vettingState != null and vettingState == '草稿'" >
+                and vetting_state = -2
+            </if>
+            <if test="vettingState != null and vettingState == '待审批'" >
+                and vetting_state = 0
+            </if>
+            <if test="vettingState != null and vettingState == '已驳回'" >
+                and vetting_state = -1
+            </if>
+            <if test="vettingState != null and vettingState == '审批通过'" >
+                and vetting_state = 1
+            </if>
+
+        </where>
+
     </select>
 </mapper>

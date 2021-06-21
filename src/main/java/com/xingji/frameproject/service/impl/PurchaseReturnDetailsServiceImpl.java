@@ -43,4 +43,14 @@ public class PurchaseReturnDetailsServiceImpl implements PurchaseReturnsDetailsS
     public int insertBatch(List<PurchaseReturnsDetails> deliverydetails) {
         return this.detailsDao.batchInsert(deliverydetails);
     }
+
+    /**
+     * 根据采购退货单编号查询所有的采购退货单详情
+     * @param id
+     * @return
+     */
+    @Override
+    public List<PurchaseReturnsDetails> queryAllByOrderId(String id) {
+        return this.detailsDao.queryAllByOrderId(id);
+    }
 }
