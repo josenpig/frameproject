@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * (BaseProduct)表控制层
@@ -225,6 +226,7 @@ public class BaseProductController {
         BaseProductVo baseProductVo = new BaseProductVo();
         System.out.println("typeID:"+id);
         baseProductVo.setProductTypeId(id);
+
         List<BaseProductVo> productShowList=baseProductService.findAllProduct(baseProductVo);
         System.out.println(productShowList);
         map.put("total",page.getTotal());
@@ -248,6 +250,11 @@ public class BaseProductController {
         return result;
     };
 
+    /**
+     * 添加产品
+     * @param add
+     * @return
+     */
     @PostMapping("/addProduct")
     public AjaxResponse addProduct(@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);

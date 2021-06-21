@@ -31,4 +31,40 @@ public class BaseProductType implements Serializable {
      * 子组件
      */
     private List<BaseProductType> children;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Integer getProductTypeParentId() {
+        return productTypeParentId;
+    }
+
+    public void setProductTypeParentId(Integer productTypeParentId) {
+        this.productTypeParentId = productTypeParentId;
+    }
+
+    public List<BaseProductType> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<BaseProductType> children) {
+        this.children = children;
+    }
 }

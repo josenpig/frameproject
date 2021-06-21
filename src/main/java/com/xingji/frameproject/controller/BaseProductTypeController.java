@@ -1,18 +1,17 @@
 package com.xingji.frameproject.controller;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.mybatis.entity.BaseDepot;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseProductType;
-import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.service.BaseProductTypeService;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
+import com.xingji.frameproject.vo.form.StockInventoryDetailsQueryForm;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -72,7 +71,7 @@ public class BaseProductTypeController {
     };
 
     /**
-     * 递归查询子菜单
+     * 递归查询产品分类
      * @param root 根菜单
      * @param all  所有菜单
      * @return 菜单信息
@@ -88,4 +87,65 @@ public class BaseProductTypeController {
         ).collect(Collectors.toList());
         return children;
     }
+
+    /**
+     * 判断产品分类名称是否重复
+     * @param ProductTypeName
+     * @return
+     */
+    @GetMapping("/judgeProductTypeName")
+    public Boolean judgeProductTypeName(String ProductTypeName){
+        System.out.println("ProductTypeName:"+ProductTypeName);
+        BaseProductType baseProductType =new BaseProductType();
+        baseProductType.setLabel(ProductTypeName);
+        List<BaseProductType> list=baseProductTypeService.queryAll(baseProductType);
+        Boolean result=false;
+        if (list.size()==0){
+            result=true;
+        };
+        return result;
+    };
+    
+    /**
+     * 新增产品分类
+     * @param add
+     * @return
+     */
+    @RequestMapping("/addProductType")
+    public AjaxResponse addProductType(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("ProductType");
+        BaseProductType ProductType = JSON.parseObject(one, BaseProductType.class);
+        BaseProductType newc=baseProductTypeService.insert(ProductType);
+        return AjaxResponse.success(newc);
+    };
+
+    /**
+     * 修改产品分类
+     * @param add
+     * @return
+     */
+    @RequestMapping("/updateProductType")
+    public AjaxResponse updateProductType(@RequestBody String add){
+        System.out.println(add);
+        JSONObject jsonObject = JSONObject.parseObject(add);
+        String one = jsonObject.getString("ProductType");
+        BaseProductType ProductType = JSON.parseObject(one, BaseProductType.class);
+        BaseProductType newProductType= baseProductTypeService.update(ProductType);
+        return AjaxResponse.success(newProductType);
+    };
+    
+    /**
+     * 删除产品分类--
+     * @param id 产品编号
+     * @return
+     */
+    @GetMapping("/delProductType")
+    public AjaxResponse delProductType(Integer id){
+        System.out.println("del:"+id);
+        Boolean del=baseProductTypeService.deleteById(id);
+        System.out.println("删除是否成功："+del);
+        return AjaxResponse.success(del);
+    };
 }
