@@ -2,7 +2,6 @@
   "name" : "PurchaseReceipt",
   "preName" : "",
   "comment" : null,
-  "templateGroupName" : "Default",
   "templateGroupName" : "EIMS",
   "fullColumn" : [ {
     "name" : "id",
@@ -27,6 +26,13 @@
     "ext" : { }
   }, {
     "name" : "buyerName",
+    "comment" : null,
+    "type" : null,
+    "shortType" : null,
+    "custom" : false,
+    "ext" : { }
+  }, {
+    "name" : "state",
     "comment" : null,
     "type" : null,
     "shortType" : null,

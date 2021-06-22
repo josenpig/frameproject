@@ -9,17 +9,22 @@ import lombok.Data;
  */
 @Data
 public class CapitalConditionPageVo {
-    private String deliveryId;
-    private String deliveryTime;
+    private String deliveryId;//收付款编号
+    private String deliveryTime;//日期1
     private String otimeState;
     private String otimeEnd;
-    private String lastCollectionTime;
+    private String lastCollectionTime;//最后收付款日期
     private String dtimeState;
     private String dtimeEnd;
-    private String customer;
-    private String salesmen;
-    private String founder;
-    private String caseState;
-    private String payee;
-    private String incomeType;
+    private String customer;//客户
+    private String vendor;//供应商
+    private String salesmen;//销售人
+    private String buyer;//采购人
+    private String founder;//创建人
+    private String approvalState;//审批状态
+    private String caseState;//结案状态
+    private String payee;//收款人
+    private String incomeType;//收款类别
+    private String drawee;//付款人
+    private String paymentType;//付款类别
 }

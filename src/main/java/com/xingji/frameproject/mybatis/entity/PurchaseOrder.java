@@ -1,27 +1,21 @@
 package com.xingji.frameproject.mybatis.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.io.Serializable;
 import java.util.Date;
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * (PurchaseOrder)实体类
  *
  * @author makejava
- * @since 2021-06-02 15:24:42
+ * @since 2021-06-17 16:42:50
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@ToString
 public class PurchaseOrder implements Serializable {
-    private static final long serialVersionUID = 780299898411581616L;
+    private static final long serialVersionUID = 421376632837238973L;
     /**
      * 采购订单编号
      */
@@ -33,7 +27,7 @@ public class PurchaseOrder implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date deliceryDate;
     /**
-     * 供应商用户名
+     * 供应商id
      */
     private String vendorName;
     /**
@@ -43,7 +37,7 @@ public class PurchaseOrder implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date documentsDate;
     /**
-     * 当前审批人用户名
+     * 当前审批人用户名id
      */
     private String vettingName;
     /**
@@ -67,15 +61,15 @@ public class PurchaseOrder implements Serializable {
      */
     private String depotName;
     /**
-     * 关联的入库单
+     * 关联的入库单id
      */
     private String receiptOrderId;
     /**
-     * 关联的退货单
+     * 关联的退货单id
      */
     private String exitOrderId;
     /**
-     * 关联的付款单
+     * 关联的付款单id
      */
     private String paymentOrder;
     /**
@@ -93,17 +87,13 @@ public class PurchaseOrder implements Serializable {
      */
     private Integer inboundState;
     /**
-     * 采购人员姓名
+     * 采购人员姓名id
      */
     private String buyerName;
     /**
-     * 创建人姓名
+     * 创建人姓名id
      */
     private String createPeople;
-    /**
-     * 联系人
-     */
-    private String contact;
     /**
      * 创建时间
      */

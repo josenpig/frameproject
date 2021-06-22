@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.PurchaseReturnsDao">
-
+    <!-- 结果集 -->
     <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseReturns" id="PurchaseReturnsMap">
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="exitDate" column="exit_date" jdbcType="TIMESTAMP"/>
@@ -12,58 +12,40 @@
         <result property="vettingName" column="vetting_name" jdbcType="VARCHAR"/>
         <result property="lastVettingTime" column="last_vetting_time" jdbcType="TIMESTAMP"/>
         <result property="vettingState" column="vetting_state" jdbcType="INTEGER"/>
-        <result property="contact" column="contact" jdbcType="VARCHAR"/>
         <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
         <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
         <result property="counter" column="counter" jdbcType="INTEGER"/>
         <result property="purchaseOrder" column="purchase_order" jdbcType="VARCHAR"/>
+        <result property="receiptOrder" column="receipt_order" jdbcType="VARCHAR"/>
+        <result property="paymentOrder" column="payment_order" jdbcType="VARCHAR"/>
+        <result property="cavOrder" column="cav_order" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="queryById" resultMap="PurchaseReturnsMap">
-        select id,
-               exit_date,
-               vendor_name,
-               buyer_name,
-               depot_name,
-               offers_price,
-               vetting_name,
-               last_vetting_time,
-               vetting_state,
-               contact,
-               create_date,
-               update_date,
-               counter,
-               purchase_order
-        from frameproject.purchase_returns
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        id
+        , exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name, last_vetting_time, vetting_state, create_date, update_date, counter, purchase_order, receipt_order, payment_order, cav_order    </sql>
+
+    <!-- 查询单个 -->
+    <select id="selectById" resultMap="PurchaseReturnsMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_returns
         where id = #{id}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="PurchaseReturnsMap">
-        select id,
-               exit_date,
-               vendor_name,
-               buyer_name,
-               depot_name,
-               offers_price,
-               vetting_name,
-               last_vetting_time,
-               vetting_state,
-               contact,
-               create_date,
-               update_date,
-               counter,
-               purchase_order
-        from frameproject.purchase_returns limit #{offset}, #{limit}
+    <!-- 查询全部 -->
+    <select id="selectAll" resultMap="PurchaseReturnsMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_returns
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="PurchaseReturnsMap">
+    <select id="selectList" resultMap="PurchaseReturnsMap">
         select
-        id, exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name, last_vetting_time,
-        vetting_state, contact, create_date, update_date, counter, purchase_order
-        from frameproject.purchase_returns
+        <include refid="Base_Column_List"/>
+        from purchase_returns
         <where>
             <if test="id != null and id != ''">
                 and id = #{id}
@@ -107,48 +89,44 @@
             <if test="purchaseOrder != null and purchaseOrder != ''">
                 and purchase_order = #{purchaseOrder}
             </if>
+            <if test="receiptOrder != null and receiptOrder != ''">
+                and receipt_order = #{receiptOrder}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                and payment_order = #{paymentOrder}
+            </if>
+            <if test="cavOrder != null and cavOrder != ''">
+                and cav_order = #{cavOrder}
+            </if>
         </where>
     </select>
 
-    <!--新增所有列-->
+    <!-- 新增所有列 -->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.purchase_returns(exit_date, vendor_name, buyer_name, depot_name, offers_price,
-                                                  vetting_name, last_vetting_time, vetting_state, contact, create_date,
-                                                  update_date, counter, purchase_order)
-        values (#{exitDate}, #{vendorName}, #{buyerName}, #{depotName}, #{offersPrice}, #{vettingName},
-                #{lastVettingTime}, #{vettingState}, #{contact}, #{createDate}, #{updateDate}, #{counter},
-                #{purchaseOrder})
+        insert into purchase_returns(id, exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name,
+                                     last_vetting_time, vetting_state, state,create_date, update_date, counter,
+                                     purchase_order, receipt_order, payment_order, cav_order)
+        values (#{id}, #{exitDate}, #{vendorName}, #{buyerName}, #{depotName}, #{offersPrice}, #{vettingName},
+                #{lastVettingTime}, #{vettingState}, #{state}, #{createDate}, #{updateDate}, #{counter},
+                #{purchaseOrder}, #{receiptOrder}, #{paymentOrder}, #{cavOrder})
     </insert>
 
-    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.purchase_returns(exit_date, vendor_name, buyer_name, depot_name, offers_price,
-        vetting_name, last_vetting_time, vetting_state, contact, create_date, update_date, counter, purchase_order)
+    <!-- 批量新增 -->
+    <insert id="batchInsert">
+        insert into purchase_returns(id, exit_date, vendor_name, buyer_name, depot_name, offers_price, vetting_name,
+        last_vetting_time, vetting_state, contact, create_date, update_date, counter, purchase_order, receipt_order,
+        payment_order, cav_order)
         values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.exitDate}, #{entity.vendorName}, #{entity.buyerName}, #{entity.depotName}, #{entity.offersPrice},
-            #{entity.vettingName}, #{entity.lastVettingTime}, #{entity.vettingState}, #{entity.contact},
-            #{entity.createDate}, #{entity.updateDate}, #{entity.counter}, #{entity.purchaseOrder})
+        <foreach collection="purchaseReturnss" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.exitDate}, #{item.vendorName}, #{item.buyerName}, #{item.depotName}, #{item.offersPrice},
+            #{item.vettingName}, #{item.lastVettingTime}, #{item.vettingState}, #{item.contact}, #{item.createDate},
+            #{item.updateDate}, #{item.counter}, #{item.purchaseOrder}, #{item.receiptOrder}, #{item.paymentOrder},
+            #{item.cavOrder} )
         </foreach>
     </insert>
 
-    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into frameproject.purchase_returns(exit_date, vendor_name, buyer_name, depot_name, offers_price,
-        vetting_name, last_vetting_time, vetting_state, contact, create_date, update_date, counter, purchase_order)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.exitDate}, #{entity.vendorName}, #{entity.buyerName}, #{entity.depotName}, #{entity.offersPrice},
-            #{entity.vettingName}, #{entity.lastVettingTime}, #{entity.vettingState}, #{entity.contact},
-            #{entity.createDate}, #{entity.updateDate}, #{entity.counter}, #{entity.purchaseOrder})
-        </foreach>
-        on duplicate key update
-        exit_date = values(exit_date) , vendor_name = values(vendor_name) , buyer_name = values(buyer_name) , depot_name
-        = values(depot_name) , offers_price = values(offers_price) , vetting_name = values(vetting_name) ,
-        last_vetting_time = values(last_vetting_time) , vetting_state = values(vetting_state) , contact =
-        values(contact) , create_date = values(create_date) , update_date = values(update_date) , counter =
-        values(counter) , purchase_order = values(purchase_order)
-    </insert>
-
-    <!--通过主键修改数据-->
+    <!-- 通过主键修改数据 -->
     <update id="update">
         update frameproject.purchase_returns
         <set>
@@ -191,6 +169,15 @@
             <if test="purchaseOrder != null and purchaseOrder != ''">
                 purchase_order = #{purchaseOrder},
             </if>
+            <if test="receiptOrder != null and receiptOrder != ''">
+                receipt_order = #{receiptOrder},
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                payment_order = #{paymentOrder},
+            </if>
+            <if test="cavOrder != null and cavOrder != ''">
+                cav_order = #{cavOrder},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -198,9 +185,62 @@
     <!--通过主键删除-->
     <delete id="deleteById">
         delete
-        from frameproject.purchase_returns
+        from purchase_returns
         where id = #{id}
     </delete>
 
-</mapper>
+    <!-- 总数 -->
+    <select id="count" resultType="int">
+        select count(*)
+        from purchase_returns
+    </select>
 
+
+    <select id="conditionpage" resultMap="PurchaseReturnsMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_returns
+        <where>
+            <if test="orderId != null and orderId != ''">
+                and id like CONCAT('%',#{orderId},'%')
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='今天'" >
+                and to_days(exit_date) = to_days(now())
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='昨天'" >
+                and to_days(now())-to_days(exit_date) = 1
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(exit_date)
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本月'" >
+                and DATE_FORMAT( exit_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="inBoundDate != null and inBoundDate != '' and inBoundDate=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(exit_date,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+
+            <if test="vettingState != null and vettingState == '草稿'" >
+                and vetting_state = -2
+            </if>
+            <if test="vettingState != null and vettingState == '待审批'" >
+                and vetting_state = 0
+            </if>
+            <if test="vettingState != null and vettingState == '已驳回'" >
+                and vetting_state = -1
+            </if>
+            <if test="vettingState != null and vettingState == '审批通过'" >
+                and vetting_state = 1
+            </if>
+
+        </where>
+
+    </select>
+</mapper>

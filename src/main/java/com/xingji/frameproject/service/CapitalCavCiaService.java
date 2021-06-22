@@ -21,6 +21,8 @@ public interface CapitalCavCiaService {
      */
     CapitalCavCia queryById(String cavId);
 
+    CapitalCavCia queryByIdTpye(String cavId, String cavType);
+
     /**
      * 查询多条数据
      *

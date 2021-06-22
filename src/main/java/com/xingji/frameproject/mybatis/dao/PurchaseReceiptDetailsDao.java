@@ -73,13 +73,6 @@ public interface PurchaseReceiptDetailsDao {
      */
     int update(PurchaseReceiptDetails purchaseReceiptDetails);
 
-    /**
-     * 批量修改数据
-     *
-     * @param purchaseReceiptDetailsList 实例对象列表
-     * @return 影响行数
-     */
-    int updateBatch(List<PurchaseReceiptDetails> purchaseReceiptDetailsList);
 
     /**
      * 通过主键删除数据
@@ -89,21 +82,12 @@ public interface PurchaseReceiptDetailsDao {
      */
     int deleteById(Integer id);
 
-    /**
-     * 通过主键列表删除数据
-     *
-     * @param ids 主键列表
-     * @return 影响行数
-     */
-    int deleteBatch(List<Integer> ids);
 
     /**
-     * 批量对象列表删除数据
-     *
-     * @param purchaseReceiptDetailsList 实例对象列表
-     * @return 影响行数
+     * 查询有多少条记录
+     * @return
      */
-    int deleteBatchByEntities(List<PurchaseReceiptDetails> purchaseReceiptDetailsList);
+    int count();
 
     /**
      * 根据采购入库单查询采购入库单商品详情

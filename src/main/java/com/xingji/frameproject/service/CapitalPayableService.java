@@ -1,6 +1,9 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
+import com.xingji.frameproject.vo.CiaBillVo;
+import com.xingji.frameproject.vo.PurchaseCapitalVo;
 
 import java.util.List;
 
@@ -28,6 +31,13 @@ public interface CapitalPayableService {
      * @return 对象列表
      */
     List<CapitalPayable> queryAllByLimit(int offset, int limit);
+    /**
+     * 通过实体类条件查询
+     *
+     * @param vo 实例对象
+     * @return 对象列表
+     */
+    List<CapitalPayable> queryAllByPage(CapitalConditionPageVo vo);
 
     /**
      * 新增数据
@@ -52,5 +62,28 @@ public interface CapitalPayableService {
      * @return 是否成功
      */
     boolean deleteById(String deliveryId);
-
+    /**
+     * 本次销售出库单收款--应收
+     * @return 数据
+     */
+    PurchaseCapitalVo querythisPayment(String purchaseId);
+    /**
+     * 通过实体类条件查询应付款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    List<PurchaseCapitalVo> queryPayment(PurchaseCapitalVo vo);
+    /**
+     * 修改已付金额数据
+     *
+     * @param capitalPayable 实例对象
+     * @return 实例对象
+     */
+    CapitalPayable receivedadd(CapitalPayable capitalPayable);
+    /**
+     * 通过实体类条件查询核销单中的应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
+    List<CiaBillVo> querycavPayment(CiaBillVo vo);
 }

@@ -22,8 +22,14 @@ public interface SaleReturnDao {
      * @param returnId 主键
      * @return 实例对象
      */
+    SaleReturn queryByIdVo(String returnId);
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param returnId 主键
+     * @return 实例对象
+     */
     SaleReturn queryById(String returnId);
-
     /**
      * 查询指定行数据
      *

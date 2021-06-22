@@ -20,13 +20,13 @@ public class CapitalPaymentAccountServiceImpl implements CapitalPaymentAccountSe
     private CapitalPaymentAccountDao capitalPaymentAccountDao;
 
     /**
-     * 通过ID查询单条数据
+     * 通过ID查询多条数据
      *
      * @param id 主键
      * @return 实例对象
      */
     @Override
-    public CapitalPaymentAccount queryById(Integer id) {
+    public List<CapitalPaymentAccount> queryById(String id) {
         return this.capitalPaymentAccountDao.queryById(id);
     }
 
@@ -63,18 +63,6 @@ public class CapitalPaymentAccountServiceImpl implements CapitalPaymentAccountSe
     public List<CapitalPaymentAccount> insertBatch(List<CapitalPaymentAccount> capitalPaymentAccount) {
         this.capitalPaymentAccountDao.insertBatch(capitalPaymentAccount);
         return capitalPaymentAccount;
-    }
-
-    /**
-     * 修改数据
-     *
-     * @param capitalPaymentAccount 实例对象
-     * @return 实例对象
-     */
-    @Override
-    public CapitalPaymentAccount update(CapitalPaymentAccount capitalPaymentAccount) {
-        this.capitalPaymentAccountDao.update(capitalPaymentAccount);
-        return this.queryById(capitalPaymentAccount.getId());
     }
 
     /**

@@ -85,23 +85,41 @@ public class CapitalReceivableServiceImpl implements CapitalReceivableService {
     public List<CapitalReceivable> queryAllByPage(CapitalConditionPageVo vo) {
         return this.capitalReceivableDao.queryAllByPage(vo);
     }
+    /**
+     * 通过实体类条件查询应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
     @Override
     public List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo) {
         return this.capitalReceivableDao.queryReceipt(vo);
     }
+    /**
+     * 通过实体类条件查询核销单中的应收款单
+     * @param vo 实体类
+     * @return 影响行数
+     */
     @Override
     public List<CiaBillVo> querycavReceipt(CiaBillVo vo) {
         return this.capitalReceivableDao.querycavReceipt(vo);
     }
+    /**
+     * 本次销售出库单收款--应收
+     * @return 数据
+     */
     @Override
     public SaleReceiptVo querythisReceipt(String saleId) {
         return this.capitalReceivableDao.querythisReceipt(saleId);
     }
-
+    /**
+     * 修改已收金额数据
+     *
+     * @param capitalReceivable 实例对象
+     * @return 实例对象
+     */
     @Override
     public CapitalReceivable receivedadd(CapitalReceivable capitalReceivable) {
         this.capitalReceivableDao.receivedadd(capitalReceivable);
         return this.queryById(capitalReceivable.getDeliveryId());
     }
-
 }

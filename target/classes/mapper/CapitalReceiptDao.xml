@@ -5,25 +5,6 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceipt" id="CapitalReceiptMap">
         <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
         <result property="receiptTime" column="receipt_time" jdbcType="TIMESTAMP"/>
-        <result property="customer" column="customer" jdbcType="VARCHAR"/>
-        <result property="payee" column="payee" jdbcType="VARCHAR"/>
-        <result property="incomeType" column="income_type" jdbcType="VARCHAR"/>
-        <result property="receiptMoney" column="receipt_money" jdbcType="NUMERIC"/>
-        <result property="ciaMoney" column="cia_money" jdbcType="NUMERIC"/>
-        <result property="ciaBalance" column="cia_balance" jdbcType="NUMERIC"/>
-        <result property="cavId" column="cav_id" jdbcType="VARCHAR"/>
-        <result property="founder" column="founder" jdbcType="VARCHAR"/>
-        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
-        <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
-        <result property="approver" column="approver" jdbcType="VARCHAR"/>
-        <result property="lastApprovalTime" column="last_approval_time" jdbcType="TIMESTAMP"/>
-        <result property="foundTime" column="found_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="approvalRemarks" column="approval_remarks" jdbcType="VARCHAR"/>
-    </resultMap>
-    <resultMap type="com.xingji.frameproject.mybatis.entity.CapitalReceipt" id="CapitalReceiptView">
-        <result property="receiptId" column="receipt_id" jdbcType="VARCHAR"/>
-        <result property="receiptTime" column="receipt_time" jdbcType="TIMESTAMP"/>
         <result property="customer" column="customer_name" jdbcType="VARCHAR"/>
         <result property="payee" column="payee" jdbcType="VARCHAR"/>
         <result property="incomeType" column="income_type" jdbcType="VARCHAR"/>
@@ -46,12 +27,12 @@
         <result property="otherParty" column="customer" jdbcType="VARCHAR"/>
         <result property="capitalTime" column="receipt_time" jdbcType="TIMESTAMP"/>
         <result property="beforeMoney" column="cia_money" jdbcType="NUMERIC"/>
-        <result property="writtenMoney" column="cia_balance-cia_money" jdbcType="NUMERIC"/>
+        <result property="writtenMoney" column="cia_money-cia_balance" jdbcType="NUMERIC"/>
         <result property="unwrittenMoney" column="cia_balance" jdbcType="NUMERIC"/>
         <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
     </resultMap>
     <!--查询单个-->
-    <select id="queryById" resultMap="CapitalReceiptView">
+    <select id="queryById" resultMap="CapitalReceiptMap">
         select a.*,b.* from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
         where receipt_id = #{receiptId}
     </select>
@@ -65,61 +46,55 @@
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="CapitalReceiptView">
-        select a.*,b.* from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
+    <select id="queryAll" resultMap="CapitalReceiptMap">
+        select a.*,b.customer_name from capital_receipt a INNER JOIN base_customer b on a.customer=b.customer_number
         <where>
-            <if test="receiptId != null and receiptId != ''">
-                and receipt_id = #{receiptId}
+            <if test="deliveryId != null and deliveryId != ''">
+                and receipt_id like CONCAT('%',#{deliveryId},'%')
             </if>
-            <if test="receiptTime != null">
-                and receipt_time = #{receiptTime}
+            <if test="deliveryTime != null and deliveryTime=='今天'" >
+                and to_days(receipt_time) = to_days(now())
             </if>
-            <if test="customer != null and customer != ''">
-                and customer = #{customer}
+            <if test="deliveryTime != null and deliveryTime=='昨天'" >
+                and to_days(now())-to_days(receipt_time) = 1
             </if>
-            <if test="payee != null and payee != ''">
-                and payee = #{payee}
+            <if test="deliveryTime != null and deliveryTime=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(receipt_time)
             </if>
-            <if test="incomeType != null and incomeType != ''">
+            <if test="deliveryTime != null and deliveryTime=='本月'" >
+                and DATE_FORMAT( receipt_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+
+            <if test="deliveryTime != null and deliveryTime != '' and deliveryTime=='自定义' and otimeState!=null and otimeEnd!=null">
+                and DATE_FORMAT(receipt_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{otimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{otimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="incomeType != '全部' and incomeType != null and incomeType !=''">
                 and income_type = #{incomeType}
             </if>
-            <if test="receiptMoney != null">
-                and receipt_money = #{receiptMoney}
+            <if test="customer != null and customer !=''">
+                and customer = #{customer}
             </if>
-            <if test="ciaMoney != null">
-                and cia_money = #{ciaMoney}
+            <if test="payee != null and payee !=''">
+                and payee = #{payee}
             </if>
-            <if test="ciaBalance != null">
-                and cia_balance = #{ciaBalance}
-            </if>
-            <if test="cavId != null and cavId != ''">
-                and cav_id = #{cavId}
-            </if>
-            <if test="founder != null and founder != ''">
+            <if test="founder != null and founder !=''">
                 and founder = #{founder}
             </if>
-            <if test="remarks != null and remarks != ''">
-                and remarks = #{remarks}
+            <if test="approvalState != null and approvalState == '草稿'" >
+                and approval_state = -2
             </if>
-            <if test="approvalState != null">
-                and approval_state = #{approvalState}
+            <if test="approvalState != null and approvalState == '待审批'" >
+                and approval_state = 0
             </if>
-            <if test="approver != null and approver != ''">
-                and approver = #{approver}
+            <if test="approvalState != null and approvalState == '已驳回'" >
+                and approval_state = -1
             </if>
-            <if test="lastApprovalTime != null">
-                and last_approval_time = #{lastApprovalTime}
-            </if>
-            <if test="foundTime != null">
-                and found_time = #{foundTime}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
-            <if test="approvalRemarks != null and approvalRemarks != ''">
-                and approval_remarks = #{approvalRemarks}
+            <if test="approvalState != null and approvalState == '审批通过'" >
+                and approval_state = 1
             </if>
         </where>
+        ORDER BY found_time DESC
     </select>
 
     <!--新增所有列-->
@@ -223,7 +198,7 @@
     </delete>
     <!--通过实体作为筛选条件查询-->
     <select id="querycavReceipt" resultMap="CiaCapMap">
-        select *,cia_balance-cia_money from frameproject.capital_receipt
+        select *,cia_money-cia_balance from frameproject.capital_receipt
         <where>
             <if test="capitalId != null and capitalId != ''">
                 and receipt_id = #{capitalId}

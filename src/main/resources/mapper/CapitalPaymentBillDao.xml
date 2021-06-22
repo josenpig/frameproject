@@ -19,7 +19,12 @@
         select
           id, payment_id, purchase_id, purchase_type, purchase_time, payable_money, paid_money, unpaid_money, this_money
         from frameproject.capital_payment_bill
-        where id = #{id}
+        where payment_id = #{id}
+    </select>
+    <!--关联单据查询-->
+    <select id="relation" resultMap="CapitalPaymentBillMap">
+        select  payment_id from frameproject.capital_payment_bill
+        where purchase_id = #{id}
     </select>
 
     <!--查询指定行数据-->

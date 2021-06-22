@@ -19,9 +19,13 @@
         select
           id, cav_id, sale_id, sale_type, sale_time, should_money, already_money, not_money, this_money
         from frameproject.capital_cav_cia_bill
-        where cav_id = #{cavId}
+        where cav_id = #{id}
     </select>
-
+    <!--关联单据查询-->
+    <select id="relation" resultMap="CapitalCavCiaBillMap">
+        select cav_id from frameproject.capital_cav_cia_bill
+        where sale_id = #{cavId}
+    </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="CapitalCavCiaBillMap">
         select

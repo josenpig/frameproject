@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 
 import java.util.List;
 
@@ -53,4 +54,16 @@ public interface PurchaseReturnsService {
      */
     boolean deleteById(String id);
 
+    /**
+     * 查询所有的可可以采购退货的订单
+     * @return
+     */
+    List<PurchaseReturns> findReturn();
+
+    /**
+     * 根据条件查询采购退货单
+     * @param order
+     * @return
+     */
+    List<PurchaseReturns> conditionpage(PurchaseReceiptConditionVo order);
 }

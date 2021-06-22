@@ -81,4 +81,24 @@ public class BaseVendorServiceImpl implements BaseVendorService {
     public List<BaseVendor> findAllVendor(BaseVendor baseVendor) {
         return this.baseVendorDao.findAllVendor(baseVendor);
     }
+
+    /**
+     * 根据供应商id查询供应商名称
+     * @param vendorId
+     * @return
+     */
+    @Override
+    public String findVendorName(String vendorId) {
+        return this.baseVendorDao.queryById(vendorId).getVendorName();
+    }
+
+    /**
+     * 根据供应商用户名查询供应商Id
+     * @param vendorName
+     * @return
+     */
+    @Override
+    public String findVendorId(String vendorName) {
+        return this.baseVendorDao.queryByName(vendorName).getVendorId();
+    }
 }

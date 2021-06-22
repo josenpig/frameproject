@@ -18,11 +18,17 @@ public interface CapitalCavCiaBillDao {
     /**
      * 通过ID查询单条数据
      *
-     * @param cavId
+     * @param id
      * @return 实例对象
      */
-    List<CapitalCavCiaBill> queryById(String cavId);
-
+    List<CapitalCavCiaBill> queryById(String id);
+    /**
+     * 通过ID查询关联单据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    List<CapitalCavCiaBill> relation(String id);
     /**
      * 查询指定行数据
      *

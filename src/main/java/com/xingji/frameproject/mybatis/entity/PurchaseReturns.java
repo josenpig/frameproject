@@ -1,16 +1,21 @@
 package com.xingji.frameproject.mybatis.entity;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * (PurchaseReturns)实体类
  *
  * @author makejava
- * @since 2021-06-15 18:49:01
+ * @since 2021-06-18 00:46:45
  */
+@Data
 public class PurchaseReturns implements Serializable {
-    private static final long serialVersionUID = 733255605405457802L;
+    private static final long serialVersionUID = 226738119366229764L;
     /**
      * 主键
      */
@@ -18,13 +23,15 @@ public class PurchaseReturns implements Serializable {
     /**
      * 退货日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date exitDate;
     /**
-     * 供应商用户名
+     * 供应商用户名id
      */
     private String vendorName;
     /**
-     * 采购人用户名
+     * 采购人用户名id
      */
     private String buyerName;
     /**
@@ -36,149 +43,53 @@ public class PurchaseReturns implements Serializable {
      */
     private Double offersPrice;
     /**
-     * 当前审批人用户名
+     * 当前审批人用户名id
      */
     private String vettingName;
     /**
      * 最后审批时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date lastVettingTime;
     /**
      * 审批状态
      */
     private Integer vettingState;
     /**
-     * 联系人
+     * 订单状态
      */
-    private String contact;
+    private Integer state;
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
     /**
      * 打印次数
      */
     private Integer counter;
     /**
-     * 关联的采购订单
+     * 关联的采购订单id
      */
     private String purchaseOrder;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getExitDate() {
-        return exitDate;
-    }
-
-    public void setExitDate(Date exitDate) {
-        this.exitDate = exitDate;
-    }
-
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
-    }
-
-    public String getBuyerName() {
-        return buyerName;
-    }
-
-    public void setBuyerName(String buyerName) {
-        this.buyerName = buyerName;
-    }
-
-    public String getDepotName() {
-        return depotName;
-    }
-
-    public void setDepotName(String depotName) {
-        this.depotName = depotName;
-    }
-
-    public Double getOffersPrice() {
-        return offersPrice;
-    }
-
-    public void setOffersPrice(Double offersPrice) {
-        this.offersPrice = offersPrice;
-    }
-
-    public String getVettingName() {
-        return vettingName;
-    }
-
-    public void setVettingName(String vettingName) {
-        this.vettingName = vettingName;
-    }
-
-    public Date getLastVettingTime() {
-        return lastVettingTime;
-    }
-
-    public void setLastVettingTime(Date lastVettingTime) {
-        this.lastVettingTime = lastVettingTime;
-    }
-
-    public Integer getVettingState() {
-        return vettingState;
-    }
-
-    public void setVettingState(Integer vettingState) {
-        this.vettingState = vettingState;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Integer getCounter() {
-        return counter;
-    }
-
-    public void setCounter(Integer counter) {
-        this.counter = counter;
-    }
-
-    public String getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(String purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
-
+    /**
+     * 关联的入库单id
+     */
+    private String receiptOrder;
+    /**
+     * 关联付款单id
+     */
+    private String paymentOrder;
+    /**
+     * 关联的核销单id
+     */
+    private String cavOrder;
 }

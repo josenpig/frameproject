@@ -106,7 +106,7 @@ public class CapitalReceivableController {
         return AjaxResponse.success(map);
     }
     /**
-     * 本次预收收款
+     * 本次销售订单收款--预收
      * @return 数据
      */
     @GetMapping("/salethisReceipt")
@@ -115,7 +115,7 @@ public class CapitalReceivableController {
         return AjaxResponse.success(vo);
     }
     /**
-     * 本次应收收款
+     * 本次销售出库单收款--应收
      * @return 数据
      */
     @GetMapping("/deliverythisReceipt")

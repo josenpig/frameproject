@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.PurchaseOrderDao">
-
+    <!-- 结果集 -->
     <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseOrder" id="PurchaseOrderMap">
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="deliceryDate" column="delicery_date" jdbcType="TIMESTAMP"/>
@@ -21,13 +21,12 @@
         <result property="inboundState" column="inbound_state" jdbcType="INTEGER"/>
         <result property="buyerName" column="buyer_name" jdbcType="VARCHAR"/>
         <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
-        <result property="contact" column="contact" jdbcType="VARCHAR"/>
         <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
         <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
         <result property="counter" column="counter" jdbcType="INTEGER"/>
         <result property="ostate" column="ostate" jdbcType="NUMERIC"/>
     </resultMap>
-    <!--资金付款-->
+
     <resultMap id="PurchaseReceipt" type="com.xingji.frameproject.vo.PurchaseCapitalVo">
         <result property="purchaseId" column="id" jdbcType="VARCHAR"/>
         <result property="purchaseTime" column="documents_date" jdbcType="TIMESTAMP"/>
@@ -36,27 +35,110 @@
         <result property="unpaidMoney" column="offers_price-ostate" jdbcType="NUMERIC"/>
         <result property="vendor" column="vendor_name" jdbcType="VARCHAR"/>
     </resultMap>
-    <!--查询单个-->
+
+
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        id
+        , delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state, buyer_name, create_people, create_date, update_date, counter, ostate    </sql>
+
+    <!-- 查询单个 -->
     <select id="queryById" resultMap="PurchaseOrderMap">
         select
-          id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state, buyer_name, create_people, contact, create_date, update_date, counter, ostate
-        from frameproject.purchase_order
+        <include refid="Base_Column_List"/>
+        from purchase_order
         where id = #{id}
     </select>
 
-    <!--查询所有-->
+    <!-- 查询全部 -->
     <select id="queryAll" resultMap="PurchaseOrderMap">
         select
-          id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state, buyer_name, create_people, contact, create_date, update_date, counter, ostate
-        from (select * from PurchaseOrder where work_point_id = #{workPointId})
+        <include refid="Base_Column_List"/>
+        from purchase_order
     </select>
 
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAndByPojo" resultMap="PurchaseOrderMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase_order
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="deliceryDate != null">
+                and delicery_date = #{deliceryDate}
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and vendor_name = #{vendorName}
+            </if>
+            <if test="documentsDate != null">
+                and documents_date = #{documentsDate}
+            </if>
+            <if test="vettingName != null and vettingName != ''">
+                and vetting_name = #{vettingName}
+            </if>
+            <if test="disrate != null">
+                and disrate = #{disrate}
+            </if>
+            <if test="dismoney != null">
+                and dismoney = #{dismoney}
+            </if>
+            <if test="offersPrice != null">
+                and offers_price = #{offersPrice}
+            </if>
+            <if test="orderState != null">
+                and order_state = #{orderState}
+            </if>
+            <if test="depotName != null and depotName != ''">
+                and depot_name = #{depotName}
+            </if>
+            <if test="receiptOrderId != null and receiptOrderId != ''">
+                and receipt_order_id = #{receiptOrderId}
+            </if>
+            <if test="exitOrderId != null and exitOrderId != ''">
+                and exit_order_id = #{exitOrderId}
+            </if>
+            <if test="paymentOrder != null and paymentOrder != ''">
+                and payment_order = #{paymentOrder}
+            </if>
+            <if test="vettingState != null">
+                and vetting_state = #{vettingState}
+            </if>
+            <if test="lastVettingDate != null">
+                and last_vetting_date = #{lastVettingDate}
+            </if>
+            <if test="inboundState != null">
+                and inbound_state = #{inboundState}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and buyer_name = #{buyerName}
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                and create_people = #{createPeople}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="counter != null">
+                and counter = #{counter}
+            </if>
+            <if test="ostate != null">
+                and ostate = #{ostate}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
     <!--通过实体作为或者条件查询-->
     <select id="queryOrByPojo" resultMap="PurchaseOrderMap">
         select
         id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state,
         depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state,
-        buyer_name, create_people, contact, create_date, update_date, counter, ostate
+        buyer_name, create_people, create_date, update_date, counter, ostate
         from purchase_order
         <where>
             <if test="orderid != null and orderid != ''">
@@ -119,128 +201,48 @@
         </where>
     </select>
 
-    <!--通过实体作为并且条件查询-->
-    <select id="queryAndByPojo" resultMap="PurchaseOrderMap">
-        select
-        id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state,
-        depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state, last_vetting_date, inbound_state,
-        buyer_name, create_people, contact, create_date, update_date, counter, ostate
-        from frameproject.purchase_order
-        <where>
-            1=1
-            <if test="id != null and id != ''">
-                and id = #{id}
-            </if>
-            <if test="deliceryDate != null">
-                and delicery_date = #{deliceryDate}
-            </if>
-            <if test="vendorName != null and vendorName != ''">
-                and vendor_name = #{vendorName}
-            </if>
-            <if test="documentsDate != null">
-                and documents_date = #{documentsDate}
-            </if>
-            <if test="vettingName != null and vettingName != ''">
-                and vetting_name = #{vettingName}
-            </if>
-            <if test="disrate != null">
-                and disrate = #{disrate}
-            </if>
-            <if test="dismoney != null">
-                and dismoney = #{dismoney}
-            </if>
-            <if test="offersPrice != null">
-                and offers_price = #{offersPrice}
-            </if>
-            <if test="orderState != null">
-                and order_state = #{orderState}
-            </if>
-            <if test="depotName != null and depotName != ''">
-                and depot_name = #{depotName}
-            </if>
-            <if test="receiptOrderId != null and receiptOrderId != ''">
-                and receipt_order_id = #{receiptOrderId}
-            </if>
-            <if test="exitOrderId != null and exitOrderId != ''">
-                and exit_order_id = #{exitOrderId}
-            </if>
-            <if test="paymentOrder != null and paymentOrder != ''">
-                and payment_order = #{paymentOrder}
-            </if>
-            <if test="vettingState != null">
-                and vetting_state = #{vettingState}
-            </if>
-            <if test="lastVettingDate != null">
-                and last_vetting_date = #{lastVettingDate}
-            </if>
-            <if test="inboundState != null">
-                and inbound_state = #{inboundState}
-            </if>
-            <if test="buyerName != null and buyerName != ''">
-                and buyer_name = #{buyerName}
-            </if>
-            <if test="createPeople != null and createPeople != ''">
-                and create_people = #{createPeople}
-            </if>
-            <if test="contact != null and contact != ''">
-                and contact = #{contact}
-            </if>
-            <if test="createDate != null">
-                and create_date = #{createDate}
-            </if>
-            <if test="updateDate != null">
-                and update_date = #{updateDate}
-            </if>
-            <if test="counter != null">
-                and counter = #{counter}
-            </if>
-            <if test="ostate != null">
-                and ostate = #{ostate}
-            </if>
-        </where>
-    </select>
-
-    <!--新增所有列-->
-    <insert id="insert">
-        insert into frameproject.purchase_order(id, delicery_date, vendor_name, documents_date, vetting_name, disrate,
-        dismoney, offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state,
-        last_vetting_date, inbound_state, buyer_name, create_people, contact, create_date, update_date, counter, ostate)
+    <!-- 新增所有列 -->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into purchase_order(id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney,
+                                   offers_price, order_state, depot_name, receipt_order_id, exit_order_id,
+                                   payment_order, vetting_state, last_vetting_date, inbound_state, buyer_name,
+                                   create_people,create_date, update_date, counter, ostate)
         values (#{id}, #{deliceryDate}, #{vendorName}, #{documentsDate}, #{vettingName}, #{disrate}, #{dismoney},
-        #{offersPrice}, #{orderState}, #{depotName}, #{receiptOrderId}, #{exitOrderId}, #{paymentOrder},
-        #{vettingState}, #{lastVettingDate}, #{inboundState}, #{buyerName}, #{createPeople}, #{contact}, #{createDate},
-        #{updateDate}, #{counter}, #{ostate})
+                #{offersPrice}, #{orderState}, #{depotName}, #{receiptOrderId}, #{exitOrderId}, #{paymentOrder},
+                #{vettingState}, #{lastVettingDate}, #{inboundState}, #{buyerName}, #{createPeople},
+                #{createDate}, #{updateDate}, #{counter}, #{ostate})
     </insert>
 
-    <!--批量新增数据 -->
+    <!-- 批量新增 -->
     <insert id="insertBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            insert into frameproject.purchase_order (id, delicery_date, vendor_name, documents_date, vetting_name,
-            disrate, dismoney, offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order,
-            vetting_state, last_vetting_date, inbound_state, buyer_name, create_people, contact, create_date,
-            update_date, counter, ostate)
-            values (SEQ_purchase_order.NEXTVAL, #{entity.deliceryDate}, #{entity.vendorName}, #{entity.documentsDate},
-            #{entity.vettingName}, #{entity.disrate}, #{entity.dismoney}, #{entity.offersPrice}, #{entity.orderState},
-            #{entity.depotName}, #{entity.receiptOrderId}, #{entity.exitOrderId}, #{entity.paymentOrder},
-            #{entity.vettingState}, #{entity.lastVettingDate}, #{entity.inboundState}, #{entity.buyerName},
-            #{entity.createPeople}, #{entity.contact}, #{entity.createDate}, #{entity.updateDate}, #{entity.counter},
-            #{entity.ostate})
+        insert into purchase_order(id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney,
+        offers_price, order_state, depot_name, receipt_order_id, exit_order_id, payment_order, vetting_state,
+        last_vetting_date, inbound_state, buyer_name, create_people, create_date, update_date, counter, ostate)
+        values
+        <foreach collection="purchaseOrders" item="item" index="index" separator=",">
+            (
+            #{item.id}, #{item.deliceryDate}, #{item.vendorName}, #{item.documentsDate}, #{item.vettingName},
+            #{item.disrate}, #{item.dismoney}, #{item.offersPrice}, #{item.orderState}, #{item.depotName},
+            #{item.receiptOrderId}, #{item.exitOrderId}, #{item.paymentOrder}, #{item.vettingState},
+            #{item.lastVettingDate}, #{item.inboundState}, #{item.buyerName}, #{item.createPeople},
+            #{item.createDate}, #{item.updateDate}, #{item.counter}, #{item.ostate} )
         </foreach>
     </insert>
 
-    <!--通过主键修改数据-->
+    <!-- 通过主键修改数据 -->
     <update id="update">
         update frameproject.purchase_order
         <set>
             <if test="deliceryDate != null">
                 delicery_date = #{deliceryDate},
             </if>
-            <if test="vendorName != null">
+            <if test="vendorName != null and vendorName != ''">
                 vendor_name = #{vendorName},
             </if>
             <if test="documentsDate != null">
                 documents_date = #{documentsDate},
             </if>
-            <if test="vettingName != null">
+            <if test="vettingName != null and vettingName != ''">
                 vetting_name = #{vettingName},
             </if>
             <if test="disrate != null">
@@ -255,16 +257,16 @@
             <if test="orderState != null">
                 order_state = #{orderState},
             </if>
-            <if test="depotName != null">
+            <if test="depotName != null and depotName != ''">
                 depot_name = #{depotName},
             </if>
-            <if test="receiptOrderId != null">
+            <if test="receiptOrderId != null and receiptOrderId != ''">
                 receipt_order_id = #{receiptOrderId},
             </if>
-            <if test="exitOrderId != null">
+            <if test="exitOrderId != null and exitOrderId != ''">
                 exit_order_id = #{exitOrderId},
             </if>
-            <if test="paymentOrder != null">
+            <if test="paymentOrder != null and paymentOrder != ''">
                 payment_order = #{paymentOrder},
             </if>
             <if test="vettingState != null">
@@ -276,14 +278,11 @@
             <if test="inboundState != null">
                 inbound_state = #{inboundState},
             </if>
-            <if test="buyerName != null">
+            <if test="buyerName != null and buyerName != ''">
                 buyer_name = #{buyerName},
             </if>
-            <if test="createPeople != null">
+            <if test="createPeople != null and createPeople != ''">
                 create_people = #{createPeople},
-            </if>
-            <if test="contact != null">
-                contact = #{contact},
             </if>
             <if test="createDate != null">
                 create_date = #{createDate},
@@ -301,96 +300,46 @@
         where id = #{id}
     </update>
 
-    <!--批量修改数据-->
-    <update id="updateBatch">
-        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
-            update frameproject.purchase_order
-            <set>
-                <if test="entity.deliceryDate != null">
-                    delicery_date = #{entity.deliceryDate},
-                </if>
-                <if test="entity.vendorName != null">
-                    vendor_name = #{entity.vendorName},
-                </if>
-                <if test="entity.documentsDate != null">
-                    documents_date = #{entity.documentsDate},
-                </if>
-                <if test="entity.vettingName != null">
-                    vetting_name = #{entity.vettingName},
-                </if>
-                <if test="entity.disrate != null">
-                    disrate = #{entity.disrate},
-                </if>
-                <if test="entity.dismoney != null">
-                    dismoney = #{entity.dismoney},
-                </if>
-                <if test="entity.offersPrice != null">
-                    offers_price = #{entity.offersPrice},
-                </if>
-                <if test="entity.orderState != null">
-                    order_state = #{entity.orderState},
-                </if>
-                <if test="entity.depotName != null">
-                    depot_name = #{entity.depotName},
-                </if>
-                <if test="entity.receiptOrderId != null">
-                    receipt_order_id = #{entity.receiptOrderId},
-                </if>
-                <if test="entity.exitOrderId != null">
-                    exit_order_id = #{entity.exitOrderId},
-                </if>
-                <if test="entity.paymentOrder != null">
-                    payment_order = #{entity.paymentOrder},
-                </if>
-                <if test="entity.vettingState != null">
-                    vetting_state = #{entity.vettingState},
-                </if>
-                <if test="entity.lastVettingDate != null">
-                    last_vetting_date = #{entity.lastVettingDate},
-                </if>
-                <if test="entity.inboundState != null">
-                    inbound_state = #{entity.inboundState},
-                </if>
-                <if test="entity.buyerName != null">
-                    buyer_name = #{entity.buyerName},
-                </if>
-                <if test="entity.createPeople != null">
-                    create_people = #{entity.createPeople},
-                </if>
-                <if test="entity.contact != null">
-                    contact = #{entity.contact},
-                </if>
-                <if test="entity.createDate != null">
-                    create_date = #{entity.createDate},
-                </if>
-                <if test="entity.updateDate != null">
-                    update_date = #{entity.updateDate},
-                </if>
-                <if test="entity.counter != null">
-                    counter = #{entity.counter},
-                </if>
-                <if test="entity.ostate != null">
-                    ostate = #{entity.ostate},
-                </if>
-            </set>
-            where id = #{entity.id}
-        </foreach>
-    </update>
-
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.purchase_order where id = #{id}
+        delete
+        from purchase_order
+        where id = #{id}
     </delete>
 
-    <!--批量删除数据-->
-    <delete id="deleteBatch">
-        delete from frameproject.purchase_order where id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
-    <!--查询付款订单-->
-    <select id="querythisReceipt" resultMap="PurchaseReceipt">
+    <!-- 总数 -->
+    <select id="count" resultType="int">
+        select count(*)
+        from purchase_order
+    </select>
+    <!--查询本次付款订单-->
+    <select id="querythisPayment" resultMap="PurchaseReceipt">
         select *,offers_price-ostate from purchase_order where id=#{purchaseId}
     </select>
+    <!--查询所有可付款款订单-->
+    <select id="queryPayment" resultMap="PurchaseReceipt">
+        select *,offers_price-ostate from purchase_order
+        <where>
+            vetting_state=1
+            <if test="purchaseId != null and purchaseId != ''">
+                and id = #{purchaseId}
+            </if>
+            <if test="vendor != null and vendor != ''">
+                and vendor_name = #{vendor}
+            </if>
+        </where>
+    </select>
+    <!--修改订单预付款-->
+    <update id="ostateadd">
+        update purchase_order
+        <set>
+            <if test="updateDate != null">
+                update_date = #{updateDate},
+            </if>
+            <if test="ostate != null">
+                ostate =ostate + #{ostate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

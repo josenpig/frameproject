@@ -1,5 +1,9 @@
 package com.xingji.frameproject.mybatis.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -9,6 +13,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-06-17 15:23:31
  */
+@Data
 public class CapitalPayable implements Serializable {
     private static final long serialVersionUID = -20948961804988009L;
     /**
@@ -18,6 +23,8 @@ public class CapitalPayable implements Serializable {
     /**
      * 单据日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date deliveryTime;
     /**
      * 供应商
@@ -58,6 +65,8 @@ public class CapitalPayable implements Serializable {
     /**
      * 最后付款时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastCollectionTime;
 
 

@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalReceipt;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaCapVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -40,7 +41,7 @@ public interface CapitalReceiptDao {
      * @param capitalReceipt 实例对象
      * @return 对象列表
      */
-    List<CapitalReceipt> queryAll(CapitalReceipt capitalReceipt);
+    List<CapitalReceipt> queryAll(CapitalConditionPageVo capitalReceipt);
 
     /**
      * 新增数据

@@ -22,14 +22,23 @@ public class CapitalCavCiaBillServiceImpl implements CapitalCavCiaBillService {
     /**
      * 通过ID查询单条数据
      *
-     * @param cavId
+     * @param id
      * @return 实例对象
      */
     @Override
-    public List<CapitalCavCiaBill> queryById(String cavId) {
-        return this.capitalCavCiaBillDao.queryById(cavId);
+    public List<CapitalCavCiaBill> queryById(String id) {
+        return this.capitalCavCiaBillDao.queryById(id);
     }
-
+    /**
+     * 通过ID查询关联单据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    @Override
+    public List<CapitalCavCiaBill> relation(String id) {
+        return this.capitalCavCiaBillDao.relation(id);
+    }
     /**
      * 查询多条数据
      *

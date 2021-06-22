@@ -89,15 +89,30 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     public List<SaleOrder> conditionpage(SaleConditionPageVo order) {
         return this.saleOrderDao.conditionpage(order);
     }
+    /**
+     * 通过实体类查询所有可收款单
+     * @param vo 实体类
+     * @return 对象列表
+     */
     @Override
     public List<SaleReceiptVo> queryReceipt(SaleReceiptVo vo) {
         return this.saleOrderDao.queryReceipt(vo);
     }
+    /**
+     * 通过订单id查询本次收款单信息
+     * @param saleId 销售单id
+     * @return 对象列表
+     */
     @Override
     public SaleReceiptVo querythisReceipt(String saleId) {
         return this.saleOrderDao.querythisReceipt(saleId);
     }
-
+    /**
+     * 修改订单已收款数据
+     *
+     * @param saleOrder 实例对象
+     * @return 实例对象
+     */
     @Override
     public boolean advanceadd(SaleOrder saleOrder) {
         return this.saleOrderDao.advanceadd(saleOrder);
