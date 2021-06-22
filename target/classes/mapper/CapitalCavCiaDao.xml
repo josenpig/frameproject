@@ -103,6 +103,7 @@
                 and approval_state = 1
             </if>
         </where>
+        ORDER BY found_time DESC
     </select>
     <!--通过实体作为筛选条件查询   预付冲应付-->
     <select id="querytwoPage" resultMap="CapitalCavCiaView">
@@ -150,6 +151,7 @@
                 and approval_state = 1
             </if>
         </where>
+        ORDER BY found_time DESC
     </select>
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="CapitalCavCiaView">
