@@ -51,7 +51,7 @@ spring:
       ddl-auto: update
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.xingji.frameproject.entity
+  type-aliases-package: com.xingji.frameproject.mybaits.entity
 
 pagehelper:
   helperDialect: mysql
