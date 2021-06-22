@@ -112,5 +112,8 @@ public interface SysUserDao {
     Integer queryUserIdByPhone(String phone);
 
     String queryUserNameByUserId(Integer userid);
+
+    SysUser updateUserName(@Param("userid") Integer userid, @Param("username") String username);
+
 }
 

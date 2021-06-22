@@ -94,6 +94,7 @@
                 and approval_state = 1
             </if>
         </where>
+        ORDER BY found_time DESC
     </select>
 
     <!--新增所有列-->

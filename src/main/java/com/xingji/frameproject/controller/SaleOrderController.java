@@ -174,7 +174,7 @@ public class SaleOrderController {
         SaleOrder sale=sos.queryById(orderid);
         List<SaleOrderDetails> orders=sods.queryById(orderid);
         SaleDelivery delivery=sds.queryById(sale.getDeliveryId());
-        SaleReturn saleReturn=srs.queryById(sale.getReturnId());
+        SaleReturn saleReturn=srs.queryByIdVo(sale.getReturnId());
         List<DeliveryStatusVo> vos=new ArrayList<DeliveryStatusVo>();
         for (int i=0;i<orders.size();i++){
             DeliveryStatusVo vo=new DeliveryStatusVo();
