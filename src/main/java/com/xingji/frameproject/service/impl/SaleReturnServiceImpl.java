@@ -27,10 +27,19 @@ public class SaleReturnServiceImpl implements SaleReturnService {
      * @return 实例对象
      */
     @Override
+    public SaleReturn queryByIdVo(String returnId) {
+        return this.saleReturnDao.queryByIdVo(returnId);
+    }
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param returnId 主键
+     * @return 实例对象
+     */
+    @Override
     public SaleReturn queryById(String returnId) {
         return this.saleReturnDao.queryById(returnId);
     }
-
     /**
      * 查询多条数据
      *

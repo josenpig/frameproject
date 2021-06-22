@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPayment;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaCapVo;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface CapitalPaymentService {
      */
     CapitalPayment queryById(String paymentId);
 
-    List<CapitalPayment> queryAll(CapitalPayment capitalPayment);
+    List<CapitalPayment> queryAll(CapitalConditionPageVo vo);
 
     /**
      * 查询多条数据

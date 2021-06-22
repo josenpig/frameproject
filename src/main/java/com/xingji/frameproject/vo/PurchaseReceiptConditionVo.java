@@ -10,4 +10,6 @@ public class PurchaseReceiptConditionVo {
     private String vendorName;//供应商
     private String createPeople;//创建人
     private String buyerName;//采购人
+    private String dtimeState;//自定义开始时间
+    private String dtimeEnd;//自定义结束时间
 }

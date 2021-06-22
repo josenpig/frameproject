@@ -3,6 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.entity.CapitalPayment;
 import com.xingji.frameproject.mybatis.dao.CapitalPaymentDao;
 import com.xingji.frameproject.service.CapitalPaymentService;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaCapVo;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +34,12 @@ public class CapitalPaymentServiceImpl implements CapitalPaymentService {
     /**
      * 通过实体作为筛选条件查询
      *
-     * @param capitalPayment 实例对象
+     * @param vo 实例对象
      * @return 对象列表
      */
     @Override
-    public List<CapitalPayment> queryAll(CapitalPayment capitalPayment) {
-        return this.capitalPaymentDao.queryAll(capitalPayment);
+    public List<CapitalPayment> queryAll(CapitalConditionPageVo vo) {
+        return this.capitalPaymentDao.queryAll(vo);
     }
 
     /**

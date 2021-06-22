@@ -100,13 +100,18 @@ public class PurchaseOrderController {
         String two = jsonObject.getString("pageSize");
         int pageSize = JSON.parseObject(two, int.class);
         String three = jsonObject.getString("condition");
-        System.out.println(one);
-        System.out.println(two);
-        System.out.println(three);
         PurchaseOrderQueryForm queryForm = JSON.parseObject(three,PurchaseOrderQueryForm.class);
         Map<String,Object> map=new HashMap<>();
         Page<PurchaseOrder> page= PageHelper.startPage(currentPage,pageSize);
         List<PurchaseOrder> list=purchaseOrderService.queryAllByPage(queryForm);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setVendorName(vendorService.findVendorName(list.get(i).getVendorName()));
+            if(list.get(i).getVettingName()!=null) {
+                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
+            }
+            list.get(i).setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getBuyerName())));
+            list.get(i).setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getCreatePeople())));
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);

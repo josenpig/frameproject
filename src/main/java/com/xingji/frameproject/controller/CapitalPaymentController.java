@@ -7,10 +7,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
-import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.BaseCapitalAccountVo;
-import com.xingji.frameproject.vo.PaymentVo;
-import com.xingji.frameproject.vo.ReceiptVo;
+import com.xingji.frameproject.vo.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -90,37 +87,37 @@ public class CapitalPaymentController {
         List<CapitalPaymentAccount> accounts= JSONArray.parseArray(three, CapitalPaymentAccount.class);
         //绑定付款单
         for (int i=0;i<bills.size();i++){
-            if (bills.get(i).getPurchaseType().equals("采购订单")){
-                PurchaseOrder order=pos.queryById(bills.get(i).getPurchaseId());
-                PurchaseOrder neworder=new PurchaseOrder();
-                neworder.setId(bills.get(i).getPurchaseId());
-                if(order.getPaymentOrder()==null) {
-                    neworder.setPaymentOrder(payment.getPaymentId());
-                }else {
-                    neworder.setPaymentOrder(order.getPaymentOrder()+","+payment.getPaymentId());
-                }
-                pos.update(neworder);
-            }else if (bills.get(i).getPurchaseType().equals("采购入库单")){
-                PurchaseReceipt receipt=prs.queryById(bills.get(i).getPurchaseId());
-                PurchaseReceipt neworder=new PurchaseReceipt();
-                neworder.setId(bills.get(i).getPurchaseId());
-                if(receipt.getPaymentOrder()==null) {
-                    neworder.setPaymentOrder(payment.getPaymentId());
-                }else {
-                    neworder.setPaymentOrder(receipt.getPaymentOrder()+","+payment.getPaymentId());
-                }
-                prs.update(neworder);
-            }else {
-                PurchaseReturns returns=preturnss.queryById(bills.get(i).getPurchaseId());
-                PurchaseReturns neworder=new PurchaseReturns();
-                neworder.setId(bills.get(i).getPurchaseId());
-                if(returns.getPaymentOrder()==null) {
-                    neworder.setPaymentOrder(payment.getPaymentId());
-                }else {
-                    neworder.setPaymentOrder(returns.getPaymentOrder()+","+payment.getPaymentId());
-                }
-                preturnss.update(neworder);
-            }
+//            if (bills.get(i).getPurchaseType().equals("采购订单")){
+//                PurchaseOrder order=pos.queryById(bills.get(i).getPurchaseId());
+//                PurchaseOrder neworder=new PurchaseOrder();
+//                neworder.setId(bills.get(i).getPurchaseId());
+//                if(order.getPaymentOrder()==null) {
+//                    neworder.setPaymentOrder(payment.getPaymentId());
+//                }else {
+//                    neworder.setPaymentOrder(order.getPaymentOrder()+","+payment.getPaymentId());
+//                }
+//                pos.update(neworder);
+//            }else if (bills.get(i).getPurchaseType().equals("采购入库单")){
+//                PurchaseReceipt receipt=prs.queryById(bills.get(i).getPurchaseId());
+//                PurchaseReceipt neworder=new PurchaseReceipt();
+//                neworder.setId(bills.get(i).getPurchaseId());
+//                if(receipt.getPaymentOrder()==null) {
+//                    neworder.setPaymentOrder(payment.getPaymentId());
+//                }else {
+//                    neworder.setPaymentOrder(receipt.getPaymentOrder()+","+payment.getPaymentId());
+//                }
+//                prs.update(neworder);
+//            }else {
+//                PurchaseReturns returns=preturnss.queryById(bills.get(i).getPurchaseId());
+//                PurchaseReturns neworder=new PurchaseReturns();
+//                neworder.setId(bills.get(i).getPurchaseId());
+//                if(returns.getPaymentOrder()==null) {
+//                    neworder.setPaymentOrder(payment.getPaymentId());
+//                }else {
+//                    neworder.setPaymentOrder(returns.getPaymentOrder()+","+payment.getPaymentId());
+//                }
+//                preturnss.update(neworder);
+//            }
             bills.get(i).setPaymentId(payment.getPaymentId());
         }
         for (int j=0;j<accounts.size();j++){
@@ -139,12 +136,12 @@ public class CapitalPaymentController {
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
         String condition = jsonObject.getString("condition");//查询条件--实体类
-        CapitalPayment capitalPayment=JSON.parseObject(condition, CapitalPayment.class);
+        CapitalConditionPageVo vo=JSON.parseObject(condition, CapitalConditionPageVo.class);
         int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
         int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<CapitalPayment> list=cps.queryAll(capitalPayment);
+        List<CapitalPayment> list=cps.queryAll(vo);
         for(int i=0;i<list.size();i++){
             list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
             if(list.get(i).getApprover()!=null){

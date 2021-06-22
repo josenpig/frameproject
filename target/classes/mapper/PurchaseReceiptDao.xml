@@ -324,16 +324,31 @@
         from purchase_receipt
         where vetting_state=1
     </select>
+
+
     <select id="conditionpage" resultMap="PurchaseReceiptMap">
         select
         <include refid="Base_Column_List"/>
         from purchase_receipt
         <where>
-            <if test="id != null and id != ''">
-                and id = #{id}
+            <if test="orderId != null and orderId != ''">
+                and id like CONCAT('%',#{orderId},'%')
             </if>
-            <if test="inboundDate != null">
-                and inbound_date = #{inboundDate}
+            <if test="inBoundDate != null and inBoundDate=='今天'" >
+                and to_days(inbound_date) = to_days(now())
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='昨天'" >
+                and to_days(now())-to_days(inbound_date) = 1
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(inbound_date)
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本月'" >
+                and DATE_FORMAT( inbound_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="inBoundDate != null and inBoundDate != '' and inBoundDate=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(inbound_date,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
             </if>
             <if test="vendorName != null and vendorName != ''">
                 and vendor_name = #{vendorName}
@@ -341,62 +356,29 @@
             <if test="buyerName != null and buyerName != ''">
                 and buyer_name = #{buyerName}
             </if>
-            <if test="state != null">
-                and state = #{state}
+
+            <if test="vettingState != null and vettingState == '草稿'" >
+                and vetting_state = -2
             </if>
-            <if test="buyerType != null and buyerType != ''">
-                and buyer_type = #{buyerType}
+            <if test="vettingState != null and vettingState == '待审批'" >
+                and vetting_state = 0
             </if>
-            <if test="disrate != null">
-                and disrate = #{disrate}
+            <if test="vettingState != null and vettingState == '已驳回'" >
+                and vetting_state = -1
             </if>
-            <if test="dismoney != null">
-                and dismoney = #{dismoney}
+            <if test="vettingState != null and vettingState == '审批通过'" >
+                and vetting_state = 1
             </if>
-            <if test="offersPrice != null">
-                and offers_price = #{offersPrice}
-            </if>
-            <if test="depotName != null and depotName != ''">
-                and depot_name = #{depotName}
-            </if>
-            <if test="vettingName != null and vettingName != ''">
-                and vetting_name = #{vettingName}
-            </if>
-            <if test="lastVettingTime != null">
-                and last_vetting_time = #{lastVettingTime}
-            </if>
-            <if test="vettingState != null">
-                and vetting_state = #{vettingState}
-            </if>
-            <if test="associatedOrder != null and associatedOrder != ''">
-                and associated_order = #{associatedOrder}
-            </if>
-            <if test="exitOrderId != null and exitOrderId != ''">
-                and exit_order_id = #{exitOrderId}
-            </if>
-            <if test="paymentOrder != null and paymentOrder != ''">
-                and payment_order = #{paymentOrder}
-            </if>
-            <if test="cavId != null and cavId != ''">
-                and cav_id = #{cavId}
-            </if>
-            <if test="invoiceId != null and invoiceId != ''">
-                and invoice_id = #{invoiceId}
-            </if>
+
+
+<!--            <if test="state != null">-->
+<!--                and state = #{state}-->
+<!--            </if>-->
+<!--            <if test="vettingState != null">-->
+<!--                and vetting_state = #{vettingState}-->
+<!--            </if>-->
             <if test="createPeople != null and createPeople != ''">
                 and create_people = #{createPeople}
-            </if>
-            <if test="updatePeople != null and updatePeople != ''">
-                and update_people = #{updatePeople}
-            </if>
-            <if test="createDate != null">
-                and create_date = #{createDate}
-            </if>
-            <if test="updateDate != null">
-                and update_date = #{updateDate}
-            </if>
-            <if test="counter != null">
-                and counter = #{counter}
             </if>
         </where>
     </select>

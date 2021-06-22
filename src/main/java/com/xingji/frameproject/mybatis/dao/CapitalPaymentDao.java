@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPayment;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import com.xingji.frameproject.vo.CiaCapVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,10 +38,10 @@ public interface CapitalPaymentDao {
     /**
      * 通过实体作为筛选条件查询
      *
-     * @param capitalPayment 实例对象
+     * @param vo 实例对象
      * @return 对象列表
      */
-    List<CapitalPayment> queryAll(CapitalPayment capitalPayment);
+    List<CapitalPayment> queryAll(CapitalConditionPageVo vo);
 
     /**
      * 新增数据

@@ -8,10 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
-import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.BaseCapitalAccountVo;
-import com.xingji.frameproject.vo.CapitalAccountVo;
-import com.xingji.frameproject.vo.ReceiptVo;
+import com.xingji.frameproject.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,37 +88,37 @@ public class CapitalReceiptController {
         List<CapitalReceiptAccount> accounts= JSONArray.parseArray(three, CapitalReceiptAccount.class);
         //绑定收款单
         for (int i=0;i<bills.size();i++){
-            if (bills.get(i).getSaleType().equals("销售订单")){
-                SaleOrder saleOrder=sos.queryById(bills.get(i).getSaleId());
-                SaleOrder neworder=new SaleOrder();
-                neworder.setOrderId(bills.get(i).getSaleId());
-                if(saleOrder.getReceiptId()==null) {
-                    neworder.setReceiptId(receipt.getReceiptId());
-                }else {
-                    neworder.setReceiptId(saleOrder.getReceiptId()+",3"+receipt.getReceiptId());
-                }
-                sos.update(neworder);
-            }else if (bills.get(i).getSaleType().equals("销售出库单")){
-                SaleDelivery saleDelivery=sds.queryById(bills.get(i).getSaleId());
-                SaleDelivery neworder=new SaleDelivery();
-                neworder.setOrderId(bills.get(i).getSaleId());
-                if(saleDelivery.getReceiptId()==null) {
-                    neworder.setReceiptId(receipt.getReceiptId());
-                }else {
-                    neworder.setReceiptId(saleDelivery.getReceiptId()+","+receipt.getReceiptId());
-                }
-                sds.update(neworder);
-            }else {
-                SaleReturn returns=srs.queryById(bills.get(i).getSaleId());
-                SaleReturn neworder=new SaleReturn();
-                neworder.setOrderId(bills.get(i).getSaleId());
-                if(returns.getReceiptId()==null) {
-                    neworder.setReceiptId(receipt.getReceiptId());
-                }else {
-                    neworder.setReceiptId(returns.getReceiptId()+","+receipt.getReceiptId());
-                }
-                srs.update(neworder);
-            }
+//            if (bills.get(i).getSaleType().equals("销售订单")){
+//                SaleOrder saleOrder=sos.queryById(bills.get(i).getSaleId());
+//                SaleOrder neworder=new SaleOrder();
+//                neworder.setOrderId(bills.get(i).getSaleId());
+//                if(saleOrder.getReceiptId()==null) {
+//                    neworder.setReceiptId(receipt.getReceiptId());
+//                }else {
+//                    neworder.setReceiptId(saleOrder.getReceiptId()+",3"+receipt.getReceiptId());
+//                }
+//                sos.update(neworder);
+//            }else if (bills.get(i).getSaleType().equals("销售出库单")){
+//                SaleDelivery saleDelivery=sds.queryById(bills.get(i).getSaleId());
+//                SaleDelivery neworder=new SaleDelivery();
+//                neworder.setOrderId(bills.get(i).getSaleId());
+//                if(saleDelivery.getReceiptId()==null) {
+//                    neworder.setReceiptId(receipt.getReceiptId());
+//                }else {
+//                    neworder.setReceiptId(saleDelivery.getReceiptId()+","+receipt.getReceiptId());
+//                }
+//                sds.update(neworder);
+//            }else {
+//                SaleReturn returns=srs.queryById(bills.get(i).getSaleId());
+//                SaleReturn neworder=new SaleReturn();
+//                neworder.setOrderId(bills.get(i).getSaleId());
+//                if(returns.getReceiptId()==null) {
+//                    neworder.setReceiptId(receipt.getReceiptId());
+//                }else {
+//                    neworder.setReceiptId(returns.getReceiptId()+","+receipt.getReceiptId());
+//                }
+//                srs.update(neworder);
+//            }
             bills.get(i).setReceiptId(receipt.getReceiptId());
         }
         for (int j=0;j<accounts.size();j++){
@@ -140,12 +137,12 @@ public class CapitalReceiptController {
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
         String condition = jsonObject.getString("condition");//查询条件--实体类
-        CapitalReceipt capitalReceipt=JSON.parseObject(condition, CapitalReceipt.class);
+        CapitalConditionPageVo vo=JSON.parseObject(condition, CapitalConditionPageVo.class);
         int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
         int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<CapitalReceipt> list=crs.queryAll(capitalReceipt);
+        List<CapitalReceipt> list=crs.queryAll(vo);
         for(int i=0;i<list.size();i++){
             list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
             if(list.get(i).getApprover()!=null){

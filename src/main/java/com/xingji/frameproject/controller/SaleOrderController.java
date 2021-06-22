@@ -54,6 +54,8 @@ public class SaleOrderController {
     private SaleDeliveryDetailsService sdds;
     @Resource
     private SaleReturnDetailsService srds;
+    @Resource
+    private CapitalReceiptBillService srbs;
     /**
      * 通过主键查询销售订单及销售订单详情
      * @param id 主键
@@ -69,6 +71,8 @@ public class SaleOrderController {
             order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
         }
         order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
+        List<CapitalReceiptBill> bills=srbs.relation(id);
+        order.setReceipts(bills);
         vo.setOrder(order);
         vo.setOrderdetails(orderDetails);
         return AjaxResponse.success(vo);
