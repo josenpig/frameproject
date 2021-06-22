@@ -2,6 +2,7 @@ package com.xingji.frameproject.mybatis.dao;
 
 
 import com.xingji.frameproject.mybatis.entity.PurchaseReturns;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -77,4 +78,11 @@ public interface PurchaseReturnsDao {
      * @return 数据总数
      */
     int count();
+
+    /**
+     * 根据条件查询采购退货单
+     * @param order
+     * @return
+     */
+    List<PurchaseReturns> conditionpage(PurchaseReceiptConditionVo order);
 }

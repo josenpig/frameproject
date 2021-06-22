@@ -189,13 +189,14 @@ public class PurchaseReceiptController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         List<PurchaseReceipt> list=purchaseReceiptService.conditionpage(order);
-//        for(int i=0;i<list.size();i++){
-//            list.get(i).setFounder(sus.queryById(Integer.valueOf(list.get(i).getFounder())).getUserName());
-//            if(list.get(i).getApprover()!=null) {
-//                list.get(i).setApprover(sus.queryById(Integer.valueOf(list.get(i).getApprover())).getUserName());
-//            }
-//            list.get(i).setSalesmen(sus.queryById(Integer.valueOf(list.get(i).getSalesmen())).getUserName());
-//        }
+        for(int i=0;i<list.size();i++){
+            list.get(i).setVendorName(vendorService.findVendorName(list.get(i).getVendorName()));
+            if(list.get(i).getVettingName()!=null) {
+                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
+            }
+            list.get(i).setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getBuyerName())));
+            list.get(i).setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getCreatePeople())));
+        }
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);

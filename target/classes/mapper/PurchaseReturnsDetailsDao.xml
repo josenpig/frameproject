@@ -5,16 +5,29 @@
     <resultMap type="com.xingji.frameproject.mybatis.entity.PurchaseReturnsDetails" id="PurchaseReturnsDetailsMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="returnId" column="return_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
         <result property="returnNum" column="return_num" jdbcType="INTEGER"/>
+        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
         <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
         <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+
     </resultMap>
+
+
+
 
     <!-- 基本字段 -->
     <sql id="Base_Column_List">
         id
         , return_id, product_id, return_num, purchase_money, depot_name    </sql>
+    <sql id="Base_Column">
+        p.id
+        , p.return_id, p.product_id, p.return_num, p.purchase_money, p.depot_name    </sql>
 
     <!-- 查询单个 -->
     <select id="selectById" resultMap="PurchaseReturnsDetailsMap">
@@ -109,5 +122,14 @@
     <select id="count" resultType="int">
         select count(*)
         from purchase_returns_details
+    </select>
+
+    <select id="queryAllByOrderId" resultMap="PurchaseReturnsDetailsMap">
+        select
+        <include refid="Base_Column"/>,b.product_name,c.unit_name,b.purchase_unit_price,b.ingredient,b.gram_heavy,b.product_describe
+        from purchase_returns_details p
+        INNER JOIN base_product b on p.product_id=b.product_id
+        INNER JOIN base_unit c on b.unit_id=c.unit_id
+        where return_id=#{id}
     </select>
 </mapper>

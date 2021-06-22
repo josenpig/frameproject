@@ -5,8 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
+import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.service.LogininService;
 import com.xingji.frameproject.service.OperationlogService;
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,8 @@ public class OperationlogController {
     private LogininService logininService;
     @Resource
     private OperationlogService operationlogService;
-    @Resource
-    private HttpServletRequest request;
+    @Autowired
+    private SysUserService sysUserService;
     /**
      * 单条件查询、多条件查询，查询所有登录日志
      * @param operator
@@ -290,4 +291,16 @@ public class OperationlogController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     }
+    @GetMapping("/getUsermessage")
+    public AjaxResponse getUsermessage(String username){
+        Map<String,Object> map=new HashMap<>();
+        System.out.println("-------------"+username);
+        SysUser sysUser=new SysUser();
+        sysUser.setUserName(username);
+        List<SysUser> user= sysUserService.queryAll(sysUser);
+        map.put("user",user);
+        System.out.println("-------------"+user);
+        return AjaxResponse.success(map);
+    }
+
 }

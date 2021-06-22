@@ -74,4 +74,6 @@ public class PurchaseReceiptDetails implements Serializable {
     private String productDescribe;
 
     private int returnNum;
+
+
 }

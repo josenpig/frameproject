@@ -78,4 +78,11 @@ public interface PurchaseReturnsDetailsDao {
      * @return 数据总数
      */
     int count();
+
+    /**
+     * 根据采购退货单编号查询所有的采购退货单详情
+     * @param id
+     * @return
+     */
+    List<PurchaseReturnsDetails> queryAllByOrderId(String id);
 }
