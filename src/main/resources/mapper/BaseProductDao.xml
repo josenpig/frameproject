@@ -75,9 +75,12 @@
     <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
-        <result property="productSpe" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
         <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
         <result property="systemNum" column="product_number" jdbcType="INTEGER"/>
         <result property="productPurchaseUnit" column="purchase_money" jdbcType="NUMERIC"/>
         <result property="remark" column="remarks" jdbcType="VARCHAR"/>
@@ -201,7 +204,7 @@
         GROUP BY p.product_id
     </select>
     <select id="allInventoryProject" resultMap="InventoryProjectVo">
-        SELECT o.`depot_name`,p.product_name,p.`product_id`,p.`product_spec`,t.product_type_name,u.unit_name,o.`product_number`,purchase_money,remarks
+        SELECT o.`depot_name`,p.product_name,p.`product_id`,p.`product_spec`,t.product_type_name,u.unit_name,o.`product_number`,purchase_money,remarks,p.ingredient,p.gram_heavy,p.product_describe
         FROM `base_product` p,
         `base_product_type` t,
         `base_unit` u  ,
