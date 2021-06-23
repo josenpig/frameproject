@@ -4,13 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xingji.frameproject.mybatis.entity.*;
-import com.xingji.frameproject.service.BaseDepotService;
-import com.xingji.frameproject.service.StockTransferDetailsService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.InventoryDetailsVo;
 import com.xingji.frameproject.vo.StockTransferDetailsVo;
 import com.xingji.frameproject.vo.form.StockTransferQueryForm;
-import com.xingji.frameproject.service.StockTransferService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +18,7 @@ import javax.annotation.Resource;
 import com.github.pagehelper.PageInfo;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +41,10 @@ public class StockTransferController {
     private BaseDepotService depotService;
     @Resource
     private StockTransferDetailsService detailsService;
+    @Resource
+    private SysUserService sysUserService;
+    @Resource
+    private BaseOpeningService openingService;
 
 
     /**
@@ -136,6 +139,9 @@ public class StockTransferController {
         String two = jsonObject.getString("orderdetails");
         List<StockTransferDetails> orderdetails= JSONArray.parseArray(two, StockTransferDetails.class);
         order.setState(type);
+        order.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(order.getCreatePeople())));
+        order.setUpdatePeople(order.getCreatePeople());
+        order.setUpdateDate(order.getDocumentDate());
         //添加销售订单单信息
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setTransferId(order.getId());
@@ -155,9 +161,53 @@ public class StockTransferController {
         StockTransferDetailsVo DetailsVo = new StockTransferDetailsVo();
         StockTransfer Stocktransfer = stockTransferService.queryById(orderId);
         List<StockTransferDetails> list = detailsService.queryAllById(orderId);
+        Stocktransfer.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(Stocktransfer.getCreatePeople())));
+        Stocktransfer.setUpdatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(Stocktransfer.getUpdatePeople())));
         DetailsVo.setStockTransfer(Stocktransfer);
         DetailsVo.setList(list);
-        log.debug(DetailsVo.toString());
         return AjaxResponse.success(DetailsVo);
+    }
+
+    /**
+     * 修改调拨单审批状态
+     * @param id 主键
+     * @return 数据
+     */
+    @GetMapping("/stockTransfer/approval")
+    public AjaxResponse approvalorder(String id,int type,String user){
+        StockTransfer order = new StockTransfer();
+        order.setId(id);
+        order.setState(type);
+        order.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
+        order.setUpdateDate(new Date());
+        order.setVettingDate(new Date());
+        StockTransfer Order=stockTransferService.update(order);
+        System.out.println(Order);
+        if(type==1){//审核通过添加库存和预计库存
+            List<StockTransferDetails> list = detailsService.queryAllById(id);
+            List<BaseOpening> openings = openingService.queryAll(new BaseOpening());
+            for (StockTransferDetails std:list){
+                boolean flag=true;
+                for (BaseOpening opening:openings){
+                    if(Order.getInwarehouse()==opening.getDepotName() && std.getProductId()==opening.getProductId()){
+                        openingService.expectadd(std.getProductId(),order.getInwarehouse(),std.getProductNum());
+                        openingService.producteadd(std.getProductId(),order.getInwarehouse(),std.getProductNum());
+                        flag=false;
+                    }
+                }
+                if (flag){
+                    System.out.println(Order);
+                    BaseOpening baseOpening = new BaseOpening();
+                    baseOpening.setDepotName(Order.getInwarehouse());
+                    baseOpening.setOpeningNumber(std.getProductNum());
+                    baseOpening.setProductId(std.getProductId());
+                    baseOpening.setExpectNumber(std.getProductNum());
+                    baseOpening.setProductNumber(std.getProductNum());
+                    System.out.println(baseOpening);
+                    openingService.insert(baseOpening);
+                }
+            }
+        }
+        return AjaxResponse.success(Order);
     }
 }

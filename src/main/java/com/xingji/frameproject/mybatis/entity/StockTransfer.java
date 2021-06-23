@@ -3,10 +3,12 @@ package com.xingji.frameproject.mybatis.entity;
 import java.util.Date;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * (StockTransfer)实体类
@@ -27,10 +29,14 @@ public class StockTransfer implements Serializable {
     /**
      * 调拨日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date transferDate;
     /**
      * 单据日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date documentDate;
     /**
      * 入库仓库
@@ -55,6 +61,8 @@ public class StockTransfer implements Serializable {
     /**
      * 审批时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date vettingDate;
     /**
      * 审批人
@@ -63,5 +71,7 @@ public class StockTransfer implements Serializable {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
 }
