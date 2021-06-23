@@ -48,7 +48,7 @@ public class BaseCustomerController {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         BaseCustomer baseCustomer=new BaseCustomer();
-        List<BaseCustomer> list=baseCustomerService.findAllCutomer(baseCustomer);
+        List<BaseCustomer> list=baseCustomerService.findAllCustomer(baseCustomer);
         System.out.println(list);
         map.put("total",page.getTotal());
         map.put("rows",list);
@@ -71,7 +71,7 @@ public class BaseCustomerController {
         if (!selcharge.equals("全部")){
             baseCustomer.setChargeName(selcharge);
         };
-        List<BaseCustomer> list=baseCustomerService.findAllCutomer(baseCustomer);
+        List<BaseCustomer> list=baseCustomerService.findAllCustomer(baseCustomer);
         System.out.println(list);
         map.put("total",page.getTotal());
         map.put("rows",list);
@@ -94,7 +94,7 @@ public class BaseCustomerController {
         if (select.equals("客户编号")){
             baseCustomer.setCustomerNumber(SearchContent);
         };
-        List<BaseCustomer> list=baseCustomerService.findAllCutomer(baseCustomer);
+        List<BaseCustomer> list=baseCustomerService.findAllCustomer(baseCustomer);
         System.out.println(list);
         map.put("total",page.getTotal());
         map.put("rows",list);

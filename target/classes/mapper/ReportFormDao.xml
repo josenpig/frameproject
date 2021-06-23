@@ -25,12 +25,34 @@
         LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
         <where>
             <if test="startTime != null and endTime != null">
-                p.payment_time BETWEEN  #{startTime} AND #{endTime}
+                payment_time BETWEEN  #{startTime} AND #{endTime}
                 or receipt_time BETWEEN  #{startTime} AND #{endTime}
             </if>
         </where>
         GROUP BY ca.capital_id
     </select>
 
+    <select id="fundAllRsum" resultType="java.lang.Double">
+        SELECT SUM(ra.this_money) FROM  `base_capital_account` ca
+        LEFT JOIN `capital_receipt_account` ra ON ra.fund_account = ca.capital_id
+        LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
+        <where>
+            <if test="param1  != null and param2  != null">
+                receipt_time BETWEEN  #{param1} AND #{param2}
+            </if>
+        </where>
+    </select>
+
+    <select id="fundAllPsum" resultType="java.lang.Double">
+        SELECT SUM(pa.this_money) FROM  `base_capital_account` ca
+        LEFT JOIN `capital_payment_account` pa ON pa.fund_account = ca.capital_id
+        LEFT JOIN `capital_payment` p ON pa.payment_id=p.payment_id
+        <where>
+            <if test="param1  != null and param2  != null">
+            AND payment_time BETWEEN  #{param1} AND #{param2}
+        </if>
+        </where>
+        AND p.approval_state=1
+    </select>
 </mapper>
 
