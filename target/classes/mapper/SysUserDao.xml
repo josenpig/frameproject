@@ -162,6 +162,9 @@
         </set>
         where user_id = #{userId}
     </update>
+    <update id="updateUserName">
+        update sys_user set user_name=#{username} where userid=#{userid}
+    </update>
 
     <!--通过主键删除-->
     <delete id="deleteById">

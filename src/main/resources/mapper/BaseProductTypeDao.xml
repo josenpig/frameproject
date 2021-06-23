@@ -43,12 +43,12 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="productTypeId" useGeneratedKeys="true">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
-        values (#{productTypeName}, #{productTypeParentId})
+        values (#{label}, #{productTypeParentId})
     </insert>
 
-    <insert id="insertBatch" keyProperty="productTypeId" useGeneratedKeys="true">
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
         values
         <foreach collection="entities" item="entity" separator=",">
@@ -56,7 +56,7 @@
         </foreach>
     </insert>
 
-    <insert id="insertOrUpdateBatch" keyProperty="productTypeId" useGeneratedKeys="true">
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
         insert into frameproject.base_product_type(product_type_name, product_type_parent_id)
         values
         <foreach collection="entities" item="entity" separator=",">
@@ -70,19 +70,16 @@
     <update id="update">
         update frameproject.base_product_type
         <set>
-            <if test="productTypeName != null and productTypeName != ''">
-                product_type_name = #{productTypeName},
-            </if>
-            <if test="productTypeParentId != null">
-                product_type_parent_id = #{productTypeParentId},
+            <if test="label != null and label != ''">
+                product_type_name = #{label}
             </if>
         </set>
-        where product_type_id = #{productTypeId}
+        where product_type_id = #{id}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.base_product_type where product_type_id = #{productTypeId}
+        delete from frameproject.base_product_type where product_type_id = #{id}
     </delete>
 
 </mapper>

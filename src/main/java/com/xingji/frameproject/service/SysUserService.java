@@ -1,10 +1,9 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.SysMenu;
-import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.mybatis.entity.SysUserRole;
-import com.xingji.frameproject.vo.LoginLogVo;
+
 
 import java.util.List;
 
@@ -99,4 +98,6 @@ public interface SysUserService {
     Integer queryUserIdByPhone(String phone);
 
     String queryUserNameByUserId(Integer userid);
+
+    SysUser updateUserName(Integer userid, String username);
 }

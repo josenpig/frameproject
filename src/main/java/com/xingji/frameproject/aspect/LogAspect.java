@@ -123,6 +123,21 @@ public class LogAspect {
 
         //请求的参数
         Object[] args = joinPoint.getArgs();
+        //条件查询传过来的参数进行格式化
+//        if((args[3]!="" && args[3]!=null) && (!args[3].equals("") && !args[3].equals(null))) {
+//            String xx = JSONObject.toJSONString(args[3]);
+//            char i = xx.charAt(10);
+//            int num = Integer.parseInt(String.valueOf(i));
+//            System.out.println("-----------" + num);
+//            num = num + 1;
+//            String as = String.valueOf(num);
+//            StringBuilder sb = new StringBuilder(as);
+//            String time = xx.substring(1, 10);
+//            System.out.println("--------------" + time);
+//            sb.insert(0, time);
+//            time = sb.toString();
+//            args[3] = time;
+//        }
         //将参数所在的数组转换成json
         String params=null;
         try {

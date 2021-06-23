@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +38,6 @@ public class OperationlogController {
     private LogininService logininService;
     @Resource
     private OperationlogService operationlogService;
-    @Resource
-    private HttpServletRequest request;
     /**
      * 单条件查询、多条件查询，查询所有登录日志
      * @param operator

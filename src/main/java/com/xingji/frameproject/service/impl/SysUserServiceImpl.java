@@ -4,11 +4,9 @@ import com.xingji.frameproject.mybatis.dao.SysMenuDao;
 import com.xingji.frameproject.mybatis.dao.SysUserDao;
 import com.xingji.frameproject.mybatis.dao.SysUserRoleDao;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
-import com.xingji.frameproject.mybatis.entity.SysRole;
 import com.xingji.frameproject.mybatis.entity.SysUser;
 import com.xingji.frameproject.mybatis.entity.SysUserRole;
 import com.xingji.frameproject.service.SysUserService;
-import com.xingji.frameproject.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -168,5 +166,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public String queryUserNameByUserId(Integer userid) {
         return this.sysUserDao.queryUserNameByUserId(userid);
+    }
+
+    @Override
+    public SysUser updateUserName(Integer userid, String username) {
+        return this.sysUserDao.updateUserName(userid,username);
     }
 }
