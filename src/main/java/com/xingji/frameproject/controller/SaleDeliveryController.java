@@ -48,6 +48,10 @@ public class SaleDeliveryController {
     private CapitalReceivableService crs;
     @Resource
     private SysUserService sus;
+    @Resource
+    private CapitalReceiptBillService srbs;
+    @Resource
+    private CapitalCavCiaBillService cccbs;
 
     /**
      * 通过主键查询销售出库单及出库单详情
@@ -64,6 +68,11 @@ public class SaleDeliveryController {
             delivery.setApprover(sus.queryById(Integer.valueOf(delivery.getApprover())).getUserName());
         }
         delivery.setSalesmen(sus.queryById(Integer.valueOf(delivery.getSalesmen())).getUserName());
+        //查询关联单据
+        List<CapitalReceiptBill> bills=srbs.relation(id);
+        delivery.setReceipts(bills);
+        List<CapitalCavCiaBill> bills1=cccbs.relation(id);
+        delivery.setCavcias(bills1);
         vo.setDelivery(delivery);
         vo.setDeliverydetails(deliveryDetails);
         return AjaxResponse.success(vo);

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (SaleDelivery)实体类
@@ -124,4 +125,12 @@ public class SaleDelivery implements Serializable {
      * 审批备注
      */
     private String approvalRemarks;
+    /**
+     * 关联收款单id
+     */
+    private List<CapitalReceiptBill> receipts;
+    /**
+     * 关联核销单id
+     */
+    private List<CapitalCavCiaBill> cavcias;
 }
