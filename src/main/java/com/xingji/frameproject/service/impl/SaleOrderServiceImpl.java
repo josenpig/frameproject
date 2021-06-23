@@ -84,6 +84,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
     public boolean deleteById(String orderId) {
         return this.saleOrderDao.deleteById(orderId) > 0;
     }
+    /**
+     * 通过实体类条件分页查询
+     * @param order 实体类
+     * @return 对象列表
+     */
     @Override
     //@Cacheable(cacheNames = "allsaleorder")
     public List<SaleOrder> conditionpage(SaleConditionPageVo order) {

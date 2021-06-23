@@ -71,6 +71,7 @@ public class SaleOrderController {
             order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
         }
         order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
+        //查询关联单据
         List<CapitalReceiptBill> bills=srbs.relation(id);
         order.setReceipts(bills);
         vo.setOrder(order);

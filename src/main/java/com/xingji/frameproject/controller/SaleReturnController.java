@@ -49,9 +49,13 @@ public class SaleReturnController {
     private CapitalReceivableService crs;
     @Resource
     private SysUserService sus;
+    @Resource
+    private CapitalReceiptBillService srbs;
+    @Resource
+    private CapitalCavCiaBillService cccbs;
 
     /**
-     * 通过主键查询销售退货单及销售t退货单详情
+     * 通过主键查询销售退货单及销售退货单详情
      * @param id 主键
      * @return vo数据
      */
@@ -65,6 +69,11 @@ public class SaleReturnController {
             saleReturn.setApprover(sus.queryById(Integer.valueOf(saleReturn.getApprover())).getUserName());
         }
         saleReturn.setSalesmen(sus.queryById(Integer.valueOf(saleReturn.getSalesmen())).getUserName());
+        //查询关联单据
+        List<CapitalReceiptBill> bills=srbs.relation(id);
+        saleReturn.setReceipts(bills);
+        List<CapitalCavCiaBill> bills1=cccbs.relation(id);
+        saleReturn.setCavcias(bills1);
         vo.setSalereturn(saleReturn);
         vo.setReturndetails(returnDetails);
         return AjaxResponse.success(vo);
@@ -89,6 +98,11 @@ public class SaleReturnController {
         salereturn.setApprovalState(type);
         salereturn.setOrderState(0);
         salereturn.setReturnState(0);
+        //绑定订单
+        SaleDelivery delivery=sds.queryByIdVo(salereturn.getDeliveryId());
+        if(delivery.getOrderId()!=null){
+            salereturn.setOrderId(delivery.getOrderId());
+        }
         //添加销售退货单信息
         for(int i=0;i<salereturndetails.size();i++){
             salereturndetails.get(i).setReturnId(salereturn.getReturnId());
