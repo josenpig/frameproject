@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.StockTransferDetailsDao">
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.StockTransferDetails" id="StockTransferDetailsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="transferId" column="transfer_id" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.StockTransferDetails" id="StockTransferDeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="transferId" column="transfer_id" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="StockTransferDetailsCol">
+        p.id
+        , p.transfer_id, p.product_id, p.product_num, p.remark    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StockTransferDetailsMap">
+        select
+        <include refid="StockTransferDetailsCol"></include>
+        from frameproject.stock_transfer_details p
+        where id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryAll" resultMap="StockTransferDetailsMap">
+        select
+        <include refid="StockTransferDetailsCol"></include>
+        from (select * from frameproject.stock_transfer_details p where work_point_id = #{workPointId})
+    </select>
+
+    <!--通过实体作为或者条件查询-->
+    <select id="queryOrByPojo" resultMap="StockTransferDetailsMap">
+        select
+        <include refid="StockTransferDetailsCol"></include>
+        from (select * from frameproject.stock_transfer_details p where work_point_id = #{workPointId})
+        <where>
+            <if test="id != null">
+                or id like '%'||#{id}||'%'
+            </if>
+            <if test="transferId != null and transferId != ''">
+                or transfer_id like '%'||#{transferId}||'%'
+            </if>
+            <if test="productId != null and productId != ''">
+                or product_id like '%'||#{productId}||'%'
+            </if>
+            <if test="productNum != null">
+                or product_num like '%'||#{productNum}||'%'
+            </if>
+            <if test="remark != null and remark != ''">
+                or remark like '%'||#{remark}||'%'
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为并且条件查询-->
+    <select id="queryAndByPojo" resultMap="StockTransferDetailsMap">
+        select
+        <include refid="StockTransferDetailsCol"></include>
+        from frameproject.stock_transfer_details
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="transferId != null and transferId != ''">
+                and transfer_id = #{transferId}
+            </if>
+            <if test="productId != null and productId != ''">
+                and product_id = #{productId}
+            </if>
+            <if test="productNum != null">
+                and product_num = #{productNum}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+        </where>
+    </select>
+    <select id="queryAllById" resultMap="StockTransferDeMap" >
+        select <include refid="StockTransferDetailsCol"/>,b.product_name,c.unit_name,b.purchase_unit_price,b.ingredient,b.gram_heavy,b.product_describe
+        from frameproject.stock_transfer_details p
+        INNER JOIN base_product b on p.product_id=b.product_id
+        INNER JOIN base_unit c on b.unit_id=c.unit_id
+        where transfer_id = #{orderId}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into frameproject.stock_transfer_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="transferId != null">
+                transfer_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="productNum != null">
+                product_num,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{id},
+            <if test="transferId != null">
+                #{transferId},
+            </if>
+            <if test="productId != null">
+                #{productId},
+            </if>
+            <if test="productNum != null">
+                #{productNum},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+
+    </insert>
+
+    <!--批量新增数据 -->
+    <insert id="insertBatch">
+            insert into frameproject.stock_transfer_details(transfer_id,product_id,product_num,remark)
+            values
+        <foreach collection="entities" item="item" index="index" separator=",">
+            (#{item.transferId},#{item.productId},#{item.productNum},#{item.remark} )
+        </foreach>
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update frameproject.stock_transfer_details
+        <set>
+            <if test="transferId != null">
+                transfer_id = #{transferId},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="productNum != null">
+                product_num = #{productNum},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--批量修改数据-->
+    <update id="updateBatch">
+        <foreach collection="list" item="entity" open="begin" separator=";" close=";end;">
+            update frameproject.stock_transfer_details
+            <set>
+                <if test="entity.transferId != null">
+                    transfer_id = #{entity.transferId},
+                </if>
+                <if test="entity.productId != null">
+                    product_id = #{entity.productId},
+                </if>
+                <if test="entity.productNum != null">
+                    product_num = #{entity.productNum},
+                </if>
+                <if test="entity.remark != null">
+                    remark = #{entity.remark},
+                </if>
+            </set>
+            where id = #{entity.id}
+        </foreach>
+    </update>
+
+    <!--通过主键删除数据-->
+    <delete id="deleteById">
+        delete
+        from frameproject.stock_transfer_details
+        where id = #{id}
+    </delete>
+
+    <!--通过主键列表批量删除数据-->
+    <delete id="deleteBatch">
+        delete from frameproject.stock_transfer_details where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--通过实体列表批量删除数据-->
+    <delete id="deleteBatchByEntities">
+        delete from frameproject.stock_transfer_details where id in
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+</mapper>
+
