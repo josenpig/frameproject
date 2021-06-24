@@ -1,0 +1,33 @@
+{
+  "groups": [
+    {
+      "name": "jwt",
+      "type": "com.xingji.frameproject.util.JwtTokenUtil",
+      "sourceType": "com.xingji.frameproject.util.JwtTokenUtil"
+    },
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.xingji.frameproject.config.DataSourceConfig",
+      "sourceMethod": "dataSource()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jwt.expire",
+      "type": "java.lang.Long",
+      "sourceType": "com.xingji.frameproject.util.JwtTokenUtil"
+    },
+    {
+      "name": "jwt.header",
+      "type": "java.lang.String",
+      "sourceType": "com.xingji.frameproject.util.JwtTokenUtil"
+    },
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.xingji.frameproject.util.JwtTokenUtil"
+    }
+  ],
+  "hints": []
+}
