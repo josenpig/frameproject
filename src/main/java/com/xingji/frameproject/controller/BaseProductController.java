@@ -136,32 +136,6 @@ public class BaseProductController {
     };
 
     /**
-     * 删除产品
-     * @param id 产品编号
-     * @return
-     */
-    @GetMapping("/delProduct")
-    public AjaxResponse delProduct(String id){
-        System.out.println("del:"+id);
-        //根据产品Id查询采购单
-        PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
-        purchaseOrderDetailsQueryForm.setProductId(id);
-        List<PurchaseOrderDetails> list =purchaseOrderDetailsService.queryAndByPojo(purchaseOrderDetailsQueryForm);
-        System.out.println(list);
-        //根据产品id查询盘点单
-        StockInventoryDetailsQueryForm stockInventoryDetails=new StockInventoryDetailsQueryForm();
-        stockInventoryDetails.setProductId(id);
-        List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
-        System.out.println(list2);
-        Boolean del=false;
-        if(list.size()==0 && list2.size()==0){
-            del=baseProductService.deleteById(id);
-        }
-        System.out.println("删除是否成功："+del);
-        return AjaxResponse.success(del);
-    };
-
-    /**
      * 批量删除产品
      * @param ids 产品编号集合
      * @return
@@ -170,6 +144,8 @@ public class BaseProductController {
     public AjaxResponse bacthDelProduct(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
         String ret=null;
+        List<String> pidlist=new ArrayList<>();
+        Boolean del=false;
         for(int i=0;i < ids.size();i++){
             //根据产品Id查询采购单
             PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
@@ -181,14 +157,19 @@ public class BaseProductController {
             stockInventoryDetails.setProductId(ids.get(i));
             List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
             System.out.println(list2);
-            Boolean del=false;
             if(list.size()==0 && list2.size()==0){
-                del=baseProductService.deleteById(ids.get(i));
-            }
-            System.out.println("删除是否成功："+del);
-            if(del==false){
+                pidlist.add(ids.get(i));
+                del=true;
+            }else{
+                del=false;
                 ret = "产品编号为："+ids.get(i)+"已存在相关单据记录，无法删除";
                 break;
+            }
+            System.out.println("批量删除产品是否成功："+del);
+        }
+        if(del==true) {
+            for (int i = 0; i < pidlist.size(); i++) {
+                baseProductService.deleteById(pidlist.get(i));
             }
         }
         return AjaxResponse.success(ret);
@@ -204,14 +185,30 @@ public class BaseProductController {
         System.out.println(Did+"+Dsate:"+Dstate);
         BaseProduct baseProduct=new BaseProduct();
         baseProduct.setProductId(Did);
-        if(Dstate==0){
-            baseProduct.setState(1);
+        //根据产品Id查询采购单
+        PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
+        purchaseOrderDetailsQueryForm.setProductId(Did);
+        List<PurchaseOrderDetails> list =purchaseOrderDetailsService.queryAndByPojo(purchaseOrderDetailsQueryForm);
+        System.out.println(list);
+        //根据产品id查询盘点单
+        StockInventoryDetailsQueryForm stockInventoryDetails=new StockInventoryDetailsQueryForm();
+        stockInventoryDetails.setProductId(Did);
+        List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
+        System.out.println(list2);
+        String ret=null;
+        if(list.size()==0 && list2.size()==0) {
+            if (Dstate == 0) {
+                baseProduct.setState(1);
+            }
+            if (Dstate == 1) {
+                baseProduct.setState(0);
+            }
+            BaseProduct baseProduct1 = baseProductService.update(baseProduct);
+        }else{
+            ret = "产品编号为："+Did+"已存在相关单据记录，无法修改状态";
         }
-        if(Dstate==1){
-            baseProduct.setState(0);
-        }
-        BaseProduct baseProduct1 =baseProductService.update(baseProduct);
-        return  AjaxResponse.success(baseProduct1);
+        System.out.println("批量删除产品是否成功："+ret);
+        return  AjaxResponse.success(ret);
     };
 
     /**

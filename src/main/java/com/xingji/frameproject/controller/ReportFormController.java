@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,5 +61,30 @@ public class ReportFormController {
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
+    };
+
+    /**
+     * 资金账户期间总收入和总支出
+     * @return 客户集合
+     */
+    @GetMapping("/fundAllRsumAndPsum")
+    public AjaxResponse fundAllRsumAndPsum(@Param("startTime") String startTime, @Param("endTime") String endTime) throws ParseException {
+        System.out.println("fundAllRsumAndPsum");
+        System.out.println(startTime);
+        System.out.println(endTime);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1=null;
+        Date date2=null;
+        if(startTime!=null && endTime!=null) {
+            System.out.println("startTime:"+startTime);
+            date1 = simpleDateFormat.parse(startTime);
+
+            System.out.println("endTime:"+endTime);
+            date2 = simpleDateFormat.parse(endTime);
+        }
+        System.out.println(date1+",,,,"+date2);
+        List<Double> list=reportFormService.fundAllRsumAndPsum(date1,date2);
+        System.out.println(list);
+        return AjaxResponse.success(list);
     };
 }

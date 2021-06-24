@@ -158,11 +158,11 @@
         delete from frameproject.base_customer where customer_number = #{customerNumber}
     </delete>
     <!--查询所有客户信息-->
-    <select id="findAllCutomer" resultMap="BaseCustomerMap">
+    <select id="findAllCustomer" resultMap="BaseCustomerMap">
         SELECT c.* FROM `base_customer` c
         <where>
             <if test="customerName != null and customerName != ''">
-                and c.customer  LIKE CONCAT('%',#{customer,jdbcType=VARCHAR},'%')
+                and c.customer_name  LIKE CONCAT('%',#{customerName,jdbcType=VARCHAR},'%')
             </if>
             <if test="customerNumber != null and customerNumber != ''">
                 and c.customer_number LIKE CONCAT('%',#{customerNumber,jdbcType=VARCHAR},'%')

@@ -86,7 +86,7 @@ public class BaseCustomerServiceImpl implements BaseCustomerService {
      * @return
      */
     @Override
-    public List<BaseCustomer> findAllCutomer(BaseCustomer baseCustomer) {
-        return this.baseCustomerDao.findAllCutomer(baseCustomer);
+    public List<BaseCustomer> findAllCustomer(BaseCustomer baseCustomer) {
+        return this.baseCustomerDao.findAllCustomer(baseCustomer);
     }
 }

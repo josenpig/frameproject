@@ -58,5 +58,5 @@ public interface BaseCustomerService {
      * 查询所有客户信息||通过条件查询客户
      * @return
      */
-    List<BaseCustomer> findAllCutomer(BaseCustomer baseCustomer);
+    List<BaseCustomer> findAllCustomer(BaseCustomer baseCustomer);
 }

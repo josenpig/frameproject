@@ -2,12 +2,11 @@ package com.xingji.frameproject.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xingji.frameproject.mybatis.entity.*;
+import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.entity.BaseProductType;
+import com.xingji.frameproject.service.BaseProductService;
 import com.xingji.frameproject.service.BaseProductTypeService;
 import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
-import com.xingji.frameproject.vo.form.StockInventoryDetailsQueryForm;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +28,8 @@ public class BaseProductTypeController {
      */
     @Resource
     private BaseProductTypeService baseProductTypeService;
+    @Resource
+    private BaseProductService baseProductService;
 
     /**
      * 通过主键查询单条数据
@@ -144,7 +145,13 @@ public class BaseProductTypeController {
     @GetMapping("/delProductType")
     public AjaxResponse delProductType(Integer id){
         System.out.println("del:"+id);
-        Boolean del=baseProductTypeService.deleteById(id);
+        BaseProduct baseProduct=new BaseProduct();
+        baseProduct.setProductTypeId(id);
+        List<BaseProduct> list=baseProductService.queryAll(baseProduct);
+        Boolean del=false;
+        if(list.size()==0){
+            del=baseProductTypeService.deleteById(id);
+        }
         System.out.println("删除是否成功："+del);
         return AjaxResponse.success(del);
     };
