@@ -12,10 +12,7 @@ import com.xingji.frameproject.service.BaseDepotService;
 import com.xingji.frameproject.service.BaseProductService;
 import com.xingji.frameproject.service.StockInventoryDetailsService;
 import com.xingji.frameproject.service.StockInventoryService;
-import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.InventoryDetailsVo;
-import com.xingji.frameproject.vo.InventoryProjectVo;
-import com.xingji.frameproject.vo.PurchaseProductVo;
+import com.xingji.frameproject.vo.*;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -224,5 +221,34 @@ public class StockInventoryController {
         return AjaxResponse.success(inventoryDetailsVo);
     }
 
+//    /**
+//     * 分页条件查询
+//     * @param conditionpage 条件查询信息
+//     * @return map数据
+//     */
+//    @PostMapping("/stockInventory/conditionpage")
+//    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+//        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+//        String condition = jsonObject.getString("condition");//查询条件
+//        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+//        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+//        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+//        System.out.println(order);
+//        System.out.println(currentPage);
+//        System.out.println(pageSize);
+//        Map<String,Object> map=new HashMap<>();
+//        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+//        List<PurchaseReturns> list=returnsService.conditionpage(order);
+//        for(int i=0;i<list.size();i++){
+//            list.get(i).setVendorName(vendorService.findVendorName(list.get(i).getVendorName()));
+//            if(list.get(i).getVettingName()!=null) {
+//                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
+//            }
+//            list.get(i).setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getBuyerName())));
+//        }
+//        map.put("total",page.getTotal());
+//        map.put("rows",list);
+//        return AjaxResponse.success(map);
+//    }
 
 }
