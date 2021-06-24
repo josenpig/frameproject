@@ -191,6 +191,7 @@
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
         LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        where p.state=1
         GROUP BY p.product_id
     </select>
     <select id="allPurchaseProduct" resultMap="PurchaseProductVo">

@@ -72,7 +72,7 @@ public class SaleOrderDetailsServiceImpl implements SaleOrderDetailsService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.saleOrderDetailsDao.deleteById(id) > 0;
     }
 }

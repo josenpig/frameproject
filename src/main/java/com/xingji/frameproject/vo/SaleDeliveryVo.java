@@ -15,4 +15,5 @@ import java.util.List;
 public class SaleDeliveryVo {
     private SaleDelivery delivery;
     private List<SaleDeliveryDetails> deliverydetails;
+    private List<SaleProductVo> saleProductVos;
 }
