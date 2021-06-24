@@ -264,7 +264,9 @@ public class PowerController {
         List<SysUser> users=sus.queryAll(user);
         for(int i=0;i<users.size();i++){
             users.get(i).setFounder(sus.queryById(Integer.valueOf(users.get(i).getFounder())).getUserName());
-            users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+            if(users.get(i).getUpdatedBy()!=null){
+                users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+            }
         }
         map.put("total",page.getTotal());
         map.put("rows",users);
@@ -287,7 +289,9 @@ public class PowerController {
         List<SysRole> users=srs.queryAll(role);
         for(int i=0;i<users.size();i++){
             users.get(i).setFounder(sus.queryById(Integer.valueOf(users.get(i).getFounder())).getUserName());
-            users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+            if(users.get(i).getUpdatedBy()!=null) {
+                users.get(i).setUpdatedBy(sus.queryById(Integer.valueOf(users.get(i).getUpdatedBy())).getUserName());
+            }
         }
         map.put("total",page.getTotal());
         map.put("rows",users);

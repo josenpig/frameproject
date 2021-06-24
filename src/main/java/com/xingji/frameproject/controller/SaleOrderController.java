@@ -8,10 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
-import com.xingji.frameproject.vo.AjaxResponse;
-import com.xingji.frameproject.vo.DeliveryStatusVo;
-import com.xingji.frameproject.vo.SaleConditionPageVo;
-import com.xingji.frameproject.vo.SaleOrderVo;
+import com.xingji.frameproject.vo.*;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +53,10 @@ public class SaleOrderController {
     private SaleReturnDetailsService srds;
     @Resource
     private CapitalReceiptBillService srbs;
+    @Resource
+    private BaseProductService baseProductService;
+    @Resource
+    private BaseOpeningService baseOpeningService;
     /**
      * 通过主键查询销售订单及销售订单详情
      * @param id 主键
@@ -71,6 +72,15 @@ public class SaleOrderController {
             order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
         }
         order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
+        //查询订单是否为草稿
+        if(order.getApprovalState()==-2){
+        List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
+        for(SaleProductVo product:SaleProductVo){
+            product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
+        }
+            vo.setSaleProductVos(SaleProductVo);
+        }
+        //查询关联单据
         List<CapitalReceiptBill> bills=srbs.relation(id);
         order.setReceipts(bills);
         vo.setOrder(order);
@@ -90,6 +100,13 @@ public class SaleOrderController {
         SaleOrder order =JSON.parseObject(one, SaleOrder.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleOrderDetails> orderdetails=JSONArray.parseArray(two, SaleOrderDetails.class);
+        //判断该订单是否为草稿单
+        SaleOrder draft=sos.queryById(order.getOrderId());
+        if(draft!=null){
+            sods.deleteById(order.getOrderId());
+            sos.deleteById(order.getOrderId());
+        }
+        //添加订单信息
         order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
         order.setFoundTime(new Date());
         order.setUpdateTime(new Date());
@@ -98,7 +115,6 @@ public class SaleOrderController {
         order.setDeliveryState(0);
         order.setAdvance(0.00);
         //添加销售订单单信息
-        System.out.println(orderdetails.toString());
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setOrderId(order.getOrderId());
         }

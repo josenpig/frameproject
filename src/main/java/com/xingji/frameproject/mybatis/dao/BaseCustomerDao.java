@@ -86,6 +86,6 @@ public interface BaseCustomerDao {
      * 查询所有客户信息
      * @return
      */
-    List<BaseCustomer> findAllCutomer(BaseCustomer baseCustomer);
+    List<BaseCustomer> findAllCustomer(BaseCustomer baseCustomer);
 
 }

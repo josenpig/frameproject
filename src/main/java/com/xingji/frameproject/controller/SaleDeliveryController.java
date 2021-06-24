@@ -11,6 +11,7 @@ import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
 import com.xingji.frameproject.vo.SaleDeliveryVo;
+import com.xingji.frameproject.vo.SaleProductVo;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,14 @@ public class SaleDeliveryController {
     private CapitalReceivableService crs;
     @Resource
     private SysUserService sus;
+    @Resource
+    private CapitalReceiptBillService srbs;
+    @Resource
+    private CapitalCavCiaBillService cccbs;
+    @Resource
+    private BaseProductService baseProductService;
+    @Resource
+    private BaseOpeningService baseOpeningService;
 
     /**
      * 通过主键查询销售出库单及出库单详情
@@ -64,6 +73,19 @@ public class SaleDeliveryController {
             delivery.setApprover(sus.queryById(Integer.valueOf(delivery.getApprover())).getUserName());
         }
         delivery.setSalesmen(sus.queryById(Integer.valueOf(delivery.getSalesmen())).getUserName());
+        //查询订单是否为草稿
+        if(delivery.getApprovalState()==-2){
+            List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
+            for(SaleProductVo product:SaleProductVo){
+                product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
+            }
+            vo.setSaleProductVos(SaleProductVo);
+        }
+        //查询关联单据
+        List<CapitalReceiptBill> bills=srbs.relation(id);
+        delivery.setReceipts(bills);
+        List<CapitalCavCiaBill> bills1=cccbs.relation(id);
+        delivery.setCavcias(bills1);
         vo.setDelivery(delivery);
         vo.setDeliverydetails(deliveryDetails);
         return AjaxResponse.success(vo);
@@ -81,6 +103,12 @@ public class SaleDeliveryController {
         SaleDelivery delivery = JSON.parseObject(one, SaleDelivery.class);
         String two = jsonObject.getString("deliverydetails");
         List<SaleDeliveryDetails> deliverydetails= JSONArray.parseArray(two, SaleDeliveryDetails.class);
+        //判断该订单是否为草稿单
+        SaleDelivery draft=sds.queryById(delivery.getDeliveryId());
+        if(draft!=null){
+            sdds.deleteById(delivery.getDeliveryId());
+            sds.deleteById(delivery.getDeliveryId());
+        }
         delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
         delivery.setFoundTime(new Date());
         delivery.setUpdateTime(new Date());

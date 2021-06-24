@@ -50,10 +50,10 @@
         </where>
     </select>
     <select id="finddepot"  resultMap="BaseOpeningMap">
-        SELECT o.*
-        FROM base_opening o
+        SELECT o.* FROM base_opening o
         INNER JOIN base_product p ON p.product_id = o.product_id
-		WHERE p.product_id=#{productId}
+        INNER JOIN base_depot d ON d.depot_name = o.depot_name
+		WHERE p.product_id=#{productId} and d.state=1
     </select>
     <!--新增所有列-->
     <insert id="insert" keyProperty="" useGeneratedKeys="true">
