@@ -16,10 +16,37 @@
         <result property="endTime" column="" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <resultMap type="com.xingji.frameproject.vo.ProductInventoryVo" id="ProductInventoryVoMap">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="ingredient" column="ingredient" jdbcType="VARCHAR"/>
+        <result property="productSpec" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="unitId" column="unit_id" jdbcType="INTEGER"/>
+        <result property="productTypeId" column="product_type_id" jdbcType="INTEGER"/>
+        <result property="purchaseUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="pictureId" column="picture_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="creationTime" column="creation_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productTypeName" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="unitName" column="unit_name" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="INTEGER"/>
+        <result property="depotName" column="o.depot_name" jdbcType="VARCHAR"/>
+        <result property="openingNumber" column="o.opening_number" jdbcType="INTEGER"/>
+        <result property="productNumber" column="o.product_number" jdbcType="INTEGER"/>
+        <result property="expectNumber" column="o.expect_number" jdbcType="INTEGER"/>
+    </resultMap>
+
     <select id="fundAllFundAccountsStatisticsVo" resultMap="FundAccountsStatisticsVoMap">
-        SELECT ca.*,st.settlement_type,SUM(pa.this_money),SUM(ra.this_money),p.payment_time,r.receipt_time FROM  `base_capital_account` ca
-        LEFT JOIN `capital_payment_account` pa ON pa.fund_account = ca.capital_id
-        LEFT JOIN `capital_receipt_account` ra ON ra.fund_account = ca.capital_id
+        SELECT ca.*,st.settlement_type,SUM(pa.this_money),SUM(ra.this_money),p.payment_time,r.receipt_time
+        FROM  `base_capital_account` ca
+        LEFT JOIN (SELECT payment_id,fund_account, SUM(this_money) AS this_money FROM capital_payment_account GROUP BY fund_account) AS pa ON pa.fund_account = ca.capital_id
+        LEFT JOIN (SELECT receipt_id,fund_account, SUM(this_money) AS this_money FROM capital_receipt_account GROUP BY fund_account) AS ra ON ra.fund_account = ca.capital_id
         LEFT JOIN `base_settlement_type` st ON st.id = ca.settlement_type_id
         LEFT JOIN `capital_payment` p ON pa.payment_id=p.payment_id
         LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
@@ -53,6 +80,15 @@
         </if>
         </where>
         AND p.approval_state=1
+    </select>
+
+    <select id="findAllProductInventoryVo" resultMap="ProductInventoryVoMap">
+        SELECT p.*,t.product_type_name,u.unit_name,uu.user_name,o.depot_name,o.opening_number,o.product_number,o.expect_number
+        FROM `base_product` p
+        LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
+        LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
+        LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        LEFT JOIN `base_opening` o ON p.product_id = o.product_id
     </select>
 </mapper>
 

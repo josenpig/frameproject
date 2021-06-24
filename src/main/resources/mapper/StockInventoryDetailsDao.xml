@@ -77,7 +77,7 @@
     <!--通过实体作为并且条件查询-->
     <select id="queryAndByPojo" resultMap="StockInventoryDetailsMap">
         select
-        id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num,
+        id, inventory_id, product_id, system_num,
         inventory_num, unit_pl, remarks
         from frameproject.stock_inventory_details
         <where>
