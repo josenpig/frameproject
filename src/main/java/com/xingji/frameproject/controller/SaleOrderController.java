@@ -73,7 +73,7 @@ public class SaleOrderController {
         }
         order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
         //查询订单是否为草稿
-        if(order.getApprovalState()==-2){
+        if(order.getApprover()==null){
         List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
         for(SaleProductVo product:SaleProductVo){
             product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
@@ -100,16 +100,20 @@ public class SaleOrderController {
         SaleOrder order =JSON.parseObject(one, SaleOrder.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleOrderDetails> orderdetails=JSONArray.parseArray(two, SaleOrderDetails.class);
-        //判断该订单是否为草稿单
-        SaleOrder draft=sos.queryById(order.getOrderId());
-        if(draft!=null){
+        order.setFoundTime(new Date());
+        //判断该订单是否为编辑单
+        if(order.getApprovalState()!=null){
+            //为编辑单时修改产品预计可用量
+            List<SaleOrderDetails> orderDetails=sods.queryById(order.getOrderId());
+            for(SaleOrderDetails sod:orderDetails){
+                bos.expectadd(sod.getProductId(),sod.getDepot(),sod.getProductNum());
+            }
             sods.deleteById(order.getOrderId());
             sos.deleteById(order.getOrderId());
+            order.setUpdateTime(new Date());
         }
         //添加订单信息
         order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
-        order.setFoundTime(new Date());
-        order.setUpdateTime(new Date());
         order.setApprovalState(type);
         order.setOrderState(0);
         order.setDeliveryState(0);

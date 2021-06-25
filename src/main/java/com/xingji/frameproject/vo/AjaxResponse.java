@@ -31,11 +31,11 @@ public class AjaxResponse {
         resultBean.setSuccess(false);
         resultBean.setCode(e.getCode());
         if(e.getCode() == CustomErrorType.USER_INPUT_ERROR.getCode()){
-            resultBean.setMessage(e.getMessage());
+            resultBean.setMessage(e.getCodeType());
         }else if(e.getCode() == CustomErrorType.SYSTEM_ERROR.getCode()){
-            resultBean.setMessage(e.getMessage() + ",系统出现异常，请联系管理员!");
+            resultBean.setMessage(e.getCodeType());
         }else{
-            resultBean.setMessage("系统出现未知异常，请联系管理员电话!");
+            resultBean.setMessage(e.getCodeType());
         }
         return resultBean;
     }

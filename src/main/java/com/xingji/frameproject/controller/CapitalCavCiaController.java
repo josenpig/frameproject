@@ -224,7 +224,7 @@ public class CapitalCavCiaController {
                 }
             }
             List<CapitalCavCiaCap> caps=ccccs.queryById(cavId);
-            for (int i=0;i<bills.size();i++) {
+            for (int i=0;i<caps.size();i++) {
                 CapitalReceipt receipt = crs.queryById(caps.get(i).getCapitalId());
                 if (receipt.getCiaBalance()==0){
                     return AjaxResponse.success("订单："+receipt.getReceiptId()+"预收余额不足");
