@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.mybatis.entity.BaseCustomer;
 import com.xingji.frameproject.mybatis.entity.BaseVendor;
 import com.xingji.frameproject.service.BaseVendorService;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -56,6 +55,18 @@ public class BaseVendorController {
         return AjaxResponse.success(map);
     };
 
+    /**
+     * 查询所有供应商 返回list
+     * @return 产品集合
+     */
+    @GetMapping("/findAllVendor/list")
+    public AjaxResponse findAllVendorToList(){
+        BaseVendor baseVendor=new BaseVendor();
+        List<BaseVendor> list=baseVendorService.findAllVendor(baseVendor);
+        System.out.println(list);
+        return AjaxResponse.success(list);
+    };
+    
     /**
      * 根据供应商类型或负责人查询的供应商
      * @return 产品集合

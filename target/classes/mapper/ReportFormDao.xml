@@ -36,24 +36,36 @@
         <result property="productTypeName" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="unitName" column="unit_name" jdbcType="VARCHAR"/>
         <result property="userName" column="user_name" jdbcType="INTEGER"/>
-        <result property="depotName" column="o.depot_name" jdbcType="VARCHAR"/>
-        <result property="openingNumber" column="o.opening_number" jdbcType="INTEGER"/>
-        <result property="productNumber" column="o.product_number" jdbcType="INTEGER"/>
-        <result property="expectNumber" column="o.expect_number" jdbcType="INTEGER"/>
+        <result property="depotName" column="depot_name" jdbcType="VARCHAR"/>
+        <result property="openingNumber" column="opening_number" jdbcType="INTEGER"/>
+        <result property="productNumber" column="product_number" jdbcType="INTEGER"/>
+        <result property="expectNumber" column="expect_number" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="fundAllFundAccountsStatisticsVo" resultMap="FundAccountsStatisticsVoMap">
         SELECT ca.*,st.settlement_type,SUM(pa.this_money),SUM(ra.this_money),p.payment_time,r.receipt_time
         FROM  `base_capital_account` ca
-        LEFT JOIN (SELECT payment_id,fund_account, SUM(this_money) AS this_money FROM capital_payment_account GROUP BY fund_account) AS pa ON pa.fund_account = ca.capital_id
-        LEFT JOIN (SELECT receipt_id,fund_account, SUM(this_money) AS this_money FROM capital_receipt_account GROUP BY fund_account) AS ra ON ra.fund_account = ca.capital_id
+        LEFT JOIN (
+        SELECT pa.payment_id,fund_account, SUM(this_money) AS this_money FROM `capital_payment_account` pa JOIN `capital_payment` p ON pa.payment_id=p.payment_id
+        <if test="startTime != null and endTime != null">
+        where payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
+        </if>
+        GROUP BY fund_account
+        ) AS pa ON pa.fund_account = ca.capital_id
+        LEFT JOIN (
+        SELECT ra.receipt_id,fund_account, SUM(this_money) AS this_money FROM `capital_receipt_account` ra LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
+        <if test="startTime != null and endTime != null">
+        where receipt_time BETWEEN #{startTime}  AND #{endTime} OR r.receipt_time =NULL
+        </if>
+        GROUP BY fund_account
+        ) AS ra ON ra.fund_account = ca.capital_id
         LEFT JOIN `base_settlement_type` st ON st.id = ca.settlement_type_id
         LEFT JOIN `capital_payment` p ON pa.payment_id=p.payment_id
         LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
         <where>
             <if test="startTime != null and endTime != null">
-                payment_time BETWEEN  #{startTime} AND #{endTime}
-                or receipt_time BETWEEN  #{startTime} AND #{endTime}
+                payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
+                or receipt_time BETWEEN  #{startTime} AND #{endTime} OR r.receipt_time =NULL
             </if>
         </where>
         GROUP BY ca.capital_id
@@ -67,6 +79,7 @@
             <if test="param1  != null and param2  != null">
                 receipt_time BETWEEN  #{param1} AND #{param2}
             </if>
+            AND r.approval_state=1
         </where>
     </select>
 
@@ -77,9 +90,9 @@
         <where>
             <if test="param1  != null and param2  != null">
             AND payment_time BETWEEN  #{param1} AND #{param2}
-        </if>
+            </if>
+            AND p.approval_state=1
         </where>
-        AND p.approval_state=1
     </select>
 
     <select id="findAllProductInventoryVo" resultMap="ProductInventoryVoMap">
@@ -89,6 +102,20 @@
         LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
+        <where>
+            <if test="depotName != null and depotName != ''">
+                and o.depot_name = #{depotName}
+            </if>
+            <if test="productName != null and productName != ''">
+                and p.product_name = #{productName}
+            </if>
+            <if test="productTypeName != null and productTypeName != ''">
+                and t.product_type_name = #{productTypeName}
+            </if>
+            <if test="state != null">
+                and p.state = #{state}
+            </if>
+        </where>
     </select>
 </mapper>
 

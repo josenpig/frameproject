@@ -2,6 +2,7 @@ package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.dao.BaseProductDao;
+import com.xingji.frameproject.service.BaseVendorProductService;
 import com.xingji.frameproject.vo.BaseProductVo;
 import com.xingji.frameproject.service.BaseProductService;
 import com.xingji.frameproject.vo.InventoryProjectVo;
@@ -22,6 +23,8 @@ import java.util.List;
 public class BaseProductServiceImpl implements BaseProductService {
     @Resource
     private BaseProductDao baseProductDao;
+    @Resource
+    private BaseVendorProductService baseVendorProductService;
 
     /**
      * 通过ID查询单条数据
@@ -85,12 +88,11 @@ public class BaseProductServiceImpl implements BaseProductService {
     public Boolean deleteById(String productId) {
         boolean pro=this.baseProductDao.deleteById(productId)>0;
         boolean open=this.baseProductDao.deleteOpingById(productId)>0;
-        System.out.println("pro"+pro);
-        Boolean receipt=false;
-        if(pro==true){
-            receipt=true;
-        }
-        return receipt;
+        boolean ver=this.baseVendorProductService.deleteById(productId);
+        System.out.println("DELpro"+pro);
+        System.out.println("DELopen"+open);
+        System.out.println("DElver"+ver);
+        return pro;
     }
 
     /**
