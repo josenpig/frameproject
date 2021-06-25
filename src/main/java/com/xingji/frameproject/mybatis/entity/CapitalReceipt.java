@@ -23,7 +23,7 @@ public class CapitalReceipt implements Serializable {
     /**
      * 收款日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date receiptTime;
     /**

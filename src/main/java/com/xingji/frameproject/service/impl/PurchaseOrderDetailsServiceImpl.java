@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.PurchaseOrderDetailsDao;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
-import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import org.springframework.stereotype.Service;
@@ -98,6 +97,7 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
 
     @Override
     public int insertBatch(List<PurchaseOrderDetails> PurchaseOrderDetailsList) {
+        System.out.println(PurchaseOrderDetailsList);
         return this.purchaseOrderDetailsDao.batchInsert(PurchaseOrderDetailsList);
     }
 

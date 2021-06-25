@@ -7,14 +7,20 @@
         <result property="inventoryId" column="inventory_id" jdbcType="VARCHAR"/>
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
         <result property="productId" column="product_id" jdbcType="VARCHAR"/>
-        <result property="productSpe" column="product_spe" jdbcType="VARCHAR"/>
-        <result property="productType" column="product_type" jdbcType="VARCHAR"/>
-        <result property="productUnit" column="product_unit" jdbcType="VARCHAR"/>
+        <result property="productNature" column="product_spe" jdbcType="VARCHAR"/>
+        <result property="productSpe" column="product_spec" jdbcType="VARCHAR"/>
+        <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
+        <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="systemNum" column="system_num" jdbcType="INTEGER"/>
         <result property="inventoryNum" column="inventory_num" jdbcType="INTEGER"/>
         <result property="unitPl" column="unit_pl" jdbcType="NUMERIC"/>
         <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <!-- 基本字段 -->
+    <sql id="Base_Column_List">
+        s.id
+        , s.inventory_id, s.product_id,s.system_num,s.inventory_num,s.unit_pl,s.remarks    </sql>
 
     <!--查询单个-->
     <select id="queryById" resultMap="StockInventoryDetailsMap">
@@ -118,11 +124,12 @@
     </select>
     <select id="queryAllById" resultMap="StockInventoryDetailsMap">
         select
-        id, inventory_id, product_name, product_id,  product_spe, product_type, product_unit, system_num,
-        inventory_num, unit_pl, remarks
-        from frameproject.stock_inventory_details
-        where
-        inventory_id=#{orderId}
+        <include refid="Base_Column_List"/>,t.product_type_name,b.product_spec,b.product_name,c.unit_name,b.purchase_unit_price,b.ingredient,b.gram_heavy,b.product_describe
+        from frameproject.stock_inventory_details s
+        INNER JOIN base_product b on s.product_id=b.product_id
+        INNER JOIN base_unit c on b.unit_id=c.unit_id
+        inner join base_product_type t on t.product_type_id=b.product_type_id
+        where inventory_id=#{orderId}
     </select>
 
     <!--新增所有列-->
@@ -136,13 +143,12 @@
     <!--批量新增数据 -->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into
-        frameproject.stock_inventory_details (inventory_id, product_name, product_id,
-        product_spe, product_type, product_unit, system_num, inventory_num, unit_pl, remarks)
+        frameproject.stock_inventory_details (inventory_id,  product_id,
+         system_num, inventory_num, unit_pl, remarks)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.inventoryId}, #{entity.productName},
-            #{entity.productId}, #{entity.productSpe}, #{entity.productType},
-            #{entity.productUnit}, #{entity.systemNum}, #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.systemNum}), #{entity.remarks})
+            (#{entity.inventoryId},#{entity.productId},#{entity.systemNum},
+             #{entity.inventoryNum}, (#{entity.inventoryNum}-#{entity.systemNum}), #{entity.remarks})
         </foreach>
     </insert>
 

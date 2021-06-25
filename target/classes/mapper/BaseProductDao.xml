@@ -69,7 +69,7 @@
         <result property="product_type_name" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
-        <result property="expectNum" column="SUM(o.current_number)" jdbcType="INTEGER"/>
+        <result property="expectNum" column="SUM(o.expect_number)" jdbcType="INTEGER"/>
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">

@@ -91,6 +91,12 @@ public class SaleReturnController {
         SaleReturn salereturn = JSON.parseObject(one, SaleReturn.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleReturnDetails> salereturndetails= JSONArray.parseArray(two, SaleReturnDetails.class);
+        //判断该订单是否为草稿单
+        SaleReturn draft=srs.queryById(salereturn.getReturnId());
+        if(draft!=null){
+            srds.deleteById(salereturn.getReturnId());
+            srs.deleteById(salereturn.getReturnId());
+        }
         salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
         salereturn.setSalesmen(String.valueOf(sus.queryUserIdByUserName(salereturn.getSalesmen())));
         salereturn.setFoundTime(new Date());

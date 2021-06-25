@@ -63,7 +63,7 @@
     </select>
     <!--查询单个-->
     <select id="queryById" resultMap="addReceipt">
-        select * sale_return where return_id = #{returnId}
+        select * from sale_return where return_id = #{returnId}
     </select>
     <!--通过实体作为或者条件查询-->
     <select id="conditionpage" resultMap="SaleReturnMap">
