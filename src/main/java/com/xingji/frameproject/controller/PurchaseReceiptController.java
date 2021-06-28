@@ -82,6 +82,7 @@ public class PurchaseReceiptController {
         delivery.setVettingName(null);
         delivery.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getCreatePeople())));
         //添加销售出库单信息
+        delivery.setBuyerName(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getBuyerName())));
         for(int i=0;i<deliverydetails.size();i++){
             deliverydetails.get(i).setReceiptid(delivery.getId());
         }
@@ -91,7 +92,6 @@ public class PurchaseReceiptController {
             saleOrder.setReceiptOrderId(delivery.getId());
             saleOrder.setUpdateDate(new Date());
             orderService.update(saleOrder);
-            delivery.setBuyerName(String.valueOf(sysUserService.queryUserIdByUserName(delivery.getBuyerName())));
             delivery.setVendorName(vendorService.findVendorId(delivery.getVendorName()));
         }
         purchaseReceiptService.insert(delivery);
@@ -145,8 +145,27 @@ public class PurchaseReceiptController {
         if(type == 1) {
             List<PurchaseReceiptDetails> details=detailsService.queryAllByOrderId(receipt.getId());
             for(PurchaseReceiptDetails prd:details){
-                bos.producteadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
-                bos.expectadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
+                List<BaseOpening> baseOpenings = bos.queryAll(new BaseOpening());
+                boolean flag = true;
+                for (BaseOpening opening:baseOpenings){
+                    System.out.println(opening.getDepotName().equals(prd.getDepotName())&&opening.getProductId().equals(prd.getProductId()));
+                    if (opening.getDepotName().equals(prd.getDepotName())&&opening.getProductId().equals(prd.getProductId())){
+                        bos.producteadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
+                        bos.expectadd(prd.getProductId(),prd.getDepotName(),prd.getProductNum());
+                        flag=false;
+                    }
+                }
+                if (flag){
+                    BaseOpening baseOpening = new BaseOpening();
+                    baseOpening.setProductId(prd.getProductId());
+                    baseOpening.setDepotName(prd.getDepotName());
+                    baseOpening.setOpeningNumber(prd.getProductNum());
+                    baseOpening.setProductNumber(prd.getProductNum());
+                    baseOpening.setExpectNumber(prd.getProductNum());
+                    System.out.println(baseOpening.toString());
+                    bos.insert(baseOpening);
+                }
+
             }
             //新增应付单据
             CapitalPayable payable=new CapitalPayable();
