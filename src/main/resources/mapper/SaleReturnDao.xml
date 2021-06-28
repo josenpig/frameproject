@@ -63,7 +63,7 @@
     </select>
     <!--查询单个-->
     <select id="queryById" resultMap="addReceipt">
-        select * sale_return where return_id = #{returnId}
+        select * from sale_return where return_id = #{returnId}
     </select>
     <!--通过实体作为或者条件查询-->
     <select id="conditionpage" resultMap="SaleReturnMap">
@@ -98,6 +98,9 @@
             </if>
             <if test="founder != null and founder !=''">
                 and founder = #{founder}
+            </if>
+            <if test="approvalState != null and approvalState == '废弃'" >
+                and approval_state = -3
             </if>
             <if test="approvalState != null and approvalState == '草稿'" >
                 and approval_state = -2
@@ -266,14 +269,11 @@
             <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
             </if>
-            <if test="approver != null and approver != ''">
+            <if test="approver != '' and approver!=null">
                 approver = #{approver},
             </if>
-            <if test="founder != null and founder != ''">
-                founder = #{founder},
-            </if>
-            <if test="foundTime != null">
-                found_time = #{foundTime},
+            <if test="approver =='清空'">
+                approver = null,
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
@@ -305,8 +305,11 @@
             <if test="orderState != null">
                 order_state = #{orderState},
             </if>
-            <if test="approvalRemarks != null and approvalRemarks != ''">
+            <if test="approvalRemarks!=null">
                 approval_remarks = #{approvalRemarks},
+            </if>
+            <if test="approvalRemarks=='清空'">
+                approval_remarks = null,
             </if>
         </set>
         where return_id = #{returnId}

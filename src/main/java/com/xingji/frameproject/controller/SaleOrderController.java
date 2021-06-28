@@ -72,9 +72,9 @@ public class SaleOrderController {
             order.setApprover(sus.queryById(Integer.valueOf(order.getApprover())).getUserName());
         }
         order.setSalesmen(sus.queryById(Integer.valueOf(order.getSalesmen())).getUserName());
-        //查询订单是否为草稿
-        if(order.getApprovalState()==-2){
-        List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
+        //查询订单是否为编辑单
+        if(order.getApprovalState()!=1){
+        List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct(new SaleProductVo());
         for(SaleProductVo product:SaleProductVo){
             product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
         }
@@ -95,30 +95,43 @@ public class SaleOrderController {
      */
     @RequestMapping("/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
+        //获取json对象
         JSONObject jsonObject = JSONObject.parseObject(add);
-        String one = jsonObject.getString("order");
+        String one = jsonObject.getString("order");//订单
         SaleOrder order =JSON.parseObject(one, SaleOrder.class);
-        String two = jsonObject.getString("orderdetails");
+        String two = jsonObject.getString("orderdetails");//单据详情
         List<SaleOrderDetails> orderdetails=JSONArray.parseArray(two, SaleOrderDetails.class);
-        //判断该订单是否为草稿单
-        SaleOrder draft=sos.queryById(order.getOrderId());
-        if(draft!=null){
-            sods.deleteById(order.getOrderId());
-            sos.deleteById(order.getOrderId());
-        }
-        //添加订单信息
-        order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
-        order.setFoundTime(new Date());
-        order.setUpdateTime(new Date());
-        order.setApprovalState(type);
-        order.setOrderState(0);
-        order.setDeliveryState(0);
-        order.setAdvance(0.00);
-        //添加销售订单单信息
+        //订单详情绑定订单id
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setOrderId(order.getOrderId());
         }
-        sos.insert(order);
+        //判断该订单是否为编辑单-----若为编辑单则修改数据
+        if(order.getApprovalState()!=null){
+            //为编辑单时恢复产品预计可用量
+            if(order.getApprovalState()>=0) {//若单据为作废单,驳回单或草稿单则不进行该操作-3/-2/-1
+                List<SaleOrderDetails> orderDetails = sods.queryById(order.getOrderId());
+                for (SaleOrderDetails sod : orderDetails) {
+                    bos.expectadd(sod.getProductId(), sod.getDepot(), sod.getProductNum());
+                }
+            }
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(order.getApprovalState()==-3||order.getApprovalState()==-1){
+                order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
+            }
+            sods.deleteById(order.getOrderId());//将原有的订单详情删除
+            order.setApprovalState(type);//订单状态
+            order.setUpdateTime(new Date());
+            sos.update(order);
+        }else {
+            //反之添加订单信息
+            order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
+            order.setFoundTime(new Date());
+            order.setOrderState(0);
+            order.setDeliveryState(0);
+            order.setAdvance(0.00);
+            order.setApprovalState(type);//订单状态
+            sos.insert(order);
+        }
         sods.insertBatch(orderdetails);
         //订单生成减去预计库存数量
         if(type == 0) {
@@ -136,6 +149,7 @@ public class SaleOrderController {
      */
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        //获取json对象
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
         String condition = jsonObject.getString("condition");//查询条件
         SaleConditionPageVo order =JSON.parseObject(condition, SaleConditionPageVo.class);
@@ -179,6 +193,37 @@ public class SaleOrderController {
         }
         SaleOrder saleOrder=sos.update(order);
         return AjaxResponse.success(saleOrder);
+    }
+    /**
+     * 通过主键删除订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/detele/{id}")
+    public AjaxResponse detele(@PathVariable("id") String id) {
+        sods.deleteById(id);
+        return AjaxResponse.success(sos.deleteById(id));
+    }
+    /**
+     * 通过主键更改订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/update/{id}")
+    public AjaxResponse update(@PathVariable("id") String id) {
+        SaleOrder order=sos.queryById(id);
+        SaleOrder neworder=new SaleOrder();
+        neworder.setOrderId(id);
+        neworder.setApprovalState(-3);
+        neworder.setApprover("清空");
+        neworder.setApprovalRemarks("清空");
+        //恢复产品预计可用量
+        List<SaleOrderDetails> orderDetails=sods.queryById(id);
+        for(SaleOrderDetails sod:orderDetails){
+            bos.expectadd(sod.getProductId(),sod.getDepot(),sod.getProductNum());
+        }
+        sos.update(neworder);
+        return AjaxResponse.success(order.getOrderId());
     }
     /**
      * 查询销售订单出库状态

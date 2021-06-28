@@ -88,37 +88,6 @@ public class CapitalReceiptController {
         List<CapitalReceiptAccount> accounts= JSONArray.parseArray(three, CapitalReceiptAccount.class);
         //绑定收款单
         for (int i=0;i<bills.size();i++){
-//            if (bills.get(i).getSaleType().equals("销售订单")){
-//                SaleOrder saleOrder=sos.queryById(bills.get(i).getSaleId());
-//                SaleOrder neworder=new SaleOrder();
-//                neworder.setOrderId(bills.get(i).getSaleId());
-//                if(saleOrder.getReceiptId()==null) {
-//                    neworder.setReceiptId(receipt.getReceiptId());
-//                }else {
-//                    neworder.setReceiptId(saleOrder.getReceiptId()+",3"+receipt.getReceiptId());
-//                }
-//                sos.update(neworder);
-//            }else if (bills.get(i).getSaleType().equals("销售出库单")){
-//                SaleDelivery saleDelivery=sds.queryById(bills.get(i).getSaleId());
-//                SaleDelivery neworder=new SaleDelivery();
-//                neworder.setOrderId(bills.get(i).getSaleId());
-//                if(saleDelivery.getReceiptId()==null) {
-//                    neworder.setReceiptId(receipt.getReceiptId());
-//                }else {
-//                    neworder.setReceiptId(saleDelivery.getReceiptId()+","+receipt.getReceiptId());
-//                }
-//                sds.update(neworder);
-//            }else {
-//                SaleReturn returns=srs.queryById(bills.get(i).getSaleId());
-//                SaleReturn neworder=new SaleReturn();
-//                neworder.setOrderId(bills.get(i).getSaleId());
-//                if(returns.getReceiptId()==null) {
-//                    neworder.setReceiptId(receipt.getReceiptId());
-//                }else {
-//                    neworder.setReceiptId(returns.getReceiptId()+","+receipt.getReceiptId());
-//                }
-//                srs.update(neworder);
-//            }
             bills.get(i).setReceiptId(receipt.getReceiptId());
         }
         for (int j=0;j<accounts.size();j++){

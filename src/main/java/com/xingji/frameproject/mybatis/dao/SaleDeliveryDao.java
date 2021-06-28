@@ -90,7 +90,6 @@ public interface SaleDeliveryDao {
 
     /**
      * 查询可退换单据
-     *
      * @return 影响行数
      */
     List<SaleDelivery> canreturn();

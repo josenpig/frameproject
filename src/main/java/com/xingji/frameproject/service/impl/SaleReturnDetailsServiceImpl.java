@@ -72,7 +72,7 @@ public class SaleReturnDetailsServiceImpl implements SaleReturnDetailsService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.saleReturnDetailsDao.deleteById(id) > 0;
     }
 }
