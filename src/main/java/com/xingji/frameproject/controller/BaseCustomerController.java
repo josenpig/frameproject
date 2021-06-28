@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.xingji.frameproject.mybatis.entity.BaseCustomer;
-import com.xingji.frameproject.service.BaseCustomerService;
-import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.mybatis.entity.*;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
 import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +26,17 @@ public class BaseCustomerController {
 
     @Resource
     private BaseCustomerService baseCustomerService;
+
+    @Resource
+    private SaleReturnService saleReturnService;//退货单
+    @Resource
+    private SaleOrderService saleOrderService;//收货单
+    @Resource
+    private SaleDeliveryService saleDeliveryService;//销售单
+    @Resource
+    private CapitalReceiptService capitalReceiptService;//收款单
+    @Resource
+    private CapitalCavCiaService capitalCavCiaService;//核销单
 
     /**
      * 通过主键查询单条数据
@@ -102,18 +112,6 @@ public class BaseCustomerController {
     };
 
     /**
-     * 删除客户
-     * @param id 客户编号
-     * @return
-     */
-    @GetMapping("/delCustomer")
-    public AjaxResponse delCustomer(String id){
-        System.out.println("del:"+id);
-        String recript=baseCustomerService.deleteById(id);
-        return AjaxResponse.success(recript);
-    };
-
-    /**
      * 批量删除客户
      * @param ids 客户编号集合
      * @return
@@ -121,12 +119,56 @@ public class BaseCustomerController {
     @DeleteMapping("/delCustomer/batch")
     public AjaxResponse bacthDelCustomer(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
+        String ret=null;
+        Boolean del=false;
         List<String> retList= new ArrayList<String>();
         for(int i=0;i < ids.size();i++){
-            String recript=baseCustomerService.deleteById(ids.get(i));
-            retList.add(recript);
+            //退货单
+            SaleReturn saleReturn=new SaleReturn();
+            saleReturn.setCustomer(ids.get(i));
+            List<SaleReturn> list1=saleReturnService.queryAll(saleReturn);
+            System.out.println("list1"+list1);
+
+            //收货单
+            SaleOrder saleOrder=new SaleOrder();
+            saleOrder.setCustomer(ids.get(i));
+            List<SaleOrder> list2=saleOrderService.queryAll(saleOrder);
+            System.out.println("list2"+list2);
+
+            //销售单
+            SaleDelivery saleDelivery=new SaleDelivery();
+            saleDelivery.setCustomer(ids.get(i));
+            List<SaleDelivery> list3=saleDeliveryService.queryAll(saleDelivery);
+            System.out.println("list3"+list3);
+
+            //收款单
+            CapitalConditionPageVo capitalReceipt=new CapitalConditionPageVo();
+            capitalReceipt.setCustomer(ids.get(i));
+            List<CapitalReceipt> list4=capitalReceiptService.queryAll(capitalReceipt);
+            System.out.println("list4"+list4);
+
+            //核销单
+            CapitalCavCia capitalCavCia=new CapitalCavCia();
+            capitalCavCia.setOtherParty(ids.get(i));
+            List<CapitalCavCia> list5=capitalCavCiaService.queryAll(capitalCavCia);
+            System.out.println("list5"+list5);
+
+            if(list1.size()==0 && list2.size()==0 && list3.size()==0 && list4.size()==0 && list5.size()==0){
+                retList.add(ids.get(i));
+                del=true;
+            }else{
+                del=false;
+                ret = "客户编号为："+ids.get(i)+"已存在相关单据记录，无法删除";
+                break;
+            }
+            System.out.println("批量删除产品是否成功："+del);
         }
-        return AjaxResponse.success(retList);
+        if(del==true) {
+            for (int i = 0; i < retList.size(); i++) {
+                baseCustomerService.deleteById(retList.get(i));
+            }
+        }
+        return AjaxResponse.success(ret);
     };
 
     /**
@@ -135,14 +177,14 @@ public class BaseCustomerController {
      * @return
      */
     @GetMapping("/judgeCustomerId")
-    public Boolean judgeId(String cid){
+    public AjaxResponse judgeId(String cid){
         System.out.println("cid:"+cid);
         BaseCustomer baseCustomer =baseCustomerService.queryById(cid);
         Boolean result=false;
         if (baseCustomer==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

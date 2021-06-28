@@ -21,6 +21,14 @@ public interface SaleReturnDetailsService {
     List<SaleReturnDetails> queryById(String returnId);
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param saleReturnDetails 实例对象
+     * @return 对象列表
+     */
+    List<SaleReturnDetails> queryAll(SaleReturnDetails saleReturnDetails);
+
+    /**
      * 查询多条数据
      *
      * @param offset 查询起始位置

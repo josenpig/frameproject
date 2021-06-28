@@ -177,7 +177,7 @@
                 and p.product_id LIKE CONCAT('%',#{productId},'%')
             </if>
             <if test="productName != null and productName != ''">
-                and p.product_name LIKE CONCAT('%',#{productName,jdbcType=VARCHA},'%')
+                and p.product_name LIKE CONCAT('%',#{productName},'%')
             </if>
         </where>
         GROUP BY p.product_id
@@ -222,7 +222,7 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="productSpec" useGeneratedKeys="true">
+    <insert id="insert" useGeneratedKeys="true">
         insert into frameproject.base_product(product_id, product_name, ingredient,product_spec, unit_id, product_type_id, purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy)
         values (#{productId}, #{productName}, #{ingredient},#{productSpec}, #{unitId}, #{productTypeId}, #{purchaseUnitPrice}, #{purchaseMoney}, #{remarks}, #{productDescribe}, #{pictureId}, 1, #{userId}, NOW(), NULL, #{gramHeavy})
     </insert>

@@ -158,8 +158,8 @@ public class BaseProductController {
     public AjaxResponse bacthDelProduct(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
         String ret=null;
-        List<String> pidlist=new ArrayList<>();
         Boolean del=false;
+        List<String> pidlist=new ArrayList<>();
         for(int i=0;i < ids.size();i++){
             //根据产品Id查询采购单
             PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
@@ -250,14 +250,14 @@ public class BaseProductController {
      * @return
      */
     @GetMapping("/judgeProductId")
-    public Boolean judgeId(String id){
+    public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
         BaseProduct baseProduct =baseProductService.queryById(id);
         Boolean result=false;
         if (baseProduct==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

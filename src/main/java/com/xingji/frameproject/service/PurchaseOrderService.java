@@ -32,6 +32,11 @@ public interface PurchaseOrderService {
     PageInfo<PurchaseOrder> queryAll(PurchaseOrderQueryForm purchaseOrderQueryForm);
 
     /**
+     * 查询所有数据2
+     */
+    List<PurchaseOrder> queryAll2(PurchaseOrderQueryForm purchaseOrderQueryForm);
+
+    /**
      * 根据查询条件搜索数据
      *
      * @param purchaseOrderQueryForm

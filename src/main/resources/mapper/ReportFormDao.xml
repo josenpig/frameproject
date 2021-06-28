@@ -42,6 +42,26 @@
         <result property="expectNumber" column="expect_number" jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap type="com.xingji.frameproject.vo.ProductOrderStreamVo" id="ProductOrderStreamVoMap">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="purchaseOrderId" column="purchase_order_id" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="depotName" column="odDepot" jdbcType="VARCHAR"/>
+        <result property="lastVettingDate" column="last_vetting_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap type="com.xingji.frameproject.vo.ProductReceiptStreamVo" id="ProductReceiptStreamVo">
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="receiptid" column="purchase_order_id" jdbcType="VARCHAR"/>
+        <result property="productNum" column="product_num" jdbcType="INTEGER"/>
+        <result property="purchaseMoney" column="purchase_money" jdbcType="NUMERIC"/>
+        <result property="depotName" column="odDepot" jdbcType="VARCHAR"/>
+        <result property="lastVettingTime" column="last_vetting_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
     <select id="fundAllFundAccountsStatisticsVo" resultMap="FundAccountsStatisticsVoMap">
         SELECT ca.*,st.settlement_type,SUM(pa.this_money),SUM(ra.this_money),p.payment_time,r.receipt_time
         FROM  `base_capital_account` ca
@@ -116,6 +136,24 @@
                 and p.state = #{state}
             </if>
         </where>
+    </select>
+
+    <!--产品出库 根据实体类中的条件查询-->
+    <select id="findAllProductOrderStreamVo" resultMap="ProductOrderStreamVoMap">
+        SELECT p.product_id,p.product_name,od.purchase_order_id,od.product_num,od.purchase_money,od.depot_name AS 'odDepot',o.last_vetting_date FROM `base_product` p
+        LEFT JOIN  `purchase_order_details` od ON od.product_id=p.product_id
+        LEFT JOIN  `purchase_order` o ON o.id=od.purchase_order_id
+        WHERE
+	    o.vetting_state=1
+    </select>
+
+    <!--产品入库 根据实体类中的条件查询-->
+    <select id="findAllProductReceiptStreamVo" resultMap="ProductReceiptStreamVo">
+        SELECT p.product_id,p.product_name,rd.receiptid,rd.product_num,rd.purchase_money,rd.depot_name AS 'odDepot',r.last_vetting_time FROM `base_product` p
+LEFT JOIN  `purchase_receipt_details` rd ON rd.product_id=p.product_id
+LEFT JOIN  `purchase_receipt` r ON r.id=rd.receiptid
+WHERE
+	r.vetting_state=1
     </select>
 </mapper>
 
