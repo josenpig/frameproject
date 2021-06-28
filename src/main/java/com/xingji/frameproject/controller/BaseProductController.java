@@ -48,6 +48,8 @@ public class BaseProductController {
     private PurchaseOrderDetailsService purchaseOrderDetailsService;
     @Resource
     private StockInventoryDetailsService stockInventoryDetailsService;
+    @Resource
+    private BaseVendorProductService baseVendorProductService;
 
     /**
      * 通过主键查询单条数据
@@ -102,7 +104,7 @@ public class BaseProductController {
     };
 
     /**
-     * 查询所有类别的产品
+     * 查询所有产品
      * @return 产品集合
      */
     @GetMapping("/findAllProduct")
@@ -116,6 +118,18 @@ public class BaseProductController {
         map.put("total",page.getTotal());
         map.put("rows",productShowList);
         return AjaxResponse.success(map);
+    };
+
+    /**
+     * 查询所有产品 返回list
+     * @return 产品集合
+     */
+    @GetMapping("/findAllProduct/list")
+    public AjaxResponse findAllProductToList(){
+        BaseProductVo baseProductVo=new BaseProductVo();
+        List<BaseProductVo> list=baseProductService.findAllProduct(baseProductVo);
+        System.out.println(list);
+        return AjaxResponse.success(list);
     };
 
     /**
@@ -270,6 +284,7 @@ public class BaseProductController {
         baseProduct.setUserId(userid);
         System.out.println("BaseProduct:"+baseProduct);
         BaseProduct baseProduct1 =baseProductService.insert(baseProduct);
+
         //添加库存
         String two = jsonObject.getString("Stock");
         List<BaseOpening> baseOpenings= JSONArray.parseArray(two, BaseOpening.class);
@@ -283,7 +298,18 @@ public class BaseProductController {
             BaseOpening baseOpening=baseOpeningService.insert(baseOpenings.get(i));
             }
         }
-        System.out.println("BaseOpening++:"+baseOpenings+",,,"+baseOpenings.size());
+        System.out.println("BaseOpening:"+baseOpenings+",,,"+baseOpenings.size());
+
+        //添加供应商
+        String three = jsonObject.getString("Supply");
+        List<BaseVendorProduct> baseVendorProducts= JSONArray.parseArray(three, BaseVendorProduct.class);
+        System.out.println("BaseVendor:"+baseVendorProducts);
+        for(int i=0;i<baseVendorProducts.size();i++){
+            if(baseVendorProducts.get(i).getVendorId()!=null && baseVendorProducts.get(i).getVendorId()!=""){
+                baseVendorProducts.get(i).setProductId(baseProduct.getProductId());
+                BaseVendorProduct baseVendorProduct= baseVendorProductService.insert(baseVendorProducts.get(i));
+            }
+        }
 
         return  AjaxResponse.success(baseProduct1);
     };
