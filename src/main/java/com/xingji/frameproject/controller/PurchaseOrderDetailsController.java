@@ -96,7 +96,7 @@ public class PurchaseOrderDetailsController {
      * @return 实例对象
      */
     @PutMapping("/purchaseOrderDetails")
-    public PurchaseOrderDetails update(@RequestBody PurchaseOrderDetails purchaseOrderDetails) {
+    public boolean update(@RequestBody PurchaseOrderDetails purchaseOrderDetails) {
         return this.purchaseOrderDetailsService.update(purchaseOrderDetails);
     }
 

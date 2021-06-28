@@ -1,5 +1,6 @@
 package com.xingji.frameproject.service;
 
+import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
 import com.xingji.frameproject.mybatis.entity.PurchaseReceiptDetails;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
@@ -70,7 +71,7 @@ public interface PurchaseOrderDetailsService {
      * @param purchaseOrderDetails 实例对象
      * @return 实例对象
      */
-    PurchaseOrderDetails update(PurchaseOrderDetails purchaseOrderDetails);
+    boolean update(PurchaseOrderDetails purchaseOrderDetails);
 
 
 
@@ -90,4 +91,6 @@ public interface PurchaseOrderDetailsService {
      * @return 对象列表
      */
     List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm);
+
+
 }

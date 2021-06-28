@@ -66,11 +66,17 @@ public class BaseProductController {
      * 查询所有销售产品
      * @return 产品集合
      */
-    @GetMapping("/allsaleproduct")
-    public AjaxResponse findAllsaleproduct(Integer currentPage, Integer pageSize){
+    @RequestMapping("/allsaleproduct")
+    public AjaxResponse findAllsaleproduct(@RequestBody String conditionpage){
+        //获取json对象
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        SaleProductVo vo =JSON.parseObject(condition, SaleProductVo.class);
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
+        List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct(vo);
         for(SaleProductVo product:SaleProductVo){
             product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
         }

@@ -74,8 +74,8 @@ public class SaleDeliveryController {
         }
         delivery.setSalesmen(sus.queryById(Integer.valueOf(delivery.getSalesmen())).getUserName());
         //查询订单是否为草稿
-        if(delivery.getApprovalState()==-2){
-            List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct();
+        if(delivery.getApprovalState()!=1){
+            List<SaleProductVo> SaleProductVo=baseProductService.allsaleproduct(new SaleProductVo());
             for(SaleProductVo product:SaleProductVo){
                 product.setBaseOpenings(baseOpeningService.finddepot(product.getProductId()));
             }
@@ -103,30 +103,35 @@ public class SaleDeliveryController {
         SaleDelivery delivery = JSON.parseObject(one, SaleDelivery.class);
         String two = jsonObject.getString("deliverydetails");
         List<SaleDeliveryDetails> deliverydetails= JSONArray.parseArray(two, SaleDeliveryDetails.class);
-        //判断该订单是否为草稿单
-        SaleDelivery draft=sds.queryById(delivery.getDeliveryId());
-        if(draft!=null){
-            sdds.deleteById(delivery.getDeliveryId());
-            sds.deleteById(delivery.getDeliveryId());
-        }
-        delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
-        delivery.setFoundTime(new Date());
-        delivery.setUpdateTime(new Date());
-        delivery.setApprovalState(type);
-        delivery.setOrderState(0);
-        delivery.setDeliveryState(0);
         //添加销售出库单信息
-        for(int i=0;i<deliverydetails.size();i++){
+        for (int i = 0; i < deliverydetails.size(); i++) {
             deliverydetails.get(i).setDeliveryId(delivery.getDeliveryId());
         }
-        sds.insert(delivery);
-        sdds.insertBatch(deliverydetails);
-        //出库单生成减去预计库存数量--关联订单为空状态下
-        if(type == 0 && delivery.getOrderId()==null) {
-            List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(delivery.getDeliveryId());
-            for(SaleDeliveryDetails sdd:deliveryDetails){
-                bos.expectreduce(sdd.getProductId(),sdd.getDepot(),sdd.getProductNum());
+        //判断该订单是否为编辑单-----若为编辑单则修改数据
+        if(delivery.getApprovalState()!=1){
+            //为编辑单时恢复产品预计可用量
+            if(delivery.getOrderId()==null && delivery.getApprovalState()>=0) {//若单据为作废单,驳回单或草稿单则不进行该操作-3/-2/-1
+                List<SaleDeliveryDetails> deliveryDetails = sdds.queryById(delivery.getDeliveryId());
+                for (SaleDeliveryDetails sdd : deliveryDetails) {
+                    bos.expectadd(sdd.getProductId(), sdd.getDepot(), sdd.getProductNum());
+                }
             }
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(delivery.getApprovalState()==-3||delivery.getApprovalState()==-1){
+                delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
+            }
+            sdds.deleteById(delivery.getDeliveryId());
+            delivery.setApprovalState(type);//订单状态
+            delivery.setUpdateTime(new Date());
+            sds.update(delivery);
+        }else {
+            //反之添加订单信息
+            delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
+            delivery.setFoundTime(new Date());
+            delivery.setOrderState(0);
+            delivery.setDeliveryState(0);
+            delivery.setApprovalState(type);//订单状态
+            sds.insert(delivery);
         }
         //如果存在销售订单，修改订单状态--绑定出库单
         if (delivery.getOrderId()!=null){
@@ -136,7 +141,56 @@ public class SaleDeliveryController {
             saleOrder.setOrderId(delivery.getOrderId());
             sos.update(saleOrder);
         }
+        sdds.insertBatch(deliverydetails);
+        //出库单生成减去预计库存数量--关联订单为空状态下
+        if(type == 0 && delivery.getOrderId()==null) {
+            List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(delivery.getDeliveryId());
+            for(SaleDeliveryDetails sdd:deliveryDetails){
+                bos.expectreduce(sdd.getProductId(),sdd.getDepot(),sdd.getProductNum());
+            }
+        }
         return AjaxResponse.success(delivery.getDeliveryId());
+    }
+    /**
+     * 通过主键删除订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/detele/{id}")
+    public AjaxResponse detele(@PathVariable("id") String id) {
+        SaleDelivery saleDelivery=sds.queryById(id);
+        sdds.deleteById(id);
+        //删除关联单据
+        if(saleDelivery.getOrderId()!=null) {
+            SaleOrder saleOrder = new SaleOrder();
+            saleOrder.setDeliveryId("清空");
+            saleOrder.setUpdateTime(new Date());
+            saleOrder.setOrderId(saleDelivery.getOrderId());
+            sos.update(saleOrder);
+        }
+        return AjaxResponse.success(sds.deleteById(id));
+    }
+    /**
+     * 通过主键更改订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/update/{id}")
+    public AjaxResponse update(@PathVariable("id") String id) {
+        SaleDelivery saleDelivery=sds.queryById(id);
+        SaleDelivery neworder=new SaleDelivery();
+        neworder.setDeliveryId(id);
+        neworder.setApprovalState(-3);
+        neworder.setApprover("清空");
+        neworder.setApprovalRemarks("清空");
+        //恢复产品预计可用量
+        List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(id);
+        for(SaleDeliveryDetails sdd:deliveryDetails){
+            bos.expectadd(sdd.getProductId(),sdd.getDepot(),sdd.getProductNum());
+        }
+        sds.update(neworder);
+        crs.deleteById(id);
+        return AjaxResponse.success(saleDelivery.getDeliveryId());
     }
     /**
      * 分页条件查询

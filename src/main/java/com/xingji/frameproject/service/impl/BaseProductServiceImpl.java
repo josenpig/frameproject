@@ -106,8 +106,8 @@ public class BaseProductServiceImpl implements BaseProductService {
      * 查询所有销售的产品
      */
     @Override
-    public List<SaleProductVo> allsaleproduct() {
-        return this.baseProductDao.allsaleproduct();
+    public List<SaleProductVo> allsaleproduct(SaleProductVo vo) {
+        return this.baseProductDao.allsaleproduct(vo);
     }
     /**
      * 查询所有的采购产品

@@ -72,7 +72,7 @@ public interface BaseProductService {
     /**
      * 查询所有销售的产品
      */
-    List<SaleProductVo> allsaleproduct();
+    List<SaleProductVo> allsaleproduct(SaleProductVo vo);
     /**
      * 查询所有的采购产品
      * @return

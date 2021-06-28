@@ -98,7 +98,7 @@ public interface BaseProductDao {
     /**
      * 查询所有销售的产品
      */
-    List<SaleProductVo> allsaleproduct();
+    List<SaleProductVo> allsaleproduct(SaleProductVo vo);
     /**
      * 查询所有采购的产品
      */
