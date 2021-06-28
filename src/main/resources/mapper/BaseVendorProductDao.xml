@@ -9,6 +9,15 @@
         <result property="money" column="money" jdbcType="NUMERIC"/>
     </resultMap>
 
+    <resultMap type="com.xingji.frameproject.vo.BaseVendorProductVo" id="BaseVendorProductVoMap">
+        <result property="vendorId" column="vendor_id" jdbcType="VARCHAR"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="priceRatio" column="price_ratio" jdbcType="NUMERIC"/>
+        <result property="money" column="money" jdbcType="NUMERIC"/>
+        <result property="vendorName" column="vendor_name" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <!--查询单个-->
     <select id="queryById" resultMap="BaseVendorProductMap">
         select
@@ -42,6 +51,17 @@
             </if>
             <if test="money != null">
                 and money = #{money}
+            </if>
+        </where>
+    </select>
+    <!--通过BaseVendorProductVo作为筛选条件查询-->
+    <select id="queryAllBaseVendorProductVo" resultMap="BaseVendorProductVoMap">
+        SELECT vp.*,v.vendor_name,p.product_name FROM `base_vendor_product` vp
+        LEFT JOIN `base_vendor` v ON v.vendor_id=vp.vendor_id
+        LEFT JOIN `base_product` p ON p.product_id=vp.product_id
+        <where>
+            <if test="vendorId != null and vendorId != ''">
+                vendor_id = #{vendorId}
             </if>
         </where>
     </select>

@@ -1,10 +1,14 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.mybatis.entity.BaseVendor;
 import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
 import com.xingji.frameproject.service.BaseVendorProductService;
+import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.BaseVendorProductVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (BaseVendorProduct)表控制层
@@ -32,5 +36,16 @@ public class BaseVendorProductController {
         return this.baseVendorProductService.queryById(vendorId);
     }
 
-
+    /**
+     * 根据供应商id查询供应商下的产品 返回list
+     * @return 产品集合
+     */
+    @GetMapping("/findAllbaseVendorProduct/list")
+    public AjaxResponse findAllVendorToList(String id){
+        BaseVendorProductVo baseVendor=new BaseVendorProductVo();
+        baseVendor.setVendorId(id);
+        List<BaseVendorProductVo> list=baseVendorProductService.queryAllBaseVendorProductVo(baseVendor);
+        System.out.println(list);
+        return AjaxResponse.success(list);
+    };
 }

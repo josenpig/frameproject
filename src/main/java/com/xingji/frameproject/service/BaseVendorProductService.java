@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
+import com.xingji.frameproject.vo.BaseVendorProductVo;
 
 import java.util.List;
 
@@ -52,5 +53,14 @@ public interface BaseVendorProductService {
      * @return 是否成功
      */
     boolean deleteById(String ProductId);
+
+    /**
+     * 通过BaseVendorProductVo作为筛选条件查询
+     *
+     * @param baseVendorProductVo 实例对象
+     * @return 对象列表
+     */
+    List<BaseVendorProductVo> queryAllBaseVendorProductVo(BaseVendorProductVo baseVendorProductVo);
+
 
 }
