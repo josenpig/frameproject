@@ -21,7 +21,7 @@ public interface BaseVendorProductDao {
      *
      * @return 实例对象
      */
-    BaseVendorProduct queryById(String vendorId);
+    BaseVendorProduct queryById(String vendorId,String productId);
 
     /**
      * 查询指定行数据
@@ -79,7 +79,7 @@ public interface BaseVendorProductDao {
      * @param
      * @return 影响行数
      */
-    int deleteById(String vendorId);
+    int deleteById(BaseVendorProduct baseVendorProduct);
 
     /**
      * 通过BaseVendorProductVo作为筛选条件查询

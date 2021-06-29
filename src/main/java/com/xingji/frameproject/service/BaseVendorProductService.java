@@ -19,7 +19,7 @@ public interface BaseVendorProductService {
      * @param
      * @return 实例对象
      */
-    BaseVendorProduct queryById(String vendorId);
+    BaseVendorProduct queryById(String vendorId,String productId);
 
     /**
      * 查询多条数据
@@ -52,7 +52,15 @@ public interface BaseVendorProductService {
      * @param
      * @return 是否成功
      */
-    boolean deleteById(String ProductId);
+    boolean deleteById(BaseVendorProduct baseVendorProduct);
+
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param baseVendorProduct 实例对象
+     * @return 对象列表
+     */
+    List<BaseVendorProduct> queryAll(BaseVendorProduct baseVendorProduct);
 
     /**
      * 通过BaseVendorProductVo作为筛选条件查询

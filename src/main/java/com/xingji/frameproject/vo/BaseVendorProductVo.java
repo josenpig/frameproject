@@ -19,9 +19,9 @@ public class BaseVendorProductVo {
      */
     private Double priceRatio;
     /**
-     * 该产品在该供应商的采购价格
+     * 标准采购价格
      */
-    private Double money;
+    private Double purchaseMoney;
     /**
      * 产品名称
      */

@@ -67,15 +67,17 @@
         FROM  `base_capital_account` ca
         LEFT JOIN (
         SELECT pa.payment_id,fund_account, SUM(this_money) AS this_money FROM `capital_payment_account` pa JOIN `capital_payment` p ON pa.payment_id=p.payment_id
+        where p.approval_state!=0
         <if test="startTime != null and endTime != null">
-        where payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
+        and payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
         </if>
         GROUP BY fund_account
         ) AS pa ON pa.fund_account = ca.capital_id
         LEFT JOIN (
         SELECT ra.receipt_id,fund_account, SUM(this_money) AS this_money FROM `capital_receipt_account` ra LEFT JOIN `capital_receipt` r ON r.receipt_id=ra.receipt_id
+        where r.approval_state!=0
         <if test="startTime != null and endTime != null">
-        where receipt_time BETWEEN #{startTime}  AND #{endTime} OR r.receipt_time =NULL
+        and receipt_time BETWEEN #{startTime}  AND #{endTime} OR r.receipt_time =NULL
         </if>
         GROUP BY fund_account
         ) AS ra ON ra.fund_account = ca.capital_id
@@ -86,7 +88,7 @@
             <if test="startTime != null and endTime != null">
                 payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
                 or receipt_time BETWEEN  #{startTime} AND #{endTime} OR r.receipt_time =NULL
-            </if>
+              </if>
         </where>
         GROUP BY ca.capital_id
     </select>
@@ -150,9 +152,9 @@
     <!--产品入库 根据实体类中的条件查询-->
     <select id="findAllProductReceiptStreamVo" resultMap="ProductReceiptStreamVo">
         SELECT p.product_id,p.product_name,rd.receiptid,rd.product_num,rd.purchase_money,rd.depot_name AS 'odDepot',r.last_vetting_time FROM `base_product` p
-LEFT JOIN  `purchase_receipt_details` rd ON rd.product_id=p.product_id
-LEFT JOIN  `purchase_receipt` r ON r.id=rd.receiptid
-WHERE
+        LEFT JOIN  `purchase_receipt_details` rd ON rd.product_id=p.product_id
+        LEFT JOIN  `purchase_receipt` r ON r.id=rd.receiptid
+        WHERE
 	r.vetting_state=1
     </select>
 </mapper>
