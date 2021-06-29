@@ -81,8 +81,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="customerNumber" useGeneratedKeys="true">
-        insert into frameproject.base_customer(customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address, contact_number, user, creation_time, update_time)
-        values (#{customerName}, #{customerType}, #{chargeName}, #{ratio}, #{remarks}, #{contact}, #{contactAddress}, #{contactNumber}, #{user}, #{creationTime}, #{updateTime})
+        insert into frameproject.base_customer(customer_number,customer_name, customer_type, charge_name, ratio, remarks, contact, contact_address, contact_number, user, creation_time, update_time)
+        values (#{customerNumber},#{customerName}, #{customerType}, #{chargeName}, #{ratio}, #{remarks}, #{contact}, #{contactAddress}, #{contactNumber}, #{user}, NOW(), NULL)
     </insert>
 
     <insert id="insertBatch" keyProperty="customerNumber" useGeneratedKeys="true">

@@ -95,7 +95,7 @@ public class BaseProductTypeController {
      * @return
      */
     @GetMapping("/judgeProductTypeName")
-    public Boolean judgeProductTypeName(String ProductTypeName){
+    public AjaxResponse judgeProductTypeName(String ProductTypeName){
         System.out.println("ProductTypeName:"+ProductTypeName);
         BaseProductType baseProductType =new BaseProductType();
         baseProductType.setLabel(ProductTypeName);
@@ -104,7 +104,7 @@ public class BaseProductTypeController {
         if (list.size()==0){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
     
     /**

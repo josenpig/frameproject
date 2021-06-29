@@ -5,8 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.BaseVendor;
+import com.xingji.frameproject.mybatis.entity.CapitalPayable;
+import com.xingji.frameproject.mybatis.entity.CapitalPayment;
+import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
 import com.xingji.frameproject.service.BaseVendorService;
+import com.xingji.frameproject.service.CapitalPayableService;
+import com.xingji.frameproject.service.CapitalPaymentService;
+import com.xingji.frameproject.service.PurchaseOrderService;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.CapitalConditionPageVo;
+import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +35,12 @@ public class BaseVendorController {
      */
     @Resource
     private BaseVendorService baseVendorService;
+    @Resource
+    private CapitalPayableService capitalPayableService;//采购应付单
+    @Resource
+    private CapitalPaymentService capitalPaymentService;//采购应付单
+    @Resource
+    private PurchaseOrderService purchaseOrderService;//采购单
 
     /**
      * 通过主键查询单条数据
@@ -111,17 +125,7 @@ public class BaseVendorController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     };
-    /**
-     * 删除供应商
-     * @param id 供应商编号
-     * @return
-     */
-    @GetMapping("/delVendor")
-    public AjaxResponse delVendor(String id){
-        System.out.println("del:"+id);
-        boolean recript=baseVendorService.deleteById(id);
-        return AjaxResponse.success(recript);
-    };
+
     /**
      * 批量删除供应商
      * @param ids 供应商编号集合
@@ -130,27 +134,59 @@ public class BaseVendorController {
     @DeleteMapping("/delVendor/batch")
     public AjaxResponse bacthDelVendor(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
-        List<Boolean> retList= new ArrayList<Boolean>();
+        String ret=null;
+        Boolean del=false;
+        List<String> retList= new ArrayList<String>();
         for(int i=0;i < ids.size();i++){
-            Boolean recript=baseVendorService.deleteById(ids.get(i));
-            retList.add(recript);
+            //采购应付单
+            CapitalConditionPageVo capitalPayable=new CapitalConditionPageVo();
+            capitalPayable.setVendor(ids.get(i));
+            List<CapitalPayable> list1=capitalPayableService.queryAllByPage(capitalPayable);
+            System.out.println("list1"+list1);
+
+            //采购应付单
+            CapitalConditionPageVo capitalPayment=new CapitalConditionPageVo();
+            capitalPayment.setVendor(ids.get(i));
+            List<CapitalPayment> list2=capitalPaymentService.queryAll(capitalPayment);
+            System.out.println("list2"+list2);
+
+            //采购单
+            PurchaseOrderQueryForm purchaseOrder=new PurchaseOrderQueryForm();
+            purchaseOrder.setVendor(ids.get(i));
+            List<PurchaseOrder> list3=purchaseOrderService.queryAll2(purchaseOrder);
+            System.out.println("list3"+list3);
+
+            if(list1.size()==0 && list2.size()==0 && list3.size()==0){
+                retList.add(ids.get(i));
+                del=true;
+            }else{
+                del=false;
+                ret = "供应商编号为："+ids.get(i)+"已存在相关单据记录，无法删除";
+                break;
+            }
         }
-        return AjaxResponse.success(retList);
+        if(del==true) {
+            for (int i = 0; i < retList.size(); i++) {
+                baseVendorService.deleteById(retList.get(i));
+            }
+        }
+        return AjaxResponse.success(ret);
     };
+
     /**
      * 判断供应商Id是否重复
      * @param id
      * @return
      */
     @GetMapping("/judgeVendorId")
-    public Boolean judgeId(String id){
+    public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
         BaseVendor baseCustomer =baseVendorService.queryById(id);
         Boolean result=false;
         if (baseCustomer==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
     /**
      * 新增供应商

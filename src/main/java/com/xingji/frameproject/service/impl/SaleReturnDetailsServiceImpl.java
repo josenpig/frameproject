@@ -30,6 +30,11 @@ public class SaleReturnDetailsServiceImpl implements SaleReturnDetailsService {
         return this.saleReturnDetailsDao.queryById(returnId);
     }
 
+    @Override
+    public List<SaleReturnDetails> queryAll(SaleReturnDetails saleReturnDetails) {
+        return this.saleReturnDetailsDao.queryAll(saleReturnDetails);
+    }
+
     /**
      * 查询多条数据
      *

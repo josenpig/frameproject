@@ -97,7 +97,7 @@ public class BaseSettlementTypeController {
      * @return
      */
     @GetMapping("/judgeSettlementType")
-    public Boolean judgeSettlementTypeName(String settlementType){
+    public AjaxResponse judgeSettlementTypeName(String settlementType){
         System.out.println("SettlementTypeName:"+settlementType);
         BaseSettlementType baseSettlementType =new BaseSettlementType();
         baseSettlementType.setSettlementType(settlementType);
@@ -106,7 +106,7 @@ public class BaseSettlementTypeController {
         if (list.size()==0){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

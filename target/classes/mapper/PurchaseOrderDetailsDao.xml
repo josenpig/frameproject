@@ -161,4 +161,9 @@
         <include refid="Base_Column_List"/>
         from purchase_order_details p
     </select>
+    <select id="findPODofVidAndPid" resultMap="PurchaseOrderDetailsMap">
+        SELECT od.* FROM `purchase_order_details` od
+        LEFT JOIN `purchase_order` o ON o.id = od.purchase_order_id
+        where od.product_id=#{productId} AND o.vendor_name=#{vendorId} AND o.order_state!=1
+    </select>
 </mapper>

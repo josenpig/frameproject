@@ -2,6 +2,8 @@ package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.vo.FundAccountsStatisticsVo;
 import com.xingji.frameproject.vo.ProductInventoryVo;
+import com.xingji.frameproject.vo.ProductOrderStreamVo;
+import com.xingji.frameproject.vo.ProductReceiptStreamVo;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,7 +32,7 @@ public interface ReportFormDao {
      */
     Double fundAllPsum(Date startTime,Date endTime);
 
-    /**************************/
+    /*********************************************/
 
     /**
      * 所有产品库存 根据实体类中的条件查询
@@ -38,4 +40,18 @@ public interface ReportFormDao {
      * @return
      */
     List<ProductInventoryVo> findAllProductInventoryVo(ProductInventoryVo productInventoryVo);
+
+    /********************************************/
+
+    /**
+     * 所有产品出库 根据实体类中的条件查询
+     * @return
+     */
+    List<ProductOrderStreamVo> findAllProductOrderStreamVo(ProductOrderStreamVo productOrderStreamVo);
+
+    /**
+     * 所有产品入库 根据实体类中的条件查询
+     * @return
+     */
+    List<ProductReceiptStreamVo> findAllProductReceiptStreamVo(ProductReceiptStreamVo productReceiptStreamVo);
 }

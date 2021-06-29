@@ -48,6 +48,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return new PageInfo<>(purchaseOrderList);
     }
 
+    @Override
+    public List<PurchaseOrder> queryAll2(PurchaseOrderQueryForm purchaseOrderQueryForm) {
+        return this.purchaseOrderDao.queryAll(purchaseOrderQueryForm);
+    }
+
     /**
      * 根据查询条件搜索数据
      *

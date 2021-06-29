@@ -107,4 +107,6 @@ public interface PurchaseOrderDao {
      * @return 实例对象
      */
     boolean ostateadd(PurchaseOrder purchaseOrder);
+
+
 }

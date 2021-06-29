@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.PurchaseOrderDetailsDao;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
+import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
@@ -137,6 +138,11 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
     @Override
     public List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm) {
         return this.purchaseOrderDetailsDao.queryAndByPojo(purchaseOrderDetailsQueryForm);
+    }
+
+    @Override
+    public List<PurchaseOrderDetails> findPODofVidAndPid(BaseVendorProduct baseVendorProduct) {
+        return this.purchaseOrderDetailsDao.findPODofVidAndPid(baseVendorProduct);
     }
 
 }
