@@ -109,14 +109,16 @@ public class BaseProductServiceImpl implements BaseProductService {
     public List<SaleProductVo> allsaleproduct(SaleProductVo vo) {
         return this.baseProductDao.allsaleproduct(vo);
     }
+
     /**
      * 查询所有的采购产品
      * @return
      */
     @Override
-    public List<PurchaseProductVo> allPurchaseProduct() {
-        return this.baseProductDao.allPurchaseProduct();
+    public List<PurchaseProductVo> allPurchaseProduct(String vendorName, String type) {
+        return this.baseProductDao.allPurchaseProduct(vendorName,type);
     }
+
 
 
     /**
@@ -124,7 +126,7 @@ public class BaseProductServiceImpl implements BaseProductService {
      * @return
      */
     @Override
-    public List<InventoryProjectVo> allStockInventoryProduct(String depotName) {
-        return this.baseProductDao.allInventoryProject(depotName);
+    public List<InventoryProjectVo> allStockInventoryProduct(String depotName,String type) {
+        return this.baseProductDao.allInventoryProject(depotName,type);
     }
 }

@@ -8,10 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
-import com.xingji.frameproject.service.BaseDepotService;
-import com.xingji.frameproject.service.BaseProductService;
-import com.xingji.frameproject.service.StockInventoryDetailsService;
-import com.xingji.frameproject.service.StockInventoryService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.*;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +40,8 @@ public class StockInventoryController {
     private BaseProductService productService;
     @Resource
     private StockInventoryDetailsService detailsService;
+    @Resource
+    private SysUserService sysUserService;
 
     /**
      * 通过主键查询单条数据
@@ -172,10 +171,10 @@ public class StockInventoryController {
      * @return 产品集合
      */
     @GetMapping("/stockInventory/allProduct/{depotName}")
-    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,@PathVariable("depotName") String depotName){
+    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,String type,@PathVariable("depotName") String depotName){
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<InventoryProjectVo> inventoryProjectVos=productService.allStockInventoryProduct(depotName);
+        List<InventoryProjectVo> inventoryProjectVos=productService.allStockInventoryProduct(depotName,type);
         for(InventoryProjectVo vo:inventoryProjectVos){
             vo.setInventoryNum(0);
             vo.setInventoryPl(vo.getInventoryNum()-vo.getSystemNum());
@@ -205,6 +204,7 @@ public class StockInventoryController {
         for(int i=0;i<orderdetails.size();i++){
             orderdetails.get(i).setInventoryId(order.getId());
         }
+        order.setInventorypeople(String.valueOf(sysUserService.queryUserIdByUserName(order.getInventorypeople())));
         stockInventoryService.insert(order);
         detailsService.insertBatch(orderdetails);
         return AjaxResponse.success(order.getId());
@@ -214,6 +214,7 @@ public class StockInventoryController {
     public AjaxResponse selectOrder(@PathVariable("id")String orderId){
         InventoryDetailsVo inventoryDetailsVo = new InventoryDetailsVo();
         StockInventory stockInventory = stockInventoryService.queryById(orderId);
+        stockInventory.setInventorypeople(sysUserService.queryUserNameByUserId(Integer.valueOf(stockInventory.getInventorypeople())));
         List<StockInventoryDetails> list = detailsService.queryAllById(orderId);
         inventoryDetailsVo.setStockInventory(stockInventory);
         inventoryDetailsVo.setList(list);
@@ -221,34 +222,30 @@ public class StockInventoryController {
         return AjaxResponse.success(inventoryDetailsVo);
     }
 
-//    /**
-//     * 分页条件查询
-//     * @param conditionpage 条件查询信息
-//     * @return map数据
-//     */
-//    @PostMapping("/stockInventory/conditionpage")
-//    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
-//        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
-//        String condition = jsonObject.getString("condition");//查询条件
-//        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
-//        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
-//        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
-//        System.out.println(order);
-//        System.out.println(currentPage);
-//        System.out.println(pageSize);
-//        Map<String,Object> map=new HashMap<>();
-//        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-//        List<PurchaseReturns> list=returnsService.conditionpage(order);
-//        for(int i=0;i<list.size();i++){
-//            list.get(i).setVendorName(vendorService.findVendorName(list.get(i).getVendorName()));
-//            if(list.get(i).getVettingName()!=null) {
-//                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
-//            }
-//            list.get(i).setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getBuyerName())));
-//        }
-//        map.put("total",page.getTotal());
-//        map.put("rows",list);
-//        return AjaxResponse.success(map);
-//    }
+    /**
+     * 分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/stockInventory/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        System.out.println(order);
+        System.out.println(currentPage);
+        System.out.println(pageSize);
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<StockInventory> list=stockInventoryService.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            list.get(i).setInventorypeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getInventorypeople())));
+        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
 
 }

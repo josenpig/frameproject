@@ -2,6 +2,7 @@ package com.xingji.frameproject.service;
 
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.entity.StockInventory;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 
 import java.util.List;
@@ -93,4 +94,11 @@ public interface StockInventoryService {
      * @return 是否成功
      */
     boolean deleteBatch(List<Integer> ids);
+
+    /**
+     * 分页查询库存盘点订单列表
+     * @param order
+     * @return
+     */
+    List<StockInventory> conditionpage(PurchaseReceiptConditionVo order);
 }
