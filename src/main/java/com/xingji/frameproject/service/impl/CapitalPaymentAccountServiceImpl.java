@@ -3,6 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.entity.CapitalPaymentAccount;
 import com.xingji.frameproject.mybatis.dao.CapitalPaymentAccountDao;
 import com.xingji.frameproject.service.CapitalPaymentAccountService;
+import com.xingji.frameproject.vo.SalesTopVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -74,5 +75,10 @@ public class CapitalPaymentAccountServiceImpl implements CapitalPaymentAccountSe
     @Override
     public boolean deleteById(Integer id) {
         return this.capitalPaymentAccountDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<SalesTopVo> querySalesTop() {
+        return this.capitalPaymentAccountDao.querySalesTop();
     }
 }
