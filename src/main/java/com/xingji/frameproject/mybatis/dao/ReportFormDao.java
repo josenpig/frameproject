@@ -32,6 +32,18 @@ public interface ReportFormDao {
      */
     Double fundAllPsum(Date startTime,Date endTime);
 
+    /**
+     * 资金收款总条数
+     * @return
+     */
+    Integer fundAllRcount();
+
+    /**
+     * 资金账户期间总支出
+     * @return
+     */
+    Integer fundAllPcount();
+
     /*********************************************/
 
     /**

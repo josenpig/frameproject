@@ -157,5 +157,15 @@
         WHERE
 	r.vetting_state=1
     </select>
+
+    <!--收款总条数-->
+    <select id="fundAllRcount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `capital_receipt` r WHERE r.approval_state=1
+    </select>
+
+    <!--付款总条数-->
+    <select id="fundAllPcount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM `capital_payment` p WHERE p.approval_state=1
+    </select>
 </mapper>
 
