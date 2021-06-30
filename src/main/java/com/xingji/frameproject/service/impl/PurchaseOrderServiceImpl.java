@@ -48,9 +48,14 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         return new PageInfo<>(purchaseOrderList);
     }
 
+    /**
+     * 通过实体类查询相关数据
+     * @param purchaseOrder
+     * @return
+     */
     @Override
-    public List<PurchaseOrder> queryAll2(PurchaseOrderQueryForm purchaseOrderQueryForm) {
-        return this.purchaseOrderDao.queryAll(purchaseOrderQueryForm);
+    public List<PurchaseOrder> queryOfPurchaseOrder(PurchaseOrder purchaseOrder) {
+        return this.purchaseOrderDao.queryOfPurchaseOrder(purchaseOrder);
     }
 
     /**

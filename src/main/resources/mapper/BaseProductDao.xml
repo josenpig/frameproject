@@ -296,12 +296,8 @@
             <if test="ingredient != null and ingredient != ''">
                 ingredient = #{ingredient},
             </if>
-            <if test="unitId != null">
                 unit_id = #{unitId},
-            </if>
-            <if test="productTypeId != null">
                 product_type_id = #{productTypeId},
-            </if>
             <if test="purchaseUnitPrice != null">
                 purchase_unit_price = #{purchaseUnitPrice},
             </if>

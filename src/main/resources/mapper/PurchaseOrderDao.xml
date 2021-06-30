@@ -132,8 +132,9 @@
         </where>
     </select>
 
+
+
     <!--通过实体作为筛选条件查询-->
-    <!--通过实体作为或者条件查询-->
     <select id="queryOrByPojo" resultMap="PurchaseOrderMap">
         select
         id, delicery_date, vendor_name, documents_date, vetting_name, disrate, dismoney, offers_price, order_state,
@@ -330,6 +331,7 @@
             </if>
         </where>
     </select>
+
     <!--修改订单预付款-->
     <update id="ostateadd">
         update purchase_order
@@ -343,4 +345,13 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="queryOfPurchaseOrder" resultMap="PurchaseOrderMap">
+        select * from `purchase_order`
+        <where>
+            <if test="vendorName != null">
+                vendor_name = #{vendorName}
+            </if>
+        </where>
+    </select>
 </mapper>

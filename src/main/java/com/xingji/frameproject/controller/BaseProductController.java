@@ -337,6 +337,7 @@ public class BaseProductController {
         JSONObject jsonObject = JSONObject.parseObject(add);
         String one = jsonObject.getString("Product");
         BaseProduct product = JSON.parseObject(one, BaseProduct.class);
+        System.out.println("product:"+product);
         //获取最初产品信息 如果新的产品信息和旧的不同则更新数据
         BaseProduct after= baseProductService.queryById(product.getProductId());
         BaseProduct newc=new BaseProduct();

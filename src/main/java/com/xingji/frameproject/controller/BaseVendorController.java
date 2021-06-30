@@ -151,9 +151,9 @@ public class BaseVendorController {
             System.out.println("list2"+list2);
 
             //采购单
-            PurchaseOrderQueryForm purchaseOrder=new PurchaseOrderQueryForm();
-            purchaseOrder.setVendor(ids.get(i));
-            List<PurchaseOrder> list3=purchaseOrderService.queryAll2(purchaseOrder);
+            PurchaseOrder purchaseOrder=new PurchaseOrder();
+            purchaseOrder.setVendorName(ids.get(i));
+            List<PurchaseOrder> list3=purchaseOrderService.queryOfPurchaseOrder(purchaseOrder);
             System.out.println("list3"+list3);
 
             if(list1.size()==0 && list2.size()==0 && list3.size()==0){
