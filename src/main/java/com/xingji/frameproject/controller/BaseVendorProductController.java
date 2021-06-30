@@ -47,10 +47,11 @@ public class BaseVendorProductController {
      * @return 产品集合
      */
     @GetMapping("/findAllbaseVendorProduct/list")
-    public AjaxResponse findAllVendorToList(String vid,String pname){
+    public AjaxResponse findAllVendorToList(String vid,String pid,String pname){
         System.out.println("vid"+vid);
         BaseVendorProductVo baseVendorProductVo=new BaseVendorProductVo();
         baseVendorProductVo.setVendorId(vid);
+        baseVendorProductVo.setProductId(pid);
         baseVendorProductVo.setProductName(pname);
         List<BaseVendorProductVo> list=baseVendorProductService.queryAllBaseVendorProductVo(baseVendorProductVo);
         System.out.println(list);

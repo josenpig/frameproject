@@ -57,7 +57,7 @@
     </select>
 
     <select id="querySalesTop" resultMap="SalesTopVoMap">
-        SELECT SUM(od.product_num),od.product_id,p.product_name FROM `purchase_order_details` od
+        SELECT SUM(od.product_num),od.product_id,p.product_name FROM `sale_delivery_details` od
         LEFT JOIN `base_product` p ON p.product_id=od.product_id
         GROUP BY od.product_id ORDER BY SUM(od.product_num) DESC
     </select>
