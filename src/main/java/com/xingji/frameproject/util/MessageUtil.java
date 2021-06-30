@@ -57,6 +57,8 @@ public class MessageUtil {
             m.setOrdertype("采购退货单");
         }else if (sb.toString().equals("XSDD")){
             m.setOrdertype("销售订单");
+        }else if (sb.toString().equals("XSTHD")){
+            m.setOrdertype("销售退货订单");
         }else if (sb.toString().equals("XSCKD")){
             m.setOrdertype("销售出库单");
         }else if (sb.toString().equals("SKD")){
@@ -78,6 +80,7 @@ public class MessageUtil {
 //        rabbitTemplate.convertAndSend(Constants.MAIL_EXCHANGE_NAME,Constants.MAIL_ROUTING_KEY_NAME,message1,new CorrelationData(msgId));
 //        System.out.println("消息发送成功----------------------");
     }
+    //回执消息
     public void addMessages(Integer sender,Integer recver,String orderid,Integer mid){
         //消息落库
         String msgId= UUID.randomUUID().toString();
@@ -128,10 +131,13 @@ public class MessageUtil {
             m.setOrdertype("库存调拨订单");
         } else if (sb.toString().equals("KCPDD")){
             m.setOrdertype("库存盘点订单");
+        }else if (sb.toString().equals("XSTHD")){
+            m.setOrdertype("销售退货订单");
         }
 
         m.setSendtime(LocalDateTime.now());
         messageService.insert(m);
+        messageService.setmessage(sender,recver,orderid,mid);
         Message1 message1=messageService.selectByOrderid(orderid).get(0);
         //发送信息
 //        rabbitTemplate.convertAndSend(Constants.MAIL_EXCHANGE_NAME,Constants.MAIL_ROUTING_KEY_NAME,message1,new CorrelationData(msgId));

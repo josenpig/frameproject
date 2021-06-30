@@ -21,17 +21,17 @@ public interface OperationlogDao {
     int updateByPrimaryKey(Operationlog record);
     List<operationlogVo> findAll();
 
-    List<operationlogVo> findbyCreateTimeAndOperatorAndInput(@Param("time") String time, @Param("operatorid") Integer operatorid, @Param("input") String input);
+    List<operationlogVo> findbyCreateTimeAndOperatorAndInput(@Param("time") String time, @Param("userid") Integer userid, @Param("input") String input);
 
-    List<operationlogVo> findbyCreateTimeAndOperator(@Param("time") String time,  @Param("operatorid")Integer operatorid);
+    List<operationlogVo> findbyCreateTimeAndOperator(@Param("time") String time,  @Param("userid")Integer userid);
 
-    List<operationlogVo> findbyInputAndOperator(@Param("operatorid") Integer operatorid, @Param("input") String input);
+    List<operationlogVo> findbyInputAndOperator(@Param("userid") Integer userid, @Param("input") String input);
 
     List<operationlogVo> findbyCreateTimeAndInput(@Param("time") String time,@Param("input") String input);
 
     List<operationlogVo> findbyCreateTime(String time);
 
-    List<operationlogVo> findbyOperator(Integer operatorid);
+    List<operationlogVo> findbyOperator(Integer userid);
 
     List<operationlogVo> findbyInput(String input);
 }
