@@ -33,6 +33,14 @@ public interface PurchaseOrderDao {
     List<PurchaseOrder> queryAll(PurchaseOrderQueryForm purchaseOrderQueryForm);
 
     /**
+     * 查询所有数据
+     *
+     * @param purchaseOrder 实例对象
+     * @return 实例对象
+     */
+    List<PurchaseOrder> queryOfPurchaseOrder(PurchaseOrder purchaseOrder);
+
+    /**
      * 通过实体作为或者条件查询
      *
      * @param purchaseOrderQueryForm 实例对象

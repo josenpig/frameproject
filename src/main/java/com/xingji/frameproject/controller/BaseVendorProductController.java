@@ -2,6 +2,8 @@ package com.xingji.frameproject.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseVendorProductService;
@@ -9,11 +11,14 @@ import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.service.PurchaseOrderService;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.BaseVendorProductVo;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (BaseVendorProduct)表控制层
@@ -38,7 +43,7 @@ public class BaseVendorProductController {
      * @param
      * @return 单条数据
      */
-    @Log("查看单个供应商产品")
+    @Log("查询单条数据")
     @GetMapping("selectOne")
     public BaseVendorProduct selectOne(String vendorId,String productId) {
         return this.baseVendorProductService.queryById(vendorId,productId);
@@ -48,7 +53,28 @@ public class BaseVendorProductController {
      * 根据供应商id查询供应商下的产品 返回list
      * @return 产品集合
      */
-    @Log("根据供应商id查询供应商下的产品 返回list")
+    @Log("查询供应商下的产品")
+    @GetMapping("/findAllbaseVendorProduct")
+    public AjaxResponse findAllVendorToList(Integer currentPage,Integer pageSize, String vid, String pid, String pname){
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        System.out.println("vid"+vid);
+        BaseVendorProductVo baseVendorProductVo=new BaseVendorProductVo();
+        baseVendorProductVo.setVendorId(vid);
+        baseVendorProductVo.setProductId(pid);
+        baseVendorProductVo.setProductName(pname);
+        List<BaseVendorProductVo> list=baseVendorProductService.queryAllBaseVendorProductVo(baseVendorProductVo);
+        System.out.println(list);
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    };
+
+    /**
+     * 根据供应商id查询供应商下的产品 返回list
+     * @return 产品集合
+     */
+    @Log("查询供应商下的产品")
     @GetMapping("/findAllbaseVendorProduct/list")
     public AjaxResponse findAllVendorToList(String vid,String pid,String pname){
         System.out.println("vid"+vid);

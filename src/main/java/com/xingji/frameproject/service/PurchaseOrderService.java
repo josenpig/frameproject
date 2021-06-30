@@ -32,9 +32,9 @@ public interface PurchaseOrderService {
     PageInfo<PurchaseOrder> queryAll(PurchaseOrderQueryForm purchaseOrderQueryForm);
 
     /**
-     * 查询所有数据2
+     * 通过实体类查询相关数据
      */
-    List<PurchaseOrder> queryAll2(PurchaseOrderQueryForm purchaseOrderQueryForm);
+    List<PurchaseOrder> queryOfPurchaseOrder(PurchaseOrder purchaseOrder);
 
     /**
      * 根据查询条件搜索数据
