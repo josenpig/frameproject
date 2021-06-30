@@ -161,7 +161,7 @@ public class PowerController {
         user.setFounder(String.valueOf(sus.queryUserIdByUserName(user.getFounder())));
         user.setFoundTime(new Date());
         user.setDelFlag(0);
-        user.setUserPass(MD5.getEncryptedPwd("a123456"));
+        user.setUserPass(MD5.getEncryptedPwd("a123456"));//密码加密
         //新增用户
         sus.insert(user);
         //新增用户角色

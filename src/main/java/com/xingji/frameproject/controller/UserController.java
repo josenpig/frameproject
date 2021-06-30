@@ -157,11 +157,12 @@ public class UserController {
             }
         }
     }
-    @GetMapping("/roleusers/{id}")
-    public AjaxResponse roleusers(@PathVariable("id") Integer id){
-        List<SysUser> sysUsers=us.roleusers(id);
-        return AjaxResponse.success(sysUsers);
-    }
+
+//    @GetMapping("/roleusers/{id}")
+//    public AjaxResponse roleusers(@PathVariable("id") Integer id){
+//        List<SysUser> sysUsers=us.roleusers(id);
+//        return AjaxResponse.success(sysUsers);
+//    }
 
     /**
      * 递归查询子菜单

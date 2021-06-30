@@ -43,7 +43,7 @@
         <where>
             approval_state=1
             <if test="saleId != null and saleId != ''">
-                and order_id = #{saleId}
+                and order_id like CONCAT('%',#{saleId},'%')
             </if>
             <if test="customer != null and customer != ''">
                 and customer = #{customer}

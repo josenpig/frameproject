@@ -136,7 +136,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.capital_receipt_bill where id = #{id}
+        delete from frameproject.capital_receipt_bill where receipt_id = #{id}
     </delete>
 
 </mapper>

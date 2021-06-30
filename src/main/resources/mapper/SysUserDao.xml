@@ -178,12 +178,16 @@
     <select id="gologin" resultMap="SysUserMap">
         select * from sys_user where user_phone=#{userPhone} and del_flag=0
     </select>
+
+    <!--查询有关人员-->
     <select id="roleusers" resultMap="SysUserMap">
         select distinct a.* from sys_user a
         inner join sys_user_role b on a.user_id=b.user_id
-				WHERE b.role_id=1 or
-				b.role_id=#{id}
+				inner join sys_role_menu c on b.role_id=c.role_id
+				inner join sys_menu d on c.menu_id=d.menu_id
+				WHERE d.menu_id=#{id}
 	</select>
+
     <select id="queryUserIdByUserName" resultType="java.lang.Integer">
         select user_id
         from sys_user

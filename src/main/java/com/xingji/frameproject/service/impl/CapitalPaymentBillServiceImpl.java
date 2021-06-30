@@ -82,7 +82,7 @@ public class CapitalPaymentBillServiceImpl implements CapitalPaymentBillService 
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.capitalPaymentBillDao.deleteById(id) > 0;
     }
 }

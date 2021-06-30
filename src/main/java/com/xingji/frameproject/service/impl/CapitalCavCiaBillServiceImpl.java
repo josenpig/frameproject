@@ -91,7 +91,7 @@ public class CapitalCavCiaBillServiceImpl implements CapitalCavCiaBillService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.capitalCavCiaBillDao.deleteById(id) > 0;
     }
 }

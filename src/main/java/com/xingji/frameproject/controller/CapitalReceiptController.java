@@ -86,18 +86,31 @@ public class CapitalReceiptController {
         List<CapitalReceiptBill> bills= JSONArray.parseArray(two, CapitalReceiptBill.class);
         String three = jsonObject.getString("account");
         List<CapitalReceiptAccount> accounts= JSONArray.parseArray(three, CapitalReceiptAccount.class);
+        //判断该订单是否为编辑单-----若为编辑单则修改数据
+        if(receipt.getApprovalState()!=null) {
+            cras.deleteById(receipt.getReceiptId());//将原有的订单详情删除
+            crbs.deleteById(receipt.getReceiptId());
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(receipt.getApprovalState()==-1){
+                receipt.setApprover("清空");
+                receipt.setApprovalRemarks("清空");
+            }
+            receipt.setApprovalState(type);//订单状态
+            receipt.setUpdateTime(new Date());
+            crs.update(receipt);
+        }else {
+            receipt.setFounder(String.valueOf(sus.queryUserIdByUserName(receipt.getFounder())));
+            receipt.setApprovalState(type);
+            receipt.setFoundTime(new Date());
+            crs.insert(receipt);
+        }
         //绑定收款单
-        for (int i=0;i<bills.size();i++){
+        for (int i = 0; i < bills.size(); i++) {
             bills.get(i).setReceiptId(receipt.getReceiptId());
         }
-        for (int j=0;j<accounts.size();j++){
+        for (int j = 0; j < accounts.size(); j++) {
             accounts.get(j).setReceiptId(receipt.getReceiptId());
         }
-        receipt.setFounder(String.valueOf(sus.queryUserIdByUserName(receipt.getFounder())));
-        receipt.setApprovalState(type);
-        receipt.setFoundTime(new Date());
-        receipt.setUpdateTime(new Date());
-        crs.insert(receipt);
         crbs.insertBatch(bills);
         cras.insertBatch(accounts);
         return AjaxResponse.success(receipt.getReceiptId());

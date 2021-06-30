@@ -130,7 +130,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.capital_cav_cia_cap where id = #{id}
+        delete from frameproject.capital_cav_cia_cap where cav_id = #{id}
     </delete>
 
 </mapper>

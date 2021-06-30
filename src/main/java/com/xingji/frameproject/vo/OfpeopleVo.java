@@ -14,6 +14,8 @@ import java.util.List;
 public class OfpeopleVo {
     private List<SysUser> salemans;//销售人员
     private List<SysUser> purchasemans;//采购人员
+    private List<SysUser> capitals;//资金收付款人员
+    private List<SysUser> stocks;//库存管理人员
     private List<BaseCustomer> customers;//客户
     private List<SysUser> notifiers;//通知人
     private List<BaseVendor> vendors;//供应商

@@ -68,7 +68,7 @@
         <where>
             case_state=0
             <if test="purchaseId != null and purchaseId != ''">
-                and delivery_id = #{purchaseId}
+                and delivery_id like CONCAT('%',#{purchaseId},'%')
             </if>
             <if test="vendor != null and vendor != ''">
                 and vendor = #{vendor}
@@ -80,7 +80,7 @@
         <where>
             case_state=0
             <if test="saleId != null and saleId != ''">
-                and delivery_id = #{saleId}
+                and delivery_id like CONCAT('%',#{saleId},'%')
             </if>
             <if test="otherParty != null and otherParty != ''">
                 and vendor = #{otherParty}

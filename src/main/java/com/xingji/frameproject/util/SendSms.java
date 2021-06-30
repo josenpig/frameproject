@@ -13,14 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
+/**
+* @author: 顾渊白
+* @date: 2021/6/30 8:51
+* @Description:  阿里云短信接口
+* @Param: phone 手机号
+* @return: code 验证码
+*/
 @Component
 public class SendSms {
     Map<String,String> map=new HashMap<>();
     public String SendCode(String phone,int i){
         String accessKeyId=null;
         String accessSecret=null;
-        String SignName="星际进销存";
+        String SignName="星际供销链";
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou",accessKeyId,accessSecret);
         IAcsClient client = new DefaultAcsClient(profile);
         CommonRequest request=new CommonRequest();
@@ -42,7 +48,7 @@ public class SendSms {
         String code=smsCode(phone);
         map.put(phone,code);
         request.putQueryParameter("TemplateParam", "{\"code\":"+code+"}");
-        trydel(map,phone);
+        trydel(map,phone);//启动线程
         try {
             CommonResponse response=client.getCommonResponse(request);
             System.out.println(response.getData());
@@ -51,12 +57,15 @@ public class SendSms {
         }
         return code;
     }
+
     //创建验证码
     public static String smsCode(String phone){
         String random=(int)((Math.random()*9+1)*100000)+"";
         System.out.print("验证码:"+random);
         return random;
     }
+
+    //创建线程存储已发送的验证码
     public static void trydel(Map map,String phone){
         System.out.println("当前所有有效验证码"+map);
         //1分钟后删除验证码
