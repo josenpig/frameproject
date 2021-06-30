@@ -55,5 +55,10 @@
       `status` = 1
     where orderid = #{orderid}
   </update>
+    <update id="setmessage">
+        update message
+        set mid=#{mid}
+        where orderid=#{orderid} and sender=#{sender} and recver=#{recver}
+    </update>
 </mapper>
 

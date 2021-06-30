@@ -60,7 +60,7 @@ public class SaleDeliveryController {
     private BaseProductService baseProductService;
     @Resource
     private BaseOpeningService baseOpeningService;
-    @Resource
+    @Autowired
     private MessageUtil messageUtil;
 
     /**
@@ -141,7 +141,9 @@ public class SaleDeliveryController {
             delivery.setApprovalState(type);//订单状态
             sds.insert(delivery);
             if(type==0){
-                messageUtil.addMessage(Integer.parseInt(delivery.getFounder()),delivery.getOrderId());
+                System.out.println("---------delivery:"+delivery);
+                messageUtil.addMessage(Integer.parseInt(delivery.getFounder()),delivery.getDeliveryId());
+                System.out.println("delivery.getOrderId():"+delivery.getDeliveryId());
             }
         }
         //如果存在销售订单，修改订单状态--绑定出库单

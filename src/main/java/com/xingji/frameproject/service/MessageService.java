@@ -22,4 +22,6 @@ public interface MessageService {
     List<Message1> selecctByRecverandstatusis1(Integer queryUserIdByUserName);
 
     List<Message1> selecctByRecverandstatusis0(Integer queryUserIdByUserName);
+
+    void setmessage(Integer sender, Integer recver, String orderid, Integer mid);
 }

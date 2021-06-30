@@ -27,4 +27,6 @@ public interface MessageDao {
 
 
     List<Message1> selecctByRecverandstatusis0(Integer queryUserIdByUserName);
+
+    void setmessage(@Param("recver") Integer sender,@Param("sender") Integer recver, @Param("orderid")String orderid,@Param("mid") Integer mid);
 }

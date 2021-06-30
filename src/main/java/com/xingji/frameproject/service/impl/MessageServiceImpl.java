@@ -60,4 +60,9 @@ public class MessageServiceImpl implements MessageService {
     public List<Message1> selecctByRecverandstatusis0(Integer queryUserIdByUserName) {
         return this.messageDao.selecctByRecverandstatusis0(queryUserIdByUserName);
     }
+
+    @Override
+    public void setmessage(Integer sender, Integer recver, String orderid, Integer mid) {
+        this.messageDao.setmessage(sender,recver,orderid,mid);
+    }
 }

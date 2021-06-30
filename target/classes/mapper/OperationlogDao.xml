@@ -31,37 +31,37 @@
             resultMap="VoBaseResultMap">
       select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
       from operationlog o
-             inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+             inner join sys_user u on u.user_id=o.userid where o.userid=#{userid,jdbcType=INTEGER} and o.createtime like #{time,jdbcType=VARCHAR} and o.operation like #{input,jdbcType=VARCHAR} order by createtime desc
     </select>
   <select id="findbyCreateTimeAndOperator" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.userid=#{userid,jdbcType=INTEGER} and o.createtime like #{time,jdbcType=VARCHAR} order by createtime desc
   </select>
   <select id="findbyInputAndOperator" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.userid=#{userid,jdbcType=INTEGER} and o.operation like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
   <select id="findbyCreateTimeAndInput" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.createtime like #{time,jdbcType=VARCHAR} and o.operation like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
   <select id="findbyCreateTime" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.createtime like #{time,jdbcType=VARCHAR} order by createtime desc
   </select>
   <select id="findbyOperator" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where user_id = #{operator,jdbcType=INTEGER} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.userid = #{userid,jdbcType=INTEGER} order by createtime desc
   </select>
   <select id="findbyInput" resultMap="VoBaseResultMap">
     select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
     from operationlog o
-           inner join sys_user u on u.user_id=o.userid where userid like #{input,jdbcType=VARCHAR} order by createtime desc
+           inner join sys_user u on u.user_id=o.userid where o.operation like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
