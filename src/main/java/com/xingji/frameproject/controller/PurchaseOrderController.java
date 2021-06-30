@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
-<<<<<<< HEAD
+
 import java.util.*;
-=======
+
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
->>>>>>> 3bc54fd1f86be84826c5637749eadef04bf73e05
+
 
 /**
  * (PurchaseOrder)表控制层
