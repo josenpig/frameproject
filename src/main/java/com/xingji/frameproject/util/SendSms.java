@@ -62,8 +62,7 @@ public class SendSms {
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName",SignName);
         request.putQueryParameter("TemplateCode","SMS_218549025");//注册--超管注册
-        request.putQueryParameter("TemplateParam", "{\"phone\":"+phone+",\"roles\":"+roles+"}");
-        System.out.println("{\"phone\":"+phone+",\"roles\":"+roles+"}");
+        request.putQueryParameter("TemplateParam", "{\"phone\":"+phone+"}");
         try {
             CommonResponse response=client.getCommonResponse(request);
             System.out.println(response.getData());
