@@ -231,7 +231,7 @@ public class SaleReturnController {
             receivable.setCaseState(0);
             crs.insert(receivable);
         }
-        messageUtil.addMessages(Integer.parseInt(order.getApprover()),Integer.parseInt(sos.queryById(orderid).getFounder()),orderid,type);
+        messageUtil.addMessages(Integer.parseInt(order.getApprover()),Integer.parseInt(srs.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(saleReturn);
     }
     /**

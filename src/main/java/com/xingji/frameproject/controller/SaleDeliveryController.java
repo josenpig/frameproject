@@ -296,7 +296,7 @@ public class SaleDeliveryController {
             order.setOrderState(1);
             sos.update(order);
         }
-        messageUtil.addMessages(Integer.parseInt(saleorder.getApprover()), Integer.parseInt(saleorder.getFounder()),orderid,type);
+        messageUtil.addMessages(Integer.parseInt(saleorder.getApprover()), Integer.parseInt(sds.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(saleDelivery);
     }
 }
