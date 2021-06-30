@@ -23,10 +23,11 @@ import java.util.TimerTask;
 @Component
 public class SendSms {
     Map<String,String> map=new HashMap<>();
-    public String SendCode(String phone,int i){
-        String accessKeyId=null;
-        String accessSecret=null;
-        String SignName="星际供销链";
+    private String accessKeyId="LTAI4Fgzwq2Q6LfhWhpRJQL8";
+    private String accessSecret="kw2ekRkeTrncBBq8ZVplflZq19QTls";
+    private String SignName="宇义商城";
+    //获取验证码
+    public String SendCode(String phone){
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou",accessKeyId,accessSecret);
         IAcsClient client = new DefaultAcsClient(profile);
         CommonRequest request=new CommonRequest();
@@ -36,15 +37,7 @@ public class SendSms {
         request.setSysAction("SendSms");
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName",SignName);
-        if (i==1){
-            request.putQueryParameter("TemplateCode","SMS_199600531");//注册
-        }else if(i==2){
-            request.putQueryParameter("TemplateCode","SMS_199771688");//快速登录
-        }else if(i==3){
-            request.putQueryParameter("TemplateCode","SMS_199791543");//修改手机号
-        }else if(i==4){
-            request.putQueryParameter("TemplateCode","SMS_201651159");//修改密码
-        }
+        request.putQueryParameter("TemplateCode","SMS_199771688");//快速登录
         String code=smsCode(phone);
         map.put(phone,code);
         request.putQueryParameter("TemplateParam", "{\"code\":"+code+"}");
@@ -57,7 +50,27 @@ public class SendSms {
         }
         return code;
     }
-
+    //发送注册成功通知
+    public void notice(String phone,String roles){
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou",accessKeyId,accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+        CommonRequest request=new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("PhoneNumbers", phone);
+        request.putQueryParameter("SignName",SignName);
+        request.putQueryParameter("TemplateCode","SMS_218549025");//注册--超管注册
+        request.putQueryParameter("TemplateParam", "{\"phone\":"+phone+",\"roles\":"+roles+"}");
+        System.out.println("{\"phone\":"+phone+",\"roles\":"+roles+"}");
+        try {
+            CommonResponse response=client.getCommonResponse(request);
+            System.out.println(response.getData());
+        } catch (ClientException e) {
+            //e.printStackTrace();
+        }
+    }
     //创建验证码
     public static String smsCode(String phone){
         String random=(int)((Math.random()*9+1)*100000)+"";

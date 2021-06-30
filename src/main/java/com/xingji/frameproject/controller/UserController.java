@@ -106,7 +106,7 @@ public class UserController {
     @PostMapping("/login/getcode/{phone}")
     @ApiOperation(value = "获取验证码",produces = "application/json")
     public AjaxResponse gologin(@PathVariable("phone") String phone) {
-        String code=sendSms.SendCode(phone,2);
+        String code=sendSms.SendCode(phone);
         return AjaxResponse.success(code);
     }
 

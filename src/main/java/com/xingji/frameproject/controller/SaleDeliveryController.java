@@ -141,7 +141,7 @@ public class SaleDeliveryController {
             delivery.setApprovalState(type);//订单状态
             sds.insert(delivery);
             if(type==0){
-                messageUtil.addMessage(Integer.parseInt(delivery.getFounder()),delivery.getOrderId());
+                messageUtil.addMessage(Integer.parseInt(delivery.getFounder()),delivery.getDeliveryId());
             }
         }
         //如果存在销售订单，修改订单状态--绑定出库单
@@ -293,7 +293,7 @@ public class SaleDeliveryController {
             order.setOrderId(saleDelivery.getOrderId());
             order.setUpdateTime(new Date());
             order.setDeliveryState(1);
-            order.setOrderState(1);
+            //order.setOrderState(1);
             sos.update(order);
         }
         messageUtil.addMessages(Integer.parseInt(saleorder.getApprover()), Integer.parseInt(sds.queryById(orderid).getFounder()),orderid,type);

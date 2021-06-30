@@ -128,7 +128,7 @@ public class SaleReturnController {
             }
             srs.insert(salereturn);
             if(type==0){
-                messageUtil.addMessage(Integer.parseInt(salereturn.getFounder()),salereturn.getOrderId());
+                messageUtil.addMessage(Integer.parseInt(salereturn.getFounder()),salereturn.getReturnId());
             }
             //如果存在销售订单，绑定退货单
             if (salereturn.getOrderId() != null) {

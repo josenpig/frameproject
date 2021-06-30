@@ -12,6 +12,7 @@ import com.xingji.frameproject.service.SysRoleService;
 import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.util.MD5;
+import com.xingji.frameproject.util.SendSms;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
 import com.xingji.frameproject.vo.SystemPowerVo;
@@ -43,6 +44,8 @@ public class PowerController {
     SysMenuService sms;
     @Resource
     SysRoleService srs;
+    @Autowired
+    SendSms sendSms;
     /**
      * 角色管理 查询角色所有的菜单及某个角色所具有菜单
      * @param roleId  角色id
@@ -175,13 +178,16 @@ public class PowerController {
         //新增用户
         sus.insert(user);
         //新增用户角色
+        String addroles="";
         List<SysUserRole> lists=new ArrayList<>();
         for (int i=0;i<sysRole.size();i++){
             SysUserRole sysUserRole=new SysUserRole();
             sysUserRole.setUserId(user.getUserId());
             sysUserRole.setRoleId(sysRole.get(i).getRoleId());
             lists.add(sysUserRole);
+            addroles=addroles+srs.queryRoleNameByroleId(sysRole.get(i).getRoleId());
         }
+        sendSms.notice(user.getUserPhone(),'"'+addroles+'"');
         return AjaxResponse.success(sus.insertBatch(lists));
     }
     /**
