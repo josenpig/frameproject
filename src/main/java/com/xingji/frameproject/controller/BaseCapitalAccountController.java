@@ -63,6 +63,17 @@ public class BaseCapitalAccountController {
     };
 
     /**
+     * 查询所有资金账户信息
+     * @return 资金账户集合
+     */
+    @GetMapping("/findAllCapitalAccountVo/list")
+    public AjaxResponse findAllProductToList(){
+        BaseCapitalAccountVo baseCapitalAccount=new BaseCapitalAccountVo();
+        List<BaseCapitalAccountVo> list=baseCapitalAccountService.queryAllVo(baseCapitalAccount);
+        return AjaxResponse.success(list);
+    };
+
+    /**
      * 根据资金账户编号或资金账户名称查询资金账户
      * @return 产品集合
      */

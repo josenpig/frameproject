@@ -64,7 +64,11 @@
 
     <select id="fundAllFundAccountsStatisticsVo" resultMap="FundAccountsStatisticsVoMap">
         SELECT ca.*,st.settlement_type,SUM(pa.this_money),SUM(ra.this_money),p.payment_time,r.receipt_time
-        FROM  `base_capital_account` ca
+        FROM  (
+        SELECT * FROM `base_capital_account`
+        <if test="capitalId != null and capitalId != ''">
+        where capital_id = #{capitalId}
+        </if>) AS ca
         LEFT JOIN (
         SELECT pa.payment_id,fund_account, SUM(this_money) AS this_money FROM `capital_payment_account` pa JOIN `capital_payment` p ON pa.payment_id=p.payment_id
         where p.approval_state!=0
@@ -88,7 +92,7 @@
             <if test="startTime != null and endTime != null">
                 payment_time BETWEEN  #{startTime} AND #{endTime} OR p.payment_time =NULL
                 or receipt_time BETWEEN  #{startTime} AND #{endTime} OR r.receipt_time =NULL
-              </if>
+            </if>
         </where>
         GROUP BY ca.capital_id
     </select>

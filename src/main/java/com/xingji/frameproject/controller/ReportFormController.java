@@ -45,7 +45,7 @@ public class ReportFormController {
      * @return 客户集合
      */
     @GetMapping("/fundAllFundAccountsStatisticsVo")
-    public AjaxResponse fundAllFundAccountsStatisticsVo(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("startTime") String startTime, @Param("endTime") String endTime) throws ParseException {
+    public AjaxResponse fundAllFundAccountsStatisticsVo(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("startTime") String startTime, @Param("endTime") String endTime,@Param("capitalId") String capitalId) throws ParseException {
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
         FundAccountsStatisticsVo fundAccountsStatisticsVo = new FundAccountsStatisticsVo();
@@ -59,7 +59,8 @@ public class ReportFormController {
             Date date2 = simpleDateFormat.parse(endTime);
             fundAccountsStatisticsVo.setEndTime(date2);
         }
-        System.out.println(fundAccountsStatisticsVo);
+        fundAccountsStatisticsVo.setCapitalId(capitalId);
+        System.out.println("fundAccountsStatisticsVo:"+fundAccountsStatisticsVo);
         List<FundAccountsStatisticsVo> list=reportFormService.fundAllFundAccountsStatisticsVo(fundAccountsStatisticsVo);
         System.out.println(list);
         map.put("total",page.getTotal());
