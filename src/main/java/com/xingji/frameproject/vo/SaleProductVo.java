@@ -15,6 +15,7 @@ import java.util.List;
 public class SaleProductVo {
     private String productName;
     private String productId;
+    private String productTypeId;
     private String productType;
     private String remark;
     private String productSpec;

@@ -55,6 +55,7 @@
         <result property="saleUnitPrice" column="purchase_unit_price" jdbcType="NUMERIC"/>
         <result property="remark" column="remarks" jdbcType="VARCHAR"/>
         <result property="gramHeavy" column="gram_heavy" jdbcType="VARCHAR"/>
+        <result property="productTypeId" column="product_type_id" jdbcType="INTEGER"/>
         <result property="productType" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
@@ -69,8 +70,9 @@
         <result property="product_type_name" column="product_type_name" jdbcType="VARCHAR"/>
         <result property="productUnit" column="unit_name" jdbcType="VARCHAR"/>
         <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
-        <result property="expectNum" column="SUM(o.current_number)" jdbcType="INTEGER"/>
+        <result property="expectNum" column="SUM(o.expect_number)" jdbcType="INTEGER"/>
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="priceRatio" column="price_ratio" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
@@ -172,12 +174,13 @@
         <where>
             <if test="productTypeId != null">
                 and p.product_type_id = #{productTypeId}
+                or t.product_type_parent_id=#{productTypeId}
             </if>
             <if test="productId != null">
                 and p.product_id LIKE CONCAT('%',#{productId},'%')
             </if>
             <if test="productName != null and productName != ''">
-                and p.product_name LIKE CONCAT('%',#{productName,jdbcType=VARCHA},'%')
+                and p.product_name LIKE CONCAT('%',#{productName},'%')
             </if>
         </where>
         GROUP BY p.product_id
@@ -191,17 +194,32 @@
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
         LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
-        where p.state=1
+        <where>
+            <if test="productTypeId != null and productTypeId != ''">
+                and p.product_type_id = #{productTypeId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and p.product_name LIKE CONCAT('%',#{productName},'%')
+            </if>
+            and p.state=1
+        </where>
         GROUP BY p.product_id
     </select>
     <select id="allPurchaseProduct" resultMap="PurchaseProductVo">
-        SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe
-        FROM `base_product` p
+        SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe,price_ratio
+        FROM base_vendor_product v,base_product p
         LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
         LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
         LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        WHERE v.`product_id`=p.`product_id`
+        <if test="vendorName != null and vendorName != ''">
+            AND v.`vendor_id` = #{vendorName}
+        </if>
+        <if test="type != null and type != ''">
+           and t.product_type_name = #{type}
+        </if>
         GROUP BY p.product_id
     </select>
     <select id="allInventoryProject" resultMap="InventoryProjectVo">
@@ -218,11 +236,16 @@
         AND p.product_id = o.product_id
         AND p.picture_id = pic.picture_id
         AND p.user_id = uu.user_id
-        AND o.`depot_name`=#{depotName}
+        <if test="depotName != null and depotName != ''">
+            AND o.`depot_name` = #{depotName}
+        </if>
+        <if test="type != null and type != ''">
+            and t.product_type_name = #{type}
+        </if>
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="productSpec" useGeneratedKeys="true">
+    <insert id="insert" useGeneratedKeys="true">
         insert into frameproject.base_product(product_id, product_name, ingredient,product_spec, unit_id, product_type_id, purchase_unit_price, purchase_money, remarks, product_describe, picture_id, state, user_id, creation_time, update_time, gram_heavy)
         values (#{productId}, #{productName}, #{ingredient},#{productSpec}, #{unitId}, #{productTypeId}, #{purchaseUnitPrice}, #{purchaseMoney}, #{remarks}, #{productDescribe}, #{pictureId}, 1, #{userId}, NOW(), NULL, #{gramHeavy})
     </insert>

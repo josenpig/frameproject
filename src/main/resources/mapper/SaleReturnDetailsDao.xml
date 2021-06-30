@@ -125,7 +125,7 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from frameproject.sale_return_details where id = #{id}
+        delete from frameproject.sale_return_details where return_id = #{id}
     </delete>
 
 </mapper>

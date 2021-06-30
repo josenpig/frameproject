@@ -10,6 +10,12 @@
         <result property="thisMoney" column="this_money" jdbcType="NUMERIC"/>
     </resultMap>
 
+    <resultMap type="com.xingji.frameproject.vo.SalesTopVo" id="SalesTopVoMap">
+        <result property="psum" column="SUM(od.product_num)" jdbcType="INTEGER"/>
+        <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <!--查询单个-->
     <select id="queryById" resultMap="CapitalPaymentAccountMap">
         select
@@ -48,6 +54,12 @@
                 and this_money = #{thisMoney}
             </if>
         </where>
+    </select>
+
+    <select id="querySalesTop" resultMap="SalesTopVoMap">
+        SELECT SUM(od.product_num),od.product_id,p.product_name FROM `purchase_order_details` od
+        LEFT JOIN `base_product` p ON p.product_id=od.product_id
+        GROUP BY od.product_id ORDER BY SUM(od.product_num) DESC
     </select>
 
     <!--新增所有列-->

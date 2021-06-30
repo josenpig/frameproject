@@ -65,7 +65,10 @@ public interface SaleDeliveryService {
      * @return 是否成功
      */
     boolean deleteById(String deliveryId);
-
+    /**
+     * 查询可退换单据
+     * @return 影响行数
+     */
     List<SaleDelivery> canreturn();
 
     //@Cacheable(cacheNames = "allsaleorder")

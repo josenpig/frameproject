@@ -30,6 +30,11 @@ public class SaleReturnDetailsServiceImpl implements SaleReturnDetailsService {
         return this.saleReturnDetailsDao.queryById(returnId);
     }
 
+    @Override
+    public List<SaleReturnDetails> queryAll(SaleReturnDetails saleReturnDetails) {
+        return this.saleReturnDetailsDao.queryAll(saleReturnDetails);
+    }
+
     /**
      * 查询多条数据
      *
@@ -72,7 +77,7 @@ public class SaleReturnDetailsServiceImpl implements SaleReturnDetailsService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.saleReturnDetailsDao.deleteById(id) > 0;
     }
 }

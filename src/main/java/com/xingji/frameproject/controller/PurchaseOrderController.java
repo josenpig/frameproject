@@ -17,7 +17,15 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+>>>>>>> 3bc54fd1f86be84826c5637749eadef04bf73e05
 
 /**
  * (PurchaseOrder)表控制层
@@ -35,6 +43,8 @@ public class PurchaseOrderController {
      */
     @Resource
     private PurchaseOrderService purchaseOrderService;
+    @Resource
+    private PurchaseOrderDetailsService detailsService;
     @Resource
     private PurchaseOrderDetailsService prds;
     @Resource
@@ -125,6 +135,7 @@ public class PurchaseOrderController {
         String two = jsonObject.getString("orderdetails");
         List<PurchaseOrderDetails> orderdetails= JSONArray.parseArray(two, PurchaseOrderDetails.class);
         order.setCreatePeople(String.valueOf(sysUserService.queryUserIdByUserName(order.getCreatePeople())));
+        order.setBuyerName(String.valueOf(sysUserService.queryUserIdByUserName(order.getBuyerName())));
         order.setCreateDate(new Date());
         order.setUpdateDate(new Date());
         order.setVettingState(type);
@@ -220,8 +231,11 @@ public class PurchaseOrderController {
      * @param id 主键
      * @return 数据
      */
-    @GetMapping("/purchaseOrder/approval")
-    public AjaxResponse approvalorder(String id,int type,String user){
+    @PostMapping("/purchaseOrder/approval")
+    public AjaxResponse approvalorder(String id,int type,String user,@RequestBody String product){
+        JSONObject jsonObject = JSONObject.parseObject(product);
+        String one = jsonObject.getString("product");
+        List<PurchaseOrderDetails> orderdetails= JSONArray.parseArray(one, PurchaseOrderDetails.class);
         PurchaseOrder order = new PurchaseOrder();
         order.setId(id);
         order.setVettingState(type);
@@ -229,6 +243,9 @@ public class PurchaseOrderController {
         order.setLastVettingDate(new Date());
         order.setUpdateDate(new Date());
         PurchaseOrder purchaseOrder=purchaseOrderService.update(order);
+        for(PurchaseOrderDetails pod:orderdetails){
+            detailsService.update(pod);
+        }
         return AjaxResponse.success(purchaseOrder);
     }
 

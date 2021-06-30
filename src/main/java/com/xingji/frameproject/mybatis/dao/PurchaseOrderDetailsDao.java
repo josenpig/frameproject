@@ -1,5 +1,6 @@
 package com.xingji.frameproject.mybatis.dao;
 
+import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
 import org.apache.ibatis.annotations.Mapper;
@@ -95,4 +96,9 @@ public interface PurchaseOrderDetailsDao {
      * @return
      */
     int count();
+
+    /**
+     * 通过供应商id和商品id查询单据
+     */
+    List<PurchaseOrderDetails> findPODofVidAndPid(BaseVendorProduct baseVendorProduct);
 }

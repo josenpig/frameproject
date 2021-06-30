@@ -91,7 +91,10 @@ public class SaleDeliveryServiceImpl implements SaleDeliveryService {
     public boolean deleteById(String deliveryId) {
         return this.saleDeliveryDao.deleteById(deliveryId) > 0;
     }
-
+    /**
+     * 查询可退换单据
+     * @return 影响行数
+     */
     @Override
     public List<SaleDelivery> canreturn() {
         return this.saleDeliveryDao.canreturn();

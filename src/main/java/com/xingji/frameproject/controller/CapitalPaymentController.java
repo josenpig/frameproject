@@ -87,37 +87,6 @@ public class CapitalPaymentController {
         List<CapitalPaymentAccount> accounts= JSONArray.parseArray(three, CapitalPaymentAccount.class);
         //绑定付款单
         for (int i=0;i<bills.size();i++){
-//            if (bills.get(i).getPurchaseType().equals("采购订单")){
-//                PurchaseOrder order=pos.queryById(bills.get(i).getPurchaseId());
-//                PurchaseOrder neworder=new PurchaseOrder();
-//                neworder.setId(bills.get(i).getPurchaseId());
-//                if(order.getPaymentOrder()==null) {
-//                    neworder.setPaymentOrder(payment.getPaymentId());
-//                }else {
-//                    neworder.setPaymentOrder(order.getPaymentOrder()+","+payment.getPaymentId());
-//                }
-//                pos.update(neworder);
-//            }else if (bills.get(i).getPurchaseType().equals("采购入库单")){
-//                PurchaseReceipt receipt=prs.queryById(bills.get(i).getPurchaseId());
-//                PurchaseReceipt neworder=new PurchaseReceipt();
-//                neworder.setId(bills.get(i).getPurchaseId());
-//                if(receipt.getPaymentOrder()==null) {
-//                    neworder.setPaymentOrder(payment.getPaymentId());
-//                }else {
-//                    neworder.setPaymentOrder(receipt.getPaymentOrder()+","+payment.getPaymentId());
-//                }
-//                prs.update(neworder);
-//            }else {
-//                PurchaseReturns returns=preturnss.queryById(bills.get(i).getPurchaseId());
-//                PurchaseReturns neworder=new PurchaseReturns();
-//                neworder.setId(bills.get(i).getPurchaseId());
-//                if(returns.getPaymentOrder()==null) {
-//                    neworder.setPaymentOrder(payment.getPaymentId());
-//                }else {
-//                    neworder.setPaymentOrder(returns.getPaymentOrder()+","+payment.getPaymentId());
-//                }
-//                preturnss.update(neworder);
-//            }
             bills.get(i).setPaymentId(payment.getPaymentId());
         }
         for (int j=0;j<accounts.size();j++){
@@ -225,4 +194,15 @@ public class CapitalPaymentController {
         }
         return AjaxResponse.success(true);
     }
+
+    /**
+     * 查询产品销售Top10
+     * @return 产品集合
+     */
+    @GetMapping("/findSalesTop")
+    public AjaxResponse findAllProductToList(){
+        List<SalesTopVo> list=cpas.querySalesTop();
+        System.out.println("SalesTop:"+list);
+        return AjaxResponse.success(list);
+    };
 }

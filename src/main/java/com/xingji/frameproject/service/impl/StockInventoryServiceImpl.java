@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.StockInventoryDao;
 import com.xingji.frameproject.mybatis.entity.StockInventory;
 import com.xingji.frameproject.service.StockInventoryService;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 import org.springframework.stereotype.Service;
 
@@ -140,5 +141,15 @@ public class StockInventoryServiceImpl implements StockInventoryService {
     public boolean deleteBatch(List<Integer> ids) {
         int row = this.stockInventoryDao.deleteBatch(ids);
         return ids.size() == row;
+    }
+
+    /**
+     * 分页查询库存盘点订单列表
+     * @param order
+     * @return
+     */
+    @Override
+    public List<StockInventory> conditionpage(PurchaseReceiptConditionVo order) {
+        return this.stockInventoryDao.conditionpage(order);
     }
 }

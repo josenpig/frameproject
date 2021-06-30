@@ -109,12 +109,11 @@
 
     <!-- 批量新增 -->
     <insert id="batchInsert">
-        insert into purchase_order_details(id, purchase_order_id, product_id, product_num, purchase_money, depot_name,
+        insert into purchase_order_details( purchase_order_id, product_id, product_num, purchase_money, depot_name,
         remark)
         values
         <foreach collection="entities" item="item" index="index" separator=",">
-            (
-            #{item.id}, #{item.purchaseOrderId}, #{item.productId}, #{item.productNum}, #{item.purchaseMoney},
+            ( #{item.purchaseOrderId}, #{item.productId}, #{item.productNum}, #{item.purchaseMoney},
             #{item.depotName}, #{item.remark} )
         </foreach>
     </insert>
@@ -161,5 +160,10 @@
         select
         <include refid="Base_Column_List"/>
         from purchase_order_details p
+    </select>
+    <select id="findPODofVidAndPid" resultMap="PurchaseOrderDetailsMap">
+        SELECT od.* FROM `purchase_order_details` od
+        LEFT JOIN `purchase_order` o ON o.id = od.purchase_order_id
+        where od.product_id=#{productId} AND o.vendor_name=#{vendorId} AND o.order_state!=1
     </select>
 </mapper>

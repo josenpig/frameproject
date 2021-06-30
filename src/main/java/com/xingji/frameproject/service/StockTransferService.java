@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.StockTransfer;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockTransferQueryForm;
 
 import java.util.List;
@@ -94,4 +95,6 @@ public interface StockTransferService {
      * @return 是否成功
      */
     boolean deleteBatch(List<Integer> ids);
+
+    List<StockTransfer> conditionpage(PurchaseReceiptConditionVo order);
 }

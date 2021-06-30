@@ -91,38 +91,98 @@ public class SaleReturnController {
         SaleReturn salereturn = JSON.parseObject(one, SaleReturn.class);
         String two = jsonObject.getString("orderdetails");
         List<SaleReturnDetails> salereturndetails= JSONArray.parseArray(two, SaleReturnDetails.class);
-        salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
-        salereturn.setSalesmen(String.valueOf(sus.queryUserIdByUserName(salereturn.getSalesmen())));
-        salereturn.setFoundTime(new Date());
-        salereturn.setUpdateTime(new Date());
-        salereturn.setApprovalState(type);
-        salereturn.setOrderState(0);
-        salereturn.setReturnState(0);
-        //绑定订单
-        SaleDelivery delivery=sds.queryByIdVo(salereturn.getDeliveryId());
-        if(delivery.getOrderId()!=null){
-            salereturn.setOrderId(delivery.getOrderId());
-        }
         //添加销售退货单信息
         for(int i=0;i<salereturndetails.size();i++){
             salereturndetails.get(i).setReturnId(salereturn.getReturnId());
         }
-        srs.insert(salereturn);
+        //判断该订单是否为草稿单-----若为编辑单则修改数据
+        if(salereturn.getApprovalState()!=1){
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(salereturn.getApprovalState()==-3||salereturn.getApprovalState()==-1){
+                salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
+            }
+            srds.deleteById(salereturn.getReturnId());
+            salereturn.setApprovalState(type);//订单状态
+            salereturn.setUpdateTime(new Date());
+            salereturn.setSalesmen(String.valueOf(sus.queryUserIdByUserName(salereturn.getSalesmen())));
+            srs.update(salereturn);
+        }else {
+            //反之添加订单信息
+            salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
+            salereturn.setSalesmen(String.valueOf(sus.queryUserIdByUserName(salereturn.getSalesmen())));
+            salereturn.setFoundTime(new Date());
+            salereturn.setApprovalState(type);//订单状态
+            salereturn.setOrderState(0);
+            salereturn.setReturnState(0);
+            //绑定订单
+            SaleDelivery delivery = sds.queryByIdVo(salereturn.getDeliveryId());
+            if (delivery.getOrderId() != null) {
+                salereturn.setOrderId(delivery.getOrderId());
+            }
+            srs.insert(salereturn);
+            //如果存在销售订单，绑定退货单
+            if (salereturn.getOrderId() != null) {
+                SaleOrder saleOrder = new SaleOrder();
+                saleOrder.setReturnId(salereturn.getReturnId());
+                saleOrder.setOrderId(salereturn.getOrderId());
+                saleOrder.setUpdateTime(new Date());
+                sos.update(saleOrder);
+            }
+            SaleDelivery saleDelivery = new SaleDelivery();
+            saleDelivery.setDeliveryId(salereturn.getDeliveryId());
+            saleDelivery.setReturnId(salereturn.getReturnId());
+            saleDelivery.setUpdateTime(new Date());
+            sds.update(saleDelivery);
+        }
         srds.insertBatch(salereturndetails);
-        //如果存在销售订单，绑定退货单
-        if (salereturn.getOrderId()!=null){
-            SaleOrder saleOrder=new SaleOrder();
-            saleOrder.setReturnId(salereturn.getReturnId());
-            saleOrder.setOrderId(salereturn.getOrderId());
+        return AjaxResponse.success(salereturn.getReturnId());
+    }
+    /**
+     * 通过主键删除订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/detele/{id}")
+    public AjaxResponse detele(@PathVariable("id") String id) {
+        SaleReturn saleReturn=srs.queryById(id);
+        srds.deleteById(id);
+        //删除关联单据
+        if(saleReturn.getOrderId()!=null) {
+            SaleOrder saleOrder = new SaleOrder();
+            saleOrder.setReturnId("清空");
             saleOrder.setUpdateTime(new Date());
+            saleOrder.setOrderId(saleReturn.getOrderId());
             sos.update(saleOrder);
         }
-        SaleDelivery saleDelivery=new SaleDelivery();
-        saleDelivery.setDeliveryId(salereturn.getDeliveryId());
-        saleDelivery.setReturnId(salereturn.getReturnId());
+        SaleDelivery saleDelivery = new SaleDelivery();
+        saleDelivery.setReturnId("清空");
         saleDelivery.setUpdateTime(new Date());
+        saleDelivery.setOrderId(saleReturn.getDeliveryId());
         sds.update(saleDelivery);
-        return AjaxResponse.success(salereturn.getReturnId());
+        return AjaxResponse.success(srs.deleteById(id));
+    }
+    /**
+     * 通过主键更改订单
+     * @param id 主键
+     * @return 数据
+     */
+    @RequestMapping("/update/{id}")
+    public AjaxResponse update(@PathVariable("id") String id) {
+        SaleReturn saleReturn=srs.queryById(id);
+        SaleReturn neworder=new SaleReturn();
+        neworder.setReturnId(id);
+        neworder.setApprovalState(-3);
+        neworder.setApprover("清空");
+        neworder.setApprovalRemarks("清空");
+        //恢复产品预计可用量
+        List<SaleReturnDetails> returnDetails=srds.queryById(id);
+        for(SaleReturnDetails sdd:returnDetails){
+            bos.productereduce(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
+            bos.expectreduce(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
+        }
+        srs.update(neworder);
+        crs.deleteById(id);
+        return AjaxResponse.success(saleReturn.getReturnId());
     }
     /**
      * 修改销售退货单审批状态

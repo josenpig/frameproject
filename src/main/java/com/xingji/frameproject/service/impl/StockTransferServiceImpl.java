@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.entity.StockTransfer;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockTransferQueryForm;
 import com.xingji.frameproject.mybatis.dao.StockTransferDao;
 import com.xingji.frameproject.service.StockTransferService;
@@ -141,5 +142,15 @@ public class StockTransferServiceImpl implements StockTransferService {
     public boolean deleteBatch(List<Integer> ids) {
         int row = this.stockTransferDao.deleteBatch(ids);
         return ids.size() == row;
+    }
+
+    /**
+     * 分页查询订单列表
+     * @param order
+     * @return
+     */
+    @Override
+    public List<StockTransfer> conditionpage(PurchaseReceiptConditionVo order) {
+        return this.stockTransferDao.conditionpage(order);
     }
 }

@@ -119,10 +119,10 @@
             <if test="deliveryId != null and deliveryId != ''">
                 and delivery_id = #{deliveryId}
             </if>
-            <if test="returnId != null and returnId != ''">
+            <if test="returnId != ''">
                 and return_id = #{returnId}
             </if>
-            <if test="receiptId != null and receiptId != ''">
+            <if test="receiptId != ''">
                 and receipt_id = #{receiptId}
             </if>
             <if test="lastApprovalTime != null">
@@ -194,6 +194,9 @@
             </if>
             <if test="founder != null and founder !=''">
                 and founder = #{founder}
+            </if>
+            <if test="approvalState != null and approvalState == '废弃'" >
+                and approval_state = -3
             </if>
             <if test="approvalState != null and approvalState == '草稿'" >
                 and approval_state = -2
@@ -280,23 +283,26 @@
             <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
             </if>
-            <if test="approver != null and approver != ''">
+            <if test="approver != '' and approver!=null">
                 approver = #{approver},
             </if>
-            <if test="founder != null and founder != ''">
-                founder = #{founder},
-            </if>
-            <if test="foundTime != null">
-                found_time = #{foundTime},
+            <if test="approver =='清空'">
+                approver = null,
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
-            <if test="deliveryId != null and deliveryId != ''">
+            <if test="deliveryId !=null">
                 delivery_id = #{deliveryId},
+            </if>
+            <if test="deliveryId =='清空'">
+                delivery_id = null,
             </if>
             <if test="returnId != null and returnId != ''">
                 return_id = #{returnId},
+            </if>
+            <if test="returnId =='清空'">
+                return_id = null,
             </if>
             <if test="receiptId != null and receiptId != ''">
                 receipt_id = #{receiptId},
@@ -316,8 +322,11 @@
             <if test="advance != null">
                 advance = #{advance},
             </if>
-            <if test="approvalRemarks != null and approvalRemarks != ''">
+            <if test="approvalRemarks!=null">
                 approval_remarks = #{approvalRemarks},
+            </if>
+            <if test="approvalRemarks=='清空'">
+                approval_remarks = null,
             </if>
         </set>
         where order_id = #{orderId}

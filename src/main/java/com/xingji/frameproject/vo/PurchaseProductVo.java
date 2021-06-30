@@ -22,4 +22,5 @@ public class PurchaseProductVo {
     private String remark;
     private int expectNum;
     private String productDescribe;
+    private double priceRatio;
 }

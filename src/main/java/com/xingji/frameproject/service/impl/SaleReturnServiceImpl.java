@@ -52,6 +52,11 @@ public class SaleReturnServiceImpl implements SaleReturnService {
         return this.saleReturnDao.queryAllByLimit(offset, limit);
     }
 
+    @Override
+    public List<SaleReturn> queryAll(SaleReturn saleReturn) {
+        return this.saleReturnDao.queryAll(saleReturn);
+    }
+
     /**
      * 新增数据
      *

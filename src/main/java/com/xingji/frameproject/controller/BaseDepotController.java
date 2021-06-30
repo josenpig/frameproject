@@ -7,9 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
-import com.xingji.frameproject.service.BaseDepotService;
-import com.xingji.frameproject.service.BaseOpeningService;
-import com.xingji.frameproject.service.SysUserService;
+import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -34,13 +32,14 @@ public class BaseDepotController {
     /**
      * 服务对象
      */
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
     @Resource
     private BaseDepotService baseDepotService;
     @Resource
     private BaseOpeningService baseOpeningService;
-
+    @Resource
+    private SaleReturnDetailsService saleReturnDetailsService;//退货单
+    @Resource
+    private SaleDeliveryDetailsService saleDeliveryDetailsService;//销售单
 
     /**
      * 通过主键查询单条数据
@@ -124,14 +123,14 @@ public class BaseDepotController {
      * @return
      */
     @GetMapping("/judgeDepotId")
-    public Boolean judgeId(String id){
+    public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
         BaseDepot baseCustomer =baseDepotService.queryById(id);
         Boolean result=false;
         if (baseCustomer==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
     /**
      * 新增仓库
@@ -177,7 +176,28 @@ public class BaseDepotController {
         if(Dstate==1){
             baseDepot.setState(0);
         }
-        BaseDepot baseCustomer =baseDepotService.update(baseDepot);
-        return  AjaxResponse.success(baseCustomer);
+
+        BaseDepot baseDepot1=baseDepotService.queryById(Did);
+        String baseDepotName=baseDepot1.getDepotName();
+
+        //退货单
+        SaleReturnDetails saleReturnDetails=new SaleReturnDetails();
+        saleReturnDetails.setDepot(baseDepotName);
+        List<SaleReturnDetails> list1=saleReturnDetailsService.queryAll(saleReturnDetails);
+        System.out.println("list1:"+list1);
+
+        //销售单
+        SaleDeliveryDetails saleDeliveryDetails=new SaleDeliveryDetails();
+        saleDeliveryDetails.setDepot(baseDepotName);
+        List<SaleDeliveryDetails> list2=saleDeliveryDetailsService.queryAll(saleDeliveryDetails);
+        System.out.println("list2:"+list2);
+
+        Boolean ret=false;
+        if(list1.size()==0 && list2.size()==0) {
+            BaseDepot baseDepot2 = baseDepotService.update(baseDepot);
+            System.out.println("update State"+baseDepot2);
+            ret=true;
+        }
+        return  AjaxResponse.success(ret);
     };
 }

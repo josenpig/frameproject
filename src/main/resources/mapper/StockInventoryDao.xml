@@ -123,6 +123,48 @@
             </if>
         </where>
     </select>
+    <select id="conditionpage" resultMap="StockInventoryMap">
+        select
+        id,inventory_time,depot_id,depot_name,inventorycount,inventorycounter,inventorypeople,inventorystate,inventorypl,remarks,stockin,stockout
+        from stock_inventory
+        <where>
+            <if test="orderId != null and orderId != ''">
+                and id like CONCAT('%',#{orderId},'%')
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='今天'" >
+                and to_days(inventory_time) = to_days(now())
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='昨天'" >
+                and to_days(now())-to_days(inventory_time) = 1
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(inventory_time)
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本月'" >
+                and DATE_FORMAT( inventory_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="inBoundDate != null and inBoundDate != '' and inBoundDate=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(inventory_time,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and depot_name = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and inventorypeople = #{buyerName}
+            </if>
+            <if test="vettingState != null and vettingState == '待审批'" >
+                and inventorystate = 0
+            </if>
+            <if test="vettingState != null and vettingState == '已驳回'" >
+                and inventorystate = -1
+            </if>
+            <if test="vettingState != null and vettingState == '审批通过'" >
+                and inventorystate = 1
+            </if>
+        </where>
+        ORDER BY inventory_time DESC
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
