@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPaymentAccount;
+import com.xingji.frameproject.vo.SalesTopVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -81,5 +82,10 @@ public interface CapitalPaymentAccountDao {
      */
     int deleteById(String id);
 
+    /**
+     * 查询产品销售Top10
+     * @return 对象列表
+     */
+    List<SalesTopVo> querySalesTop();
 }
 

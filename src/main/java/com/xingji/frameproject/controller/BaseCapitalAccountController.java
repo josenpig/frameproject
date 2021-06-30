@@ -109,14 +109,14 @@ public class BaseCapitalAccountController {
      * @return
      */
     @GetMapping("/judgeCapitalId")
-    public Boolean judgeId(String id){
+    public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
         BaseCapitalAccount baseCapitalAccount =baseCapitalAccountService.queryById(id);
         Boolean result=false;
         if (baseCapitalAccount==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

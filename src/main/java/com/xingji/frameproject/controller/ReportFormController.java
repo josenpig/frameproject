@@ -124,4 +124,14 @@ public class ReportFormController {
         map.put("rows",list);
         return AjaxResponse.success(map);
     };
+
+    /**
+     * 资金账户期间总收入和总支出
+     * @return 客户集合
+     */
+    @GetMapping("/fundAllCount")
+    public AjaxResponse fundAllRsumAndPsum() throws ParseException {
+        List<Integer> list=this.reportFormService.findAllCount();
+        return AjaxResponse.success(list);
+    };
 }

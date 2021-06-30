@@ -51,6 +51,7 @@ public class BaseProductController {
     @Resource
     private BaseVendorProductService baseVendorProductService;
 
+
     /**
      * 通过主键查询单条数据
      *
@@ -90,13 +91,13 @@ public class BaseProductController {
      * @return 产品集合
      */
     @GetMapping("/allpurchaseproduct")
-    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize){
+    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,String vendorName,String type){
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<PurchaseProductVo> purchaseProductVos=baseProductService.allPurchaseProduct();
+        List<PurchaseProductVo> purchaseProductVos=baseProductService.allPurchaseProduct(vendorName,type);
         for(PurchaseProductVo product:purchaseProductVos){
             product.setBaseDepots(baseDepotService.findAll());
-            product.getBaseDepots();
+            product.setPurchaseUnitPrice(product.getPurchaseUnitPrice()*product.getPriceRatio()/100);
         }
         map.put("total",page.getTotal());
         map.put("rows",purchaseProductVos);
@@ -164,20 +165,25 @@ public class BaseProductController {
     public AjaxResponse bacthDelProduct(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
         String ret=null;
-        List<String> pidlist=new ArrayList<>();
         Boolean del=false;
+        List<String> pidlist=new ArrayList<>();
         for(int i=0;i < ids.size();i++){
             //根据产品Id查询采购单
             PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm=new PurchaseOrderDetailsQueryForm();
             purchaseOrderDetailsQueryForm.setProductId(ids.get(i));
             List<PurchaseOrderDetails> list =purchaseOrderDetailsService.queryAndByPojo(purchaseOrderDetailsQueryForm);
-            System.out.println(list);
+            System.out.println("list:"+list);
             //根据产品id查询盘点单
             StockInventoryDetailsQueryForm stockInventoryDetails=new StockInventoryDetailsQueryForm();
             stockInventoryDetails.setProductId(ids.get(i));
             List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
-            System.out.println(list2);
-            if(list.size()==0 && list2.size()==0){
+            System.out.println("list2:"+list2);
+            //根据产品id查询供应商产品单
+            BaseVendorProduct baseVendorProduct=new BaseVendorProduct();
+            baseVendorProduct.setProductId(ids.get(i));
+            List<BaseVendorProduct> list3=baseVendorProductService.queryAll(baseVendorProduct);
+            System.out.println("list3:"+list3);
+            if(list.size()==0 && list2.size()==0 && list3.size()==0){
                 pidlist.add(ids.get(i));
                 del=true;
             }else{
@@ -215,6 +221,8 @@ public class BaseProductController {
         stockInventoryDetails.setProductId(Did);
         List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
         System.out.println(list2);
+        //根据产品id查询供应商产品
+
         String ret=null;
         if(list.size()==0 && list2.size()==0) {
             if (Dstate == 0) {
@@ -256,14 +264,14 @@ public class BaseProductController {
      * @return
      */
     @GetMapping("/judgeProductId")
-    public Boolean judgeId(String id){
+    public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
         BaseProduct baseProduct =baseProductService.queryById(id);
         Boolean result=false;
         if (baseProduct==null){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

@@ -3,10 +3,13 @@ package com.xingji.frameproject.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.InventoryDetailsVo;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.StockTransferDetailsVo;
 import com.xingji.frameproject.vo.form.StockTransferQueryForm;
 import io.swagger.annotations.Api;
@@ -19,7 +22,9 @@ import com.github.pagehelper.PageInfo;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (StockTransfer)表控制层
@@ -179,24 +184,27 @@ public class StockTransferController {
         order.setId(id);
         order.setState(type);
         order.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
+        order.setUpdatePeople(String.valueOf(sysUserService.queryUserIdByUserName(user)));
         order.setUpdateDate(new Date());
         order.setVettingDate(new Date());
         StockTransfer Order=stockTransferService.update(order);
         System.out.println(Order);
         if(type==1){//审核通过添加库存和预计库存
             List<StockTransferDetails> list = detailsService.queryAllById(id);
-            List<BaseOpening> openings = openingService.queryAll(new BaseOpening());
             for (StockTransferDetails std:list){
+                List<BaseOpening> openings = openingService.queryAll(new BaseOpening());
                 boolean flag=true;
                 for (BaseOpening opening:openings){
-                    if(Order.getInwarehouse()==opening.getDepotName() && std.getProductId()==opening.getProductId()){
-                        openingService.expectadd(std.getProductId(),order.getInwarehouse(),std.getProductNum());
-                        openingService.producteadd(std.getProductId(),order.getInwarehouse(),std.getProductNum());
+                    System.out.println(opening.getDepotName().equals(Order.getInwarehouse())&&opening.getProductId().equals(std.getProductId()));
+                    if(Order.getInwarehouse().equals(opening.getDepotName()) && std.getProductId().equals(opening.getProductId())){
+                        openingService.expectadd(std.getProductId(),Order.getInwarehouse(),std.getProductNum());
+                        openingService.producteadd(std.getProductId(),Order.getInwarehouse(),std.getProductNum());
+                        openingService.expectreduce(std.getProductId(),Order.getOutwarehouse(),std.getProductNum());
+                        openingService.productereduce(std.getProductId(),Order.getOutwarehouse(),std.getProductNum());
                         flag=false;
                     }
                 }
                 if (flag){
-                    System.out.println(Order);
                     BaseOpening baseOpening = new BaseOpening();
                     baseOpening.setDepotName(Order.getInwarehouse());
                     baseOpening.setOpeningNumber(std.getProductNum());
@@ -205,9 +213,38 @@ public class StockTransferController {
                     baseOpening.setProductNumber(std.getProductNum());
                     System.out.println(baseOpening);
                     openingService.insert(baseOpening);
+                    openingService.expectreduce(std.getProductId(),Order.getOutwarehouse(),std.getProductNum());
+                    openingService.productereduce(std.getProductId(),Order.getOutwarehouse(),std.getProductNum());
                 }
             }
         }
         return AjaxResponse.success(Order);
+    }
+
+    /**
+     * 分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/stockTransfer/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<StockTransfer> list=stockTransferService.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getVettingName()!=null) {
+                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
+            }
+            list.get(i).setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getCreatePeople())));
+            list.get(i).setUpdatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getUpdatePeople())));
+        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
     }
 }

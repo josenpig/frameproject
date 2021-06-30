@@ -30,4 +30,9 @@ public interface ReportFormService {
      * @return
      */
     List<ProductInventoryVo> findAllProductInventoryVo(ProductInventoryVo productInventoryVo);
+
+    /**
+     * 资金收款，付款总条数
+     */
+    List<Integer> findAllCount();
 }

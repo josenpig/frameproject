@@ -369,18 +369,11 @@
             <if test="vettingState != null and vettingState == '审批通过'" >
                 and vetting_state = 1
             </if>
-
-
-<!--            <if test="state != null">-->
-<!--                and state = #{state}-->
-<!--            </if>-->
-<!--            <if test="vettingState != null">-->
-<!--                and vetting_state = #{vettingState}-->
-<!--            </if>-->
             <if test="createPeople != null and createPeople != ''">
                 and create_people = #{createPeople}
             </if>
         </where>
+        ORDER BY create_date DESC
     </select>
 
 

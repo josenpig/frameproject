@@ -38,7 +38,7 @@ public class LogAspect {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private SysUserService us;
-    private static String username;
+    private static Integer userid;
     @Pointcut("execution(public * com.xingji.frameproject.controller.UserController.gologinByPhone(..))")
     public void getuserByPhone(){
      //this.
@@ -63,7 +63,7 @@ public class LogAspect {
         Integer userid=us.queryUserIdByPhone(cha);
         //用户名
         String  userName=us.queryUserNameByUserId(userid);
-        username = userName;
+        userid=us.queryUserIdByUserName(userName);
     }
     /**
      * 定义切点l
@@ -89,7 +89,7 @@ public class LogAspect {
         int index=xx.indexOf("userName");
         int index2=xx.indexOf('"'+","+'"'+"userPass");
         String cha=xx.substring(index+11,index2);
-        username = cha;
+        userid=us.queryUserIdByUserName(cha);
     }
     //定义切点 @Pointcut
     //在注解的位置切入代码
@@ -149,12 +149,16 @@ public class LogAspect {
         //获取操作时间
         operationlog.setCreatetime(new Date());
         //获取用户名
-        operationlog.setOperator(username);
+
+
+        System.out.println("userid:"+userid);
+        operationlog.setUserId(userid);
         //获取用户ip地址
         String ip= InetAddress.getLocalHost().getHostAddress();
         operationlog.setIpaddress(ip);
         //调用service保存SysLog实体类到数据库
         operationlogService.InsertLog(operationlog);
+        System.out.println("添加操作日志");
     }
 
 }

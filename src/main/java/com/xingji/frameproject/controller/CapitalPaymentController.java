@@ -207,4 +207,15 @@ public class CapitalPaymentController {
         }
         return AjaxResponse.success(true);
     }
+
+    /**
+     * 查询产品销售Top10
+     * @return 产品集合
+     */
+    @GetMapping("/findSalesTop")
+    public AjaxResponse findAllProductToList(){
+        List<SalesTopVo> list=cpas.querySalesTop();
+        System.out.println("SalesTop:"+list);
+        return AjaxResponse.success(list);
+    };
 }

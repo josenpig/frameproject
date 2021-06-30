@@ -25,10 +25,6 @@ public class BaseVendorProduct implements Serializable {
      * 调剂比例
      */
     private Double priceRatio;
-    /**
-     * 该产品在该供应商的采购价格
-     */
-    private Double money;
 
 
     public String getVendorId() {
@@ -53,14 +49,6 @@ public class BaseVendorProduct implements Serializable {
 
     public void setPriceRatio(Double priceRatio) {
         this.priceRatio = priceRatio;
-    }
-
-    public Double getMoney() {
-        return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
     }
 
 }

@@ -2,6 +2,7 @@ package com.xingji.frameproject.service.impl;
 
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.dao.BaseProductDao;
+import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
 import com.xingji.frameproject.service.BaseVendorProductService;
 import com.xingji.frameproject.vo.BaseProductVo;
 import com.xingji.frameproject.service.BaseProductService;
@@ -88,7 +89,9 @@ public class BaseProductServiceImpl implements BaseProductService {
     public Boolean deleteById(String productId) {
         boolean pro=this.baseProductDao.deleteById(productId)>0;
         boolean open=this.baseProductDao.deleteOpingById(productId)>0;
-        boolean ver=this.baseVendorProductService.deleteById(productId);
+        BaseVendorProduct baseVendorProduct=new BaseVendorProduct();
+        baseVendorProduct.setProductId(productId);
+        boolean ver=this.baseVendorProductService.deleteById(baseVendorProduct);
         System.out.println("DELpro"+pro);
         System.out.println("DELopen"+open);
         System.out.println("DElver"+ver);
@@ -109,14 +112,16 @@ public class BaseProductServiceImpl implements BaseProductService {
     public List<SaleProductVo> allsaleproduct(SaleProductVo vo) {
         return this.baseProductDao.allsaleproduct(vo);
     }
+
     /**
      * 查询所有的采购产品
      * @return
      */
     @Override
-    public List<PurchaseProductVo> allPurchaseProduct() {
-        return this.baseProductDao.allPurchaseProduct();
+    public List<PurchaseProductVo> allPurchaseProduct(String vendorName, String type) {
+        return this.baseProductDao.allPurchaseProduct(vendorName,type);
     }
+
 
 
     /**
@@ -124,7 +129,7 @@ public class BaseProductServiceImpl implements BaseProductService {
      * @return
      */
     @Override
-    public List<InventoryProjectVo> allStockInventoryProduct(String depotName) {
-        return this.baseProductDao.allInventoryProject(depotName);
+    public List<InventoryProjectVo> allStockInventoryProduct(String depotName,String type) {
+        return this.baseProductDao.allInventoryProject(depotName,type);
     }
 }

@@ -4,6 +4,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xingji.frameproject.mybatis.dao.PurchaseOrderDetailsDao;
+import com.xingji.frameproject.mybatis.entity.BaseProduct;
+import com.xingji.frameproject.mybatis.entity.BaseVendorProduct;
 import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
 import com.xingji.frameproject.vo.form.PurchaseOrderDetailsQueryForm;
@@ -109,9 +111,9 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
      * @return 实例对象
      */
     @Override
-    public PurchaseOrderDetails update(PurchaseOrderDetails purchaseOrderDetails) {
-        this.purchaseOrderDetailsDao.update(purchaseOrderDetails);
-        return this.queryById(purchaseOrderDetails.getId());
+    public boolean update(PurchaseOrderDetails purchaseOrderDetails) {
+        int i  = this.purchaseOrderDetailsDao.update(purchaseOrderDetails);
+        return i>0?true:false;
     }
 
 
@@ -136,6 +138,11 @@ public class PurchaseOrderDetailsServiceImpl implements PurchaseOrderDetailsServ
     @Override
     public List<PurchaseOrderDetails> queryAndByPojo(PurchaseOrderDetailsQueryForm purchaseOrderDetailsQueryForm) {
         return this.purchaseOrderDetailsDao.queryAndByPojo(purchaseOrderDetailsQueryForm);
+    }
+
+    @Override
+    public List<PurchaseOrderDetails> findPODofVidAndPid(BaseVendorProduct baseVendorProduct) {
+        return this.purchaseOrderDetailsDao.findPODofVidAndPid(baseVendorProduct);
     }
 
 }

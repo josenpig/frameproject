@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+
 /**
  * operationlog
  * @author 
@@ -22,7 +24,7 @@ public class Operationlog implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createtime;
 
-    private String operator;
+    private Integer userId;
 
     private String operation;
 

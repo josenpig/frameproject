@@ -96,7 +96,7 @@ public class BaseUnitController {
      * @return
      */
     @GetMapping("/judgeUnitName")
-    public Boolean judgeUnitName(String UnitName){
+    public AjaxResponse judgeUnitName(String UnitName){
         System.out.println("UnitName:"+UnitName);
         BaseUnit baseUnit =new BaseUnit();
         baseUnit.setUnitName(UnitName);
@@ -105,7 +105,7 @@ public class BaseUnitController {
         if (list.size()==0){
             result=true;
         };
-        return result;
+        return AjaxResponse.success(result);
     };
 
     /**

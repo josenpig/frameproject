@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xingji.frameproject.mybatis.dao.NotificationDao">
+  <resultMap id="BaseResultMap" type="com.xingji.frameproject.mybatis.entity.Notification">
+    <result column="msgId" jdbcType="VARCHAR" property="msgid" />
+    <result column="eid" jdbcType="INTEGER" property="eid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="routeKey" jdbcType="VARCHAR" property="routekey" />
+    <result column="exchange" jdbcType="VARCHAR" property="exchange" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="tryTime" jdbcType="TIMESTAMP" property="trytime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xingji.frameproject.mybatis.entity.Notification">
+    insert into Notification (msgId, eid, `status`, 
+      routeKey, exchange, `count`, 
+      tryTime, createtime, updatetime
+      )
+    values (#{msgid,jdbcType=VARCHAR}, #{eid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{routekey,jdbcType=VARCHAR}, #{exchange,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
+      #{trytime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xingji.frameproject.mybatis.entity.Notification">
+    insert into Notification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="msgid != null">
+        msgId,
+      </if>
+      <if test="eid != null">
+        eid,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="routekey != null">
+        routeKey,
+      </if>
+      <if test="exchange != null">
+        exchange,
+      </if>
+      <if test="count != null">
+        `count`,
+      </if>
+      <if test="trytime != null">
+        tryTime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="msgid != null">
+        #{msgid,jdbcType=VARCHAR},
+      </if>
+      <if test="eid != null">
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="routekey != null">
+        #{routekey,jdbcType=VARCHAR},
+      </if>
+      <if test="exchange != null">
+        #{exchange,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="trytime != null">
+        #{trytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateStautsByMsgid">
+    update Notification set status = #{param1} where msgid = #{param2}
+  </update>
+    <update id="update">
+      update Notification set count = #{param1},updatetime = #{param2}, trytime = #{param3} where msgid=#{param4}
+    </update>
+    <select id="selectBystaus" resultType="com.xingji.frameproject.mybatis.entity.Notification">
+    select * from Notification where status = #{param1}
+  </select>
+  <select id="selectAll" resultType="com.xingji.frameproject.mybatis.entity.Notification">
+    select * from Notification
+  </select>
+</mapper>

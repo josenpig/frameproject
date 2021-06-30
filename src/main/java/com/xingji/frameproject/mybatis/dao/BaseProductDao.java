@@ -102,12 +102,12 @@ public interface BaseProductDao {
     /**
      * 查询所有采购的产品
      */
-    List<PurchaseProductVo> allPurchaseProduct();
+    List<PurchaseProductVo> allPurchaseProduct(@Param("vendorName")String vendorName,@Param("type") String type);
 
     /**
      * 查询所有的库存盘点商品
      * @return
      */
-    List<InventoryProjectVo> allInventoryProject(String depotName);
+    List<InventoryProjectVo> allInventoryProject(@Param("depotName") String depotName,@Param("type") String type);
 }
 

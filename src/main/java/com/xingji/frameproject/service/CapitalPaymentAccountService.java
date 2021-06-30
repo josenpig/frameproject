@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.CapitalPaymentAccount;
+import com.xingji.frameproject.vo.SalesTopVo;
 
 import java.util.List;
 
@@ -47,4 +48,9 @@ public interface CapitalPaymentAccountService {
      */
     boolean deleteById(String id);
 
+    /**
+     * 查询产品销售Top10
+     * @return 对象列表
+     */
+    List<SalesTopVo> querySalesTop();
 }

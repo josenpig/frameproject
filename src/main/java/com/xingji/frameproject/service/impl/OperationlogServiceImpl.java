@@ -3,7 +3,7 @@ package com.xingji.frameproject.service.impl;
 import com.xingji.frameproject.mybatis.dao.OperationlogDao;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 import com.xingji.frameproject.service.OperationlogService;
-import org.springframework.stereotype.Component;
+import com.xingji.frameproject.vo.operationlogVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,42 +25,42 @@ public class OperationlogServiceImpl implements OperationlogService {
     }
 
     @Override
-    public List<Operationlog> findAll(Operationlog operationlog) {
-        return this.operationlogDao.findAll(operationlog);
+    public List<operationlogVo> findAll() {
+        return this.operationlogDao.findAll();
     }
 
     @Override
-    public List<Operationlog> findbyCreateTimeAndOperatorAndInput(String time, String operator, String input) {
-        return this.operationlogDao.findbyCreateTimeAndOperatorAndInput(time,operator,input);
+    public List<operationlogVo> findbyCreateTimeAndOperatorAndInput(String time, Integer operatorid, String input) {
+        return this.operationlogDao.findbyCreateTimeAndOperatorAndInput(time,operatorid,input);
     }
 
     @Override
-    public List<Operationlog> findbyCreateTimeAndOperator(String time, String operator) {
-        return this.operationlogDao.findbyCreateTimeAndOperator(time,operator);
+    public List<operationlogVo> findbyCreateTimeAndOperator(String time, Integer operatorid) {
+        return this.operationlogDao.findbyCreateTimeAndOperator(time,operatorid);
     }
 
     @Override
-    public List<Operationlog> findbyInputAndOperator(String operator, String input) {
-        return this.operationlogDao.findbyInputAndOperator(operator,input);
+    public List<operationlogVo> findbyInputAndOperator(Integer operatorid, String input) {
+        return this.operationlogDao.findbyInputAndOperator(operatorid,input);
     }
 
     @Override
-    public List<Operationlog> findbyCreateTimeAndInput(String time, String input) {
+    public List<operationlogVo> findbyCreateTimeAndInput(String time, String input) {
         return this.operationlogDao.findbyCreateTimeAndInput(time,input);
     }
 
     @Override
-    public List<Operationlog> findbyCreateTime(String time) {
+    public List<operationlogVo> findbyCreateTime(String time) {
         return this.operationlogDao.findbyCreateTime(time);
     }
 
     @Override
-    public List<Operationlog> findbyOperator(String operator) {
-        return this.operationlogDao.findbyOperator(operator);
+    public List<operationlogVo> findbyOperator(Integer operatorid) {
+        return this.operationlogDao.findbyOperator(operatorid);
     }
 
     @Override
-    public List<Operationlog> findbyInput(String input) {
+    public List<operationlogVo> findbyInput(String input) {
         return this.operationlogDao.findbyInput(input);
     }
 }
