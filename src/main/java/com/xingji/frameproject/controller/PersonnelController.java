@@ -41,17 +41,21 @@ public class PersonnelController {
 
     @GetMapping("/ofpeople")
     public AjaxResponse roleusers(){
-        List<SysUser> salemens=us.roleusers(3);
-        List<SysUser> purchasemans=us.roleusers(1);
-        List<SysUser> notifiers=us.queryAll(new SysUser());
-        List<BaseCustomer> customers=bcs.queryAll(new BaseCustomer());
-        List<BaseVendor> vendors=bvs.findAllVendor(new BaseVendor());
-        List<SysRole> sysRoles=sysRoleService.queryAll(new SysRole());
-        List<BaseDepot> depots = depotService.findAll();
+        List<SysUser> salemens=us.roleusers(3);//销售人员
+        List<SysUser> purchasemans=us.roleusers(2);//采购人员
+        List<SysUser> capitals=us.roleusers(5);//资金收付款人员
+        List<SysUser> stocks=us.roleusers(4);//库存管理人员
+        List<SysUser> notifiers=us.queryAll(new SysUser());//所有人员
+        List<BaseCustomer> customers=bcs.queryAll(new BaseCustomer());//客户
+        List<BaseVendor> vendors=bvs.findAllVendor(new BaseVendor());//供应商
+        List<SysRole> sysRoles=sysRoleService.queryAll(new SysRole());//所有角色
+        List<BaseDepot> depots = depotService.findAll();//所有仓库
         OfpeopleVo vo=new OfpeopleVo();
         vo.setDepots(depots);
         vo.setSalemans(salemens);
         vo.setPurchasemans(purchasemans);
+        vo.setCapitals(capitals);
+        vo.setStocks(stocks);
         vo.setCustomers(customers);
         vo.setNotifiers(notifiers);
         vo.setVendors(vendors);
