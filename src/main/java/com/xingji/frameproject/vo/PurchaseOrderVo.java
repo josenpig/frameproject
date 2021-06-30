@@ -1,7 +1,6 @@
 package com.xingji.frameproject.vo;
 
-import com.xingji.frameproject.mybatis.entity.PurchaseOrder;
-import com.xingji.frameproject.mybatis.entity.PurchaseOrderDetails;
+import com.xingji.frameproject.mybatis.entity.*;
 import lombok.Data;
 
 import java.util.List;
@@ -13,4 +12,6 @@ import java.util.List;
 public class PurchaseOrderVo {
     private PurchaseOrder purchaseOrder;//订单信息
     private List<PurchaseOrderDetails> list;//订单详情信息
+    private List<CapitalPaymentBill> payments;//该订单绑定的付款单
+    private List<CapitalCavCiaBill> ciaBills;
 }
