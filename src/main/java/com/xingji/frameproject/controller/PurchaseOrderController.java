@@ -57,7 +57,10 @@ public class PurchaseOrderController {
     private BaseVendorService vendorService;
     @Resource
     private MessageUtil messageUtil;
-
+    @Resource
+    private CapitalPaymentBillService paymentBillService;
+    @Resource
+    private CapitalCavCiaBillService cccbs;
 
 
 
@@ -216,11 +219,14 @@ public class PurchaseOrderController {
         if (order.getVettingName()!=null){
             order.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(order.getVettingName())));
         }
+        List<CapitalCavCiaBill> cavCiaBills = cccbs.relation(order.getId());
 
         List<PurchaseOrderDetails> orderDetails=prds.queryAllByOrderId(id);
         PurchaseOrderVo vo=new PurchaseOrderVo();
         vo.setPurchaseOrder(order);
         vo.setList(orderDetails);
+        vo.setPayments(paymentBillService.relation(order.getId()));
+        vo.setCiaBills(cavCiaBills);
         return AjaxResponse.success(vo);
     }
 

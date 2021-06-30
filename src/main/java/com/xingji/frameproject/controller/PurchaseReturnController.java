@@ -55,7 +55,10 @@ public class PurchaseReturnController {
     private CapitalPayableService payableService;
     @Resource
     private MessageUtil messageUtil;
-
+    @Resource
+    private CapitalPaymentBillService paymentBillService;
+    @Resource
+    private CapitalCavCiaBillService cccbs;
 
     /**
      * 查询所有的可可以采购退货的订单
@@ -144,9 +147,14 @@ public class PurchaseReturnController {
         if (receipt.getVettingName()!=""&&receipt.getVettingName()!=null){
             receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
         }
+        List<CapitalPaymentBill> paymentBills = paymentBillService.relation(receipt.getId());
+        List<CapitalCavCiaBill> cavCiaBills =  cccbs.relation(receipt.getId());
+
         PurchaseReturnVo vo=new PurchaseReturnVo();
         vo.setReturns(receipt);
         vo.setReturnsDetails(Details);
+        vo.setPayments(paymentBills);
+        vo.setCiaBills(cavCiaBills);
         return AjaxResponse.success(vo);
     }
 

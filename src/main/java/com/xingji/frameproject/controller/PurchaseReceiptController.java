@@ -55,7 +55,10 @@ public class PurchaseReceiptController {
     private BaseVendorService vendorService;
     @Resource
     private MessageUtil messageUtil;
-
+    @Resource
+    private CapitalPaymentBillService paymentBillService;
+    @Resource
+    private CapitalCavCiaBillService ciaBillService;
     /**
      * 通过主键查询单条数据
      *
@@ -124,15 +127,14 @@ public class PurchaseReceiptController {
         if(!(receipt.getCreatePeople().equals("null"))&&receipt.getCreatePeople().length()!=0){
             receipt.setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getCreatePeople())));
         }
-//        if (receipt.getVettingName()!=""||receipt.getVettingName()!=null){
-//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
-//        }
-//        if (receipt.getUpdatePeople()!=""||receipt.getUpdatePeople()!=null){
-//            receipt.setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(receipt.getVettingName())));
-//        }
+
+        List<CapitalPaymentBill> paymentBills = paymentBillService.relation(receipt.getId());
+        List<CapitalCavCiaBill> ciaBills = ciaBillService.relation(receipt.getId());
         PurchaseReceiptVo vo=new PurchaseReceiptVo();
         vo.setReceipt(receipt);
         vo.setReceiptDetails(deliveryDetails);
+        vo.setPaymentBills(paymentBills);
+        vo.setCiaBills(ciaBills);
         return AjaxResponse.success(vo);
     }
 
