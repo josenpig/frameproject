@@ -136,12 +136,24 @@ public class OperationlogController {
                 char i = logintime.charAt(9);
                 int num = Integer.parseInt(String.valueOf(i));
                 System.out.println("-----------"+num);
-                num=num+1;
+                char a = logintime.charAt(8);
+                int num8 = Integer.parseInt(String.valueOf(a));
+                System.out.println("-----------"+num);
+                if(num==9){
+                    num8=num8+1;
+                    num=0;
+                }else {
+                    num = num + 1;
+                }
+                String as8=String.valueOf(num8);
                 String as=String.valueOf(num);
+                StringBuilder  sb8=new StringBuilder(as8);
                 StringBuilder sb=new StringBuilder(as);
-                String time=logintime.substring(0,9);
+                String time=logintime.substring(0,8);
                 System.out.println("--------------"+time);
                 sb.insert(0,time);
+                System.out.println("----------------insert1"+sb);
+                sb.insert(8,sb8);
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
@@ -224,13 +236,24 @@ public class OperationlogController {
                 System.out.println("-----------findbyCreateTimeAndOperator");
                 char i = createtime.charAt(9);
                 int num = Integer.parseInt(String.valueOf(i));
+                char a = createtime.charAt(8);
+                int num8 = Integer.parseInt(String.valueOf(a));
                 System.out.println("-----------"+num);
-                num=num+1;
+                if(num==9){
+                    num8=num8+1;
+                    num=0;
+                }else {
+                    num = num + 1;
+                }
+                String as8=String.valueOf(num8);
                 String as=String.valueOf(num);
+                StringBuilder  sb8=new StringBuilder(as8);
                 StringBuilder sb=new StringBuilder(as);
-                String time=createtime.substring(0,9);
+                String time=createtime.substring(0,8);
                 System.out.println("--------------"+time);
                 sb.insert(0,time);
+                System.out.println("----------------insert1"+sb);
+                sb.insert(8,sb8);
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
