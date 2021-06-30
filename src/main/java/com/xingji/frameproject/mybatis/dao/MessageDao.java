@@ -11,7 +11,7 @@ public interface MessageDao {
 
     int insert(Message1 record);
 
-    Message1 selectByOrderid(@Param("orderid") String id);
+    List<Message1> selectByOrderid(@Param("orderid") String id);
 
     List<Message1> selecctByRecver(@Param("recver") Integer recver);
 

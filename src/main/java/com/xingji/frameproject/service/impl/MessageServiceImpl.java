@@ -20,7 +20,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message1 selectByOrderid(String id) {
+    public List<Message1> selectByOrderid(String id) {
         return this.messageDao.selectByOrderid(id);
     }
 

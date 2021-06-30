@@ -73,7 +73,7 @@ public class MessageUtil {
 
         m.setSendtime(LocalDateTime.now());
         messageService.insert(m);
-        Message1 message1=messageService.selectByOrderid(orderid);
+        Message1 message1=messageService.selectByOrderid(orderid).get(0);
         //发送信息
 //        rabbitTemplate.convertAndSend(Constants.MAIL_EXCHANGE_NAME,Constants.MAIL_ROUTING_KEY_NAME,message1,new CorrelationData(msgId));
 //        System.out.println("消息发送成功----------------------");
@@ -132,7 +132,7 @@ public class MessageUtil {
 
         m.setSendtime(LocalDateTime.now());
         messageService.insert(m);
-        Message1 message1=messageService.selectByOrderid(orderid);
+        Message1 message1=messageService.selectByOrderid(orderid).get(0);
         //发送信息
 //        rabbitTemplate.convertAndSend(Constants.MAIL_EXCHANGE_NAME,Constants.MAIL_ROUTING_KEY_NAME,message1,new CorrelationData(msgId));
 //        System.out.println("消息发送成功----------------------");

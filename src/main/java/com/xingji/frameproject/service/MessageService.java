@@ -7,7 +7,7 @@ import java.util.List;
 public interface MessageService {
     void insert(Message1 m);
 
-    Message1 selectByOrderid(String id);
+    List<Message1> selectByOrderid(String id);
 
     List<Message1> selecctByRecver(Integer recver);
 
