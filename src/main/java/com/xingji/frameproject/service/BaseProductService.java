@@ -77,11 +77,11 @@ public interface BaseProductService {
      * 查询所有的采购产品
      * @return
      */
-    List<PurchaseProductVo> allPurchaseProduct();
+    List<PurchaseProductVo> allPurchaseProduct(String vendorName,String type);
 
     /**
      * 查询所有的库存盘点产品信息
      * @return
      */
-    List<InventoryProjectVo> allStockInventoryProduct(String depotName);
+    List<InventoryProjectVo> allStockInventoryProduct(String depotName,String type);
 }

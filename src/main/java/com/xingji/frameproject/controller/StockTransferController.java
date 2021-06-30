@@ -184,6 +184,7 @@ public class StockTransferController {
         order.setId(id);
         order.setState(type);
         order.setVettingName(String.valueOf(sysUserService.queryUserIdByUserName(user)));
+        order.setUpdatePeople(String.valueOf(sysUserService.queryUserIdByUserName(user)));
         order.setUpdateDate(new Date());
         order.setVettingDate(new Date());
         StockTransfer Order=stockTransferService.update(order);
@@ -220,31 +221,30 @@ public class StockTransferController {
         return AjaxResponse.success(Order);
     }
 
-//    /**
-//     * 分页条件查询
-//     * @param conditionpage 条件查询信息
-//     * @return map数据
-//     */
-//    @PostMapping("/stockTransfer/conditionpage")
-//    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
-//        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
-//        String condition = jsonObject.getString("condition");//查询条件
-//        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
-//        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
-//        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
-//        Map<String,Object> map=new HashMap<>();
-//        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-//        List<PurchaseReceipt> list=purchaseReceiptService.conditionpage(order);
-//        for(int i=0;i<list.size();i++){
-//            list.get(i).setVendorName(vendorService.findVendorName(list.get(i).getVendorName()));
-//            if(list.get(i).getVettingName()!=null) {
-//                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
-//            }
-//            list.get(i).setBuyerName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getBuyerName())));
-//            list.get(i).setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getCreatePeople())));
-//        }
-//        map.put("total",page.getTotal());
-//        map.put("rows",list);
-//        return AjaxResponse.success(map);
-//    }
+    /**
+     * 分页条件查询
+     * @param conditionpage 条件查询信息
+     * @return map数据
+     */
+    @PostMapping("/stockTransfer/conditionpage")
+    public AjaxResponse conditionpage(@RequestBody String conditionpage) {
+        JSONObject jsonObject = JSONObject.parseObject(conditionpage);
+        String condition = jsonObject.getString("condition");//查询条件
+        PurchaseReceiptConditionVo order =JSON.parseObject(condition, PurchaseReceiptConditionVo.class);//查询条件Vo
+        int currentPage = Integer.parseInt(jsonObject.getString("currentPage"));
+        int pageSize = Integer.parseInt(jsonObject.getString("pageSize"));
+        Map<String,Object> map=new HashMap<>();
+        Page<Object> page= PageHelper.startPage(currentPage,pageSize);
+        List<StockTransfer> list=stockTransferService.conditionpage(order);
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getVettingName()!=null) {
+                list.get(i).setVettingName(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getVettingName())));
+            }
+            list.get(i).setCreatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getCreatePeople())));
+            list.get(i).setUpdatePeople(sysUserService.queryUserNameByUserId(Integer.valueOf(list.get(i).getUpdatePeople())));
+        }
+        map.put("total",page.getTotal());
+        map.put("rows",list);
+        return AjaxResponse.success(map);
+    }
 }

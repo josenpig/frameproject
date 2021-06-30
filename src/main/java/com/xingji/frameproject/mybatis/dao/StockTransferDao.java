@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.StockTransfer;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockTransferQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -102,5 +103,7 @@ public interface StockTransferDao {
      * @return 影响行数
      */
     int deleteBatchByEntities(List<StockTransfer> stockTransferList);
+
+    List<StockTransfer> conditionpage(PurchaseReceiptConditionVo order);
 }
 

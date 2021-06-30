@@ -72,6 +72,7 @@
         <result property="productNum" column="SUM(o.product_number)" jdbcType="INTEGER"/>
         <result property="expectNum" column="SUM(o.expect_number)" jdbcType="INTEGER"/>
         <result property="productDescribe" column="product_describe" jdbcType="VARCHAR"/>
+        <result property="priceRatio" column="price_ratio" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap type="com.xingji.frameproject.vo.InventoryProjectVo" id="InventoryProjectVo">
         <result property="productName" column="product_name" jdbcType="VARCHAR"/>
@@ -205,13 +206,20 @@
         GROUP BY p.product_id
     </select>
     <select id="allPurchaseProduct" resultMap="PurchaseProductVo">
-        SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe
-        FROM `base_product` p
+        SELECT p.product_name,p.`product_id`,t.product_type_name,SUM(o.product_number),u.unit_name,purchase_unit_price,SUM(o.expect_number),remarks,product_describe,price_ratio
+        FROM base_vendor_product v,base_product p
         LEFT JOIN `base_product_type` t ON p.product_type_id = t.product_type_id
         LEFT JOIN `base_unit` u ON p.unit_id = u.unit_id
         LEFT JOIN `base_opening` o ON p.product_id = o.product_id
         LEFT JOIN `base_picture` pic ON p.picture_id = pic.picture_id
         LEFT JOIN `sys_user` uu ON p.user_id = uu.user_id
+        WHERE v.`product_id`=p.`product_id`
+        <if test="vendorName != null and vendorName != ''">
+            AND v.`vendor_id` = #{vendorName}
+        </if>
+        <if test="type != null and type != ''">
+           and t.product_type_name = #{type}
+        </if>
         GROUP BY p.product_id
     </select>
     <select id="allInventoryProject" resultMap="InventoryProjectVo">
@@ -228,7 +236,12 @@
         AND p.product_id = o.product_id
         AND p.picture_id = pic.picture_id
         AND p.user_id = uu.user_id
-        AND o.`depot_name`=#{depotName}
+        <if test="depotName != null and depotName != ''">
+            AND o.`depot_name` = #{depotName}
+        </if>
+        <if test="type != null and type != ''">
+            and t.product_type_name = #{type}
+        </if>
     </select>
 
     <!--新增所有列-->

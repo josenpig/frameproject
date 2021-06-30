@@ -91,13 +91,13 @@ public class BaseProductController {
      * @return 产品集合
      */
     @GetMapping("/allpurchaseproduct")
-    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize){
+    public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,String vendorName,String type){
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pageSize);
-        List<PurchaseProductVo> purchaseProductVos=baseProductService.allPurchaseProduct();
+        List<PurchaseProductVo> purchaseProductVos=baseProductService.allPurchaseProduct(vendorName,type);
         for(PurchaseProductVo product:purchaseProductVos){
             product.setBaseDepots(baseDepotService.findAll());
-            product.getBaseDepots();
+            product.setPurchaseUnitPrice(product.getPurchaseUnitPrice()*product.getPriceRatio()/100);
         }
         map.put("total",page.getTotal());
         map.put("rows",purchaseProductVos);

@@ -123,6 +123,51 @@ documentDate}
             </if>
         </where>
     </select>
+    <select id="conditionpage" resultMap="StockTransferMap">
+        select
+        id,transfer_date,document_date,inwarehouse,outwarehouse,state,create_people,update_people,vetting_date,vetting_name,update_date
+        from stock_transfer
+        <where>
+            <if test="orderId != null and orderId != ''">
+                and id like CONCAT('%',#{orderId},'%')
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='今天'" >
+                and to_days(transfer_date) = to_days(now())
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='昨天'" >
+                and to_days(now())-to_days(transfer_date) = 1
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本周'" >
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= date(transfer_date)
+            </if>
+            <if test="inBoundDate != null and inBoundDate=='本月'" >
+                and DATE_FORMAT( transfer_date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+            </if>
+            <if test="inBoundDate != null and inBoundDate != '' and inBoundDate=='自定义' and dtimeState!=null and dtimeEnd!=null">
+                and DATE_FORMAT(transfer_date,'%Y-%m-%d') BETWEEN DATE_FORMAT(#{dtimeState},'%Y-%m-%d')
+                AND DATE_FORMAT(#{dtimeEnd},'%Y-%m-%d')
+            </if>
+            <if test="vendorName != null and vendorName != ''">
+                and outwarehouse = #{vendorName}
+            </if>
+            <if test="buyerName != null and buyerName != ''">
+                and inwarehouse = #{buyerName}
+            </if>
+            <if test="vettingState != null and vettingState == '待审批'" >
+                and state = 0
+            </if>
+            <if test="vettingState != null and vettingState == '已驳回'" >
+                and state = -1
+            </if>
+            <if test="vettingState != null and vettingState == '审批通过'" >
+                and state = 1
+            </if>
+            <if test="createPeople != null and createPeople != ''">
+                and create_people = #{createPeople}
+            </if>
+        </where>
+        ORDER BY transfer_date DESC
+    </select>
 
     <!--新增所有列-->
     <insert id="insert">

@@ -1,6 +1,7 @@
 package com.xingji.frameproject.mybatis.dao;
 
 import com.xingji.frameproject.mybatis.entity.StockInventory;
+import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.form.StockInventoryQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -94,4 +95,12 @@ public interface StockInventoryDao {
      * @return 影响行数
      */
     int deleteBatch(List<Integer> ids);
+
+
+    /**
+     *分页查询库存盘点订单列表
+     * @param order
+     * @return
+     */
+    List<StockInventory> conditionpage(PurchaseReceiptConditionVo order);
 }
