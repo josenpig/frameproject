@@ -154,9 +154,6 @@
             <if test="vettingState != null">
                 vetting_state = #{vettingState},
             </if>
-            <if test="contact != null and contact != ''">
-                contact = #{contact},
-            </if>
             <if test="createDate != null">
                 create_date = #{createDate},
             </if>

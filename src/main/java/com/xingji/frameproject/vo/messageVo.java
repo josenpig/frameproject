@@ -1,9 +1,11 @@
 package com.xingji.frameproject.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.LocalDateTime;
@@ -14,9 +16,9 @@ import java.time.LocalDateTime;
 @Data
 public class messageVo {
         /**
-         * 消息id
+         * 消息状态
          */
-        private Integer mid;
+        private String mid;
 
         /**
          * 接收人
@@ -46,6 +48,8 @@ public class messageVo {
         /**
          * 发送时间
          */
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime sendtime;
 
         private static final long serialVersionUID = 1L;

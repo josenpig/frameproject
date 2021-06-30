@@ -1,5 +1,6 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseCharge;
 import com.xingji.frameproject.service.BaseChargeService;
 import com.xingji.frameproject.util.JwtTokenUtil;
@@ -33,6 +34,7 @@ public class BaseChargeController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个负责人")
     @GetMapping("selectOne")
     public BaseCharge selectOne(Integer id) {
         return this.baseChargeService.queryById(id);
@@ -42,6 +44,7 @@ public class BaseChargeController {
      * 查询所有负责人
      * @return 单条数据
      */
+    @Log("查询所有负责人")
     @GetMapping("selectAll")
     public AjaxResponse selectAll() {
         List<BaseCharge> productShowList=baseChargeService.findAllCharge();

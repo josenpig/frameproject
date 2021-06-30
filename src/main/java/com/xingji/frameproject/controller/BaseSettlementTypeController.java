@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseSettlementType;
 import com.xingji.frameproject.mybatis.entity.BaseSettlementType;
 import com.xingji.frameproject.service.BaseCapitalAccountService;
@@ -40,6 +41,7 @@ public class BaseSettlementTypeController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单条结算类型")
     @GetMapping("selectOne")
     public BaseSettlementType selectOne(Integer id) {
         return this.baseSettlementTypeService.queryById(id);
@@ -49,6 +51,7 @@ public class BaseSettlementTypeController {
      * 查询所有结算类型信息
      * @return 结算类型集合
      */
+    @Log("查询所有结算类型信息")
     @GetMapping("/findAllSettlementType")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -65,6 +68,7 @@ public class BaseSettlementTypeController {
      * 查询所有结算类型信息 集合
      * @return 结算类型集合
      */
+    @Log("结算类型集合")
     @GetMapping("/findAllSettlementType/list")
     public AjaxResponse findAllProductToList(){
         BaseSettlementType baseSettlementType=new BaseSettlementType();
@@ -77,6 +81,7 @@ public class BaseSettlementTypeController {
      * @param uid 单位编号
      * @return
      */
+    @Log("删除单位")
     @GetMapping("/delSettlementType")
     public AjaxResponse delSettlementType(String uid){
         Integer id=Integer.valueOf(uid);
@@ -96,6 +101,7 @@ public class BaseSettlementTypeController {
      * @param settlementType
      * @return
      */
+    @Log("判断单位名称是否重复")
     @GetMapping("/judgeSettlementType")
     public AjaxResponse judgeSettlementTypeName(String settlementType){
         System.out.println("SettlementTypeName:"+settlementType);
@@ -114,6 +120,7 @@ public class BaseSettlementTypeController {
      * @param add
      * @return
      */
+    @Log("新增单位")
     @RequestMapping("/addSettlementType")
     public AjaxResponse addSettlementType(@RequestBody String add){
         System.out.println("add"+add);
@@ -130,6 +137,7 @@ public class BaseSettlementTypeController {
      * @param add
      * @return
      */
+    @Log("修改单位")
     @RequestMapping("/updateSettlementType")
     public AjaxResponse updateSettlementType(@RequestBody String add){
         System.out.println(add);

@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
 import com.xingji.frameproject.vo.SaleDeliveryVo;
@@ -53,12 +55,15 @@ public class SaleReturnController {
     private CapitalReceiptBillService srbs;
     @Resource
     private CapitalCavCiaBillService cccbs;
+    @Resource
+    private MessageUtil messageUtil;
 
     /**
      * 通过主键查询销售退货单及销售退货单详情
      * @param id 主键
      * @return vo数据
      */
+    @Log("查询销售退货单及销售退货单详情")
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         SaleReturn saleReturn=srs.queryByIdVo(id);
@@ -84,6 +89,7 @@ public class SaleReturnController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增销售退货单")
     @RequestMapping("/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -121,6 +127,9 @@ public class SaleReturnController {
                 salereturn.setOrderId(delivery.getOrderId());
             }
             srs.insert(salereturn);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(salereturn.getFounder()),salereturn.getOrderId());
+            }
             //如果存在销售订单，绑定退货单
             if (salereturn.getOrderId() != null) {
                 SaleOrder saleOrder = new SaleOrder();
@@ -143,6 +152,7 @@ public class SaleReturnController {
      * @param id 主键
      * @return 数据
      */
+    @Log("删除销售退货单")
     @RequestMapping("/detele/{id}")
     public AjaxResponse detele(@PathVariable("id") String id) {
         SaleReturn saleReturn=srs.queryById(id);
@@ -167,6 +177,7 @@ public class SaleReturnController {
      * @param id 主键
      * @return 数据
      */
+    @Log("更改销售退货单")
     @RequestMapping("/update")
     public AjaxResponse update(String id,Integer type) {
         SaleReturn saleReturn=new SaleReturn();
@@ -188,6 +199,7 @@ public class SaleReturnController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改销售退货单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
         SaleReturn order=new SaleReturn();
@@ -200,7 +212,6 @@ public class SaleReturnController {
         SaleReturn saleReturn=srs.update(order);
         //审批通过产品入库增加当前库存数量
         if(type == 1) {
-            order.setOrderState(1);
             List<SaleReturnDetails> returnDetails=srds.queryById(orderid);
             for(SaleReturnDetails sdd:returnDetails){
                 bos.producteadd(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
@@ -220,6 +231,7 @@ public class SaleReturnController {
             receivable.setCaseState(0);
             crs.insert(receivable);
         }
+        messageUtil.addMessages(Integer.parseInt(order.getApprover()),Integer.parseInt(sos.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(saleReturn);
     }
     /**
@@ -227,6 +239,7 @@ public class SaleReturnController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询销售退货单")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);

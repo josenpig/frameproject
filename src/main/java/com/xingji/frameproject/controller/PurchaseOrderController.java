@@ -6,8 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseOrderVo;
 import com.xingji.frameproject.vo.form.PurchaseOrderQueryForm;
@@ -53,6 +55,8 @@ public class PurchaseOrderController {
     private SysUserService sysUserService;
     @Resource
     private BaseVendorService vendorService;
+    @Resource
+    private MessageUtil messageUtil;
 
 
 
@@ -64,6 +68,7 @@ public class PurchaseOrderController {
      * @param purchaseOrderQueryForm 实例对象
      * @return 实例对象
      */
+    @Log("查询所有采购订单")
     @GetMapping("/purchaseOrder")
     public PageInfo<PurchaseOrder> queryAll(PurchaseOrderQueryForm purchaseOrderQueryForm) {
         return this.purchaseOrderService.queryAll(purchaseOrderQueryForm);
@@ -75,6 +80,7 @@ public class PurchaseOrderController {
      * @param purchaseOrderQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件搜索采购订单")
     @GetMapping("/purchaseOrder/search")
     public PageInfo<PurchaseOrder> queryBySearch(PurchaseOrderQueryForm purchaseOrderQueryForm) {
         return this.purchaseOrderService.queryBySearch(purchaseOrderQueryForm);
@@ -86,6 +92,7 @@ public class PurchaseOrderController {
      * @param purchaseOrderQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件筛选采购订单")
     @GetMapping("/purchaseOrder/screen")
     public PageInfo<PurchaseOrder> queryByScreen(PurchaseOrderQueryForm purchaseOrderQueryForm) {
         return this.purchaseOrderService.queryByScreen(purchaseOrderQueryForm);
@@ -96,6 +103,7 @@ public class PurchaseOrderController {
      * @param find
      * @return
      */
+    @Log("根据条件进行采购订单的查询")
     @RequestMapping("/purchaseOrder/findpage")
     public AjaxResponse selectAllByPage(@RequestBody String find){
         JSONObject jsonObject = JSONObject.parseObject(find);
@@ -127,6 +135,7 @@ public class PurchaseOrderController {
      * @param add
      * @return
      */
+    @Log("新增采购订单数据")
     @RequestMapping("/purchaseOrder/add/{type}")
     public AjaxResponse insert(@PathVariable("type") int type,@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -148,6 +157,7 @@ public class PurchaseOrderController {
         }
         purchaseOrderService.insert(order);
         prds.insertBatch(orderdetails);
+        messageUtil.addMessage(Integer.parseInt(order.getCreatePeople()),order.getId());
         return AjaxResponse.success(order.getId());
     }
 
@@ -157,6 +167,7 @@ public class PurchaseOrderController {
      * @param PurchaseOrderList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量新增采购订单")
     @PostMapping("/purchaseOrder/batch")
     public boolean insertBatch(@RequestBody List<PurchaseOrder> PurchaseOrderList) {
         return this.purchaseOrderService.insertBatch(PurchaseOrderList);
@@ -168,6 +179,7 @@ public class PurchaseOrderController {
      * @param purchaseOrder 实例对象
      * @return 实例对象
      */
+    @Log("修改采购订单")
     @PutMapping("/purchaseOrder")
     public PurchaseOrder update(@RequestBody PurchaseOrder purchaseOrder) {
         return this.purchaseOrderService.update(purchaseOrder);
@@ -181,6 +193,7 @@ public class PurchaseOrderController {
      * @param id 主键
      * @return 是否成功
      */
+    @Log("通过主键删除采购订单")
     @DeleteMapping("/purchaseOrder")
     public boolean deleteById(String id) {
         return this.purchaseOrderService.deleteById(id);
@@ -193,6 +206,7 @@ public class PurchaseOrderController {
      * @param id 主键
      * @return 数据
      */
+    @Log("通过主键查询采购订单")
     @GetMapping("/purchaseOrder/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         PurchaseOrder order=purchaseOrderService.queryById(id);
@@ -216,6 +230,7 @@ public class PurchaseOrderController {
      * @param id 主键
      * @return 数据
      */
+    @Log("采购单的审核，修改采购订单的状态")
     @GetMapping("/purchaseOrder/vetting")
     public AjaxResponse selectvetting(@PathVariable("id") String id) {
         PurchaseOrder order=purchaseOrderService.queryById(id);
@@ -223,6 +238,7 @@ public class PurchaseOrderController {
         PurchaseOrderVo vo=new PurchaseOrderVo();
         vo.setPurchaseOrder(order);
         vo.setList(orderDetails);
+        messageUtil.addMessage(1,order.getId());
         return AjaxResponse.success(vo);
     }
 
@@ -231,6 +247,7 @@ public class PurchaseOrderController {
      * @param id 主键
      * @return 数据
      */
+    @Log("修改采购订单审批状态")
     @PostMapping("/purchaseOrder/approval")
     public AjaxResponse approvalorder(String id,int type,String user,@RequestBody String product){
         JSONObject jsonObject = JSONObject.parseObject(product);
@@ -246,6 +263,7 @@ public class PurchaseOrderController {
         for(PurchaseOrderDetails pod:orderdetails){
             detailsService.update(pod);
         }
+        messageUtil.addMessages(Integer.parseInt(order.getVettingName()),Integer.parseInt(purchaseOrderService.queryById(order.getId()).getCreatePeople()),order.getId(),type);
         return AjaxResponse.success(purchaseOrder);
     }
 

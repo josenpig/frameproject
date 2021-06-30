@@ -5,9 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.*;
+import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -46,12 +49,14 @@ public class CapitalPaymentController {
     private CapitalPaymentBillService cpbs;
     @Resource
     private CapitalPaymentAccountService cpas;
-
+    @Resource
+    private MessageUtil messageUtil;
     /**
      * 通过主键查询单条数据
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个付款单")
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         CapitalPayment payment=cps.queryById(id);
@@ -76,6 +81,8 @@ public class CapitalPaymentController {
         }
         return AjaxResponse.success(vo);
     }
+
+    @Log("新增付款单")
     @PostMapping("/addpayment/{type}")
     public AjaxResponse addreceipt(@PathVariable("type") int type, @RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -102,6 +109,9 @@ public class CapitalPaymentController {
             payment.setApprovalState(type);
             payment.setFoundTime(new Date());
             cps.insert(payment);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(payment.getFounder()),payment.getPaymentId());
+            }
         }
         //绑定付款单
         for (int i=0;i<bills.size();i++){
@@ -114,6 +124,8 @@ public class CapitalPaymentController {
         cpas.insertBatch(accounts);
         return AjaxResponse.success(payment.getPaymentId());
     }
+
+    @Log("付款单分页条件查询")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -140,6 +152,7 @@ public class CapitalPaymentController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改订单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
         //判断订单付款金额是否能够通过审批
@@ -205,6 +218,7 @@ public class CapitalPaymentController {
                 bcas.currentAmountreduce(baseaccount);
             }
         }
+        messageUtil.addMessages(Integer.parseInt(payment.getApprover()),Integer.parseInt(cps.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(true);
     }
 
@@ -212,6 +226,7 @@ public class CapitalPaymentController {
      * 查询产品销售Top10
      * @return 产品集合
      */
+    @Log("查询产品销售Top10")
     @GetMapping("/findSalesTop")
     public AjaxResponse findAllProductToList(){
         List<SalesTopVo> list=cpas.querySalesTop();

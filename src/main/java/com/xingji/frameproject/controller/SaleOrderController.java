@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.*;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -57,11 +59,14 @@ public class SaleOrderController {
     private BaseProductService baseProductService;
     @Resource
     private BaseOpeningService baseOpeningService;
+    @Resource
+    private MessageUtil messageUtil;
     /**
      * 通过主键查询销售订单及销售订单详情
      * @param id 主键
      * @return 数据
      */
+    @Log("查询销售订单及销售订单详情")
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         SaleOrder order=sos.queryById(id);
@@ -93,6 +98,7 @@ public class SaleOrderController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增销售订单")
     @RequestMapping("/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
         //获取json对象
@@ -132,6 +138,9 @@ public class SaleOrderController {
             order.setAdvance(0.00);
             order.setApprovalState(type);//订单状态
             sos.insert(order);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(order.getFounder()),order.getOrderId());
+            }
         }
         sods.insertBatch(orderdetails);
         //订单生成减去预计库存数量
@@ -148,6 +157,7 @@ public class SaleOrderController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询销售订单")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         //获取json对象
@@ -175,6 +185,7 @@ public class SaleOrderController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改销售订单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
         SaleOrder order=new SaleOrder();
@@ -186,13 +197,13 @@ public class SaleOrderController {
         order.setUpdateTime(new Date());
         //订单驳回修改库存
         if(type == -1){
-            order.setOrderState(-1);
             List<SaleOrderDetails> orderDetails=sods.queryById(order.getOrderId());
             for(SaleOrderDetails sod:orderDetails){
                 bos.expectadd(sod.getProductId(),sod.getDepot(),sod.getProductNum());
             }
         }
         SaleOrder saleOrder=sos.update(order);
+        messageUtil.addMessages(Integer.parseInt(order.getApprover()),Integer.parseInt(sos.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(saleOrder);
     }
     /**
@@ -200,6 +211,7 @@ public class SaleOrderController {
      * @param id 主键
      * @return 数据
      */
+    @Log("删除销售订单")
     @RequestMapping("/detele/{id}")
     public AjaxResponse detele(@PathVariable("id") String id) {
         sods.deleteById(id);
@@ -210,6 +222,7 @@ public class SaleOrderController {
      * @param id 主键
      * @return 数据
      */
+    @Log("更改销售订单")
     @RequestMapping("/update")
     public AjaxResponse update(String id,Integer type) {
         SaleOrder order=new SaleOrder();
@@ -229,6 +242,7 @@ public class SaleOrderController {
      * @param orderid 主键
      * @return vos数据
      */
+    @Log("查询销售订单出库状态")
     @GetMapping("/status/{orderid}")
     public AjaxResponse status(@PathVariable("orderid") String orderid){
         SaleOrder sale=sos.queryById(orderid);

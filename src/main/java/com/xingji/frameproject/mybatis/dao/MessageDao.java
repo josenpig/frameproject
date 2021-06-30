@@ -8,17 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface MessageDao {
-    int deleteByPrimaryKey(Integer mid);
 
     int insert(Message1 record);
-
-    int insertSelective(Message1 record);
-
-    Message1 selectByPrimaryKey(Integer mid);
-
-    int updateByPrimaryKeySelective(Message1 record);
-
-    int updateByPrimaryKey(Message1 record);
 
     Message1 selectByOrderid(@Param("orderid") String id);
 

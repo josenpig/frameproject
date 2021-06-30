@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.entity.BaseUnit;
 import com.xingji.frameproject.service.BaseProductService;
@@ -39,6 +40,7 @@ public class BaseUnitController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个单位")
     @GetMapping("selectOne")
     public BaseUnit selectOne(Integer id) {
         return this.baseUnitService.queryById(id);
@@ -48,6 +50,7 @@ public class BaseUnitController {
      * 查询所有单位信息
      * @return 单位集合
      */
+    @Log("查询所有单位信息")
     @GetMapping("/findAllUnit")
     public AjaxResponse findAllUnit(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -64,6 +67,7 @@ public class BaseUnitController {
      * 查询所有单位信息返回集合
      * @return 单位集合
      */
+    @Log("查询所有单位信息返回集合")
     @GetMapping("/findAllUnit/list")
     public AjaxResponse findAllUnitToList(){
         BaseUnit baseUnit=new BaseUnit();
@@ -76,6 +80,7 @@ public class BaseUnitController {
      * @param uid 单位编号
      * @return
      */
+    @Log("删除单位")
     @GetMapping("/delUnit")
     public AjaxResponse delUnit(String uid){
         Integer id=Integer.valueOf(uid);
@@ -95,6 +100,7 @@ public class BaseUnitController {
      * @param UnitName
      * @return
      */
+    @Log("判断单位名称是否重复")
     @GetMapping("/judgeUnitName")
     public AjaxResponse judgeUnitName(String UnitName){
         System.out.println("UnitName:"+UnitName);
@@ -113,6 +119,7 @@ public class BaseUnitController {
      * @param add
      * @return
      */
+    @Log("新增单位")
     @RequestMapping("/addUnit")
     public AjaxResponse addUnit(@RequestBody String add){
         System.out.println(add);
@@ -128,6 +135,7 @@ public class BaseUnitController {
      * @param add
      * @return
      */
+    @Log("修改单位")
     @RequestMapping("/updateUnit")
     public AjaxResponse updateUnit(@RequestBody String add){
         System.out.println(add);

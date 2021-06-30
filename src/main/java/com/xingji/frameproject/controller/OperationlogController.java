@@ -50,7 +50,7 @@ public class OperationlogController {
      * @param logintime
      * @return
      */
-    @Log("查询操作日志")
+
     @GetMapping("/findloginlogbycondition")
     public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
@@ -192,6 +192,7 @@ public class OperationlogController {
      * @param operator
      * @return
      */
+
     @GetMapping("/findoperationlogbycondition")
     public AjaxResponse findoperatorLogByCondition(String operator,Integer currentPage, Integer pagesize,String createtime ,String input) {
         System.out.println("operator: "+operator+"-------currenPage: "+currentPage+"------pagesize: "

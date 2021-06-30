@@ -5,13 +5,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.PurchaseReceipt;
 import com.xingji.frameproject.service.*;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.PurchaseReceiptVo;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +53,8 @@ public class PurchaseReceiptController {
     private SysUserService sysUserService;
     @Resource
     private BaseVendorService vendorService;
+    @Resource
+    private MessageUtil messageUtil;
 
     /**
      * 通过主键查询单条数据
@@ -57,6 +62,7 @@ public class PurchaseReceiptController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个采购入库单")
     @GetMapping("selectOne")
     public PurchaseReceipt selectOne(String id) {
         return this.purchaseReceiptService.queryById(id);
@@ -68,6 +74,7 @@ public class PurchaseReceiptController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增采购入库-单")
     @RequestMapping("/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type, @RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -96,6 +103,7 @@ public class PurchaseReceiptController {
         }
         purchaseReceiptService.insert(delivery);
         detailsService.insertBatch(deliverydetails);
+        messageUtil.addMessage(Integer.parseInt(delivery.getCreatePeople()),delivery.getId());
         return AjaxResponse.success(delivery.getId());
     }
 
@@ -105,6 +113,7 @@ public class PurchaseReceiptController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("通过订单查询采购入库单及入库单详情")
     @GetMapping("/find/{id}")
     public AjaxResponse find(@PathVariable("id") String id) {
         PurchaseReceipt receipt=purchaseReceiptService.queryById(id);
@@ -132,6 +141,7 @@ public class PurchaseReceiptController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改采购出入库单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user){
         PurchaseReceipt receipt = purchaseReceiptService.queryById(orderid);
@@ -189,6 +199,7 @@ public class PurchaseReceiptController {
             order.setOrderState(1);
             purchaseOrderService.update(order);
         }
+        messageUtil.addMessages(Integer.parseInt(receipt.getVettingName()),Integer.parseInt(purchaseReceiptService.queryById(orderid).getCreatePeople()),orderid,type);
         return AjaxResponse.success(receipt);
     }
 
@@ -198,6 +209,7 @@ public class PurchaseReceiptController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询采购出入库单")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);

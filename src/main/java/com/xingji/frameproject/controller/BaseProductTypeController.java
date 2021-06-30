@@ -2,6 +2,7 @@ package com.xingji.frameproject.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.entity.BaseProductType;
 import com.xingji.frameproject.service.BaseProductService;
@@ -38,6 +39,7 @@ public class BaseProductTypeController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
+    @Log("查询单个产品分类")
     public BaseProductType selectOne(Integer id) {
         return this.baseProductTypeService.queryById(id);
     }
@@ -46,6 +48,7 @@ public class BaseProductTypeController {
      * 查询所有产品分类信息
      * @return 产品集合
      */
+    @Log("查询所有产品分类信息")
     @GetMapping("/findProType")
     public AjaxResponse findAllProduct(){
         BaseProductType baseProductType=new BaseProductType();
@@ -64,6 +67,7 @@ public class BaseProductTypeController {
      * 查询所有产品分类信息
      * @return 产品集合
      */
+    @Log("查询所有产品分类信息")
     @GetMapping("/findProType/list")
     public AjaxResponse findAllProductToList(){
         BaseProductType baseProductType=new BaseProductType();
@@ -77,6 +81,7 @@ public class BaseProductTypeController {
      * @param all  所有菜单
      * @return 菜单信息
      */
+    @Log("递归查询产品分类")
     private List<BaseProductType> getChildrens(BaseProductType root, List<BaseProductType> all) {
         List<BaseProductType> children = all.stream().filter(m -> {
             return Objects.equals(m.getProductTypeParentId(), root.getId());
@@ -94,6 +99,7 @@ public class BaseProductTypeController {
      * @param ProductTypeName
      * @return
      */
+    @Log("判断产品分类名称是否重复")
     @GetMapping("/judgeProductTypeName")
     public AjaxResponse judgeProductTypeName(String ProductTypeName){
         System.out.println("ProductTypeName:"+ProductTypeName);
@@ -112,6 +118,7 @@ public class BaseProductTypeController {
      * @param add
      * @return
      */
+    @Log("新增产品分类")
     @RequestMapping("/addProductType")
     public AjaxResponse addProductType(@RequestBody String add){
         System.out.println(add);
@@ -127,6 +134,7 @@ public class BaseProductTypeController {
      * @param add
      * @return
      */
+    @Log("修改产品分类")
     @RequestMapping("/updateProductType")
     public AjaxResponse updateProductType(@RequestBody String add){
         System.out.println(add);
@@ -142,6 +150,7 @@ public class BaseProductTypeController {
      * @param id 产品编号
      * @return
      */
+    @Log("删除产品分类")
     @GetMapping("/delProductType")
     public AjaxResponse delProductType(Integer id){
         System.out.println("del:"+id);

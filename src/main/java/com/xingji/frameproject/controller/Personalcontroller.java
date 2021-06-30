@@ -34,6 +34,7 @@ public class Personalcontroller {
      * @param change json对象
      * @return 是否成功
      */
+    @Log("个人中心 修改用户数据")
     @PostMapping("/changeuesr")
     public AjaxResponse changeuesr(@RequestBody String change) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(change);
@@ -70,6 +71,7 @@ public class Personalcontroller {
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
      */
+    @Log("修改密码")
     @GetMapping("/changeuesrPass")
     public AjaxResponse changeuesrPass(String userName,String userPass,String updatedBy) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         SysUser user =new SysUser();
@@ -90,6 +92,7 @@ public class Personalcontroller {
      * @param username 用户名
      * @return
      */
+    @Log("获取用户信息")
     @GetMapping("/getUsermessage")
     public AjaxResponse getUsermessage(String username) {
         Map<String, Object> map = new HashMap<>();

@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
 import com.xingji.frameproject.vo.PurchaseReturnVo;
@@ -51,12 +53,15 @@ public class PurchaseReturnController {
     private PurchaseReturnsDetailsService purchaseReturnsDetailsService;
     @Resource
     private CapitalPayableService payableService;
+    @Resource
+    private MessageUtil messageUtil;
 
 
     /**
      * 查询所有的可可以采购退货的订单
      * @return
      */
+    @Log("查询所有的可可以采购退货的订单")
     @PostMapping("/purchaseReturn/findcanReturn")
     public AjaxResponse findRetrun(){
         List<PurchaseReceipt> list = receiptService.queryAllByVettingState();
@@ -69,6 +74,7 @@ public class PurchaseReturnController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增采购入库")
     @RequestMapping("purchaseReturn/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type, @RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -87,6 +93,7 @@ public class PurchaseReturnController {
         delivery.setVendorName(vendorService.findVendorId(delivery.getVendorName()));
         returnsService.insert(delivery);
         returnsDetailsService.insertBatch(deliverydetails);
+        messageUtil.addMessage(Integer.parseInt(delivery.getBuyerName()),delivery.getId());
         return AjaxResponse.success(delivery.getId());
     }
 
@@ -96,6 +103,7 @@ public class PurchaseReturnController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询采购退货单")
     @PostMapping("/purchaseReturn/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -126,6 +134,7 @@ public class PurchaseReturnController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询采购退货单及退货单详情")
     @GetMapping("/purchaseReturn/find/{id}")
     public AjaxResponse find(@PathVariable("id") String id) {
         PurchaseReturns receipt=returnsService.queryById(id);
@@ -142,10 +151,11 @@ public class PurchaseReturnController {
     }
 
     /**
-     * 通过主键查询采购入库单及入库单详情
+     * 审核退货单
      * @param id 主键
      * @return 单条数据
      */
+    @Log("审核退货单")
     @GetMapping("/purchaseReturn/approval")
     public AjaxResponse approval(String id,int type,String user){
         PurchaseReturns order = new PurchaseReturns();
@@ -164,18 +174,19 @@ public class PurchaseReturnController {
             }
 
             //新增应付单据
-            payable.setDeliveryId(order.getId());
-            payable.setDeliveryTime(order.getExitDate());
-            payable.setVendor(order.getVendorName());
-            payable.setBuyer(order.getBuyerName());
-            payable.setPayables(order.getOffersPrice());
+            payable.setDeliveryId(returns.getId());
+            payable.setDeliveryTime(returns.getExitDate());
+            payable.setVendor(returns.getVendorName());
+            payable.setBuyer(returns.getBuyerName());
+            payable.setPayables(returns.getOffersPrice());
             payable.setPaid(0.00);
-            payable.setUnpaid(order.getOffersPrice());
+            payable.setUnpaid(returns.getOffersPrice());
             payable.setFounder(user);
             payable.setCaseState(0);
-            payable.setFounder(order.getVettingName());
+            payable.setFounder(returns.getVettingName());
             payableService.insert(payable);
         }
+        messageUtil.addMessages(Integer.parseInt(order.getVettingName()),Integer.parseInt(returnsService.queryById(order.getId()).getBuyerName()),order.getId(),type);
         return AjaxResponse.success(returns);
     }
 

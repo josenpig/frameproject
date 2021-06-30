@@ -1,6 +1,7 @@
 package com.xingji.frameproject.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.StockInventoryDetails;
 import com.xingji.frameproject.service.StockInventoryDetailsService;
 import com.xingji.frameproject.vo.form.StockInventoryDetailsQueryForm;
@@ -29,6 +30,7 @@ public class StockInventoryDetailsController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单条盘点详情")
     @GetMapping("/stockInventoryDetails/one")
     public StockInventoryDetails selectOne(Integer id) {
         return this.stockInventoryDetailsService.queryById(id);
@@ -40,6 +42,7 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetailsQueryForm 实例对象
      * @return 实例对象
      */
+    @Log("查询所有盘点详情")
     @GetMapping("/stockInventoryDetails")
     public PageInfo<StockInventoryDetails> queryAll(StockInventoryDetailsQueryForm stockInventoryDetailsQueryForm) {
         return this.stockInventoryDetailsService.queryAll(stockInventoryDetailsQueryForm);
@@ -51,6 +54,7 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetailsQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件搜索盘点详情")
     @GetMapping("/stockInventoryDetails/search")
     public PageInfo<StockInventoryDetails> queryBySearch(StockInventoryDetailsQueryForm stockInventoryDetailsQueryForm) {
         return this.stockInventoryDetailsService.queryBySearch(stockInventoryDetailsQueryForm);
@@ -62,6 +66,7 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetailsQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件筛选盘点详情")
     @GetMapping("/stockInventoryDetails/screen")
     public PageInfo<StockInventoryDetails> queryByScreen(StockInventoryDetailsQueryForm stockInventoryDetailsQueryForm) {
         return this.stockInventoryDetailsService.queryByScreen(stockInventoryDetailsQueryForm);
@@ -73,8 +78,10 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetails 实例对象
      * @return 实例对象
      */
+    @Log("新增盘点详情")
     @PostMapping("/stockInventoryDetails")
     public StockInventoryDetails insert(@RequestBody StockInventoryDetails stockInventoryDetails) {
+
         return this.stockInventoryDetailsService.insert(stockInventoryDetails);
     }
 
@@ -84,6 +91,7 @@ public class StockInventoryDetailsController {
      * @param StockInventoryDetailsList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量新增盘点详情")
     @PostMapping("/stockInventoryDetails/batch")
     public boolean insertBatch(@RequestBody List<StockInventoryDetails> StockInventoryDetailsList) {
         return this.stockInventoryDetailsService.insertBatch(StockInventoryDetailsList);
@@ -95,6 +103,7 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetails 实例对象
      * @return 实例对象
      */
+    @Log("修改盘点详情")
     @PutMapping("/stockInventoryDetails")
     public StockInventoryDetails update(@RequestBody StockInventoryDetails stockInventoryDetails) {
         return this.stockInventoryDetailsService.update(stockInventoryDetails);
@@ -106,6 +115,7 @@ public class StockInventoryDetailsController {
      * @param stockInventoryDetailsList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量修改盘点详情")
     @PutMapping("/stockInventoryDetails/batch")
     public boolean updateBatch(@RequestBody List<StockInventoryDetails> stockInventoryDetailsList) {
         return this.stockInventoryDetailsService.updateBatch(stockInventoryDetailsList);
@@ -117,6 +127,7 @@ public class StockInventoryDetailsController {
      * @param id 主键
      * @return 是否成功
      */
+    @Log("删除盘点详情")
     @DeleteMapping("/stockInventoryDetails")
     public boolean deleteById(Integer id) {
         return this.stockInventoryDetailsService.deleteById(id);
@@ -128,6 +139,7 @@ public class StockInventoryDetailsController {
      * @param ids 主键列表
      * @return 是否成功
      */
+    @Log("批量删除盘点详情")
     @DeleteMapping("/stockInventoryDetails/batch")
     public boolean deleteBatch(@RequestBody List<Integer> ids) {
         return this.stockInventoryDetailsService.deleteBatch(ids);

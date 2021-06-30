@@ -1,5 +1,6 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.SysMenu;
 import com.xingji.frameproject.mybatis.entity.SysUser;
@@ -52,6 +53,7 @@ public class UserController {
     @Autowired
     SysRoleService sysRoleService;
 
+    @Log("用户账户登录")
     @PostMapping("/login")
     @ApiOperation(value = "用户账户登录",produces = "application/json")
     public AjaxResponse login(@RequestBody SysUser user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -100,6 +102,7 @@ public class UserController {
     }
 
 
+    @Log("获取验证码")
     @PostMapping("/login/getcode/{phone}")
     @ApiOperation(value = "获取验证码",produces = "application/json")
     public AjaxResponse gologin(@PathVariable("phone") String phone) {
@@ -107,6 +110,7 @@ public class UserController {
         return AjaxResponse.success(code);
     }
 
+    @Log("用户手机号登录")
     @PostMapping("/login/fast")
     @ApiOperation(value = "用户手机号登录",produces = "application/json")
     public AjaxResponse gologinByPhone(String phone,String code) {

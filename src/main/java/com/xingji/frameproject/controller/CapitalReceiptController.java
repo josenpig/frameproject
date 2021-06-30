@@ -5,10 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.*;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,12 +50,15 @@ public class CapitalReceiptController {
     private SaleDeliveryService sds;
     @Resource
     private SaleReturnService srs;
+    @Resource
+    private MessageUtil messageUtil;
 
     /**
      * 通过主键查询单条数据
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个收款单")
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         CapitalReceipt receipt=crs.queryById(id);
@@ -77,6 +83,8 @@ public class CapitalReceiptController {
         }
         return AjaxResponse.success(vo);
     }
+
+    @Log("新增收款单")
     @PostMapping("/addreceipt/{type}")
     public AjaxResponse addreceipt(@PathVariable("type") int type,@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -103,6 +111,9 @@ public class CapitalReceiptController {
             receipt.setApprovalState(type);
             receipt.setFoundTime(new Date());
             crs.insert(receipt);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(receipt.getFounder()),receipt.getReceiptId());
+            }
         }
         //绑定收款单
         for (int i = 0; i < bills.size(); i++) {
@@ -115,6 +126,8 @@ public class CapitalReceiptController {
         cras.insertBatch(accounts);
         return AjaxResponse.success(receipt.getReceiptId());
     }
+
+    @Log("分页多条件查询收款单")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -141,6 +154,7 @@ public class CapitalReceiptController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改订单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
         //判断订单收款金额是否能够通过审批
@@ -206,6 +220,7 @@ public class CapitalReceiptController {
                 bcas.currentAmountadd(baseaccount);
             }
         }
+        messageUtil.addMessages(Integer.parseInt(receipt.getApprover()),Integer.parseInt(crs.queryById(orderid).getFounder()),orderid,type);
         return AjaxResponse.success(true);
     }
 }

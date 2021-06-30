@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.SysMenuService;
 import com.xingji.frameproject.service.SysRoleService;
@@ -47,6 +48,7 @@ public class PowerController {
      * @param roleId  角色id
      * @return vo
      */
+    @Log("查询角色所有的菜单及某个角色所具有菜单")
     @PostMapping("/findmenus")
     public AjaxResponse findmenus(Integer roleId){
         SystemPowerVo vo=new SystemPowerVo();
@@ -69,6 +71,7 @@ public class PowerController {
      * @param change  json对象
      * @return vo
      */
+    @Log("通过实体类修改角色菜单")
     @PostMapping("/changerolemenu")
     public AjaxResponse changerolemenu(@RequestBody String change){
         JSONObject jsonObject = JSONObject.parseObject(change);
@@ -78,13 +81,16 @@ public class PowerController {
         SysRole sysRole = JSON.parseObject(roles, SysRole.class);
         sysRole.setUpdatedBy(String.valueOf(sus.queryUserIdByUserName(sysRole.getUpdatedBy())));
         sysRole.setUpdateTime(new Date());
+        //判断是否为删除
+        if(sysRole.getDelFlag()!=null && srs.findtfhasuser(sysRole.getRoleId()).size()==0){//判断角色新是否存在用户
+            return AjaxResponse.success(srs.update(sysRole));
+        }
+        if (sysRole.getDelFlag()!=null && srs.findtfhasuser(sysRole.getRoleId()).size()>0){
+            return AjaxResponse.success(false);
+        }
         //判断菜单数据是否被修改
-        if (sysMenu.size()==0){
-            if(sysRole.getDelFlag()==-1 && srs.findtfhasuser(sysRole.getRoleId()).size()==0){//判断角色新是否存在用户
-                return AjaxResponse.success(srs.update(sysRole));
-            }else {
-                return AjaxResponse.success(false);
-            }
+        if (sysMenu.size()==0 ){
+            return AjaxResponse.success(srs.update(sysRole));
         }else {
             srs.deletemenus(sysRole.getRoleId());//先删除原有的数据
             List<SysRoleMenu> lists=new ArrayList<>();
@@ -103,6 +109,7 @@ public class PowerController {
      * @param add json对象
      * @return vo
      */
+    @Log("添加角色")
     @PostMapping("/addnewrole")
     public AjaxResponse addnewrole(@RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -129,6 +136,7 @@ public class PowerController {
      * 用户管理 查询某个用户所具有的角色
      * @return 菜单信息
      */
+    @Log("查询某个用户所具有的角色")
     @PostMapping("/findroles")
     public AjaxResponse findroles(String username){
         SysUser loginuser = sus.login(username);
@@ -140,6 +148,7 @@ public class PowerController {
      * 用户管理 查询用户所有的角色
      * @return 菜单信息
      */
+    @Log("查询用户所有的角色")
     @PostMapping("/findallroles")
     public AjaxResponse findallroles(){
         //查询所有角色
@@ -151,6 +160,7 @@ public class PowerController {
      * @param add json对象
      * @return vo
      */
+    @Log("添加用户")
     @PostMapping("/addnewuser")
     public AjaxResponse addnewuser(@RequestBody String add) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -179,6 +189,7 @@ public class PowerController {
      * @param change json对象
      * @return 是否成功
      */
+    @Log("修改用户数据")
     @PostMapping("/changeuesr")
     public AjaxResponse changeuesr(@RequestBody String change) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(change);
@@ -212,6 +223,7 @@ public class PowerController {
      * 菜单管理查询所有菜单
      * @return 菜单信息
      */
+    @Log("菜单管理查询所有菜单")
     @PostMapping("/findmenulist")
     public AjaxResponse findmenulist(){
         List<SysMenu> menulist=sus.usermenu(0);
@@ -229,6 +241,7 @@ public class PowerController {
      * @param username  用户名
      * @return 菜单信息
      */
+    @Log("通过菜单实体类修改菜单")
     @PostMapping("/changemenu/{username}")
     public AjaxResponse change(@RequestBody SysMenu sysMenu, @PathVariable("username")String username){
         boolean tf=sms.change(sysMenu);
@@ -252,6 +265,7 @@ public class PowerController {
      * @param conditionpage 查询条件
      * @return 菜单信息
      */
+    @Log("条件分页查询用户信息")
     @PostMapping("/conditionpageuser")
     public AjaxResponse conditionpageuser(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -277,6 +291,7 @@ public class PowerController {
      * @param conditionpage 查询条件
      * @return 菜单信息
      */
+    @Log("条件分页查询角色信息")
     @PostMapping("/conditionpagerole")
     public AjaxResponse conditionpagerole(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);

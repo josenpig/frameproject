@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.service.*;
@@ -58,6 +59,7 @@ public class BaseProductController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个产品")
     @GetMapping("selectOne")
     public BaseProduct selectOne(String id) {
         return this.baseProductService.queryById(id);
@@ -67,6 +69,7 @@ public class BaseProductController {
      * 查询所有销售产品
      * @return 产品集合
      */
+    @Log("查询所有销售产品")
     @RequestMapping("/allsaleproduct")
     public AjaxResponse findAllsaleproduct(@RequestBody String conditionpage){
         //获取json对象
@@ -90,6 +93,7 @@ public class BaseProductController {
      * 查询所有采购的产品
      * @return 产品集合
      */
+    @Log("查询所有采购的产品")
     @GetMapping("/allpurchaseproduct")
     public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,String vendorName,String type){
         Map<String,Object> map=new HashMap<>();
@@ -108,6 +112,7 @@ public class BaseProductController {
      * 查询所有产品
      * @return 产品集合
      */
+    @Log("查询所有产品")
     @GetMapping("/findAllProduct")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -125,6 +130,7 @@ public class BaseProductController {
      * 查询所有产品 返回list
      * @return 产品集合
      */
+    @Log("查询所有产品 返回list")
     @GetMapping("/findAllProduct/list")
     public AjaxResponse findAllProductToList(){
         BaseProductVo baseProductVo=new BaseProductVo();
@@ -137,6 +143,7 @@ public class BaseProductController {
      * 根据产品id或产品名称查询的产品
      * @return 产品集合
      */
+    @Log("根据产品id或产品名称查询的产品")
     @GetMapping("/findAllProduct/ByIdOrName")
     public AjaxResponse findAllProductByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select, @Param("SearchContent") String SearchContent){
         Map<String,Object> map=new HashMap<>();
@@ -161,6 +168,7 @@ public class BaseProductController {
      * @param ids 产品编号集合
      * @return
      */
+    @Log("批量删除产品")
     @DeleteMapping("/delProduct/batch")
     public AjaxResponse bacthDelProduct(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
@@ -206,6 +214,7 @@ public class BaseProductController {
      * @param Did,Dstate
      * @return
      */
+    @Log("禁用或启用产品")
     @GetMapping("/disableOrEnable")
     public AjaxResponse disableOrEnable(String Did,int Dstate){
         System.out.println(Did+"+Dsate:"+Dstate);
@@ -243,6 +252,7 @@ public class BaseProductController {
      * 根据产品分类的产品
      * @return 产品集合
      */
+    @Log("根据产品分类的产品")
     @GetMapping("/findAllProduct/ByTpye")
     public AjaxResponse findAllProductByTpye(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("id") Integer id){
         Map<String,Object> map=new HashMap<>();
@@ -263,6 +273,7 @@ public class BaseProductController {
      * @param id
      * @return
      */
+    @Log("判断产品Id是否重复")
     @GetMapping("/judgeProductId")
     public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
@@ -279,6 +290,7 @@ public class BaseProductController {
      * @param add
      * @return
      */
+    @Log("添加产品")
     @PostMapping("/addProduct")
     public AjaxResponse addProduct(@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -327,6 +339,7 @@ public class BaseProductController {
      * @param add
      * @return
      */
+    @Log("修改产品")
     @RequestMapping("/updateProduct")
     public AjaxResponse updateProduct(@RequestBody String add){
         System.out.println(add);
@@ -352,6 +365,7 @@ public class BaseProductController {
      * @param element
      * @return
      */
+    @Log("去除指定字符")
     public static String trimFirstAndLastChar(String source,char element){
                 boolean beginIndexFlag = true;
                 boolean endIndexFlag = true;

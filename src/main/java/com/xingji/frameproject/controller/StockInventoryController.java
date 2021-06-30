@@ -49,6 +49,7 @@ public class StockInventoryController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单条库存盘点单记录")
     @GetMapping("/stockInventory/one")
     public StockInventory selectOne(String id) {
         return this.stockInventoryService.queryById(id);
@@ -60,6 +61,7 @@ public class StockInventoryController {
      * @param stockInventoryQueryForm 实例对象
      * @return 实例对象
      */
+    @Log("查询所有库存盘点单记录")
     @GetMapping("/stockInventory")
     public PageInfo<StockInventory> queryAll(StockInventoryQueryForm stockInventoryQueryForm) {
         return this.stockInventoryService.queryAll(stockInventoryQueryForm);
@@ -71,6 +73,7 @@ public class StockInventoryController {
      * @param stockInventoryQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件搜索库存盘点单记录")
     @GetMapping("/stockInventory/search")
     public PageInfo<StockInventory> queryBySearch(StockInventoryQueryForm stockInventoryQueryForm) {
         return this.stockInventoryService.queryBySearch(stockInventoryQueryForm);
@@ -82,6 +85,7 @@ public class StockInventoryController {
      * @param stockInventoryQueryForm
      * @return 对象列表
      */
+    @Log("根据查询条件筛选库存盘点单记录")
     @GetMapping("/stockInventory/screen")
     public PageInfo<StockInventory> queryByScreen(StockInventoryQueryForm stockInventoryQueryForm) {
         return this.stockInventoryService.queryByScreen(stockInventoryQueryForm);
@@ -93,6 +97,7 @@ public class StockInventoryController {
      * @param stockInventory 实例对象
      * @return 实例对象
      */
+    @Log("新增库存盘点单")
     @PostMapping("/stockInventory")
     public StockInventory insert(@RequestBody StockInventory stockInventory) {
         return this.stockInventoryService.insert(stockInventory);
@@ -104,6 +109,7 @@ public class StockInventoryController {
      * @param StockInventoryList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量新增库存盘点单")
     @PostMapping("/stockInventory/batch")
     public boolean insertBatch(@RequestBody List<StockInventory> StockInventoryList) {
         return this.stockInventoryService.insertBatch(StockInventoryList);
@@ -115,6 +121,7 @@ public class StockInventoryController {
      * @param stockInventory 实例对象
      * @return 实例对象
      */
+    @Log("修改库存盘点单")
     @PutMapping("/stockInventory")
     public StockInventory update(@RequestBody StockInventory stockInventory) {
         return this.stockInventoryService.update(stockInventory);
@@ -126,6 +133,7 @@ public class StockInventoryController {
      * @param stockInventoryList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量修改库存盘点单")
     @PutMapping("/stockInventory/batch")
     public boolean updateBatch(@RequestBody List<StockInventory> stockInventoryList) {
         return this.stockInventoryService.updateBatch(stockInventoryList);
@@ -137,6 +145,7 @@ public class StockInventoryController {
      * @param id 主键
      * @return 是否成功
      */
+    @Log("删除库存盘点单")
     @DeleteMapping("/stockInventory")
     public boolean deleteById(String id) {
         return this.stockInventoryService.deleteById(id);
@@ -148,6 +157,7 @@ public class StockInventoryController {
      * @param ids 主键列表
      * @return 是否成功
      */
+    @Log("批量删除库存盘点单")
     @DeleteMapping("/stockInventory/batch")
     public boolean deleteBatch(@RequestBody List<Integer> ids) {
         return this.stockInventoryService.deleteBatch(ids);
@@ -157,6 +167,7 @@ public class StockInventoryController {
      * 查询所有的仓库表
      * @return
      */
+    @Log("查询所有的仓库表")
     @GetMapping("/stockInventory/allDepot")
     public AjaxResponse selectAllDepot(){
         Map<String,Object> map=new HashMap<>();
@@ -170,6 +181,7 @@ public class StockInventoryController {
      * 查询所有库存盘点的产品
      * @return 产品集合
      */
+    @Log("查询所有库存盘点的产品")
     @GetMapping("/stockInventory/allProduct/{depotName}")
     public AjaxResponse findAllPurchaseProduct(Integer currentPage, Integer pageSize,String type,@PathVariable("depotName") String depotName){
         Map<String,Object> map=new HashMap<>();
@@ -192,6 +204,7 @@ public class StockInventoryController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增库存盘点订单")
     @RequestMapping("/stockInventory/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -210,6 +223,7 @@ public class StockInventoryController {
         return AjaxResponse.success(order.getId());
     }
 
+    @Log("查询盘点单以及盘点单详情")
     @GetMapping("/stockInventory/find/{id}")
     public AjaxResponse selectOrder(@PathVariable("id")String orderId){
         InventoryDetailsVo inventoryDetailsVo = new InventoryDetailsVo();
@@ -227,6 +241,7 @@ public class StockInventoryController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询盘点单")
     @PostMapping("/stockInventory/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);

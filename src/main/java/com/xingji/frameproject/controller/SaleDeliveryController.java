@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.SaleConditionPageVo;
 import com.xingji.frameproject.vo.SaleDeliveryVo;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import java.awt.*;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,12 +60,15 @@ public class SaleDeliveryController {
     private BaseProductService baseProductService;
     @Resource
     private BaseOpeningService baseOpeningService;
+    @Resource
+    private MessageUtil messageUtil;
 
     /**
      * 通过主键查询销售出库单及出库单详情
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询销售出库单及出库单详情")
     @GetMapping("/find/{id}")
     public AjaxResponse selectOne(@PathVariable("id") String id) {
         SaleDelivery delivery=sds.queryByIdVo(id);
@@ -96,6 +102,7 @@ public class SaleDeliveryController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增销售出库单")
     @RequestMapping("/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -133,6 +140,9 @@ public class SaleDeliveryController {
             delivery.setDeliveryState(0);
             delivery.setApprovalState(type);//订单状态
             sds.insert(delivery);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(delivery.getFounder()),delivery.getOrderId());
+            }
         }
         //如果存在销售订单，修改订单状态--绑定出库单
         if (delivery.getOrderId()!=null){
@@ -157,6 +167,7 @@ public class SaleDeliveryController {
      * @param id 主键
      * @return 数据
      */
+    @Log("删除订单")
     @RequestMapping("/detele/{id}")
     public AjaxResponse detele(@PathVariable("id") String id) {
         SaleDelivery saleDelivery=sds.queryById(id);
@@ -176,6 +187,7 @@ public class SaleDeliveryController {
      * @param id 主键
      * @return 数据
      */
+    @Log("通过主键更改销售出库订单")
     @RequestMapping("/update")
     public AjaxResponse update(String id,Integer type) {
         SaleDelivery saleDelivery=new SaleDelivery();
@@ -196,6 +208,7 @@ public class SaleDeliveryController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询销售出库单")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -221,6 +234,7 @@ public class SaleDeliveryController {
      * 查询销可以退货的销售出库单
      * @return saleDeliveries数据
      */
+    @Log("查询销可以退货的销售出库单")
     @RequestMapping("/findcanreturn")
     public AjaxResponse selectall(){
         List<SaleDelivery> saleDeliveries=sds.canreturn();
@@ -231,6 +245,7 @@ public class SaleDeliveryController {
      * @param orderid 主键
      * @return 数据
      */
+    @Log("修改销售出库单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String orderid,int type,String user,String approvalremarks){
         SaleDelivery saleorder=new SaleDelivery();
@@ -242,7 +257,6 @@ public class SaleDeliveryController {
         saleorder.setUpdateTime(new Date());
         //订单驳回修改预计库存
         if(type == -1){
-            saleorder.setOrderState(-1);
             saleorder.setUpdateTime(new Date());
             List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(orderid);
             for(SaleDeliveryDetails sdd:deliveryDetails){
@@ -282,6 +296,7 @@ public class SaleDeliveryController {
             order.setOrderState(1);
             sos.update(order);
         }
+        messageUtil.addMessages(Integer.parseInt(saleorder.getApprover()), Integer.parseInt(saleorder.getFounder()),orderid,type);
         return AjaxResponse.success(saleDelivery);
     }
 }

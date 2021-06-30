@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
 import com.xingji.frameproject.vo.InventoryDetailsVo;
 import com.xingji.frameproject.vo.PurchaseReceiptConditionVo;
@@ -50,7 +52,8 @@ public class StockTransferController {
     private SysUserService sysUserService;
     @Resource
     private BaseOpeningService openingService;
-
+    @Resource
+    private MessageUtil messageUtil;
 
     /**
      * 通过主键查询单条数据
@@ -58,6 +61,7 @@ public class StockTransferController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单条调拨单")
     @GetMapping("/stockTransfer/one")
     public StockTransfer selectOne(String id) {
         return this.stockTransferService.queryById(id);
@@ -71,6 +75,7 @@ public class StockTransferController {
      * @param StockTransferList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量新增调拨单")
     @PostMapping("/stockTransfer/batch")
     public boolean insertBatch(@RequestBody List<StockTransfer> StockTransferList) {
         return this.stockTransferService.insertBatch(StockTransferList);
@@ -82,6 +87,7 @@ public class StockTransferController {
      * @param stockTransfer 实例对象
      * @return 实例对象
      */
+    @Log("修改调拨单")
     @PutMapping("/stockTransfer")
     public StockTransfer update(@RequestBody StockTransfer stockTransfer) {
         return this.stockTransferService.update(stockTransfer);
@@ -93,6 +99,7 @@ public class StockTransferController {
      * @param stockTransferList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量修改调拨单")
     @PutMapping("/stockTransfer/batch")
     public boolean updateBatch(@RequestBody List<StockTransfer> stockTransferList) {
         return this.stockTransferService.updateBatch(stockTransferList);
@@ -104,6 +111,7 @@ public class StockTransferController {
      * @param id 主键
      * @return 是否成功
      */
+    @Log("删除调拨单")
     @DeleteMapping("/stockTransfer")
     public boolean deleteById(String id) {
         return this.stockTransferService.deleteById(id);
@@ -115,6 +123,7 @@ public class StockTransferController {
      * @param ids 主键列表
      * @return 是否成功
      */
+    @Log("批量删除调拨单")
     @DeleteMapping("/stockTransfer/batch")
     public boolean deleteBatch(@RequestBody List<Integer> ids) {
         return this.stockTransferService.deleteBatch(ids);
@@ -124,6 +133,7 @@ public class StockTransferController {
      * 查询所有的仓库
      * @return
      */
+    @Log("查询所有的仓库")
     @GetMapping("/stockTransfer/selectAllDepot")
     public AjaxResponse selectAllDepot(){
         List<BaseDepot> list =depotService.findAll();
@@ -136,6 +146,7 @@ public class StockTransferController {
      * @param type 是否为草稿
      * @return 订单id
      */
+    @Log("新增调拨单")
     @RequestMapping("/stockTransfer/add/{type}")
     public AjaxResponse add(@PathVariable("type") int type,@RequestBody String add){
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -153,6 +164,7 @@ public class StockTransferController {
         }
         stockTransferService.insert(order);
         detailsService.insertBatch(orderdetails);
+        messageUtil.addMessage(Integer.parseInt(order.getCreatePeople()),order.getId());
         return AjaxResponse.success(order.getId());
     }
 
@@ -161,6 +173,7 @@ public class StockTransferController {
      * @param orderId
      * @return
      */
+    @Log("根据调拨单编号查找该的调拨单详细信息")
     @GetMapping("/stockTransfer/find/{id}")
     public AjaxResponse selectOrder(@PathVariable("id")String orderId){
         StockTransferDetailsVo DetailsVo = new StockTransferDetailsVo();
@@ -178,6 +191,7 @@ public class StockTransferController {
      * @param id 主键
      * @return 数据
      */
+    @Log("修改调拨单审批状态")
     @GetMapping("/stockTransfer/approval")
     public AjaxResponse approvalorder(String id,int type,String user){
         StockTransfer order = new StockTransfer();
@@ -218,6 +232,7 @@ public class StockTransferController {
                 }
             }
         }
+        messageUtil.addMessages(Integer.parseInt(order.getVettingName()),Integer.parseInt(stockTransferService.queryById(id).getCreatePeople()),id,type);
         return AjaxResponse.success(Order);
     }
 
@@ -226,6 +241,7 @@ public class StockTransferController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询调拨单")
     @PostMapping("/stockTransfer/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);

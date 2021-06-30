@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.MessageDao">
-  <resultMap id="BaseResultMap" type="com.xingji.frameproject.mybatis.entity.Message1">
-    <id column="mId" jdbcType="INTEGER" property="mid" />
-    <result column="recver" jdbcType="INTEGER" property="recver" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="sender" jdbcType="INTEGER" property="sender" />
-    <result column="orderType" jdbcType="VARCHAR" property="ordertype" />
-    <result column="OrderID" jdbcType="VARCHAR" property="orderid" />
-    <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    mId, recver, `status`, sender, orderType, OrderID, sendtime
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from message
-    where mId = #{mid,jdbcType=INTEGER}
-  </select>
+
+    <resultMap type="com.xingji.frameproject.mybatis.entity.Message1" id="MessageMap">
+        <result property="mid" column="mId" jdbcType="INTEGER"/>
+        <result property="recver" column="recver" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="sender" column="sender" jdbcType="INTEGER"/>
+        <result property="ordertype" column="orderType" jdbcType="VARCHAR"/>
+        <result property="orderid" column="OrderID" jdbcType="VARCHAR"/>
+        <result property="sendtime" column="sendtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
   <select id="selectByOrderid" resultType="com.xingji.frameproject.mybatis.entity.Message1">
     select * from message where orderid = #{orderid}
   </select>
-    <select id="selecctByRecver" resultType="com.xingji.frameproject.mybatis.entity.Message1">
+  <select id="selecctByRecver" resultType="com.xingji.frameproject.mybatis.entity.Message1">
       select * from message where recver=#{recver} and status!= 2 order by status,sendtime desc
     </select>
   <select id="selectstatusis1" resultType="java.lang.String">
@@ -34,95 +27,16 @@
   <select id="selecctByRecverandstatusis0" resultType="com.xingji.frameproject.mybatis.entity.Message1">
     select * from message where recver=#{recver} and status = 0 order by sendtime desc
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from message
-    where mId = #{mid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="mId" keyProperty="mid" parameterType="com.xingji.frameproject.mybatis.entity.Message1" useGeneratedKeys="true">
-    insert into message (recver, `status`, sender, 
+  <insert id="insert" parameterType="com.xingji.frameproject.mybatis.entity.Message1" >
+    insert into message (mid,recver, `status`, sender,
       orderType, OrderID, sendtime
       )
-    values (#{recver,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{sender,jdbcType=VARCHAR}, 
+    values (#{mid,jdbcType=INTEGER},#{recver,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{sender,jdbcType=VARCHAR},
       #{ordertype,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, #{sendtime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="mId" keyProperty="mid" parameterType="com.xingji.frameproject.mybatis.entity.Message1" useGeneratedKeys="true">
-    insert into message
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="recver != null">
-        recver,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="sender != null">
-        sender,
-      </if>
-      <if test="ordertype != null">
-        orderType,
-      </if>
-      <if test="orderid != null">
-        OrderID,
-      </if>
-      <if test="sendtime != null">
-        sendtime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="recver != null">
-        #{recver,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="sender != null">
-        #{sender,jdbcType=VARCHAR},
-      </if>
-      <if test="ordertype != null">
-        #{ordertype,jdbcType=VARCHAR},
-      </if>
-      <if test="orderid != null">
-        #{orderid,jdbcType=VARCHAR},
-      </if>
-      <if test="sendtime != null">
-        #{sendtime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xingji.frameproject.mybatis.entity.Message1">
-    update message
-    <set>
-      <if test="recver != null">
-        recver = #{recver,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="sender != null">
-        sender = #{sender,jdbcType=VARCHAR},
-      </if>
-      <if test="ordertype != null">
-        orderType = #{ordertype,jdbcType=VARCHAR},
-      </if>
-      <if test="orderid != null">
-        OrderID = #{orderid,jdbcType=VARCHAR},
-      </if>
-      <if test="sendtime != null">
-        sendtime = #{sendtime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where mId = #{mid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.xingji.frameproject.mybatis.entity.Message1">
-    update message
-    set recver = #{recver,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=INTEGER},
-      sender = #{sender,jdbcType=VARCHAR},
-      orderType = #{ordertype,jdbcType=VARCHAR},
-      OrderID = #{orderid,jdbcType=VARCHAR},
-      sendtime = #{sendtime,jdbcType=TIMESTAMP}
-    where mId = #{mid,jdbcType=INTEGER}
-  </update>
+
+
   <update id="updateisreadByorderid">
     update message
     set
@@ -142,3 +56,4 @@
     where orderid = #{orderid}
   </update>
 </mapper>
+

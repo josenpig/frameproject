@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
@@ -49,6 +50,7 @@ public class CapitalReceivableController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("资金应收分页条件查询")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -72,6 +74,7 @@ public class CapitalReceivableController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("预收单收款分页条件查询")
     @PostMapping("/findsalepage")
     public AjaxResponse findsalepage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -91,6 +94,7 @@ public class CapitalReceivableController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("应收单分页条件查询")
     @PostMapping("/finddeliverypage")
     public AjaxResponse finddeliverypage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -109,6 +113,7 @@ public class CapitalReceivableController {
      * 本次销售订单收款--预收
      * @return 数据
      */
+    @Log("本次销售订单收款--预收")
     @GetMapping("/salethisReceipt")
     public AjaxResponse salethisReceipt(String saleId){
         SaleReceiptVo vo=sos.querythisReceipt(saleId);
@@ -118,6 +123,7 @@ public class CapitalReceivableController {
      * 本次销售出库单收款--应收
      * @return 数据
      */
+    @Log("本次销售出库单收款--应收")
     @GetMapping("/deliverythisReceipt")
     public AjaxResponse deliverythisReceipt(String saleId){
         SaleReceiptVo vo=crs.querythisReceipt(saleId);
@@ -127,6 +133,7 @@ public class CapitalReceivableController {
      * 查询资金账户
      * @return 数据
      */
+    @Log("查询资金账户")
     @GetMapping("/findaccount")
     public AjaxResponse findaccount(){
         BaseCapitalAccountVo baseCapitalAccountVo=new BaseCapitalAccountVo();

@@ -2,6 +2,7 @@ package com.xingji.frameproject.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.BaseVendorProductService;
 import com.xingji.frameproject.service.PurchaseOrderDetailsService;
@@ -37,6 +38,7 @@ public class BaseVendorProductController {
      * @param
      * @return 单条数据
      */
+    @Log("查看单个供应商产品")
     @GetMapping("selectOne")
     public BaseVendorProduct selectOne(String vendorId,String productId) {
         return this.baseVendorProductService.queryById(vendorId,productId);
@@ -46,6 +48,7 @@ public class BaseVendorProductController {
      * 根据供应商id查询供应商下的产品 返回list
      * @return 产品集合
      */
+    @Log("根据供应商id查询供应商下的产品 返回list")
     @GetMapping("/findAllbaseVendorProduct/list")
     public AjaxResponse findAllVendorToList(String vid,String pid,String pname){
         System.out.println("vid"+vid);
@@ -63,6 +66,7 @@ public class BaseVendorProductController {
      * @param add
      * @return
      */
+    @Log("新增供应商下产品")
     @RequestMapping("/addBaseVendorProduct")
     public AjaxResponse addBaseVendorProduct(@RequestBody String add){
         System.out.println(add);
@@ -78,6 +82,7 @@ public class BaseVendorProductController {
      * @param add
      * @return
      */
+    @Log("修改产品")
     @RequestMapping("/updateVendorProduct")
     public AjaxResponse updateVendorProduct(@RequestBody String add){
         System.out.println(add);
@@ -99,6 +104,7 @@ public class BaseVendorProductController {
      * 删除单位
      * @return
      */
+    @Log("删除单位")
     @GetMapping("/delVendorProduct")
     public AjaxResponse delVendorProduct(String vid,String pid){
         System.out.println("vid:"+vid+", pid:"+pid);

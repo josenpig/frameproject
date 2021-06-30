@@ -1,5 +1,6 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.StockTransferDetails;
 import com.xingji.frameproject.vo.form.StockTransferDetailsQueryForm;
 import com.xingji.frameproject.service.StockTransferDetailsService;
@@ -37,6 +38,7 @@ public class StockTransferDetailsController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单条调拨单详情数据")
     @GetMapping("/stockTransferDetails/one")
     public StockTransferDetails selectOne(Long id) {
         return this.stockTransferDetailsService.queryById(id);
@@ -49,6 +51,7 @@ public class StockTransferDetailsController {
      * @param StockTransferDetailsList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量新增调拨单详情数据")
     @PostMapping("/stockTransferDetails/batch")
     public boolean insertBatch(@RequestBody List<StockTransferDetails> StockTransferDetailsList) {
         return this.stockTransferDetailsService.insertBatch(StockTransferDetailsList);
@@ -60,6 +63,7 @@ public class StockTransferDetailsController {
      * @param stockTransferDetails 实例对象
      * @return 实例对象
      */
+    @Log("修改调拨单详情数据")
     @PutMapping("/stockTransferDetails")
     public StockTransferDetails update(@RequestBody StockTransferDetails stockTransferDetails) {
         return this.stockTransferDetailsService.update(stockTransferDetails);
@@ -71,6 +75,7 @@ public class StockTransferDetailsController {
      * @param stockTransferDetailsList 实例对象列表
      * @return 影响行数
      */
+    @Log("批量修改调拨单详情数据")
     @PutMapping("/stockTransferDetails/batch")
     public boolean updateBatch(@RequestBody List<StockTransferDetails> stockTransferDetailsList) {
         return this.stockTransferDetailsService.updateBatch(stockTransferDetailsList);
@@ -82,6 +87,7 @@ public class StockTransferDetailsController {
      * @param id 主键
      * @return 是否成功
      */
+    @Log("删除调拨单详情数据")
     @DeleteMapping("/stockTransferDetails")
     public boolean deleteById(Long id) {
         return this.stockTransferDetailsService.deleteById(id);
@@ -93,6 +99,7 @@ public class StockTransferDetailsController {
      * @param ids 主键列表
      * @return 是否成功
      */
+    @Log("批量删除调拨单详情数据")
     @DeleteMapping("/stockTransferDetails/batch")
     public boolean deleteBatch(@RequestBody List<Integer> ids) {
         return this.stockTransferDetailsService.deleteBatch(ids);

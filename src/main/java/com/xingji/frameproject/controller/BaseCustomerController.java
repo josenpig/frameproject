@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.vo.AjaxResponse;
@@ -44,6 +45,7 @@ public class BaseCustomerController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个客户")
     @GetMapping("selectOne")
     public BaseCustomer selectOne(String id) {
         return this.baseCustomerService.queryById(id);
@@ -53,6 +55,7 @@ public class BaseCustomerController {
      * 查询所有客户信息
      * @return 客户集合
      */
+    @Log("查询所有客户信息")
     @GetMapping("/findAllCustomer")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -69,6 +72,7 @@ public class BaseCustomerController {
      * 根据客户类型或负责人查询的客户
      * @return 客户集合
      */
+    @Log("根据客户类型或负责人查询的客户")
     @GetMapping("/findAllCustomer/ByTypeOrCharge")
     public AjaxResponse findAllCustomerByTypeOrCharge(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("selcharge") String selcharge, @Param("selCustomerType") String selCustomerType){
         System.out.println(selCustomerType+"++++"+selcharge);
@@ -92,6 +96,7 @@ public class BaseCustomerController {
      * 根据客户编号或客户名称查询的客户
      * @return 客户集合
      */
+    @Log("根据客户编号或客户名称查询的客户")
     @GetMapping("/findAllCustomer/ByIdOrName")
     public AjaxResponse findAllProductByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select,@Param("SearchContent") String SearchContent){
         System.out.println(select+"++++"+SearchContent);
@@ -116,6 +121,7 @@ public class BaseCustomerController {
      * @param ids 客户编号集合
      * @return
      */
+    @Log("批量删除客户")
     @DeleteMapping("/delCustomer/batch")
     public AjaxResponse bacthDelCustomer(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
@@ -176,6 +182,7 @@ public class BaseCustomerController {
      * @param cid
      * @return
      */
+    @Log("判断客户Id是否重复")
     @GetMapping("/judgeCustomerId")
     public AjaxResponse judgeId(String cid){
         System.out.println("cid:"+cid);
@@ -192,6 +199,7 @@ public class BaseCustomerController {
      * @param add
      * @return
      */
+    @Log("新增客户")
     @RequestMapping("/addCustomer")
     public AjaxResponse addCustomer(@RequestBody String add){
         System.out.println(add);
@@ -207,6 +215,7 @@ public class BaseCustomerController {
      * @param add
      * @return
      */
+    @Log("修改客户")
     @RequestMapping("/updateCustomer")
     public AjaxResponse updateCustomer(@RequestBody String add){
         System.out.println(add);

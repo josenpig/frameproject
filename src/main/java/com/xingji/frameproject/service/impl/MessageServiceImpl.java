@@ -6,12 +6,13 @@ import com.xingji.frameproject.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
 @Service("MessageService")
 public class MessageServiceImpl implements MessageService {
-    @Autowired
+    @Resource
     private MessageDao messageDao;
     @Override
     public void insert(Message1 m) {

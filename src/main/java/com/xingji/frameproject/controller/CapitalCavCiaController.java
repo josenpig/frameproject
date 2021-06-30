@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
+import com.xingji.frameproject.util.MessageUtil;
 import com.xingji.frameproject.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +47,16 @@ public class CapitalCavCiaController {
     private CapitalPaymentService cps;
     @Resource
     private SysUserService sus;
+    @Resource
+    private MessageUtil messageUtil;
+
 
     /**
      * 通过主键查询核销单及核销单详情
      * @param cavId 主键
      * @return 数据
      */
+    @Log("通过主键查询核销单及核销单详情")
     @GetMapping("/find")
     public AjaxResponse selectOne(String cavId,String cavType) {
         CapitalCavCia order=cccs.queryByIdTpye(cavId,cavType);
@@ -72,6 +78,7 @@ public class CapitalCavCiaController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("核销单应收款分页条件查询-----预收冲应收")
     @PostMapping("/receivablepage")
     public AjaxResponse receivablepage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -91,6 +98,7 @@ public class CapitalCavCiaController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("核销单收款单据分页条件查询-----预收冲应收")
     @PostMapping("/receiptpage")
     public AjaxResponse receiptpage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -110,6 +118,7 @@ public class CapitalCavCiaController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("核销单应付款分页条件查询-----预付冲应付")
     @PostMapping("/payablepage")
     public AjaxResponse payablepage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -129,6 +138,7 @@ public class CapitalCavCiaController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("核销单付款单据分页条件查询-----预付冲应付")
     @PostMapping("/paymentpage")
     public AjaxResponse paymentpage(@RequestBody String conditionpage){
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -148,6 +158,7 @@ public class CapitalCavCiaController {
      * @param add 添加数据
      * @return 单据id
      */
+    @Log("新增核销单")
     @PostMapping("/add/{type}")
     public AjaxResponse addreceipt(@PathVariable("type") int type,@RequestBody String add) {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -174,6 +185,9 @@ public class CapitalCavCiaController {
             cia.setApprovalState(type);
             cia.setFoundTime(new Date());
             cccs.insert(cia);
+            if(type==0){
+                messageUtil.addMessage(Integer.parseInt(cia.getFounder()),cia.getCavId());
+            }
         }
         //添加核销单应收单据列表信息
         for(int i=0;i<bills.size();i++){
@@ -192,6 +206,7 @@ public class CapitalCavCiaController {
      * @param conditionpage 条件查询信息
      * @return map数据
      */
+    @Log("分页条件查询")
     @PostMapping("/conditionpage")
     public AjaxResponse conditionpage(@RequestBody String conditionpage) {
         JSONObject jsonObject = JSONObject.parseObject(conditionpage);
@@ -224,6 +239,7 @@ public class CapitalCavCiaController {
      * @param cavId 主键
      * @return 数据
      */
+    @Log("修改订单审批状态")
     @GetMapping("/approval")
     public AjaxResponse approvalorder(String cavId,String cavType,int type,String user,String approvalremarks){
         //预收冲应收
@@ -324,6 +340,7 @@ public class CapitalCavCiaController {
                 cps.update(newpayment);
             }
         }
+        messageUtil.addMessages(Integer.parseInt(cia.getApprover()),Integer.parseInt(cccs.queryById(cavId).getFounder()),cavId,type);
         return AjaxResponse.success(cianew!=null);
     }
 }

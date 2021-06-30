@@ -1,5 +1,6 @@
 package com.xingji.frameproject.controller;
 
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.service.*;
 import com.xingji.frameproject.util.JwtTokenUtil;
@@ -39,6 +40,7 @@ public class PersonnelController {
     @Autowired
     BaseDepotService depotService;
 
+    @Log("查询常用基础信息")
     @GetMapping("/ofpeople")
     public AjaxResponse roleusers(){
         List<SysUser> salemens=us.roleusers(3);//销售人员

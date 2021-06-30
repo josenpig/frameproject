@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
 import com.xingji.frameproject.mybatis.entity.BaseDepot;
@@ -47,6 +48,7 @@ public class BaseDepotController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个仓库")
     @GetMapping("selectOne")
     public BaseDepot selectOne(String id) {
         return this.baseDepotService.queryById(id);
@@ -56,6 +58,7 @@ public class BaseDepotController {
      * 查询所有仓库信息
      * @return 仓库集合
      */
+    @Log("查询所有仓库")
     @GetMapping("/findAllDepot")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -71,6 +74,7 @@ public class BaseDepotController {
      * 查询所有仓库信息返回集合
      * @return 仓库集合
      */
+    @Log("查询所有仓库信息返回集合")
     @GetMapping("/findAllDepot/list")
     public AjaxResponse findAllProductToList(){
         List<BaseDepot> baseDepotVoList=baseDepotService.findAllDepot();
@@ -81,6 +85,7 @@ public class BaseDepotController {
      * 根据仓库编号或仓库名称查询的仓库
      * @return 产品集合
      */
+    @Log("根据仓库编号或仓库名称查询的仓库")
     @GetMapping("/findAllDepot/ByIdOrName")
     public AjaxResponse findAllDepotByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select, @Param("SearchContent") String SearchContent){
         System.out.println(select+"++++"+SearchContent);
@@ -104,6 +109,7 @@ public class BaseDepotController {
      * @param depotId 仓库编号
      * @return
      */
+    @Log("删除仓库")
     @GetMapping("/delDepot")
     public AjaxResponse delDepot(String depotId){
         System.out.println("del:"+depotId);
@@ -122,6 +128,7 @@ public class BaseDepotController {
      * @param id
      * @return
      */
+    @Log("判断仓库Id是否重复")
     @GetMapping("/judgeDepotId")
     public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
@@ -137,6 +144,7 @@ public class BaseDepotController {
      * @param add
      * @return
      */
+    @Log("新增仓库")
     @RequestMapping("/addDepot")
     public AjaxResponse addDepot(@RequestBody String add){
         System.out.println(add);
@@ -151,6 +159,7 @@ public class BaseDepotController {
      * @param add
      * @return
      */
+    @Log("修改仓库")
     @RequestMapping("/updateDepot")
     public AjaxResponse updateDepot(@RequestBody String add){
         System.out.println(add);
@@ -165,6 +174,7 @@ public class BaseDepotController {
      * @param Did,Dstate
      * @return
      */
+    @Log("禁用或启用仓库")
     @GetMapping("/disableOrEnable")
     public AjaxResponse disableOrEnable(String Did,int Dstate){
         System.out.println(Did+"+Dsate:"+Dstate);

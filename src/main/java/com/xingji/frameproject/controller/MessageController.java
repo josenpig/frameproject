@@ -2,6 +2,7 @@ package com.xingji.frameproject.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.Message1;
 
 import com.xingji.frameproject.service.MessageService;
@@ -33,6 +34,7 @@ public class MessageController {
      * @param userName
      * @return
      */
+    @Log("查询所有未删除如订单审批单（包括已读未读）")
     @GetMapping("allm")
     public AjaxResponse getmessage(Integer currentPage, Integer pagesize,String userName){
         System.out.println("currentPage:"+currentPage+"pagesize:"+pagesize+"userId"+userName);
@@ -47,8 +49,16 @@ public class MessageController {
             }else{
             status="已读";
         }
+        String mid="";
+            if(list.get(i).getMid()==0){
+                mid="待审批";
+            }else if(list.get(i).getMid()==1){
+                mid="审批通过";
+            }else if(list.get(i).getMid()==-1){
+                mid="审批未通过";
+            }
             messageVo.add(new messageVo(
-                    list.get(i).getMid()
+                    mid
                     ,sus.queryUserNameByUserId(list.get(i).getRecver())
                     ,status
                     ,sus.queryUserNameByUserId(list.get(i).getSender())
@@ -67,6 +77,9 @@ public class MessageController {
         map.put("rows",messageVo);
         return AjaxResponse.success(map);
     }
+
+
+    @Log("消息标记已读")
     @GetMapping("/isread")
     //标记已读
     public AjaxResponse isread( String userName,String orderid){
@@ -74,6 +87,8 @@ public class MessageController {
         List<Message1> list=service.updateisreadByorderid(sus.queryUserIdByUserName(userName),orderid);
         return AjaxResponse.success();
     }
+
+    @Log("修改所有消息为已读状态")
     //标记已读所有
     @GetMapping("/isreadAll")
     public AjaxResponse isreadAll(Integer currentPage, Integer pagesize,String userName){
@@ -84,6 +99,8 @@ public class MessageController {
         }
         return AjaxResponse.success();
     }
+
+    @Log("消息标记为读")
     //标记未读
     @GetMapping("/notread")
     public AjaxResponse notread(String userName,String orderid){
@@ -92,7 +109,10 @@ public class MessageController {
         List<Message1> list=service.updatenotreadByorderid(sus.queryUserIdByUserName(userName),orderid);
         return AjaxResponse.success();
     }
+
+
     //查看已读
+    @Log("查看已读")
     @GetMapping("/qureyisread")
     public AjaxResponse qureyisread(Integer currentPage, Integer pagesize,String userName){
         System.out.println("currentPage:"+currentPage+"pagesize:"+pagesize+"userId"+userName);
@@ -101,9 +121,17 @@ public class MessageController {
         List<Message1> list=service.selecctByRecverandstatusis1(sus.queryUserIdByUserName(userName));
         List<messageVo> messageVo=new ArrayList<>();
         for (int i=0;i<list.size();i++){
-
+            String mid="";
+            if(list.get(i).getMid()==0){
+                mid="待审批";
+            }else if(list.get(i).getMid()==1){
+                mid="审批通过";
+            }else if(list.get(i).getMid()==-1){
+                mid="审批未通过";
+            }
             messageVo.add(new messageVo(
-                    list.get(i).getMid()
+
+                    mid
                     ,sus.queryUserNameByUserId(list.get(i).getRecver())
                     ,"已读"
                     ,sus.queryUserNameByUserId(list.get(i).getSender())
@@ -122,6 +150,8 @@ public class MessageController {
         map.put("rows",messageVo);
         return AjaxResponse.success(map);
     }
+
+    @Log("查看未读")
     //查看未读
     @GetMapping("/qureynotread")
     public AjaxResponse qureynotread(Integer currentPage, Integer pagesize,String userName){
@@ -131,9 +161,16 @@ public class MessageController {
         List<Message1> list=service.selecctByRecverandstatusis0(sus.queryUserIdByUserName(userName));
         List<messageVo> messageVo=new ArrayList<>();
         for (int i=0;i<list.size();i++){
-
+            String mid="";
+            if(list.get(i).getMid().equals(0)){
+                mid="待审批";
+            }else if(list.get(i).getMid().equals(1)){
+                mid="审批通过";
+            }else if(list.get(i).getMid().equals(-1)){
+                mid="审批未通过";
+            }
             messageVo.add(new messageVo(
-                    list.get(i).getMid()
+                    mid
                     ,sus.queryUserNameByUserId(list.get(i).getRecver())
                     ,"未读"
                     ,sus.queryUserNameByUserId(list.get(i).getSender())

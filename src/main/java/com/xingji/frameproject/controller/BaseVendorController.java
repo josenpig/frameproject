@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseVendor;
 import com.xingji.frameproject.mybatis.entity.CapitalPayable;
 import com.xingji.frameproject.mybatis.entity.CapitalPayment;
@@ -48,6 +49,7 @@ public class BaseVendorController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个供应商")
     @GetMapping("selectOne")
     public BaseVendor selectOne(String id) {
         return this.baseVendorService.queryById(id);
@@ -57,6 +59,7 @@ public class BaseVendorController {
      * 查询所有供应商信息
      * @return 产品集合
      */
+    @Log("查询所有供应商信息")
     @GetMapping("/findAllVendor")
     public AjaxResponse findAllVendor(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -73,6 +76,7 @@ public class BaseVendorController {
      * 查询所有供应商 返回list
      * @return 产品集合
      */
+    @Log("查询所有供应商 返回list")
     @GetMapping("/findAllVendor/list")
     public AjaxResponse findAllVendorToList(){
         BaseVendor baseVendor=new BaseVendor();
@@ -85,6 +89,7 @@ public class BaseVendorController {
      * 根据供应商类型或负责人查询的供应商
      * @return 产品集合
      */
+    @Log("根据供应商类型或负责人查询的供应商")
     @GetMapping("/findAllVendor/ByTypeOrCharge")
     public AjaxResponse findAllVendorByTypeOrCharge(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("selcharge") String selcharge, @Param("selVendorType") String selVendorType){
         System.out.println(selVendorType+"++++"+selcharge);
@@ -107,6 +112,7 @@ public class BaseVendorController {
      * 根据供应商编号或供应商名称查询的供应商
      * @return 产品集合
      */
+    @Log("根据供应商编号或供应商名称查询的供应商")
     @GetMapping("/findAllVendor/ByIdOrName")
     public AjaxResponse findAllVendorByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select,@Param("SearchContent") String SearchContent){
         System.out.println(select+"++++"+SearchContent);
@@ -131,6 +137,7 @@ public class BaseVendorController {
      * @param ids 供应商编号集合
      * @return
      */
+    @Log("批量删除供应商")
     @DeleteMapping("/delVendor/batch")
     public AjaxResponse bacthDelVendor(@RequestBody List<String> ids){
         System.out.println("delList："+ids);
@@ -178,6 +185,7 @@ public class BaseVendorController {
      * @param id
      * @return
      */
+    @Log("判断供应商Id是否重复")
     @GetMapping("/judgeVendorId")
     public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
@@ -193,6 +201,7 @@ public class BaseVendorController {
      * @param add
      * @return
      */
+    @Log("新增供应商")
     @RequestMapping("/addVendor")
     public AjaxResponse addVendor(@RequestBody String add){
         System.out.println(add);
@@ -207,6 +216,7 @@ public class BaseVendorController {
      * @param add
      * @return
      */
+    @Log("修改供应商")
     @RequestMapping("/updateVendor")
     public AjaxResponse updateVendor(@RequestBody String add){
         System.out.println(add);

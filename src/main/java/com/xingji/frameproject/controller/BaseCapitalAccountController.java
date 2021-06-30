@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.*;
 import com.xingji.frameproject.mybatis.entity.BaseCapitalAccount;
 import com.xingji.frameproject.service.BaseCapitalAccountService;
@@ -41,6 +42,7 @@ public class BaseCapitalAccountController {
      * @param id 主键
      * @return 单条数据
      */
+    @Log("查询单个资金账户")
     @GetMapping("selectOne")
     public BaseCapitalAccount selectOne(String id) {
         return this.baseCapitalAccountService.queryById(id);
@@ -50,6 +52,7 @@ public class BaseCapitalAccountController {
      * 查询所有资金账户信息
      * @return 资金账户集合
      */
+    @Log("查询所有资金账户信息")
     @GetMapping("/findAllCapitalAccountVo")
     public AjaxResponse findAllProduct(Integer currentPage, Integer pageSize){
         Map<String,Object> map=new HashMap<>();
@@ -66,6 +69,7 @@ public class BaseCapitalAccountController {
      * 根据资金账户编号或资金账户名称查询资金账户
      * @return 产品集合
      */
+    @Log("根据资金账户编号或资金账户名称查询资金账户")
     @GetMapping("/findAllCapitalAccountVo/ByIdOrName")
     public AjaxResponse findAllDepotByIdOrName(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("select") String select, @Param("SearchContent") String SearchContent){
         System.out.println(select+"++++"+SearchContent);
@@ -90,6 +94,7 @@ public class BaseCapitalAccountController {
      * @param uid 单位编号
      * @return
      */
+    @Log("删除资金账户")
     @GetMapping("/delCapitalAccount")
     public AjaxResponse delCapitalAccount(String uid){
         System.out.println("del:"+uid);
@@ -108,6 +113,7 @@ public class BaseCapitalAccountController {
      * @param id
      * @return
      */
+    @Log("判断资金账户Id是否重复")
     @GetMapping("/judgeCapitalId")
     public AjaxResponse judgeId(String id){
         System.out.println("id:"+id);
@@ -124,6 +130,7 @@ public class BaseCapitalAccountController {
      * @param add
      * @return
      */
+    @Log("新增资金账户")
     @RequestMapping("/addCapitalAccount")
     public AjaxResponse addCapitalAccount(@RequestBody String add){
         System.out.println(add);
@@ -140,6 +147,7 @@ public class BaseCapitalAccountController {
      * @param add
      * @return
      */
+    @Log("修改资金账户")
     @RequestMapping("/updateCapitalAccount")
     public AjaxResponse updateCapitalAccount(@RequestBody String add){
         System.out.println(add);
@@ -155,6 +163,7 @@ public class BaseCapitalAccountController {
      * @param uid 单位编号
      * @return
      */
+    @Log("设置默认账户")
     @GetMapping("/setState")
     public AjaxResponse setState(String uid){
         System.out.println("setState:"+uid);

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.xingji.frameproject.annotation.Log;
 import com.xingji.frameproject.mybatis.entity.BaseCustomer;
 import com.xingji.frameproject.mybatis.entity.BaseProduct;
 import com.xingji.frameproject.mybatis.entity.BaseUnit;
@@ -44,6 +45,7 @@ public class ReportFormController {
      * 资金账户汇总表
      * @return 客户集合
      */
+    @Log("查询资金账户汇总表")
     @GetMapping("/fundAllFundAccountsStatisticsVo")
     public AjaxResponse fundAllFundAccountsStatisticsVo(@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize, @Param("startTime") String startTime, @Param("endTime") String endTime) throws ParseException {
         Map<String,Object> map=new HashMap<>();
@@ -71,6 +73,7 @@ public class ReportFormController {
      * 资金账户期间总收入和总支出
      * @return 客户集合
      */
+    @Log("查询资金账户期间总收入和总支出")
     @GetMapping("/fundAllRsumAndPsum")
     public AjaxResponse fundAllRsumAndPsum(@Param("startTime") String startTime, @Param("endTime") String endTime) throws ParseException {
         System.out.println("fundAllRsumAndPsum");
@@ -96,6 +99,7 @@ public class ReportFormController {
      * 所有产品库存 根据实体类中的条件查询
      * @return 客户集合
      */
+    @Log("查询所有产品库存")
     @GetMapping("/findAllProductInventoryVo")
     public AjaxResponse findAllProductInventoryVo(@Param("depotName")String depotName, @Param("productName") String productName,@Param("productTypeName")String productTypeName, @Param("state") String state,@Param("currentPage")Integer currentPage, @Param("pageSize") Integer pageSize) throws ParseException {
         System.out.println(depotName+"+++"+productName+"+++"+productTypeName+"+++"+state);
@@ -129,6 +133,7 @@ public class ReportFormController {
      * 资金账户期间总收入和总支出
      * @return 客户集合
      */
+    @Log("资金账户期间总收入和总支出")
     @GetMapping("/fundAllCount")
     public AjaxResponse fundAllRsumAndPsum() throws ParseException {
         List<Integer> list=this.reportFormService.findAllCount();
