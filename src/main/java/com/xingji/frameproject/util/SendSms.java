@@ -37,7 +37,7 @@ public class SendSms {
         request.setSysAction("SendSms");
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName",SignName);
-        request.putQueryParameter("TemplateCode","SMS_199771688");//快速登录
+        request.putQueryParameter("TemplateCode","SMS_202807975");//快速登录
         String code=smsCode(phone);
         map.put(phone,code);
         request.putQueryParameter("TemplateParam", "{\"code\":"+code+"}");
