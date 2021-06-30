@@ -60,6 +60,9 @@
             <if test="vendorId != null and vendorId != ''">
                 vp.vendor_id = #{vendorId}
             </if>
+            <if test="productId != null and productId != ''">
+                vp.product_id = #{productId}
+            </if>
             <if test="productName != null and productName != ''">
                 and p.product_name LIKE CONCAT('%',#{productName},'%')
             </if>
