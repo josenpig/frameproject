@@ -32,6 +32,21 @@ spring:
       filters: stat,wall,log4j
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#  #rabbitmq配置
+#  rabbitmq:
+#    #服务器地址
+#    host: localhost
+#    #d端口
+#    port: 5672
+#    #用户名
+#    username: guest
+#    #密码
+#    password: guest
+#    #消息确定回调
+#    publisher-confirm-type: correlated
+#    #消息失败回调
+#    publisher-returns: true
+
   redis:
     database: 0 # Redis 数据库索引（默认为 0）
     host: 127.0.0.1 # Redis 服务器地址
@@ -51,7 +66,7 @@ spring:
       ddl-auto: update
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.xingji.frameproject.mybaits.entity
+  type-aliases-package: com.xingji.frameproject.mybatis.entity
 
 pagehelper:
   helperDialect: mysql

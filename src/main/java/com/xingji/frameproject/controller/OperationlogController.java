@@ -7,8 +7,10 @@ import com.xingji.frameproject.mybatis.entity.Loginin;
 import com.xingji.frameproject.mybatis.entity.Operationlog;
 import com.xingji.frameproject.service.LogininService;
 import com.xingji.frameproject.service.OperationlogService;
+import com.xingji.frameproject.service.SysUserService;
 import com.xingji.frameproject.util.JwtTokenUtil;
 import com.xingji.frameproject.vo.AjaxResponse;
+import com.xingji.frameproject.vo.operationlogVo;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +30,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/operationlog")
-
 public class OperationlogController {
     /**
      * 服务对象
      */
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Resource
+    @Autowired
     private LogininService logininService;
-    @Resource
+    @Autowired
     private OperationlogService operationlogService;
+    @Autowired
+    private SysUserService sysUserService;
     /**
      * 单条件查询、多条件查询，查询所有登录日志
      * @param operator
@@ -46,10 +50,11 @@ public class OperationlogController {
      * @param logintime
      * @return
      */
-    @Log("查询登录日志")
+    @Log("查询操作日志")
     @GetMapping("/findloginlogbycondition")
     public AjaxResponse findLogbycondition(String operator, Integer currentPage, Integer pagesize , String logintime, String operatorType) {
         System.out.println("operator:"+operator+"-------currenPage:"+currentPage+"------pagesize:"+pagesize+"---------logintime:"+logintime+"---------operatorType:"+operatorType);
+        Integer userid=sysUserService.queryUserIdByUserName(operator);
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pagesize);
         List<Loginin> list = null;
@@ -158,8 +163,8 @@ public class OperationlogController {
             //查询所有
             System.out.println("-------------findAll");
             list=logininService.findAll(loginin);
-
         }
+
         map.put("total",page.getTotal());
         map.put("rows",list);
         return AjaxResponse.success(map);
@@ -179,13 +184,14 @@ public class OperationlogController {
     public AjaxResponse findoperatorLogByCondition(String operator,Integer currentPage, Integer pagesize,String createtime ,String input) {
         System.out.println("operator: "+operator+"-------currenPage: "+currentPage+"------pagesize: "
                 +pagesize+"----------createtime: "+createtime+"-------input: "+input);
+
         if((input!=null && input!="") && (!input.equals("") && !input.equals(null))){
             input="%"+input+"%";
         }
+        Integer userid=sysUserService.queryUserIdByUserName(operator);
         Map<String,Object> map=new HashMap<>();
         Page<Object> page= PageHelper.startPage(currentPage,pagesize);
-        List<Operationlog> list = null;
-        Operationlog operationlog=new Operationlog();
+        List<operationlogVo> OperationlogVo= new ArrayList<>();
 
         //时间,操作员,操作内容有一个不为空时
         if(((createtime!=null && createtime!="") &&(!createtime.equals("") && ! createtime.equals(null)))
@@ -209,7 +215,8 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTimeAndOperatorAndInput(time,operator,input);
+                OperationlogVo=operationlogService.findbyCreateTimeAndOperatorAndInput(time,userid,input);
+
             }
             //时间和操作员不为空时
             else if(((createtime!=null && createtime!="") && (!createtime.equals("") && !createtime.equals(null)))
@@ -227,13 +234,15 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTimeAndOperator(time,operator);
+                OperationlogVo=operationlogService.findbyCreateTimeAndOperator(time,userid);
+
             }
             //操作员和操作内容不为空时
             else if(((operator!=null && operator!="")&&(!operator.equals("") && !operator.equals(null)))
                     && ((input!=null && input!="") && (!input.equals("") && !input.equals(null)))){
                 System.out.println("______________findbyInputAndOperator");
-                list=operationlogService.findbyInputAndOperator(operator,input);
+                OperationlogVo=operationlogService.findbyInputAndOperator(userid,input);
+
             }
             //时间和操作内容不为空时
             else if(((createtime!=null && createtime!="") && (!createtime.equals("") && !createtime.equals(null)))
@@ -251,7 +260,8 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTimeAndInput(time,input);
+                OperationlogVo=operationlogService.findbyCreateTimeAndInput(time,input);
+
             }
             //时间不为空时
             else if((createtime!=null && createtime!="") && (!createtime.equals("") && !createtime.equals(null))){
@@ -268,23 +278,28 @@ public class OperationlogController {
                 time=sb.toString();
                 System.out.println("char:"+i+ "String as:"+as+"Num:"+num+"time:"+time);
                 time=time+"%";
-                list=operationlogService.findbyCreateTime(time);
+                OperationlogVo=operationlogService.findbyCreateTime(time);
+
             }
             //操作内容不为空时
             else if((input!=null && input!="") && (!input.equals("") && !input.equals(null))){
                 System.out.println("______________findbyInput");
-                list=operationlogService.findbyInput(input);
+                OperationlogVo=operationlogService.findbyInput(input);
+
+
             }
             //操作员不为空时
             else if((operator!=null && operator!="") && (!operator.equals("") && !operator.equals(null))){
                 System.out.println("______________findbyOperator");
-                list=operationlogService.findbyOperator(operator);
+                OperationlogVo=operationlogService.findbyOperator(userid);
+
             }
         }else{
-            list=operationlogService.findAll(operationlog);
+            OperationlogVo=operationlogService.findAll();
+            System.out.println("userName:"+OperationlogVo);
         }
         map.put("total",page.getTotal());
-        map.put("rows",list);
+        map.put("rows",OperationlogVo);
         return AjaxResponse.success(map);
     }
 }
