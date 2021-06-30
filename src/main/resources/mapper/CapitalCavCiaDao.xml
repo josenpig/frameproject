@@ -255,9 +255,6 @@
             <if test="thisMoney != null">
                 this_money = #{thisMoney},
             </if>
-            <if test="founder != null and founder != ''">
-                founder = #{founder},
-            </if>
             <if test="foundTime != null">
                 found_time = #{foundTime},
             </if>
@@ -267,11 +264,17 @@
             <if test="approver != null and approver != ''">
                 approver = #{approver},
             </if>
+            <if test="approver =='清空'">
+                approver = null,
+            </if>
             <if test="approvalState != null">
                 approval_state = #{approvalState},
             </if>
             <if test="approvalRemarks != null and approvalRemarks != ''">
                 approval_remarks = #{approvalRemarks},
+            </if>
+            <if test="approvalRemarks=='清空'">
+                approval_remarks = null,
             </if>
             <if test="lastApprovalTime != null">
                 last_approval_time = #{lastApprovalTime},

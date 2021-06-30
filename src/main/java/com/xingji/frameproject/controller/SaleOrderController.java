@@ -116,7 +116,8 @@ public class SaleOrderController {
             }
             //判断该单据是否为二次提交单据及驳回单或作废单
             if(order.getApprovalState()==-3||order.getApprovalState()==-1){
-                order.setFounder(String.valueOf(sus.queryUserIdByUserName(order.getFounder())));
+                order.setApprover("清空");
+                order.setApprovalRemarks("清空");
             }
             sods.deleteById(order.getOrderId());//将原有的订单详情删除
             order.setApprovalState(type);//订单状态
@@ -209,21 +210,19 @@ public class SaleOrderController {
      * @param id 主键
      * @return 数据
      */
-    @RequestMapping("/update/{id}")
-    public AjaxResponse update(@PathVariable("id") String id) {
-        SaleOrder order=sos.queryById(id);
-        SaleOrder neworder=new SaleOrder();
-        neworder.setOrderId(id);
-        neworder.setApprovalState(-3);
-        neworder.setApprover("清空");
-        neworder.setApprovalRemarks("清空");
-        //恢复产品预计可用量
-        List<SaleOrderDetails> orderDetails=sods.queryById(id);
-        for(SaleOrderDetails sod:orderDetails){
-            bos.expectadd(sod.getProductId(),sod.getDepot(),sod.getProductNum());
+    @RequestMapping("/update")
+    public AjaxResponse update(String id,Integer type) {
+        SaleOrder order=new SaleOrder();
+        order.setOrderId(id);
+        order.setApprovalState(type);
+        if(type==-3) {
+            //恢复产品预计可用量
+            List<SaleOrderDetails> orderDetails = sods.queryById(id);
+            for (SaleOrderDetails sod : orderDetails) {
+                bos.expectadd(sod.getProductId(), sod.getDepot(), sod.getProductNum());
+            }
         }
-        sos.update(neworder);
-        return AjaxResponse.success(order.getOrderId());
+        return AjaxResponse.success(sos.update(order).getOrderId());
     }
     /**
      * 查询销售订单出库状态

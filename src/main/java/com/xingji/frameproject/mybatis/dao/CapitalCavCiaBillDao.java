@@ -85,7 +85,7 @@ public interface CapitalCavCiaBillDao {
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Integer id);
+    int deleteById(String id);
 
 }
 

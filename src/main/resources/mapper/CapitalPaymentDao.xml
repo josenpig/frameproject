@@ -164,9 +164,6 @@
             <if test="cavId != null and cavId != ''">
                 cav_id = #{cavId},
             </if>
-            <if test="founder != null and founder != ''">
-                founder = #{founder},
-            </if>
             <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
             </if>
@@ -176,17 +173,20 @@
             <if test="approver != null and approver != ''">
                 approver = #{approver},
             </if>
+            <if test="approver =='清空'">
+                approver = null,
+            </if>
             <if test="lastApprovalTime != null">
                 last_approval_time = #{lastApprovalTime},
-            </if>
-            <if test="foundTime != null">
-                found_time = #{foundTime},
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
             <if test="approvalRemarks != null and approvalRemarks != ''">
                 approval_remarks = #{approvalRemarks},
+            </if>
+            <if test="approvalRemarks=='清空'">
+                approval_remarks = null,
             </if>
         </set>
         where payment_id = #{paymentId}
@@ -201,7 +201,7 @@
         select *,pia_money-pia_balance from frameproject.capital_payment
         <where>
             <if test="capitalId != null and capitalId != ''">
-                and payment_id = #{capitalId}
+                and payment_id like CONCAT('%',#{capitalId},'%')
             </if>
             <if test="otherParty != null and otherParty != ''">
                 and vendor = #{otherParty}

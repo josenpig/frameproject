@@ -85,6 +85,24 @@ public class CapitalPaymentController {
         List<CapitalPaymentBill> bills= JSONArray.parseArray(two, CapitalPaymentBill.class);
         String three = jsonObject.getString("account");
         List<CapitalPaymentAccount> accounts= JSONArray.parseArray(three, CapitalPaymentAccount.class);
+        //判断该订单是否为编辑单-----若为编辑单则修改数据
+        if(payment.getApprovalState()!=null) {
+            cpas.deleteById(payment.getPaymentId());//将原有的订单详情删除
+            cpbs.deleteById(payment.getPaymentId());
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(payment.getApprovalState()==-1){
+                payment.setApprover("清空");
+                payment.setApprovalRemarks("清空");
+            }
+            payment.setApprovalState(type);//订单状态
+            payment.setUpdateTime(new Date());
+            cps.update(payment);
+        }else {
+            payment.setFounder(String.valueOf(sus.queryUserIdByUserName(payment.getFounder())));
+            payment.setApprovalState(type);
+            payment.setFoundTime(new Date());
+            cps.insert(payment);
+        }
         //绑定付款单
         for (int i=0;i<bills.size();i++){
             bills.get(i).setPaymentId(payment.getPaymentId());
@@ -92,11 +110,6 @@ public class CapitalPaymentController {
         for (int j=0;j<accounts.size();j++){
             accounts.get(j).setPaymentId(payment.getPaymentId());
         }
-        payment.setFounder(String.valueOf(sus.queryUserIdByUserName(payment.getFounder())));
-        payment.setApprovalState(type);
-        payment.setFoundTime(new Date());
-        payment.setUpdateTime(new Date());
-        cps.insert(payment);
         cpbs.insertBatch(bills);
         cpas.insertBatch(accounts);
         return AjaxResponse.success(payment.getPaymentId());

@@ -72,7 +72,7 @@ public class CapitalPaymentAccountServiceImpl implements CapitalPaymentAccountSe
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(String id) {
         return this.capitalPaymentAccountDao.deleteById(id) > 0;
     }
 }

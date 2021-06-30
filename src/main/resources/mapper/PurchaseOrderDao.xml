@@ -322,7 +322,7 @@
         <where>
             vetting_state=1
             <if test="purchaseId != null and purchaseId != ''">
-                and id = #{purchaseId}
+                and id like CONCAT('%',#{purchaseId},'%')
             </if>
             <if test="vendor != null and vendor != ''">
                 and vendor_name = #{vendor}

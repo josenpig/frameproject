@@ -108,7 +108,7 @@ public class SaleDeliveryController {
             deliverydetails.get(i).setDeliveryId(delivery.getDeliveryId());
         }
         //判断该订单是否为编辑单-----若为编辑单则修改数据
-        if(delivery.getApprovalState()!=1){
+        if(delivery.getApprovalState()!=null && delivery.getApprovalState()!=1){
             //为编辑单时恢复产品预计可用量
             if(delivery.getOrderId()==null && delivery.getApprovalState()>=0) {//若单据为作废单,驳回单或草稿单则不进行该操作-3/-2/-1
                 List<SaleDeliveryDetails> deliveryDetails = sdds.queryById(delivery.getDeliveryId());
@@ -118,7 +118,8 @@ public class SaleDeliveryController {
             }
             //判断该单据是否为二次提交单据及驳回单或作废单
             if(delivery.getApprovalState()==-3||delivery.getApprovalState()==-1){
-                delivery.setFounder(String.valueOf(sus.queryUserIdByUserName(delivery.getFounder())));
+                delivery.setApprover("清空");
+                delivery.setApprovalRemarks("清空");
             }
             sdds.deleteById(delivery.getDeliveryId());
             delivery.setApprovalState(type);//订单状态
@@ -175,22 +176,20 @@ public class SaleDeliveryController {
      * @param id 主键
      * @return 数据
      */
-    @RequestMapping("/update/{id}")
-    public AjaxResponse update(@PathVariable("id") String id) {
-        SaleDelivery saleDelivery=sds.queryById(id);
-        SaleDelivery neworder=new SaleDelivery();
-        neworder.setDeliveryId(id);
-        neworder.setApprovalState(-3);
-        neworder.setApprover("清空");
-        neworder.setApprovalRemarks("清空");
-        //恢复产品预计可用量
-        List<SaleDeliveryDetails> deliveryDetails=sdds.queryById(id);
-        for(SaleDeliveryDetails sdd:deliveryDetails){
-            bos.expectadd(sdd.getProductId(),sdd.getDepot(),sdd.getProductNum());
+    @RequestMapping("/update")
+    public AjaxResponse update(String id,Integer type) {
+        SaleDelivery saleDelivery=new SaleDelivery();
+        saleDelivery.setDeliveryId(id);
+        saleDelivery.setApprovalState(type);
+        if(type==-3) {
+            //恢复产品预计可用量
+            List<SaleDeliveryDetails> deliveryDetails = sdds.queryById(id);
+            for (SaleDeliveryDetails sdd : deliveryDetails) {
+                bos.expectadd(sdd.getProductId(), sdd.getDepot(), sdd.getProductNum());
+            }
+            crs.deleteById(id);
         }
-        sds.update(neworder);
-        crs.deleteById(id);
-        return AjaxResponse.success(saleDelivery.getDeliveryId());
+        return AjaxResponse.success(sds.update(saleDelivery).getDeliveryId());
     }
     /**
      * 分页条件查询

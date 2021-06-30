@@ -96,10 +96,11 @@ public class SaleReturnController {
             salereturndetails.get(i).setReturnId(salereturn.getReturnId());
         }
         //判断该订单是否为草稿单-----若为编辑单则修改数据
-        if(salereturn.getApprovalState()!=1){
+        if(salereturn.getApprovalState()!=null && salereturn.getApprovalState()!=1){
             //判断该单据是否为二次提交单据及驳回单或作废单
             if(salereturn.getApprovalState()==-3||salereturn.getApprovalState()==-1){
-                salereturn.setFounder(String.valueOf(sus.queryUserIdByUserName(salereturn.getFounder())));
+                salereturn.setApprover("清空");
+                salereturn.setApprovalRemarks("清空");
             }
             srds.deleteById(salereturn.getReturnId());
             salereturn.setApprovalState(type);//订单状态
@@ -166,23 +167,21 @@ public class SaleReturnController {
      * @param id 主键
      * @return 数据
      */
-    @RequestMapping("/update/{id}")
-    public AjaxResponse update(@PathVariable("id") String id) {
-        SaleReturn saleReturn=srs.queryById(id);
-        SaleReturn neworder=new SaleReturn();
-        neworder.setReturnId(id);
-        neworder.setApprovalState(-3);
-        neworder.setApprover("清空");
-        neworder.setApprovalRemarks("清空");
-        //恢复产品预计可用量
-        List<SaleReturnDetails> returnDetails=srds.queryById(id);
-        for(SaleReturnDetails sdd:returnDetails){
-            bos.productereduce(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
-            bos.expectreduce(sdd.getProductId(),sdd.getDepot(),sdd.getReturnNum());
+    @RequestMapping("/update")
+    public AjaxResponse update(String id,Integer type) {
+        SaleReturn saleReturn=new SaleReturn();
+        saleReturn.setReturnId(id);
+        saleReturn.setApprovalState(type);
+        if(type==-3) {
+            //恢复产品预计可用量
+            List<SaleReturnDetails> returnDetails = srds.queryById(id);
+            for (SaleReturnDetails sdd : returnDetails) {
+                bos.productereduce(sdd.getProductId(), sdd.getDepot(), sdd.getReturnNum());
+                bos.expectreduce(sdd.getProductId(), sdd.getDepot(), sdd.getReturnNum());
+            }
+            crs.deleteById(id);
         }
-        srs.update(neworder);
-        crs.deleteById(id);
-        return AjaxResponse.success(saleReturn.getReturnId());
+        return AjaxResponse.success(srs.update(saleReturn).getReturnId());
     }
     /**
      * 修改销售退货单审批状态

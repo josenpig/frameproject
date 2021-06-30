@@ -157,10 +157,24 @@ public class CapitalCavCiaController {
         List<CapitalCavCiaBill> bills= JSONArray.parseArray(two, CapitalCavCiaBill.class);
         String three = jsonObject.getString("cap");
         List<CapitalCavCiaCap> caps= JSONArray.parseArray(three, CapitalCavCiaCap.class);
-        cia.setFounder(String.valueOf(sus.queryUserIdByUserName(cia.getFounder())));
-        cia.setApprovalState(type);
-        cia.setFoundTime(new Date());
-        cia.setUpdateTime(new Date());
+        //判断该订单是否为编辑单-----若为编辑单则修改数据
+        if(cia.getApprovalState()!=null) {
+            ccccs.deleteById(cia.getCavId());//将原有的订单详情删除
+            cccbs.deleteById(cia.getCavId());
+            //判断该单据是否为二次提交单据及驳回单或作废单
+            if(cia.getApprovalState()==-1){
+                cia.setApprover("清空");
+                cia.setApprovalRemarks("清空");
+            }
+            cia.setApprovalState(type);//订单状态
+            cia.setUpdateTime(new Date());
+            cccs.update(cia);
+        }else {
+            cia.setFounder(String.valueOf(sus.queryUserIdByUserName(cia.getFounder())));
+            cia.setApprovalState(type);
+            cia.setFoundTime(new Date());
+            cccs.insert(cia);
+        }
         //添加核销单应收单据列表信息
         for(int i=0;i<bills.size();i++){
             bills.get(i).setCavId(cia.getCavId());
@@ -169,7 +183,6 @@ public class CapitalCavCiaController {
         for(int i=0;i<caps.size();i++){
             caps.get(i).setCavId(cia.getCavId());
         }
-        cccs.insert(cia);
         cccbs.insertBatch(bills);
         ccccs.insertBatch(caps);
         return AjaxResponse.success(cia.getCavId());
