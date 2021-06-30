@@ -169,7 +169,7 @@ public class UserController {
      * @param all  所有菜单
      * @return 菜单信息
      */
-    private List<SysMenu> getChildrens(SysMenu root, List<SysMenu> all) {
+    public List<SysMenu> getChildrens(SysMenu root, List<SysMenu> all) {
         List<SysMenu> children = all.stream().filter(m -> {
             return Objects.equals(m.getParentId(), root.getMenuId());
         }).map(

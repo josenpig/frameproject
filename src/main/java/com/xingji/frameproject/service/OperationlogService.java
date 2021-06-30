@@ -1,6 +1,7 @@
 package com.xingji.frameproject.service;
 
 import com.xingji.frameproject.mybatis.entity.Operationlog;
+import com.xingji.frameproject.vo.operationlogVo;
 
 import java.util.List;
 
@@ -15,22 +16,21 @@ public interface OperationlogService {
 
     /**
      * 查询所有操作日志
-     * @param operationlog
      * @return
      */
-    List<Operationlog> findAll(Operationlog operationlog);
+    List<operationlogVo> findAll();
 
-    List<Operationlog> findbyCreateTimeAndOperatorAndInput(String time, String operator, String input);
+    List<operationlogVo> findbyCreateTimeAndOperatorAndInput(String time, Integer operatorid, String input);
 
-    List<Operationlog> findbyCreateTimeAndOperator(String time, String operator);
+    List<operationlogVo> findbyCreateTimeAndOperator(String time, Integer operatorid);
 
-    List<Operationlog> findbyInputAndOperator(String operator, String input);
+    List<operationlogVo> findbyInputAndOperator(Integer operatorid, String input);
 
-    List<Operationlog> findbyCreateTimeAndInput(String time, String input);
+    List<operationlogVo> findbyCreateTimeAndInput(String time, String input);
 
-    List<Operationlog> findbyCreateTime(String time);
+    List<operationlogVo> findbyCreateTime(String time);
 
-    List<Operationlog> findbyOperator(String operator);
+    List<operationlogVo> findbyOperator(Integer operatorid);
 
-    List<Operationlog> findbyInput(String input);
+    List<operationlogVo> findbyInput(String input);
 }

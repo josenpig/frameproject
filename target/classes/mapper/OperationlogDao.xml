@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xingji.frameproject.mybatis.dao.OperationlogDao">
-  <resultMap id="BaseResultMap" type="com.xingji.frameproject.mybatis.entity.Operationlog">
+  <resultMap  type="com.xingji.frameproject.mybatis.entity.Operationlog" id="BaseResultMap">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
-    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="userid" jdbcType="INTEGER" property="userId" />
     <result column="operation" jdbcType="VARCHAR" property="operation" />
     <result column="method" jdbcType="VARCHAR" property="method" />
     <result column="params" jdbcType="VARCHAR" property="params" />
     <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, createtime, `operator`, `operation`, `method`, params, ipaddress
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from operationlog
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-    <select id="findAll" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-      SELECT o.* FROM `operationlog` o
-      <where>
-        <if test="createtime != null and createtime != ''">
-          and c.createtime  LIKE CONCAT('%',#{createtime,jdbcType=TIMESTAMP},'%')
-        </if>
-        <if test="operator != null and operator != ''">
-          and c.operator LIKE CONCAT('%',#{operator,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="method != null and method != ''">
-          and c.method LIKE CONCAT('%',#{method,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="params != null and params != ''">
-          and c.params LIKE CONCAT('%',#{params,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="ipaddress != null and ipaddress != ''">
-          and c.ipaddress LIKE CONCAT('%',#{ipaddress,jdbcType=VARCHAR},'%')
-        </if>
-      </where>
+  <resultMap id="VoBaseResultMap" type="com.xingji.frameproject.vo.operationlogVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="user_name" jdbcType="INTEGER" property="operator" />
+    <result column="operation" jdbcType="VARCHAR" property="operation" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="ipaddress" jdbcType="VARCHAR" property="ipaddress" />
+  </resultMap>
+
+
+    <select id="findAll" resultMap="VoBaseResultMap">
+      select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+      from operationlog o
+             inner join sys_user u on u.user_id=o.userid
       order by createtime desc
     </select>
     <select id="findbyCreateTimeAndOperatorAndInput"
-            resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-      select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+            resultMap="VoBaseResultMap">
+      select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+      from operationlog o
+             inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
     </select>
-  <select id="findbyCreateTimeAndOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyCreateTimeAndOperator" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and createtime like #{time,jdbcType=VARCHAR} order by createtime desc
   </select>
-  <select id="findbyInputAndOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where operator=#{operator,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyInputAndOperator" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where userid=#{operator,jdbcType=INTEGER} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
-  <select id="findbyCreateTimeAndInput" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyCreateTimeAndInput" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where createtime like #{time,jdbcType=VARCHAR} and operation like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
-  <select id="findbyCreateTime" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where createtime like #{time,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyCreateTime" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where createtime like #{time,jdbcType=VARCHAR} order by createtime desc
   </select>
-  <select id="findbyOperator" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where operator = #{operator,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyOperator" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where user_id = #{operator,jdbcType=INTEGER} order by createtime desc
   </select>
-  <select id="findbyInput" resultType="com.xingji.frameproject.mybatis.entity.Operationlog">
-    select * from operationlog where operation like #{input,jdbcType=VARCHAR} order by createtime desc
+  <select id="findbyInput" resultMap="VoBaseResultMap">
+    select o.id, o.createtime, o.operation, o.method, o.params, o.ipaddress,u.user_name
+    from operationlog o
+           inner join sys_user u on u.user_id=o.userid where userid like #{input,jdbcType=VARCHAR} order by createtime desc
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -68,10 +69,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xingji.frameproject.mybatis.entity.Operationlog" useGeneratedKeys="true">
-    insert into operationlog (createtime, `operator`, `operation`, 
+    insert into operationlog (createtime, `userid`, `operation`,
       `method`, params, ipaddress
       )
-    values (#{createtime,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{operation,jdbcType=VARCHAR}, 
+    values (#{createtime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, #{operation,jdbcType=VARCHAR},
       #{method,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, #{ipaddress,jdbcType=VARCHAR}
       )
   </insert>
@@ -81,8 +82,8 @@
       <if test="createtime != null">
         createtime,
       </if>
-      <if test="operator != null">
-        `operator`,
+      <if test="userId != null">
+        `userid`,
       </if>
       <if test="operation != null">
         `operation`,
@@ -101,8 +102,8 @@
       <if test="createtime != null">
         #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="operator != null">
-        #{operator,jdbcType=VARCHAR},
+      <if test="userId != null">
+        #{userId ,jdbcType=INTEGER},
       </if>
       <if test="operation != null">
         #{operation,jdbcType=VARCHAR},
@@ -124,8 +125,8 @@
       <if test="createtime != null">
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="operator != null">
-        `operator` = #{operator,jdbcType=VARCHAR},
+      <if test="userId != null">
+        `userId ` = #{userId,jdbcType=INTEGER},
       </if>
       <if test="operation != null">
         `operation` = #{operation,jdbcType=VARCHAR},
@@ -145,7 +146,7 @@
   <update id="updateByPrimaryKey" parameterType="com.xingji.frameproject.mybatis.entity.Operationlog">
     update operationlog
     set createtime = #{createtime,jdbcType=TIMESTAMP},
-      `operator` = #{operator,jdbcType=VARCHAR},
+      `userid` = #{userId,jdbcType=INTEGER},
       `operation` = #{operation,jdbcType=VARCHAR},
       `method` = #{method,jdbcType=VARCHAR},
       params = #{params,jdbcType=VARCHAR},

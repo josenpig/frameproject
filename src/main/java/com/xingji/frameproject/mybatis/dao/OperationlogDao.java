@@ -2,9 +2,9 @@ package com.xingji.frameproject.mybatis.dao;
 
 
 import com.xingji.frameproject.mybatis.entity.Operationlog;
+import com.xingji.frameproject.vo.operationlogVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -16,24 +16,22 @@ public interface OperationlogDao {
 
     int insertSelective(Operationlog record);
 
-    Operationlog selectByPrimaryKey(Integer id);
-
     int updateByPrimaryKeySelective(Operationlog record);
 
     int updateByPrimaryKey(Operationlog record);
-    List<Operationlog> findAll(Operationlog operationlog);
+    List<operationlogVo> findAll();
 
-    List<Operationlog> findbyCreateTimeAndOperatorAndInput(@Param("time") String time, @Param("operator") String operator, @Param("input") String input);
+    List<operationlogVo> findbyCreateTimeAndOperatorAndInput(@Param("time") String time, @Param("operatorid") Integer operatorid, @Param("input") String input);
 
-    List<Operationlog> findbyCreateTimeAndOperator(@Param("time") String time,  @Param("operator")String operator);
+    List<operationlogVo> findbyCreateTimeAndOperator(@Param("time") String time,  @Param("operatorid")Integer operatorid);
 
-    List<Operationlog> findbyInputAndOperator(@Param("operator") String operator, @Param("input") String input);
+    List<operationlogVo> findbyInputAndOperator(@Param("operatorid") Integer operatorid, @Param("input") String input);
 
-    List<Operationlog> findbyCreateTimeAndInput(@Param("time") String time,@Param("input") String input);
+    List<operationlogVo> findbyCreateTimeAndInput(@Param("time") String time,@Param("input") String input);
 
-    List<Operationlog> findbyCreateTime(String time);
+    List<operationlogVo> findbyCreateTime(String time);
 
-    List<Operationlog> findbyOperator(String operator);
+    List<operationlogVo> findbyOperator(Integer operatorid);
 
-    List<Operationlog> findbyInput(String input);
+    List<operationlogVo> findbyInput(String input);
 }
