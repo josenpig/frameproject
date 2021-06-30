@@ -188,7 +188,7 @@ public class BaseProductController {
                 del=true;
             }else{
                 del=false;
-                ret = "产品编号为："+ids.get(i)+"已存在相关单据记录，无法删除";
+                ret = "产品编号为："+ids.get(i)+"已存在相关单据记录或已与供应商关联，无法删除";
                 break;
             }
             System.out.println("批量删除产品是否成功："+del);
@@ -222,9 +222,12 @@ public class BaseProductController {
         List<StockInventoryDetails> list2=stockInventoryDetailsService.queryAndByPojo(stockInventoryDetails);
         System.out.println(list2);
         //根据产品id查询供应商产品
-
+        BaseVendorProduct baseVendorProduct=new BaseVendorProduct();
+        baseVendorProduct.setProductId(Did);
+        List<BaseVendorProduct> list3=baseVendorProductService.queryAll(baseVendorProduct);
+        System.out.println("list3:"+list3);
         String ret=null;
-        if(list.size()==0 && list2.size()==0) {
+        if(list.size()==0 && list2.size()==0 && list3.size()==0){
             if (Dstate == 0) {
                 baseProduct.setState(1);
             }
@@ -233,7 +236,7 @@ public class BaseProductController {
             }
             BaseProduct baseProduct1 = baseProductService.update(baseProduct);
         }else{
-            ret = "产品编号为："+Did+"已存在相关单据记录，无法修改状态";
+            ret = "产品编号为："+Did+"已存在相关单据记录或已与供应商关联，无法修改状态";
         }
         System.out.println("批量删除产品是否成功："+ret);
         return  AjaxResponse.success(ret);
@@ -312,8 +315,9 @@ public class BaseProductController {
         String three = jsonObject.getString("Supply");
         List<BaseVendorProduct> baseVendorProducts= JSONArray.parseArray(three, BaseVendorProduct.class);
         System.out.println("BaseVendor:"+baseVendorProducts);
+        String n2=null;
         for(int i=0;i<baseVendorProducts.size();i++){
-            if(baseVendorProducts.get(i).getVendorId()!=null && baseVendorProducts.get(i).getVendorId()!=""){
+            if(baseVendorProducts.get(i).getVendorId()!=null && baseVendorProducts.get(i).getVendorId()!="" && !baseVendorProducts.get(i).getVendorId().equals(n2) && !baseVendorProducts.get(i).getVendorId().equals("")){
                 baseVendorProducts.get(i).setProductId(baseProduct.getProductId());
                 BaseVendorProduct baseVendorProduct= baseVendorProductService.insert(baseVendorProducts.get(i));
             }
