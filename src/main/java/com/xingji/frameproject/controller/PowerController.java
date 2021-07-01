@@ -163,7 +163,7 @@ public class PowerController {
      * @param add json对象
      * @return vo
      */
-    @Log("添加用户")
+    //@Log("添加用户")
     @PostMapping("/addnewuser")
     public AjaxResponse addnewuser(@RequestBody String add) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         JSONObject jsonObject = JSONObject.parseObject(add);
@@ -178,16 +178,16 @@ public class PowerController {
         //新增用户
         sus.insert(user);
         //新增用户角色
-        String addroles="";
+        //String addroles="";
         List<SysUserRole> lists=new ArrayList<>();
         for (int i=0;i<sysRole.size();i++){
             SysUserRole sysUserRole=new SysUserRole();
             sysUserRole.setUserId(user.getUserId());
             sysUserRole.setRoleId(sysRole.get(i).getRoleId());
             lists.add(sysUserRole);
-            addroles=addroles+srs.queryRoleNameByroleId(sysRole.get(i).getRoleId());
+            //addroles=addroles+srs.queryRoleNameByroleId(sysRole.get(i).getRoleId());
         }
-        sendSms.notice(user.getUserPhone(),'"'+addroles+'"');
+        //sendSms.notice(user.getUserPhone(),'"'+addroles+'"');
         return AjaxResponse.success(sus.insertBatch(lists));
     }
     /**

@@ -49,19 +49,18 @@ public class LogAspect {
      * @param joinPoint
      */
     @Before("getuserByPhone()")
-    public void doBefore1(JoinPoint joinPoint){
+    public void doBefore1(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         // 记录下请求内容
         log.info("URL : " + request.getRequestURL().toString());
         log.info("HTTP_METHOD : " + request.getMethod());
         log.info("REQUEST：" + joinPoint.getArgs().toString());
-        String xx=JSONObject.toJSONString(joinPoint.getArgs());
-        int index=xx.indexOf("["+'"');
-        int index2=xx.indexOf('"'+","+'"');
-        String cha=xx.substring(index+2,index2);
-        Integer userid=us.queryUserIdByPhone(cha);
-        //用户名
+        String xx = JSONObject.toJSONString(joinPoint.getArgs());
+        int index = xx.indexOf("[" + '"');
+        int index2 = xx.indexOf('"' + "," + '"');
+        String cha = xx.substring(index + 2, index2);
+        Integer userid = us.queryUserIdByPhone(cha);
         String  userName=us.queryUserNameByUserId(userid);
         userid=us.queryUserIdByUserName(userName);
     }
